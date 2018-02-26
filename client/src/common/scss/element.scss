@@ -1,0 +1,10 @@
+$--color-primary: deepskyblue !default;
+
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";
+
+.el-table__header-wrapper tr{
+   background-color: deepskyblue !important;
+}
+

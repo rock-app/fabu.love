@@ -12,7 +12,7 @@
     },
     methods: {
       _initHttp() {
-        this.axios.defaults.baseURL = 'http://172.17.11.105:3001/'
+        this.axios.defaults.baseURL = 'http://localhost:3001/'
         this.axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
       }
     }

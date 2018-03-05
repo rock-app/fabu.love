@@ -49,8 +49,8 @@ var getAppList = async (ctx, next) => {
 
     let response
     await Promise.all([
-        App.count(filter),
-        App.find(filter)
+        App.count(modifyFilter(filter)),
+        App.find(modifyFilter(filter))
             .sort(sortParam)
             .limit(parseInt(pageSize))
             .skip(page * pageSize)
@@ -67,6 +67,14 @@ var getAppList = async (ctx, next) => {
     ctx.rest(response)
 }
 
+//设置模糊查询
+function modifyFilter(filter) {
+    let result = {}
+    for (var key in filter) {
+        result[key] = {$regex: filter[key]}
+    }
+    return result
+}
 
 module.exports = {
     'POST /api/applist': getAppList

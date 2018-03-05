@@ -4,14 +4,23 @@ const axios = require('axios')
 export default class BaseApi {
   
   static init (router) {
-    axios.interceptors.request.use((config) => {
-      let token = TokenMgr.get('localhost:3001')
-      alert(config.url)
+    // axios.interceptors.request.use((config) => {
+    //   var token = TokenMgr.get('http://localhost:3001/api/applist')
+    //   if (token) {
+    //     config.headers.token = 'Bearer' + ' ' + token
+    //   }
+    //   return config
+    // }, (error) => {
+    //   return Promise.reject(error)
+    // })
+
+    axios.interceptors.request.use(function (config) {
+      var token = TokenMgr.get('http://localhost:3001/api/applist')
       if (token) {
-        config.header.token = 'Bearer' + ' ' + token
+        config.headers.Authorization = 'Bearer' + ' ' + token
       }
       return config
-    }, (error) => {
+    }, function (errpr) {
       return Promise.reject(error)
     })
 
@@ -20,8 +29,7 @@ export default class BaseApi {
       if (response.data && response.data.token) {
         TokenMgr.add(response.config.url, response.data.token)
       }
-      // if (response.body)
-      
+      return response
     }, (error) => {
       return Promise.reject(error)
     })

@@ -18,7 +18,7 @@ class TokenMgr {
   
   get (url) {
     var host = this.urlhost(url)
-    for (const item in this.tokens) {
+    for (var item of this.tokens) {
       if (item.url === host) {
         return item.token
       }

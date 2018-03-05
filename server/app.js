@@ -13,7 +13,7 @@ const app = new Koa()
 
 //解决跨域问题
 app.use(cors());
-app.use(koajwt({secret: 'jwt-secret'}).unless({path: [/\/register/, /\/login/]}))
+app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({path: [/\/register/, /\/login/]}))
 app.use(bodyParser())
 app.use(rest.restify())
 app.use(controller())

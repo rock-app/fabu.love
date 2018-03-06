@@ -1,5 +1,5 @@
 const APIError = require('../rest').APIError
-const App = require('../model/App')
+const App = require('../model/app')
 
 
 // App.find().remove().exec()

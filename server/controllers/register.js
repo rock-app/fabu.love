@@ -23,7 +23,7 @@ var register = async (ctx, next) => {
     } else {
       ctx.status = 406;
       ctx.body = {
-      message: '用户已存在'
+        message: '用户已存在'
       }
     }
   } catch (error) {

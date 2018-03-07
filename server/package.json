@@ -4,7 +4,7 @@
     "description": "Hello Koa 2 example with async",
     "main": "app.js",
     "scripts": {
-        "start": "node app.js"
+        "start": "node start.js"
     },
     "keywords": [
         "koa",

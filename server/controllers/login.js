@@ -21,7 +21,7 @@ var login = async (ctx, next) => {
                 exp: Math.floor(Date.now() / 1000) + (60 * 60)
             }, 'jwt-secret')
         }
-        ctx.header.token = jwt.sign({
+        ctx.headers.token = jwt.sign({
           data: user,
           exp: Math.floor(Date.now() / 1000) + (60 * 60)
         }, 'jwt-secret')

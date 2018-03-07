@@ -30,7 +30,7 @@ export default {
   name: 'Login',
   data () {
     return {
-      userName: '',
+      username: '',
       password: '',
       repwd: '',
       isLogin: true,
@@ -55,14 +55,14 @@ export default {
     onClick () {
       if (this.isLogin) {
         var me = this
-        LoginApi.login(this.userName, this.password).then((resp) => {
+        LoginApi.login(this.username, this.password).then((resp) => {
           me.$router.push('applist')
           console.log(resp.data)
         }).catch((error) => {
           console.log(error)
         })
       } else {
-        LoginApi.register(this.userName, this.password).then((resp) => {
+        LoginApi.register(this.username, this.password).then((resp) => {
           console.log(resp.data)
 
         }).catch((error) => {

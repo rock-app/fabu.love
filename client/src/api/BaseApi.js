@@ -2,7 +2,7 @@ import TokenMgr from '../mgr/TokenMgr'
 const axios = require('axios')
 
 export default class BaseApi {
-  
+
   static init (router) {
     // axios.interceptors.request.use((config) => {
     //   var token = TokenMgr.get('http://localhost:3001/api/applist')
@@ -20,7 +20,7 @@ export default class BaseApi {
         config.headers.Authorization = 'Bearer' + ' ' + token
       }
       return config
-    }, function (errpr) {
+    }, function (error) {
       return Promise.reject(error)
     })
 

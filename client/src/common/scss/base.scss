@@ -1,1 +1,22 @@
 
+@import "./reset";
+
+$paleGrey: rgb(244, 245, 247);
+$paleGreyTwo: rgb(253, 253, 253);
+$black: rgb(41, 44, 64);
+
+$warmgrey: rgb(163, 166, 178);
+
+
+body {
+  background: $paleGrey;
+  margin: 0;
+  padding: 0;
+}
+
+// 一行，多余显示....
+.nowrap {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

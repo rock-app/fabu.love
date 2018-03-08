@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '../components/Login.vue'
+import Login from '../components/loginRegiest/Login.vue'
+import Regiest from '../components/loginRegiest/regiest.vue'
+import AppDetail from '../components/appList/appDetail.vue'
 
 Vue.use(Router)
 
-const AppList = () => import('components/AppList')
+const AppList = () => import('components/appList/appList.vue')
 
 export default new Router({
   routes: [
@@ -17,6 +19,16 @@ export default new Router({
       path: '/applist',
       name: 'AppList',
       component: AppList
+    },
+    {
+      path: '/regiest',
+      name: 'Regiest',
+      component: Regiest
+    },
+    {
+      path: '/appDetail',
+      name: 'AppDetail',
+      component: AppDetail
     }
   ]
 })

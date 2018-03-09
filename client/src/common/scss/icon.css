@@ -1,0 +1,50 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?raf4wn');
+  src:  url('../fonts/icomoon.eot?raf4wn#iefix') format('embedded-opentype'),
+  url('../fonts/icomoon.ttf?raf4wn') format('truetype'),
+  url('../fonts/icomoon.woff?raf4wn') format('woff'),
+  url('../fonts/icomoon.svg?raf4wn#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ic_android:before {
+  content: "\e900";
+  color: #8a8a8a;
+}
+.icon-ic_editor:before {
+  content: "\e901";
+  color: #8a8a8a;
+}
+.icon-ic_search:before {
+  content: "\e902";
+  color: #8a8a8a;
+}
+.icon-ic_application:before {
+  content: "\e903";
+  color: #8a8a8a;
+}
+.icon-ic_preview:before {
+  content: "\e904";
+  color: #8a8a8a;
+}
+.icon-ic_ios:before {
+  content: "\e905";
+  color: #8a8a8a;
+}

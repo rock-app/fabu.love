@@ -1,14 +1,13 @@
 import {request, summary, tags, body} from 'koa-swagger-decorator';
-import { User,userSchema } from "../model/user";
+import {User, userSchema} from "../model/user";
 
 const jwt = require('jsonwebtoken');
 
 const tag = tags(['认证']);
 
+export default class AuthRouter {
 
-export default class AuthRouter{
-
-    @request('POST','/api/user/login')
+    @request('post', '/auth/login')
     @summary('登录')
     @tag
     static async login(ctx, next) {
@@ -47,8 +46,8 @@ export default class AuthRouter{
             ctx.throw(500)
         }
     }
-    
-    @request('POST', '/api/user/register')
+
+    @request('post', '/auth/register')
     @summary('注册用户')
     @body(userSchema)
     @tag

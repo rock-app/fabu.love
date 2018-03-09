@@ -1,8 +1,8 @@
-const mongoose = require('../db.js')
+const mongoose = require('../helper/db')
 const Schema = mongoose.Schema
 const Version = require('./version');
 
-
+delete mongoose.connection.models['App'];
 var appSchema = new Schema({
     platform: { type: String },
     bundleId: { type:String ,index:true },

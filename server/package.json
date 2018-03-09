@@ -4,7 +4,7 @@
     "description": "Hello Koa 2 example with async",
     "main": "app.js",
     "scripts": {
-        "start": "node start.js"
+        "start": "babel-node index.js"
     },
     "keywords": [
         "koa",
@@ -17,20 +17,34 @@
         "url": "https://github.com/michaelliao/learn-javascript.git"
     },
     "dependencies": {
-        "koa": "2.0.0",
-        "koa-bodyparser": "3.2.0",
+        "koa": "^2.4.1",
+        "koa-bodyparser": "^4.2.0",
         "koa-cors": "0.0.16",
         "koa-router": "7.0.0",
-        "mime": "1.3.4",
+        "koa-multer": "^1.0.2",
+        "koa-swagger-decorator": "^1.2.0",
+        "bunyan": "^1.8.12",
         "mongoose": "5.0.4",
-        "mz": "2.4.0",
-        "nunjucks": "2.4.2",
         "koa-jwt": "^3.3.0",
         "jsonwebtoken": "^7.4.1",
         "ipa-extract-info": "^1.2.3",
         "apk-parser3": "^0.1.7",
         "adm-zip": "^0.4.7",
         "koa-body": "^2.5.0",
-        "uuid": "^3.0.1"
+        "lodash": "^4.17.4",
+        "pm2": "^2.9.3",
+        "uuid": "^3.2.1"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.24.1",
+        "babel-core": "^6.26.0",
+        "babel-eslint": "^8.2.1",
+        "babel-plugin-transform-decorators-legacy": "^1.3.4",
+        "babel-preset-env": "^1.6.0",
+        "chai": "^4.1.2",
+        "eslint": "^4.17.0",
+        "eslint-config-airbnb": "^16.1.0",
+        "eslint-plugin-import": "^2.8.0",
+        "mocha": "^5.0.1"
     }
 }

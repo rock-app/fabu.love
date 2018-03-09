@@ -1,4 +1,4 @@
-const mongoose = require('../db.js');
+const mongoose = require('../helper/db');
 const Schema = mongoose.Schema;
 
 var versionSchema = new Schema({
@@ -11,7 +11,6 @@ var versionSchema = new Schema({
     size: Number,
     downloadUrl:String,
     hidden:Boolean,
-    current:Boolean
 });
 
 module.exports = mongoose.model('Version', versionSchema);

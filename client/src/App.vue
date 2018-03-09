@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <!--<div class="bgview"></div>-->
     <router-view/>
+    <div style="background-color: lightgrey; width: 100%;height: 80px"></div>
   </div>
 </template>
 
@@ -23,6 +23,7 @@
 <style lang="scss">
   @import "common/scss/reset";
   @import "common/scss/element";
+  @import 'common/scss/icon.css';
 
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -32,36 +33,5 @@
   }
   body {
     background-color: white;
-  }
-  .bgview {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0px;
-    top: 0px;
-    bottom: 0px;
-    background-image: url("./assets/background.png");
-    background-size: cover;
-    z-index: -1;
-    -webkit-animation: STAR-MOVE 200s linear infinite;
-    -moz-animation: STAR-MOVE 200s linear infinite;
-    -ms-animation: STAR-MOVE 200s linear infinite;
-    animation: STAR-MOVE 200s linear infinite;
-  }
-  @-webkit-keyframes STAR-MOVE {
-    from {
-      background-position:0% 0%
-    }
-    to {
-      background-position: 600% 0%
-    }
-  }
-  @keyframes STAR-MOVE {
-    from {
-      background-position: 0% 0%
-    }
-    to {
-      background-position: 600% 0%
-    }
   }
 </style>

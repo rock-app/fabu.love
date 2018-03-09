@@ -1,0 +1,237 @@
+<template>
+  <div>
+    <!--导航部分-->
+    <appListNav appSubModule="订货宝"></appListNav>
+    <!--头部-->
+    <div class="appDetail-header">
+      <img class="appicon" src="../../assets/backgroundImage.png" alt="" @click="clickAppIcon">
+      <div class="appDetail-appinfo">
+        <div class="appDetail-appinfo-info">
+          <div class="appDetail-appinfo-link">http://12121212121212</div>
+          <div class="appDetail-appinfo-downloadwrapper">
+            <i class="el-icon-download"></i>
+            <span>21666666</span>
+          </div>
+          <div class="appDetail-appinfo-link appDetail-appinfo-platform">Android</div>
+          <div class="appDetail-appinfo-downloadwrapper">
+            <p class="appDetail-appinfo-downloadwrapper-packname">PackName</p>
+            <span>21666666</span>
+          </div>
+        </div>
+        <div class="detail-otherinfo">
+          <ul>
+            <li style="display: inline-block;width: 80px;height: 60px;margin-right: 25px;position: relative" v-for="item in headerOperationData" :class="getDetailotherAppInfoClass(item)" :key="item.id" @click="clickOtherInfo(item)">
+              <div class="detail-otherinfo-line"></div>
+              <i class="el-icon-edit"></i>
+              <span class="detail-otherinfo-title" v-html="item"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="appDetail-header-rightwrapper">
+        <el-button class="uploadButton" type="primary"><i class="el-icon-upload el-icon--left"></i>上传</el-button>
+        <div>
+          <el-button class="detail-preViewButton"><i class="el-icon-upload el-icon--left"></i>预览</el-button>
+        </div>
+      </div>
+      <div style="position: absolute;left: 15%;bottom: -15px">
+        <img class="appDetail-header-indicate" src="../../assets/indicateImg.png" alt="">
+      </div>
+    </div>
+    <!--内容-->
+    <appVersions v-show="this.currentModule === 'appVersions'"></appVersions>
+    <appBasicInfo v-show="this.currentModule === '基本信息'"></appBasicInfo>
+    <appIntegration v-show="this.currentModule === '集成'"></appIntegration>
+    <authorControl v-show="this.currentModule === '权限控制'"></authorControl>
+    <highSummary v-show="this.currentModule === '高级统计'"></highSummary>
+    <applicationMerge v-show="this.currentModule === '应用合并'"></applicationMerge>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  import AppListNav from '../appList/appListNav.vue'
+  import AppBasicInfo from './appBasicInfo.vue'
+  import AppIntegration from './appIntegration.vue'
+  import AuthorControl from './authorControl.vue'
+  import HighSummary from './/highSummary.vue'
+  import ApplicationMerge from './applicationMerge.vue'
+  import AppVersions from './appVersions.vue'
+
+  export default {
+    data() {
+      return {
+        headerOperationData: ['基本信息', '权限控制', '应用合并', '高级统计', '集成'],
+        currentModule: 'appVersions'
+      }
+    },
+    components: {
+      AppListNav, AppBasicInfo, AppIntegration, AuthorControl, HighSummary, ApplicationMerge, AppVersions
+    },
+    computed: {
+    },
+    methods: {
+      clickAppIcon() {
+        this.currentModule = 'appVersions'
+      },
+      clickOtherInfo(item) {
+        this.currentModule = item
+
+        if (this.currentModule === 'appVersions') {
+        }
+        if (this.currentModule === '基本信息') {
+        }
+        if (this.currentModule === '权限控制') {
+        }
+        if (this.currentModule === '应用合并') {
+        }
+        if (this.currentModule === '高级统计') {
+        }
+        if (this.currentModule === '集成') {
+        }
+        document.getElementsByClassName('appDetail-header-indicate')
+      },
+      getDetailotherAppInfoClass(item) {
+        if (item === this.currentModule) {
+          return 'detail-otherAppInfo-active'
+        } else {
+          return 'detail-otherAppInfo-nomal'
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../common/scss/base";
+
+  .appDetail-header {
+    height: 225px;
+    background-color: white;
+    margin-top: 1px;
+    padding-left: 15%;
+    padding-right: 15%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    border-bottom: solid 0.5px #eee;
+  }
+  .appDetail-header .appicon {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    background-size: cover;
+    margin-top: 65px;
+  }
+  .appDetail-header-indicate {
+    width: 40px;
+    height: 40px;
+    background-size: 40px 40px;
+    margin-left: 30px;
+    /*animation: indicateMove0 1s linear;*/
+    /*animation-fill-mode: forwards;*/
+  }
+  @keyframes indicateMove0 {
+    to {
+      margin-left: 30px;
+    }
+  }
+  .appDetail-appinfo {
+    flex-grow: 1;
+    height: 100%;
+  }
+  .appDetail-header-rightwrapper {
+    width: 150px;
+    height: 150px;
+  }
+  .appDetail-appinfo-info {
+    margin-top: 65px;
+    padding-left: 60px;
+    display: flex;
+  }
+  .appDetail-appinfo-link {
+    height: 20px;
+    padding: 0px 8px;
+    border: solid 1px #999;
+    font-size: 10px;
+    text-align: center;
+    color: #F8BA0B;
+    border-color: #F8BA0B;
+    border-radius: 5px;
+    line-height: 20px;
+    margin-right: 10px;
+  }
+  .appDetail-appinfo-downloadwrapper {
+    height: 20px;
+    border: solid 1px #999;
+    border-radius: 5px;
+    display: flex;
+    padding: 0px 8px;
+    overflow: hidden;
+    margin-right: 10px;
+  }
+  .appDetail-appinfo-downloadwrapper i {
+    width: 20px;
+    height: 20px;
+    border-right: solid 1px #999;
+    padding-top: 2px;
+  }
+  .appDetail-appinfo-downloadwrapper span {
+    height: 20px;
+    font-size: 10px;
+    margin-left: 8px;
+    line-height: 20px;
+  }
+  .appDetail-appinfo-platform {
+    color: #999;
+    border-color: #999;
+    margin-right: 10px;
+  }
+  .appDetail-appinfo-downloadwrapper-packname {
+    border-right: solid 1px #999;
+    font-size: 10px;
+    line-height: 20px;
+    padding-right: 8px;
+  }
+  .detail-otherinfo {
+    margin-left: 60px;
+    margin-top: 30px;
+  }
+  .detail-otherAppInfo-active {
+    color: #333;
+  }
+  .detail-otherAppInfo-nomal {
+    color: #999;
+  }
+  .detail-otherinfo-line {
+    position: absolute;
+    width: 1px;
+    height: 60px;
+    background-color: #999;
+    top: 0px;
+    left: 0px;
+  }
+  .el-icon-edit {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+  }
+  .detail-otherinfo-title {
+    position: absolute;
+    left: 15px;
+    top: 40px;
+    font-size: 15px;
+  }
+  .appDetail-appinfo-info .el-radio-button {
+    height: 25px !important;
+  }
+  .uploadButton {
+    width: 150px;
+    background-color: #3AB2A7 !important;
+    border-color: #3AB2A7 !important;
+    margin-top: 30px;
+  }
+  .detail-preViewButton {
+    width: 150px;
+    margin-top: 10px;
+  }
+</style>

@@ -44,7 +44,12 @@
         "chai": "^4.1.2",
         "eslint": "^4.17.0",
         "eslint-config-airbnb": "^16.1.0",
-        "eslint-plugin-import": "^2.8.0",
+        "eslint-config-google": "^0.9.1",
+        "eslint-config-standard": "^11.0.0",
+        "eslint-plugin-import": "^2.9.0",
+        "eslint-plugin-node": "^6.0.1",
+        "eslint-plugin-promise": "^3.7.0",
+        "eslint-plugin-standard": "^3.0.1",
         "mocha": "^5.0.1"
     }
 }

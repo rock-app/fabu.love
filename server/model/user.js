@@ -1,10 +1,15 @@
-const mongoose = require('../db.js');
+const mongoose = require('../helper/db');
 const Schema = mongoose.Schema;
 
-var User = new Schema({
-    username: {type: String},
-    password: {type: String},
-    token: {type: String}
-});
+var userSchema = {
+    username: { type: String },
+    password: { type: String },
+    token: { type: String }
+}
 
-module.exports = mongoose.model('User', User);
+
+module.exports = {
+    User : mongoose.model('User', new Schema(userSchema)),
+    userSchema : userSchema
+}
+

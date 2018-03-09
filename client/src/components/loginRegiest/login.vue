@@ -46,6 +46,7 @@
           this.errorInfo = '* 密码不能为空'
           return
         }
+        this.errorInfo = ''
         var me = this
         me.$router.push('applist')
         LoginApi.login(this.userName, this.pwd).then((resp) => {
@@ -116,13 +117,13 @@
     display: flex;
     flex-direction: column;
   }
-  .input {
+  .login-content .input {
     width: 360px;
     height: 50px;
     display: inline-block;
     margin: 0 auto;
   }
-  .userName {
+  .login-content .userName {
     margin-bottom: 10px;
   }
   .btn {

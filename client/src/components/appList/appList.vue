@@ -14,23 +14,35 @@
       </div>
       <div class="search-wrapper">
         <i class="el-icon-search"></i>
-        <input class="applist-header-search" type="text" placeholder="输入名称搜索">
+        <input class="applist-header-search" v-model="queryText" type="text" placeholder="输入名称搜索">
       </div>
     </div>
     <!--应用列表-->
     <div class="applist-content">
       <el-row>
-        <el-col class="appItem-wrapper" :span="7" v-for="(o) in 20" :key="o" :offset="1">
-          <el-card :body-style="{ padding: '0px'}">
-            <img class="appItem-platform" src="../../assets/android.png" alt="">
-            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="">
+        <el-col
+          class="appItem-wrapper"
+          :span="7" v-for="(o,index) in 20" :key="o"
+          :offset="1"
+        >
+          <div
+            :class="getAppItemClass(index)"
+            @mouseover="appItemHovered"
+            @mouseout="appItemUnhovered"
+          >
+            <div :style="index%2===0? `borderTopColor: #A4C639;borderLeftColor:transparent`:`borderTopColor: lightGray;borderLeftColor:transparent`" style="width: 0px;height: 0px;position: absolute;top: 0;
+right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
+            </div>
+            <i v-show="index%2===0" class="icon-ic_ios appItem-platform"></i>
+            <i v-show="index%2!==0" class="icon-ic_android appItem-platform"></i>
+            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail">
             <!--app信息-->
             <div class="appItem-info">
               <div class="appItem-info-namewrapper">
-                <img src="../../assets/android.png" alt="">
+                <span class="icon-ic_application"></span>
                 <p class="nowrap" @click="gotoAppDetail">订货宝</p>
               </div>
-              <table>
+              <table style="width: 100%;table-layout: fixed">
                 <tr>
                   <td class="appItem-info-title">短链接:</td>
                   <td>
@@ -54,18 +66,24 @@
             <!--删除等操作-->
             <div class="appItem-operate">
               <div class="appItem-operate-editor appItem-operate-common">
-                <i class="el-icon-edit" style="margin-top: 5px"></i>
+                <span class="icon-ic_editor"></span>
                 <span style="font-size: 14px">编辑</span>
               </div>
               <div class="appItem-operate-preview appItem-operate-common">
-                <i class="el-icon-edit" style="margin-top: 5px"></i>
+                <span class="icon-ic_preview"></span>
                 <span style="font-size: 14px">预览</span>
               </div>
               <div class="appItem-operate-delect appItem-operate-common">
-                <i class="el-icon-delete" style="margin-top: 5px"></i>
+                <i class="el-icon-delete"></i>
               </div>
             </div>
-          </el-card>
+
+            <div v-show="index === 0" class="list-firstChild" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;background-color: #F8BA0B;text-align: center">
+              <img src="../../assets/uploadVersion_w.png" alt="">
+              <p>拖拽到这里上传</p>
+            </div>
+          </div>
+
         </el-col>
       </el-row>
     </div>
@@ -79,7 +97,9 @@
     data() {
       return {
         currentPlatform: '',
-        dataList: ['1', '2', '3', '4', '5']
+        dataList: ['1', '2', '3', '4', '5'],
+        queryText: '',
+        hoverFlag: false
       }
     },
     components: {
@@ -101,13 +121,31 @@
       },
       gotoAppDetail() {
         this.$router.push('appDetail')
+      },
+      getAppItemClass(index) {
+        if (this.hoverFlag) {
+          return 'appItemHovered'
+        }
+      },
+      appItemHovered() {
+        this.hoverFlag = true
+        console.log(55555555)
+      },
+      appItemUnhovered() {
+        this.hoverFlag = false
       }
+    },
+    created () {
+      this.$watch('queryText', () => {
+        console.log(this.queryText)
+      })
     }
   }
 </script>
 
 <style lang="scss">
   @import "../../common/scss/base";
+
   .applist-header {
     margin-left: 15%;
     margin-top: 50px;
@@ -169,12 +207,11 @@
     outline: 0;
   }
   .applist-content {
-    margin-left: 15%;
+    margin-left: 12%;
     margin-right: 15%;
   }
-  .image {
-    width: 100%;
-    display: block;
+  .appItemHovered {
+    box-shadow: #666 0px 0px 10px;
   }
   .appItem-wrapper {
     margin-bottom: 20px;
@@ -182,13 +219,13 @@
     background-color: white;
     position: relative;
   }
-  .appItem-wrapper .appItem-platform {
+  .appItem-wrapper .appItem-platform{
     position: absolute;
     right: 0px;
-    top: 0px;
-    width: 50px;
-    height: 50px;
-    background-size: 50px 50px;
+    top: 5px;
+    width: 25px;
+    height: 25px;
+    background-size: 25px 25px;
   }
   .appItem-wrapper .appItem-icon {
     position: absolute;
@@ -198,6 +235,8 @@
     height: 100px;
     background-size: cover;
     border-radius: 10px;
+    color: white;
+    cursor: pointer;
   }
   .appItem-wrapper .appItem-info {
     position: absolute;
@@ -221,7 +260,8 @@
   .appItem-info-namewrapper {
     height: 40px;
   }
-  .appItem-info-namewrapper img {
+  .appItem-info-namewrapper span {
+    display: inline-block;
     width: 25px;
     height: 25px;
     background-size: cover;
@@ -232,6 +272,7 @@
     display: inline-block;
     color: #666;
     font-weight: 300;
+    vertical-align: top;
   }
   .appItem-info-namewrapper p:hover{
     color: #000;
@@ -243,10 +284,17 @@
   .appItem-info-appInfo {
     font-size: 10px;
     color: #333;
-    max-width: 70%;
+    max-width: 100%;
     line-height: 25px;
   }
-  .appItem-operate-common {
+  .appItem-operate i {
+    margin-top: 5px;
+  }
+  .appItem-operate span {
+    line-height: 30px;
+    vertical-align: middle;
+  }
+    .appItem-operate-common {
     border: solid 1px #999;
     height: 100%;
     width: 32%;
@@ -256,5 +304,23 @@
   .appItem-operate-delect {
     width: 30px;
     text-align: center;
+  }
+  .list-firstChild img {
+    width: 60px;
+    height: 60px;
+    background-size: 60px 60px;
+    margin-top: 160px;
+    color: white;
+  }
+  .list-firstChild p {
+    color: white;
+    font-size: 14px;
+    margin-top: 40px;
+  }
+  .appItem-wrapper .icon-ic_ios:before {
+    color: white;
+  }
+  .appItem-wrapper .icon-ic_android:before {
+    color: white;
   }
 </style>

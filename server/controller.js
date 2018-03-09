@@ -1,4 +1,36 @@
 const fs = require('fs')
+const kswagger = require('koa-swagger-decorator')
+
+
+//添加swagger的路由
+function addSwaggerMapping(router) {
+    kswagger.wrapper(router)
+    router.swagger({
+        title : 'App-publish Server',
+        description : 'API DOC',
+        version : '1.0.0',
+
+        // [optional] default is root path.
+        // prefix : '/api',
+
+        // [optional] default is /swagger-html
+        swaggerHtmlEndpoint : '/swagger-html',
+
+        // [optional] default is /swagger-json
+        swaggerJsonEndpoint : '/swagger-json',
+
+        // [optional] additional options for building swagger doc eg. add api_key as
+        // shown below
+        swaggerOptions : {
+            securityDefinitions: {
+                ApiKeyAuth: {
+                    type: 'apiKey', in: 'header',
+                    name: 'Authorization'
+                }
+            }
+        }
+    })
+}
 
 function addControllers(router) {
     var files = fs.readdirSync(__dirname + '/controllers')
@@ -9,23 +41,7 @@ function addControllers(router) {
     for (var f of js_files) {
         console.log(`process controller: ${f}...`)
         let mapping = require(__dirname + '/controllers/' + f)
-        addMapping(router, mapping)
-    }
-}
-
-function addMapping(router, mapping) {
-    for (var url in mapping) {
-        if (url.startsWith('GET ')) {
-            var path = url.substring(4)
-            router.get(path, mapping[url])
-            console.log(`register URL mapping: GET ${path}`)
-        } else if (url.startsWith('POST ')) {
-            var path = url.substring(5)
-            router.post(path, mapping[url])
-            console.log(`register URL mapping: POST ${path}`)
-        } else {
-            console.log(`invalid URL: ${url}`)
-        }
+        router.map(mapping)
     }
 }
 
@@ -33,6 +49,7 @@ module.exports = function (dir) {
     let
         controllers_dir = dir || 'controllers', // 如果不传参数，扫描目录默认为'controllers'
         router = require('koa-router')()
-    addControllers(router, controllers_dir)
+    addSwaggerMapping(router)
+    addControllers(router, controllers_dir) 
     return router.routes()
 }

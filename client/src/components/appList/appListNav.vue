@@ -3,8 +3,8 @@
     <div class="applist-nav">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="applist-nav-left">
         <el-breadcrumb-item :to="{ path: '/' }">App-publisher</el-breadcrumb-item>
-        <el-breadcrumb-item>我的应用</el-breadcrumb-item>
-        <el-breadcrumb-item v-show="this.appSubModule" v-html="this.appSubModule"></el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/applist' }">我的应用</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="this.appSubModule" v-show="this.appSubModule" v-html="this.appSubModule"></el-breadcrumb-item>
       </el-breadcrumb>
       <div class="userInfoBottomWrapper" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
         <div class="userInfoWrapper">

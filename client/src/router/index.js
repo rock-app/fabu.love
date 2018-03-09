@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../components/loginRegiest/Login.vue'
 import Regiest from '../components/loginRegiest/regiest.vue'
-import AppDetail from '../components/appList/appDetail.vue'
+import AppDetail from '../components/appDetail/appDetail.vue'
 
 Vue.use(Router)
 

@@ -4,7 +4,7 @@ const router = require('koa-router')()
 const bodyParser = require('koa-bodyparser')
 // 导入controller middleware:
 const controller = require('./controller')
-const rest = require('./rest')
+const rest = require('./helper/rest')
 var cors = require('koa-cors');
 const koajwt = require('koa-jwt')
 var koaBody = require('koa-body')
@@ -15,7 +15,11 @@ const app = new Koa()
 
 //解决跨域问题
 app.use(cors());
-app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({path: [/\/register/, /\/login/]}))
+app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
+    path: [
+        /\/register/, /\/login/, /\/swagger-html/,/\/swagger-json/
+    ]
+}))
 app.use(bodyParser())
 app.use(koaBody({ mutipart: true }))
 app.use(rest.restify())

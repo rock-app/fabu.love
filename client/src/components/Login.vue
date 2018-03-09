@@ -8,7 +8,7 @@
         </div>
         <div>
           <img src="@/assets/logo.png">
-          <input type="text" placeholder="用户名" v-model="userName">
+          <input type="text" placeholder="用户名" v-model="username">
         </div>
         <div>
           <img src="@/assets/logo.png">

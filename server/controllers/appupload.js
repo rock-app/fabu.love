@@ -58,13 +58,13 @@ var download = async (ctx, next) => {
   ctx.set('Content-type', mimetype)
 }
 
-module.exports = {
-  'POST /api/appupload': upload
-}
+// module.exports = {
+//   'POST /api/appupload': upload
+// }
 
-module.exports = {
-  'POST /api/appdownload': download
-}
+// module.exports = {
+//   'POST /api/appdownload': download
+// }
 
 function parseAppAndInsertToDB(filePath, callback, errorCallback) {
   var guid = uuidV4()
@@ -82,37 +82,37 @@ function parseAppAndInsertToDB(filePath, callback, errorCallback) {
   Promise.all([parse(filePath), extract(filePath, guid)]).then(values => {
     var info = values[0]
     info['guid'] = guid
-    // info['changelog'] = changelog
-    // var app = App({})
+    info['changelog'] = changelog
+    var app = App({})
 
-    // var app = App.findOne({'platform': info['platform'], 'bundleID': info['bundleID']}) 
-    // if (!app) {
-    //   app = new app(info)
-    //   let version = Version(info)
-    //   app.save()
-    //   version.save()
-    //   ctx.body({'success': true})
-    //   callback(info)
-    //   return
-    // } 
-    // var version = Version.findOne({appId: app.id})
-    // if(!version) {
-    //   version = new Version({appID: app.id, bundleID: app.bundleID, versionCode: info.versionCode,
-    //    versionName: info.version, downloadUrl: info.downloadUrl})
-    //   version.save()
-    //   callback(info)
-    //   return
-    // } else {
-    //   // ctx.status = 408
-    //   // ctx.body = {
-    //   //   message: '版本已存在'
-    //   // }
-    //   let err = Error()
-    //   err.code = 408
-    //   err.message = '版本已存在'
-    //   errorCallback(err)
-    //   return
-    // }
+    var app = App.findOne({'platform': info['platform'], 'bundleID': info['bundleID']}) 
+    if (!app) {
+      app = new app(info)
+      let version = Version(info)
+      app.save()
+      version.save()
+      ctx.body({'success': true})
+      callback(info)
+      return
+    } 
+    var version = Version.findOne({appId: app.id})
+    if(!version) {
+      version = new Version({appID: app.id, bundleID: app.bundleID, versionCode: info.versionCode,
+       versionName: info.version, downloadUrl: info.downloadUrl})
+      version.save()
+      callback(info)
+      return
+    } else {
+      // ctx.status = 408
+      // ctx.body = {
+      //   message: '版本已存在'
+      // }
+      let err = Error()
+      err.code = 408
+      err.message = '版本已存在'
+      errorCallback(err)
+      return
+    }
   }).catch (error => {
     errorCallback(error)
   })
@@ -207,12 +207,12 @@ function extractIpaIcon(filename, guid) {
 function parseApk(filename) {
   return new Promise((resolve, reject) => {
     apkParser3(filename, (err, data) => {
-      var package = parseText(data.package)
+      var apkPackage = parseText(data.package)
       var info = {
         'name': data['application-label'].replace(/'/g, ''.data),
-        'build': package.versionCode,
-        'bundleID': package.name,
-        'version': package.versionName,
+        'build': apkPackage.versionCode,
+        'bundleID': apkPackage.name,
+        'version': apkPackage.versionName,
         'platform': 'android'
       }
       resolve(info)
@@ -269,4 +269,13 @@ String.prototype.format = function () {
   return this.replace(/\{(\d+)\}/g, function(s, i){
     return args[i]
   })
+}
+
+function parseText(text) {
+  var regx = /(\w+)='([\w\.\d]+)'/g
+  var match = null, result = {}
+  while(match = regx.exec(text)) {
+    result[match[1]] = match[2]
+  }
+  return result
 }

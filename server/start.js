@@ -7,6 +7,8 @@ const controller = require('./controller')
 const rest = require('./rest')
 var cors = require('koa-cors');
 const koajwt = require('koa-jwt')
+var koaBody = require('koa-body')
+var uuidV4 = require('uuid/v4')
 
 // 创建一个Koa对象表示web app本身
 const app = new Koa()
@@ -15,6 +17,7 @@ const app = new Koa()
 app.use(cors());
 app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({path: [/\/register/, /\/login/]}))
 app.use(bodyParser())
+app.use(koaBody({ mutipart: true }))
 app.use(rest.restify())
 app.use(controller())
 app.use(router.routes())

@@ -4,7 +4,7 @@
     <appListNav appSubModule="订货宝"></appListNav>
     <!--头部-->
     <div class="appDetail-header">
-      <img src="../../assets/backgroundImage.png" alt="">
+      <img class="appicon" src="../../assets/backgroundImage.png" alt="" @click="clickAppIcon">
       <div class="appDetail-appinfo">
         <div class="appDetail-appinfo-info">
           <div class="appDetail-appinfo-link">http://12121212121212</div>
@@ -34,28 +34,61 @@
           <el-button class="detail-preViewButton"><i class="el-icon-upload el-icon--left"></i>预览</el-button>
         </div>
       </div>
+      <div style="position: absolute;left: 15%;bottom: -15px">
+        <img class="appDetail-header-indicate" src="../../assets/indicateImg.png" alt="">
+      </div>
     </div>
+    <!--内容-->
+    <appVersions v-show="this.currentModule === 'appVersions'"></appVersions>
+    <appBasicInfo v-show="this.currentModule === '基本信息'"></appBasicInfo>
+    <appIntegration v-show="this.currentModule === '集成'"></appIntegration>
+    <authorControl v-show="this.currentModule === '权限控制'"></authorControl>
+    <highSummary v-show="this.currentModule === '高级统计'"></highSummary>
+    <applicationMerge v-show="this.currentModule === '应用合并'"></applicationMerge>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import AppListNav from './appListNav.vue'
+  import AppListNav from '../appList/appListNav.vue'
+  import AppBasicInfo from './appBasicInfo.vue'
+  import AppIntegration from './appIntegration.vue'
+  import AuthorControl from './authorControl.vue'
+  import HighSummary from './/highSummary.vue'
+  import ApplicationMerge from './applicationMerge.vue'
+  import AppVersions from './appVersions.vue'
 
   export default {
     data() {
       return {
         headerOperationData: ['基本信息', '权限控制', '应用合并', '高级统计', '集成'],
-        currentModule: '基本信息'
+        currentModule: 'appVersions'
       }
     },
     components: {
-      AppListNav
+      AppListNav, AppBasicInfo, AppIntegration, AuthorControl, HighSummary, ApplicationMerge, AppVersions
     },
     computed: {
     },
     methods: {
+      clickAppIcon() {
+        this.currentModule = 'appVersions'
+      },
       clickOtherInfo(item) {
         this.currentModule = item
+
+        if (this.currentModule === 'appVersions') {
+        }
+        if (this.currentModule === '基本信息') {
+        }
+        if (this.currentModule === '权限控制') {
+        }
+        if (this.currentModule === '应用合并') {
+        }
+        if (this.currentModule === '高级统计') {
+        }
+        if (this.currentModule === '集成') {
+        }
+        document.getElementsByClassName('appDetail-header-indicate')
       },
       getDetailotherAppInfoClass(item) {
         if (item === this.currentModule) {
@@ -79,13 +112,28 @@
     padding-right: 15%;
     display: flex;
     flex-direction: row;
+    position: relative;
+    border-bottom: solid 0.5px #eee;
   }
-  .appDetail-header img {
+  .appDetail-header .appicon {
     width: 100px;
     height: 100px;
     border-radius: 10px;
     background-size: cover;
     margin-top: 65px;
+  }
+  .appDetail-header-indicate {
+    width: 40px;
+    height: 40px;
+    background-size: 40px 40px;
+    margin-left: 30px;
+    /*animation: indicateMove0 1s linear;*/
+    /*animation-fill-mode: forwards;*/
+  }
+  @keyframes indicateMove0 {
+    to {
+      margin-left: 30px;
+    }
   }
   .appDetail-appinfo {
     flex-grow: 1;

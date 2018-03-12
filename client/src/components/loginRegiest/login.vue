@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="login-wrapper">
     <div class="login-header">
       <div class="header-title">
         <span>登录</span>
@@ -117,13 +117,13 @@
     display: flex;
     flex-direction: column;
   }
-  .login-content .input {
+  .login-wrapper .login-content .input {
     width: 360px;
     height: 50px;
     display: inline-block;
     margin: 0 auto;
   }
-  .login-content .userName {
+  .login-wrapper .login-content .userName {
     margin-bottom: 10px;
   }
   .btn {

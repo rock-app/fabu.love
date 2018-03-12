@@ -22,29 +22,40 @@
     <!--内容-->
     <div class="appversion-versionList">
       <ul style="position: relative">
-        <li v-for="item in dataArr" :key="item" class="appversion-versionList-item">
+        <li v-for="(item, index) in dataArr" :key="index" class="appversion-versionList-item">
           <div class="appversion-versionList-left-iconWrapper">
             <img src="../../assets/uploadVersion.png" alt="">
           </div>
           <div class="appversion-versionList-left-line"></div>
           <div class="appversion-versionList-right">
-            <div class="appversion-versionList-itemtitle" v-html="item"></div>
+            <div class="appversion-versionList-itemtitle" v-html="item.a"></div>
             <div class="appversion-versionList-itemInfo">
               <span>21212121212</span>
               <span class="versionType">企业版</span>
               <span>XC:com.hd.123.com-sahnghaiasasasasasasasasas</span>
             </div>
-            <div class="appversion-versionList-itemBottom">
-              <el-button round>编辑</el-button>
+            <div class="appversion-versionList-itemBottom" v-show="!item.isEditor">
+              <el-button round @click="cliclEditorBtn(index)">编辑</el-button>
               <el-button round><i class="el-icon-upload el-icon--left"></i>10.36M</el-button>
-              <el-button round><i class="el-icon-upload el-icon--left"></i>预览</el-button>
+              <el-button @click="clickPreViewBtn" round><i class="icon-ic_preview"></i>预览</el-button>
               <el-button round><i class="el-icon-upload el-icon--left"></i>标记上线</el-button>
               <el-switch
                 style="margin-left: 15px"
                 v-model="showInDownLoadPage"
                 active-color="#F8BA0B"
-                inactive-color="#999">
+                inactive-color="#999"
+                @change="changeSwitch(index)"
+              >
               </el-switch><span style="color: #999; font-size: 15px;vertical-align: middle;margin-left: 10px">显示在下载页面</span>
+            </div>
+
+            <!--更新日志的展示-->
+            <div class="appversion-versionList-updateNote" v-show="item.isEditor">
+              <textarea autofocus="true" name="" id="" placeholder="更新日志"></textarea>
+              <div style="text-align: right">
+                <button class="appversion-versionList-updateNote-cancel" @click="clickCancel(index)">取消</button>
+                <button class="appversion-versionList-updateNote-save" @click="clickSave(index)">保存</button>
+              </div>
             </div>
           </div>
         </li>
@@ -59,7 +70,7 @@
     data() {
       return {
         isFix: false,
-        dataArr: ['1.1.0', '1.1.1', '1.1.2', '1.1.3', '1.1.4', '1.1.5', '1.1.6', '1.1.7'],
+        dataArr: [{'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}],
         showInDownLoadPage: false
       }
     },
@@ -72,6 +83,11 @@
         }
       }
     },
+    created() {
+      this.$watch('showInDownLoadPage', (newValue) => {
+        console.log(newValue)
+      })
+    },
     methods: {
       clickFixBtn() {
         this.isFix = !this.isFix
@@ -83,6 +99,24 @@
         setTimeout(() => {
           this.dataArr.push(...['5555', '6666666'], '77777')
         }, 1000)
+      },
+      cliclEditorBtn(index) {
+        this.dataArr[index].isEditor = true
+      },
+      clickCancel(index) {
+        this.dataArr[index].isEditor = false
+      },
+      clickSave(index) {
+
+      },
+      changeSwitch(index) {
+        console.log(index)
+      },
+      clickPreViewBtn() {
+        const {href} = this.$router.resolve({
+          name: 'AppPreView'
+        })
+        window.open(href + 'appPreView', '_blank')
       }
     }
   }
@@ -160,7 +194,7 @@
   /*列表的样式*/
   .appversion-versionList-item {
     position: relative;
-    height: 180px;
+    padding-bottom: 60px;
   }
   .appversion-versionList-left-iconWrapper {
     width: 50px;
@@ -179,14 +213,13 @@
   }
   .appversion-versionList-left-line {
     width: 1px;
-    height: 130px;
     background-color: #ccc;
     position: absolute;
     top: 50px;
     left: 5px;
+    bottom: 0px;
   }
   .appversion-versionList-right {
-    height: 120px;
     display: inline-block;
     vertical-align: top;
     margin-left: 65px;
@@ -231,5 +264,27 @@
     color: #999;
     text-align: center;
     line-height: 40px;
+  }
+  .appversion-versionList-updateNote textarea {
+    width: 100%;
+    height: 100px;
+    border: solid 1px #ccc;
+    font-size: 15px;
+    outline: 0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 20px;
+    padding: 8px 8px;
+    margin-bottom: 10px;
+    resize: none;
+  }
+  .appversion-versionList-updateNote-save {
+    width: 60px;
+    height: 35px;
+    border-radius: 17.5px;
+    background-color: #F8BA0B;
+    border-color: transparent;
+    font-size: 16px;
+    color: white;
   }
 </style>

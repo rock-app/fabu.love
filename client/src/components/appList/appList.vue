@@ -24,12 +24,10 @@
           class="appItem-wrapper"
           :span="7" v-for="(o,index) in 20" :key="o"
           :offset="1"
+          @mouseover="appItemHovered"
+          @mouseout="appItemUnhovered"
         >
-          <div
-            :class="getAppItemClass(index)"
-            @mouseover="appItemHovered"
-            @mouseout="appItemUnhovered"
-          >
+          <div>
             <div :style="index%2===0? `borderTopColor: #A4C639;borderLeftColor:transparent`:`borderTopColor: lightGray;borderLeftColor:transparent`" style="width: 0px;height: 0px;position: absolute;top: 0;
 right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
@@ -79,11 +77,11 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
 
             <div v-show="index === 0" class="list-firstChild" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;background-color: #F8BA0B;text-align: center">
+              <input type="file" style="position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;opacity: 0">
               <img src="../../assets/uploadVersion_w.png" alt="">
               <p>拖拽到这里上传</p>
             </div>
           </div>
-
         </el-col>
       </el-row>
     </div>
@@ -98,14 +96,18 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       return {
         currentPlatform: '',
         dataList: ['1', '2', '3', '4', '5'],
-        queryText: '',
-        hoverFlag: false
+        queryText: ''
       }
     },
     components: {
       AppListNav
     },
     computed: {
+      getTitleActiveClass() {
+        if (this.hoverFlag) {
+          return `color: red`
+        }
+      }
     },
     methods: {
       clickIosPlatform() {
@@ -122,17 +124,9 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       gotoAppDetail() {
         this.$router.push('appDetail')
       },
-      getAppItemClass(index) {
-        if (this.hoverFlag) {
-          return 'appItemHovered'
-        }
-      },
       appItemHovered() {
-        this.hoverFlag = true
-        console.log(55555555)
       },
       appItemUnhovered() {
-        this.hoverFlag = false
       }
     },
     created () {
@@ -210,14 +204,22 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     margin-left: 12%;
     margin-right: 15%;
   }
-  .appItemHovered {
-    box-shadow: #666 0px 0px 10px;
-  }
   .appItem-wrapper {
     margin-bottom: 20px;
     height: 460px;
     background-color: white;
     position: relative;
+    transition: all 0.25s;
+  }
+  .appItem-wrapper:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0,0,0,.1);
+  }
+  .appItem-wrapper:hover .appItem-info-namewrapper p {
+    color: #000;
+  }
+  .appItem-wrapper:hover .list-firstChild img {
+    transform: scale(1.5);
   }
   .appItem-wrapper .appItem-platform{
     position: absolute;
@@ -294,7 +296,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     line-height: 30px;
     vertical-align: middle;
   }
-    .appItem-operate-common {
+  .appItem-operate-common {
     border: solid 1px #999;
     height: 100%;
     width: 32%;
@@ -311,6 +313,10 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     background-size: 60px 60px;
     margin-top: 160px;
     color: white;
+    transition: all 0.25s;
+  }
+  .list-firstChild img:hover {
+    transform: scale(1.5);
   }
   .list-firstChild p {
     color: white;

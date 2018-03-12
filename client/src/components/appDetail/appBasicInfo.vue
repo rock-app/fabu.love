@@ -6,11 +6,14 @@
       </el-form-item>
       <hr style="opacity: 0.2">
       <el-form-item label="应用名称" style="margin-top: 30px">
-        <el-input v-model="form.appName"></el-input>
+        <el-input v-model="form.appName" style="margin-left: 150px"></el-input>
       </el-form-item>
       <el-form-item label="短链接" style="margin-top: 30px">
-        <el-input v-model="form.shortLink">
-        </el-input>
+        <div style="margin-left: 150px !important;">
+          <el-input v-model="form.shortLink">
+            <template slot="prepend">Http://</template>
+          </el-input>
+        </div>
       </el-form-item>
       <el-form-item label="应用图标" style="margin-top: 30px">
         <img class="appBaseInfo-appicon" src="../../assets/backgroundImage.png" alt="">
@@ -72,14 +75,13 @@
   .appBaseInfo-wrapper {
     padding: 80px 15%;
   }
-  .el-form-item__label {
+  .appBaseInfo-wrapper .el-form-item__label {
     color: #9b9b9b;
     font-size: 18px;
   }
-  .el-input__inner {
+  .appBaseInfo-wrapper .el-input__inner {
     width: 500px;
     height: 50px !important;
-    margin-left: 150px;
     background-color: #F6F6F6;
     font-size: 20px;
   }
@@ -90,7 +92,7 @@
     background-size: cover;
     margin-left: 150px;
   }
-  .el-textarea__inner {
+  .appBaseInfo-wrapper .el-textarea__inner {
     background-color: #F6F6F6;
     margin-left: 150px;
     height: 260px;

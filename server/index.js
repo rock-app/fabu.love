@@ -14,9 +14,9 @@ const app = new Koa()
 
 // 解决跨域问题
 app.use(cors())
-// app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
-//   path: ['/api/user/register', '/api/user/login', '/swagger-html', '/swagger-json']
-// }))
+app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
+  path: ['/api/user/register', '/api/user/login', '/swagger-html', '/swagger-json']
+}))
 app.use(bodyParser())
 app.use(rest.restify())
 app.use(router.routes())

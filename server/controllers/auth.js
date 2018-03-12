@@ -1,15 +1,43 @@
-import {request, summary, tags, body} from 'koa-swagger-decorator';
+import {request, summary, tags, body,description} from 'koa-swagger-decorator';
 import {User, userSchema} from "../model/user";
 
 const jwt = require('jsonwebtoken');
 
 const tag = tags(['认证']);
 
+var loginSchema = {
+    username: {
+        type: 'string',
+        required: true
+    },
+    password: {
+        type: 'string',
+        required: true
+    }
+}
+
+var registerSchema = {
+    username: {
+        type: 'string',
+        required: true
+    },
+    password: {
+        type: 'string',
+        required: true
+    },
+    email : {
+        type: 'string',
+        required: true
+    }
+}
+
 module.exports = class AuthRouter {
 
-    @request('post', '/auth/login')
+    @request('post', '/api/user/login')
     @summary('登录')
+    @description('example of api')
     @tag
+    @body(loginSchema)
     static async login(ctx, next) {
         const {body} = ctx.request
         try {
@@ -47,9 +75,9 @@ module.exports = class AuthRouter {
         }
     }
 
-    @request('post', '/auth/register')
+    @request('post', '/api/user/register')
     @summary('注册用户')
-    @body(userSchema)
+    @body(registerSchema)
     @tag
     static async register(ctx, next) {
         const {body} = ctx.request;
@@ -64,7 +92,7 @@ module.exports = class AuthRouter {
             let user = await User.find({username: body.username});
             if (!user.length) {
                 const newUser = new User(body);
-                user = newUser.save();
+                user = await newUser.save();
                 ctx.status = 200;
                 ctx.body = {
                     message: '注册成功',

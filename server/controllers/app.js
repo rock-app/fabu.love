@@ -81,6 +81,13 @@ module.exports = class AppRouter {
         })
         ctx.rest(response)
     }
+
+    @request('post','/api/upload')
+    @description("上传IPA或者Apk")
+    static async upload(ctx,next){
+        
+    }
+
 }
 
 
@@ -92,3 +99,6 @@ function modifyFilter(filter) {
     }
     return result
 }
+
+
+

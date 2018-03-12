@@ -11,17 +11,19 @@
       </el-form-item>
       <el-form-item class="authorControll-form" label="开启密码访问">
         <el-switch
-          style="margin-left: 170px;"
+          style="margin-left: 170px"
           v-model="visitPassword"
           active-color="#F8BA0B"
           inactive-color="#333">
         </el-switch>
+        <input v-show="this.visitPassword" class="authorControll-passwordInput" placeholder="输入密码"/>
+        <span v-show="this.visitPassword" class="authorControll-passwordInput-arrow"></span>
       </el-form-item>
       <hr style="opacity: 0.2;margin-top: 40px;margin-bottom: 40px">
       <el-form-item class="authorControll-form" label="自动刷新应用权限">
         <el-switch
           style="margin-left: 170px;"
-          v-model="visitPassword"
+          v-model="autoRefresh"
           active-color="#F8BA0B"
           inactive-color="#333">
         </el-switch>
@@ -43,11 +45,23 @@
       return {
         allCanSeeDownLoadPage: false,
         visitPassword: true,
-        showInviteView: false
+        showInviteView: false,
+        autoRefresh: false
       }
     },
     components: {
       InviteMember
+    },
+    created () {
+      this.$watch('allCanSeeDownLoadPage', () => {
+        console.log(this.allCanSeeDownLoadPage)
+      })
+      this.$watch('visitPassword', () => {
+        console.log(this.visitPassword)
+      })
+      this.$watch('autoRefresh', () => {
+        console.log(this.autoRefresh)
+      })
     },
     methods: {
       clickInviteBtn() {
@@ -84,8 +98,30 @@
     line-height: 30px;
     height: 30px;
   }
-    .authorControll-invite .el-form-item__label {
+  .authorControll-invite .el-form-item__label {
     font-size: 20px;
     color: #666;
+  }
+  .authorControll-passwordInput {
+    margin-left: 60px;
+    width: 200px;
+    outline: 0;
+    height: 40px;
+    border-radius: 5px;
+    border: solid 1px #333;
+    display: inline-block;
+    padding-left: 10px;
+  }
+  .authorControll-passwordInput-arrow {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    left: -223px;
+    background-color: white;
+    transform: rotate(-45deg);
+    border-top: solid 1px #333;
+    border-left: solid 1px #333;
+    box-sizing: border-box;
   }
 </style>

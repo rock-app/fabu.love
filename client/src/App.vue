@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <router-view/>
-    <div style="background-color: lightgrey; width: 100%;height: 80px"></div>
   </div>
 </template>
 

@@ -29,13 +29,16 @@
         </div>
       </div>
       <div class="appDetail-header-rightwrapper">
-        <el-button class="uploadButton" type="primary"><i class="el-icon-upload el-icon--left"></i>上传</el-button>
-        <div>
-          <el-button class="detail-preViewButton"><i class="el-icon-upload el-icon--left"></i>预览</el-button>
+        <div style="position: relative">
+          <el-button class="uploadButton" type="primary"><i class="el-icon-upload el-icon--left"></i>上传</el-button>
+          <input type="file" style="position: absolute;top: 30px;height: 40px;width: 150px;opacity: 0">
+          <div>
+        </div>
+          <el-button @click="clickPreviewBtn" class="detail-preViewButton"><i class="el-icon-upload el-icon--left"></i>预览</el-button>
         </div>
       </div>
       <div style="position: absolute;left: 15%;bottom: -15px">
-        <img class="appDetail-header-indicate" src="../../assets/indicateImg.png" alt="">
+        <img ref="headerIndicate" class="appDetail-header-indicate" src="../../assets/indicateImg.png" alt="">
       </div>
     </div>
     <!--内容-->
@@ -72,6 +75,7 @@
     methods: {
       clickAppIcon() {
         this.currentModule = 'appVersions'
+        this.$refs.headerIndicate.style.marginLeft = `30px`
       },
       clickOtherInfo(item) {
         this.currentModule = item
@@ -79,16 +83,20 @@
         if (this.currentModule === 'appVersions') {
         }
         if (this.currentModule === '基本信息') {
+          this.$refs.headerIndicate.style.marginLeft = `175px`
         }
         if (this.currentModule === '权限控制') {
+          this.$refs.headerIndicate.style.marginLeft = `295px`
         }
         if (this.currentModule === '应用合并') {
+          this.$refs.headerIndicate.style.marginLeft = `400px`
         }
         if (this.currentModule === '高级统计') {
+          this.$refs.headerIndicate.style.marginLeft = `500px`
         }
         if (this.currentModule === '集成') {
+          this.$refs.headerIndicate.style.marginLeft = `590px`
         }
-        document.getElementsByClassName('appDetail-header-indicate')
       },
       getDetailotherAppInfoClass(item) {
         if (item === this.currentModule) {
@@ -96,6 +104,12 @@
         } else {
           return 'detail-otherAppInfo-nomal'
         }
+      },
+      clickPreviewBtn() {
+        const {href} = this.$router.resolve({
+          name: 'AppPreView'
+        })
+        window.open(href + 'appPreView', '_blank')
       }
     }
   }
@@ -127,8 +141,7 @@
     height: 40px;
     background-size: 40px 40px;
     margin-left: 30px;
-    /*animation: indicateMove0 1s linear;*/
-    /*animation-fill-mode: forwards;*/
+    transition: margin-left  0.25s;
   }
   @keyframes indicateMove0 {
     to {
@@ -233,5 +246,7 @@
   .detail-preViewButton {
     width: 150px;
     margin-top: 10px;
+    border-color: #3AB2A7;
+    color: #3AB2A7;
   }
 </style>

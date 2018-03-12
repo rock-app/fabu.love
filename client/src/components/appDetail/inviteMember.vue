@@ -45,7 +45,7 @@
     left: 0px;
     top: 0px;
     background-color: white;
-    opacity: 0.8;
+    opacity: 0.9;
   }
   .inviteWrapper {
     position: fixed;
@@ -57,8 +57,12 @@
   .emailtextareawrapper {
     margin-top: 10px;
   }
+  .emailtextareawrapper .el-textarea__inner {
+    height: 260px;
+  }
   .inviteMember-emailtextarea {
     width: 100%;
+    height: 100%;
   }
   .inviteMember-inviteBtn {
     background-color: #F8BA0B;
@@ -71,9 +75,5 @@
     font-size: 16px;
     position: absolute;
     right: 0px;
-  }
-
-  .emailtextareawrapper .el-textarea__inner {
-    margin-left: 0px;
   }
 </style>

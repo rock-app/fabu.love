@@ -36,8 +36,8 @@ router.swagger({
   for (var f of js_files) {
     console.log(`process controller: ${f}...`)
     let mapping = require('./controllers/' + f)
-    console.log(mapping['default'])
-    router.map(mapping['default'])
+    console.log(mapping)
+    router.map(mapping)
   }
 })();
 

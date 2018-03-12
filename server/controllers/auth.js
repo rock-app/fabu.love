@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const tag = tags(['认证']);
 
-export default class AuthRouter {
+module.exports = class AuthRouter {
 
     @request('post', '/auth/login')
     @summary('登录')

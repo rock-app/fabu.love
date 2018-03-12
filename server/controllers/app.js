@@ -42,7 +42,7 @@ const App = require('../model/app')
 
 const tag = tags(['AppResource']);
 
-export default class AppRouter {
+module.exports = class AppRouter {
     @request('post','/api/apps')
     @description("获取所有App列表")
     @summary('获取所有App列表')

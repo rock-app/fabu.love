@@ -4,6 +4,7 @@ import Login from '../components/loginRegiest/Login.vue'
 import Regiest from '../components/loginRegiest/regiest.vue'
 import AppDetail from '../components/appDetail/appDetail.vue'
 import AppPreView from '../components/appDetail/appPreView.vue'
+import UserInfo from '../components/user/userInfo.vue'
 
 Vue.use(Router)
 
@@ -37,6 +38,11 @@ export default new Router({
       path: '/appPreView',
       name: 'AppPreView',
       component: AppPreView
+    },
+    {
+      path: '/userInfo',
+      name: 'UserInfo',
+      component: UserInfo
     }
   ]
 })

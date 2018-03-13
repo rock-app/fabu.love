@@ -109,7 +109,7 @@
         const {href} = this.$router.resolve({
           name: 'AppPreView'
         })
-        window.open(href + 'appPreView', '_blank')
+        window.open(href, '_blank')
       }
     }
   }

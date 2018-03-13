@@ -9,12 +9,12 @@
       <div class="appversion-header-right">
         <el-form ref="form">
           <el-form-item class="appversion-header-form" label="版本更新">
-            <button class="appversion-header-backbtn">回退</button>
+            <button type="button" class="appversion-header-backbtn">回退</button>
           </el-form-item>
-          <el-form-item class="appversion-header-form-address" label="商店地址：" style="">
+          <el-form-item class="appversion-header-form-address" label="商店地址：">
             <input :disabled="!this.isFix" :style="setBackgroudColor" type="text" placeholder="未填写">
-            <button @click="clickFixBtn" v-html="this.isFix ? `保存`:`修改`"></button>
-            <button @click="clickCancelBtn" style="margin-left: 3px" v-show="this.isFix">取消</button>
+            <button type="button" @click="clickFixBtn" v-html="this.isFix ? `保存`:`修改`"></button>
+            <button type="button" @click="clickCancelBtn" style="margin-left: 3px" v-show="this.isFix">取消</button>
           </el-form-item>
         </el-form>
       </div>
@@ -35,7 +35,7 @@
               <span>XC:com.hd.123.com-sahnghaiasasasasasasasasas</span>
             </div>
             <div class="appversion-versionList-itemBottom" v-show="!item.isEditor">
-              <el-button round @click="cliclEditorBtn(index)">编辑</el-button>
+              <el-button round @click="clickEditorBtn(index)">编辑</el-button>
               <el-button round><i class="el-icon-upload el-icon--left"></i>10.36M</el-button>
               <el-button @click="clickPreViewBtn" round><i class="icon-ic_preview"></i>预览</el-button>
               <el-button round><i class="el-icon-upload el-icon--left"></i>标记上线</el-button>
@@ -66,7 +66,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   export default {
+    components: {ElButton},
     data() {
       return {
         isFix: false,
@@ -100,7 +102,7 @@
           this.dataArr.push(...['5555', '6666666'], '77777')
         }, 1000)
       },
-      cliclEditorBtn(index) {
+      clickEditorBtn(index) {
         this.dataArr[index].isEditor = true
       },
       clickCancel(index) {
@@ -116,7 +118,7 @@
         const {href} = this.$router.resolve({
           name: 'AppPreView'
         })
-        window.open(href + 'appPreView', '_blank')
+        window.open(href, '_blank')
       }
     }
   }
@@ -159,11 +161,11 @@
     font-weight: bold;
     text-align: left;
   }
-  .appversion-header-form-address .el-form-item__label {
+  .appversion-header-right .appversion-header-form-address .el-form-item__label {
     font-size: 14px;
     text-align: left;
   }
-  .appversion-header-form-address input {
+  .appversion-header-right .appversion-header-form-address input {
     width: 400px;
     height: 40px;
     border: solid 1px #999;
@@ -172,7 +174,7 @@
     padding-left: 8px;
     outline: 0;
   }
-  .appversion-header-form-address button {
+  .appversion-header-right .appversion-header-form-address button {
     width: 50px;
     height: 40px;
     border: solid 1px #999;
@@ -181,7 +183,6 @@
     background-color: $paleGrey;
     vertical-align: top;
     margin-left: 10px;
-    outline: 0;
   }
   .appversion-header-backbtn {
     background-color: $paleGrey;

@@ -6,7 +6,7 @@
         <el-breadcrumb-item :to="{ path: '/applist' }">我的应用</el-breadcrumb-item>
         <el-breadcrumb-item v-if="this.appSubModule" v-show="this.appSubModule" v-html="this.appSubModule"></el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="userInfoBottomWrapper" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
+      <div class="userInfoBottomWrapper" :style="this.userHover? 'background-color: rgb(244, 245, 247)':'background-color: white'" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
         <div class="userInfoWrapper">
           <img src="../../assets/logo.png" alt="">
           <div class="ueserInfo-username nowrap">
@@ -15,8 +15,8 @@
           <p class="ueserInfo-email nowrap">dede12121212@qq.com</p>
         </div>
       </div>
-      <ul class="userInfoSubWrapper" v-show="this.userHover">
-        <li class="userInfoSub">
+      <ul class="userInfoSubWrapper" v-show="this.userHover" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
+        <li class="userInfoSub" @click="clickUserInfoWrapper">
           <span>个人资料</span>
         </li>
         <li class="userInfoSub">
@@ -48,6 +48,9 @@
       },
       userInfoUnhovered() {
         this.userHover = false
+      },
+      clickUserInfoWrapper() {
+        this.$router.push('userInfo')
       }
     }
   }
@@ -112,6 +115,7 @@
     top: 85px;
     width: 150px;
     height: 50px;
+    z-index: 100;
   }
   .userInfoSub {
     width: 150px;
@@ -125,5 +129,8 @@
     line-height: 44px;
     height: 44px;
     color: #999;
+  }
+  .userInfoSub span:hover {
+    color: #333;
   }
 </style>

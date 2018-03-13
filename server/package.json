@@ -2,7 +2,7 @@
     "name": "hello-koa2",
     "version": "1.0.0",
     "description": "Hello Koa 2 example with async",
-    "main": "app.js",
+    "main": "index.js",
     "scripts": {
         "start": "babel-node index.js",
         "build": "babel src -d dist --source-maps",
@@ -36,7 +36,9 @@
         "koa-body": "^2.5.0",
         "lodash": "^4.17.4",
         "pm2": "^2.9.3",
-        "uuid": "^3.2.1"
+        "uuid": "^3.2.1",
+        "mime": "^2.2.0",
+        "await-exec": "^0.1.0"
     },
     "devDependencies": {
         "babel-cli": "^6.24.1",
@@ -54,6 +56,5 @@
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
         "mocha": "^5.0.1"
-        
     }
 }

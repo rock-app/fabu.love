@@ -11,7 +11,7 @@ import {
 import { APIError } from "../helper/rest";
 
 // const APIError = require('../helper/rest').APIError
-const App = require('../model/app')
+const App = require('../model/app_model')
 
 
 // App.find().remove().exec()
@@ -81,13 +81,6 @@ module.exports = class AppRouter {
         })
         ctx.rest(response)
     }
-
-    @request('post','/api/upload')
-    @description("上传IPA或者Apk")
-    static async upload(ctx,next){
-        
-    }
-
 }
 
 

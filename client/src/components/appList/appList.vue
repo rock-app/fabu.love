@@ -63,11 +63,11 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
             <!--删除等操作-->
             <div class="appItem-operate">
-              <div class="appItem-operate-editor appItem-operate-common">
+              <div class="appItem-operate-editor appItem-operate-common" @click="clickEditorBtn">
                 <span class="icon-ic_editor"></span>
                 <span style="font-size: 14px">编辑</span>
               </div>
-              <div class="appItem-operate-preview appItem-operate-common">
+              <div class="appItem-operate-preview appItem-operate-common" @click="clickPreview">
                 <span class="icon-ic_preview"></span>
                 <span style="font-size: 14px">预览</span>
               </div>
@@ -127,6 +127,15 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       appItemHovered() {
       },
       appItemUnhovered() {
+      },
+      clickEditorBtn() {
+        this.$router.push('appDetail')
+      },
+      clickPreview() {
+        const {href} = this.$router.resolve({
+          name: 'AppPreView'
+        })
+        window.open(href, '_blank')
       }
     },
     created () {
@@ -296,6 +305,20 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     line-height: 30px;
     vertical-align: middle;
   }
+  .appItem-operate-editor:hover {
+    border-color: #F8BA0B;
+    color: #F8BA0B;
+  }
+  .appItem-operate-editor:hover span:before {
+    color: #F8BA0B;
+  }
+  .appItem-operate-preview:hover {
+    border-color: #F8BA0B;
+    color: #F8BA0B;
+  }
+  .appItem-operate-preview:hover span:before {
+    color: #F8BA0B;
+  }
   .appItem-operate-common {
     border: solid 1px #999;
     height: 100%;
@@ -306,6 +329,13 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
   .appItem-operate-delect {
     width: 30px;
     text-align: center;
+  }
+  .appItem-operate-delect:hover {
+    background-color: crimson;
+    border-color: transparent;
+  }
+  .appItem-operate-delect:hover i {
+    color: white;
   }
   .list-firstChild img {
     width: 60px;

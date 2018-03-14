@@ -29,7 +29,7 @@ module.exports = {
                     ctx.response.status = 400
                     ctx.response.type = 'application/json'
                     ctx.response.body = {
-                        code: e.code || 'internal:unknown_error',
+                        code: e.code || 500,
                         message: e.message || ''
                     }
                     console.log(e)

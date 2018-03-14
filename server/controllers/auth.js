@@ -81,31 +81,27 @@ module.exports = class AuthRouter {
     @tag
     static async register(ctx, next) {
         const {body} = ctx.request;
-        try {
-            if (!body.username || !body.password) {
-                ctx.status = 401;
-                ctx.body = {
-                    error: 'expected an object with userName, password but got'
-                };
-                return;
+        if (!body.username || !body.password) {
+            ctx.status = 401;
+            ctx.body = {
+                error: 'expected an object with userName, password but got'
+            };
+            return;
+        }
+        let user = await User.find({username: body.username});
+        if (!user.length) {
+            const newUser = new User(body);
+            user = await newUser.save();
+            ctx.status = 200;
+            ctx.body = {
+                message: '注册成功',
+                user: user
             }
-            let user = await User.find({username: body.username});
-            if (!user.length) {
-                const newUser = new User(body);
-                user = await newUser.save();
-                ctx.status = 200;
-                ctx.body = {
-                    message: '注册成功',
-                    user: user
-                }
-            } else {
-                ctx.status = 406;
-                ctx.body = {
-                    message: '用户已存在'
-                }
+        } else {
+            ctx.status = 406;
+            ctx.body = {
+                message: '用户已存在'
             }
-        } catch (error) {
-            ctx.throw(500);
         }
     }
 }

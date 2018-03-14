@@ -2,23 +2,23 @@ const mongoose = require('../helper/db');
 const Schema = mongoose.Schema;
 
 var versionSchema = new Schema({
-    appId: {
+    bundleId:  {
         type: String,
         index: true
     },
-    bundleId: String,
     versionStr: String,
     versionCode: String,
     uploadAt: {
         type: Date,
         default: Date.now
     },
-    uploader: {
-        type: String
-    },
+    uploader: String,
+    uploaderId:String,
     size: Number,
+    active:Boolean,
     downloadUrl: String,
-    hidden: Boolean
+    downloadCount: Number, 
+    hidden: { type:Boolean , default:false}
 });
 
 module.exports = mongoose.model('Version', versionSchema);

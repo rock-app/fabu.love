@@ -10,12 +10,14 @@ var appSchema = new Schema({
         type: String,
         index: true
     },
-    name: {
+    bundleName: {
         type: String
     },
+    appName:String,
     currentVersion: {
         type: String
     },
+    creatorId: String,
     creator: String,
     createAt: {
         type: Date,

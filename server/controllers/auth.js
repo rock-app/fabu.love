@@ -1,3 +1,5 @@
+'use strict';
+
 import {request, summary, tags, body,description} from 'koa-swagger-decorator';
 import {User, userSchema} from "../model/user";
 
@@ -35,7 +37,6 @@ module.exports = class AuthRouter {
 
     @request('post', '/api/user/login')
     @summary('登录')
-    @description('example of api')
     @tag
     @body(loginSchema)
     static async login(ctx, next) {

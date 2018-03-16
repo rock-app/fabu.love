@@ -1,7 +1,6 @@
 import Router from 'koa-router';
-
-const fs = require('fs')
-const swagger = require('koa-swagger-decorator')
+import fs from 'fs';
+import swagger from './swagger';
 
 const router = new Router();
 swagger.wrapper(router);

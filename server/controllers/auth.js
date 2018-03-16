@@ -60,6 +60,7 @@ module.exports = class AuthRouter {
             if (body.password === user.password) {
                 ctx.status = 200
                 ctx.body = {
+                    code:200,
                     message: '登录成功',
                     token: jwt.sign({
                         data: user,

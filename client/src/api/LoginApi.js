@@ -2,19 +2,26 @@ import axios from 'axios'
 
 export default class LoginApi {
 
-  static baseURL = 'http://localhost:3001/'
+  static baseURL = 'http://localhost:3008/'
 
   static login(username, password) {
-    return axios.post(this.baseURL + 'api/login', {
+    this.configAxios()
+    return axios.post(this.baseURL + 'api/user/login', {
       username: username,
       password: password
     })
   }
 
-static register(username, password) {
-    return axios.post(this.baseURL + 'api/register', {
+  static register(username, password, email) {
+    this.configAxios()
+    return axios.post(this.baseURL + 'api/user/register', {
       username: username,
-      password: password
+      password: password,
+      email: email
     })
+  }
+
+  static configAxios() {
+    axios.defaults.headers.common['Content-Type'] = 'application/json'
   }
 }

@@ -7,7 +7,7 @@ import {
     path,
     query,
     description
-} from 'koa-swagger-decorator';
+} from '../swagger';
 
 import { APIError } from "../helper/rest";
 import { responseWrapper } from "../helper/util";

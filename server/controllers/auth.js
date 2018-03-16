@@ -1,6 +1,6 @@
 'use strict';
 
-import {request, summary, tags, body,description} from 'koa-swagger-decorator';
+import {request, summary, tags, body,description} from '../swagger';
 import {User, userSchema} from "../model/user";
 import { responseWrapper } from "../helper/util";
 
@@ -12,11 +12,18 @@ var loginSchema = {
     username: {
         type: 'string',
         required: true
+        // a: {
+        //     type: 'string'
+        // },
+        // b: {
+        //     type: 'string'
+        // }
     },
     password: {
         type: 'string',
         required: true
     }
+
 }
 
 var registerSchema = {
@@ -39,7 +46,7 @@ module.exports = class AuthRouter {
     @request('post', '/api/user/login')
     @summary('登录')
     @tag
-    @body(loginSchema)
+    @body(userSchema)
     static async login(ctx, next) {
         const {body} = ctx.request
         const user = await User.findOne({username: body.username,password:body.password},'username');

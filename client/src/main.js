@@ -11,6 +11,8 @@ import BaseApi from './api/BaseApi'
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
 
+Vue.prototype.router = router
+
 Vue.use(ElementUI)
 
 BaseApi.init(router)

@@ -10,8 +10,10 @@
 
     <el-form class="form-wrapper" ref="form" :model="form">
       <el-input class="regiest-input" v-model="form.userName" placeholder="请输入用户名"></el-input>
+      <el-input type="text" class="regiest-input" v-model="form.email" placeholder="请输入邮箱"></el-input>
       <el-input type="password" class="regiest-input" v-model="form.password" placeholder="请输入密码" ></el-input>
       <el-input type="password" class="regiest-input" v-model="form.repassword" placeholder="请再次输入密码"></el-input>
+
     </el-form>
 
     <div class="regiest-footer">
@@ -24,7 +26,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import LoginApi from '../../api/LoginApi'
+  import * as LoginApi from '../../api/moudle/loginApi'
 
   export default {
     data() {
@@ -32,7 +34,8 @@
         form: {
           userName: '',
           password: '',
-          repassword: ''
+          repassword: '',
+          email: ''
         },
         errorInfo: ''
       }
@@ -52,11 +55,24 @@
           return
         }
         this.errorInfo = ''
-        LoginApi.register(this.form.userName, this.form.password).then((resp) => {
-          console.log(resp.data)
-        }).catch((error) => {
-          console.log(error)
-        })
+        let body = {
+          'username': this.form.userName,
+          'password': this.form.password,
+          'email': this.form.email
+        }
+        LoginApi.register(body)
+          .then(response => {
+            console.log(response.data)
+            this.$message({
+              message: '恭喜你，注册成功',
+              type: 'success'
+            })
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 800)
+          }, reject => {
+            console.log(reject)
+          })
       },
       onLoginAgain() {
         this.$router.go(-1)

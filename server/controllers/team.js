@@ -1,6 +1,6 @@
 'use strict';
 
-import {request, summary, tags, body, query, description,path} from 'koa-swagger-decorator';
+import {request, summary, tags, body, query,path,description} from '../swagger';
 import {User, userSchema} from "../model/user";
 import Team from "../model/team";
 import {responseWrapper} from "../helper/util";

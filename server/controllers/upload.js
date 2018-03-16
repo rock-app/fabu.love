@@ -1,15 +1,14 @@
-var {
+import {
   request,
   summary,
   body,
   tags,
   middlewares,
-  path,
   description,
   formData,
   responses,
   query
-} = require('koa-swagger-decorator');
+} from '../swagger';
 
 const Version = require('../model/version')
 const App = require('../model/app_model')

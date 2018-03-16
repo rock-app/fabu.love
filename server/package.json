@@ -38,7 +38,7 @@
         "pm2": "^2.9.3",
         "uuid": "^3.2.1",
         "mime": "^2.2.0",
-        "await-exec": "^0.1.0"
+        "fawn": "^2.1.5"
     },
     "devDependencies": {
         "babel-cli": "^6.24.1",

@@ -19,19 +19,19 @@ const writeFile = (path, data, opts = 'utf8') => new Promise((res, rej) => {
     })
 })
 
-const responseWrapper = (success, message, data) => {
+const responseWrapper = function wrapper(success, message, data) {
     if (arguments.length === 3) {
-        return {'success': success, 'message': message, 'data': data}
+        return {'success': success, 'message': message, 'data': data};
     }
     //只传2个参数,必须传是否成功 和 返回的提示信息
     if (arguments.length === 2) {
-        return {'success': success, 'message': message}
-    }
+        return {'success': success, 'message': message};
+    };
     //如果只传一个参数 则默认当作请求成功 返回正常数据
     if (arguments.length === 1) {
-        return {'success': true, 'data': arguments[0]}
+        return {'success': true, 'data': arguments[0]};
     }
-   
+    return {}
 }
 
 function exec(command, options = {

@@ -6,7 +6,7 @@ import {
     middlewares,
     path,
     description
-} from 'koa-swagger-decorator';
+} from '../swagger';
 
 import { APIError } from "../helper/rest";
 

@@ -1,6 +1,7 @@
 const mongoose = require('../helper/db')
-const Schema = mongoose.Schema
-
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
+    
 var teamSchema = new Schema({
     name: {
         type: String,

@@ -1,6 +1,6 @@
 'use strict';
 
-import {request, summary, tags, body,description} from 'koa-swagger-decorator';
+import {request, summary, tags, body,description} from '../swagger';
 import {User, userSchema} from "../model/user";
 
 const jwt = require('jsonwebtoken');
@@ -11,11 +11,18 @@ var loginSchema = {
     username: {
         type: 'string',
         required: true
+        // a: {
+        //     type: 'string'
+        // },
+        // b: {
+        //     type: 'string'
+        // }
     },
     password: {
         type: 'string',
         required: true
     }
+
 }
 
 var registerSchema = {
@@ -38,7 +45,7 @@ module.exports = class AuthRouter {
     @request('post', '/api/user/login')
     @summary('登录')
     @tag
-    @body(loginSchema)
+    @body(userSchema)
     static async login(ctx, next) {
         const {body} = ctx.request
         try {

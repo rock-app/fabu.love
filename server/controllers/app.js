@@ -13,33 +13,6 @@ import { APIError } from "../helper/rest";
 // const APIError = require('../helper/rest').APIError
 const App = require('../model/app_model')
 
-
-// App.find().remove().exec()
-
-// var date = new Date(2018, 1, 1, 0, 0, 0, 0);
-// for (let i = 0; i < 95; i++) {
-//     let platform, version
-//     if (i % 2 === 0) {
-//         platform = 'android'
-//         version = '1.2.0'
-//     } else {
-//         platform = 'ios'
-//         version = '1.3.0'
-//     }
-//     var app = new App({
-
-//         name: '千帆优货',
-//         version: version,
-//         describe: '-增加四级地址支持 增加四级地址支持增加四级地址支持 - 稳定性提升',
-//         state: '正常',
-//         isRelease: true,
-//         type: 'release',
-//         downloadCounts: i,
-//         updateTime: new Date(date.getTime() + 60 * 60 * 1000 * i)
-//     })
-//     app.save()
-// }
-
 const tag = tags(['AppResource']);
 
 module.exports = class AppRouter {

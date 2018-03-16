@@ -31,6 +31,10 @@ var appSchema = new Schema({
     },
     updateAt: {
         type: Date
+    },
+    owner:{
+        tag:{type:String,enum:["team","user"]}, // team / user 
+        id:String //团队或者用户的id
     }
 })
 

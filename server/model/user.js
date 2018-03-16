@@ -10,7 +10,16 @@ var userSchema = {
   },
   token: {
     type: String
-  }
+  },
+  team: [
+    {
+      id: String,
+      role: {
+        type: String,
+        enum: ["owner", "manager", "guest"]
+      }
+    }
+  ]
 }
 
 module.exports = {

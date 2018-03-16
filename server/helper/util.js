@@ -19,24 +19,41 @@ const writeFile = (path, data, opts = 'utf8') => new Promise((res, rej) => {
     })
 })
 
-const responseWrapper = (res) => {
-    return {'code': 200, 'data': res}
+const responseWrapper = (success, message, data) => {
+    if (arguments.length === 3) {
+        return {'success': success, 'message': message, 'data': data}
+    }
+    //只传2个参数,必须传是否成功 和 返回的提示信息
+    if (arguments.length === 2) {
+        return {'success': success, 'message': message}
+    }
+    //如果只传一个参数 则默认当作请求成功 返回正常数据
+    if (arguments.length === 1) {
+        return {'success': true, 'data': arguments[0]}
+    }
+   
 }
 
-function exec (command, options = { log: false, cwd: process.cwd() }) {
-  if (options.log) console.log(command)
+function exec(command, options = {
+    log: false,
+    cwd: process.cwd()
+}) {
+    if (options.log) 
+        console.log(command)
 
-  return new Promise((done, failed) => {
-    cp.exec(command, { options }, (err, stdout, stderr) => {
-      if (err) {
-        err.stdout = stdout
-        err.stderr = stderr
-        failed(err)
-        return
-      }
-      done({ stdout, stderr })
+    return new Promise((done, failed) => {
+        cp.exec(command, {
+            options
+        }, (err, stdout, stderr) => {
+            if (err) {
+                err.stdout = stdout
+                err.stderr = stderr
+                failed(err)
+                return
+            }
+            done({stdout, stderr})
+        })
     })
-  })
 }
 
 module.exports = {

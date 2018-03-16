@@ -22,7 +22,7 @@
       <el-row>
         <el-col
           class="appItem-wrapper"
-          :span="7" v-for="(o,index) in 20" :key="o"
+          :span="7" v-for="(item,index) in dataList" :key="item.id"
           :offset="1"
           @mouseover="appItemHovered"
           @mouseout="appItemUnhovered"
@@ -31,32 +31,32 @@
             <div :style="index%2===0? `borderTopColor: #A4C639;borderLeftColor:transparent`:`borderTopColor: lightGray;borderLeftColor:transparent`" style="width: 0px;height: 0px;position: absolute;top: 0;
 right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
-            <i v-show="index%2===0" class="icon-ic_ios appItem-platform"></i>
-            <i v-show="index%2!==0" class="icon-ic_android appItem-platform"></i>
+            <i v-show="item.platform === 'ios'" class="icon-ic_ios appItem-platform"></i>
+            <i v-show="item.platform === 'android'" class="icon-ic_android appItem-platform"></i>
             <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail">
             <!--app信息-->
             <div class="appItem-info">
               <div class="appItem-info-namewrapper">
                 <span class="icon-ic_application"></span>
-                <p class="nowrap" @click="gotoAppDetail">订货宝</p>
+                <p class="nowrap" @click="gotoAppDetail">{{item.appName}}</p>
               </div>
               <table style="width: 100%;table-layout: fixed">
                 <tr>
                   <td class="appItem-info-title">短链接:</td>
                   <td>
-                    <div class="appItem-info-appInfo nowrap">http://fir.im/xiaoutrialxiaoutrial</div>
+                    <div class="appItem-info-appInfo nowrap">参数无</div>
                   </td>
                 </tr>
                 <tr>
                   <td class="appItem-info-title">PackageName:</td>
                   <td>
-                    <div class="appItem-info-appInfo nowrap">com.hd123.xiaoutrialxiaoutrialxiaoutrial</div>
+                    <div class="appItem-info-appInfo nowrap">{{item.bundleId}}</div>
                   </td>
                 </tr>
                 <tr>
                   <td class="appItem-info-title">最新版本:</td>
                   <td>
-                    <div class="appItem-info-appInfo nowrap">1.0_build_12141046 ( Build 1 )</div>
+                    <div class="appItem-info-appInfo nowrap">参数无</div>
                   </td>
                 </tr>
               </table>
@@ -77,30 +77,36 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
 
             <div v-show="index === 0" class="list-firstChild" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;background-color: #F8BA0B;text-align: center">
-              <input type="file" style="position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;opacity: 0">
               <img src="../../assets/uploadVersion_w.png" alt="">
               <p>拖拽到这里上传</p>
+              <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;opacity: 0">
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
+
+    <uploadApp v-if="this.showUploadView" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import AppListNav from './appListNav.vue'
+  import * as AppResourceApi from '../../api/moudle/appResourceApi'
+  import UploadApp from './uploadApp.vue'
 
   export default {
     data() {
       return {
         currentPlatform: '',
-        dataList: ['1', '2', '3', '4', '5'],
-        queryText: ''
+        dataList: [{'flag': 'flag'}],
+        queryText: '',
+        showUploadView: false,
+        file: FileList
       }
     },
     components: {
-      AppListNav
+      AppListNav, UploadApp
     },
     computed: {
       getTitleActiveClass() {
@@ -110,6 +116,31 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       }
     },
     methods: {
+      loadAppList() {
+        AppResourceApi.getAppList()
+          .then(response => {
+            console.log(response)
+            this.dataList = [{'flag': 'flag'}]
+            response.applist.forEach((item) => {
+              this.dataList.push(item)
+            })
+          }, reject => {
+            this.$message.error(reject)
+          })
+      },
+      referenceUpload(e) {
+        this.file = e.target.files
+        if (e.target.files.length > 0) {
+          this.showUploadView = true
+        }
+      },
+      closeUploadMethod() {
+        this.showUploadView = false
+      },
+      uploadSuccessMethod() {
+        this.showUploadView = false
+        this.loadAppList()
+      },
       clickIosPlatform() {
         this.currentPlatform = 'ios'
       },
@@ -141,6 +172,9 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     created () {
       this.$watch('queryText', () => {
         console.log(this.queryText)
+      })
+      this.$nextTick(() => {
+        this.loadAppList()
       })
     }
   }

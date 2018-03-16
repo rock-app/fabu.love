@@ -2,15 +2,15 @@
   <div>
     <div class="applist-nav">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="applist-nav-left">
-        <el-breadcrumb-item :to="{ path: '/' }">App-publisher</el-breadcrumb-item>
+        <el-breadcrumb-item>App-publisher</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/applist' }">我的应用</el-breadcrumb-item>
         <el-breadcrumb-item v-if="this.appSubModule" v-show="this.appSubModule" v-html="this.appSubModule"></el-breadcrumb-item>
       </el-breadcrumb>
       <div class="userInfoBottomWrapper" :style="this.userHover? 'background-color: rgb(244, 245, 247)':'background-color: white'" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
         <div class="userInfoWrapper">
           <img src="../../assets/logo.png" alt="">
-          <div class="ueserInfo-username nowrap">
-            chenliang21212222212
+          <div class="ueserInfo-username nowrap" v-if="this.userInfo">
+            {{this.userInfo.userName}}
           </div>
           <p class="ueserInfo-email nowrap">dede12121212@qq.com</p>
         </div>
@@ -19,7 +19,7 @@
         <li class="userInfoSub" @click="clickUserInfoWrapper">
           <span>个人资料</span>
         </li>
-        <li class="userInfoSub">
+        <li class="userInfoSub" @click="loginout">
           <span>退出</span>
         </li>
       </ul>
@@ -28,6 +28,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {getUserInfo} from '../../mgr/userMgr'
+
   export default {
     props: {
       appSubModule: {
@@ -37,10 +39,14 @@
     },
     data() {
       return {
-        userHover: false
+        userHover: false,
+        userInfo: {
+        }
       }
     },
     created() {
+      let user = getUserInfo()
+      this.userInfo = user
     },
     methods: {
       userInfoHovered() {
@@ -51,6 +57,9 @@
       },
       clickUserInfoWrapper() {
         this.$router.push('userInfo')
+      },
+      loginout() {
+        this.$router.push('/')
       }
     }
   }

@@ -3,6 +3,7 @@
 import {request, summary, tags, body,description} from '../swagger';
 import {User, userSchema} from "../model/user";
 import { responseWrapper } from "../helper/util";
+import bcrypt from "bcrypt"
 
 const jwt = require('jsonwebtoken');
 
@@ -49,8 +50,13 @@ module.exports = class AuthRouter {
     @body(userSchema)
     static async login(ctx, next) {
         const {body} = ctx.request
-        const user = await User.findOne({username: body.username,password:body.password},'username');
-        if (!user) {
+        const user = await User.findOne({username: body.username},'username password');
+        if (user) {
+            const valide = await bcrypt.compare(body.password, user.password)
+            if (!valide) {
+                throw new Error('用户名或密码错误')
+            }
+        } else {
             throw new Error('用户名或密码错误')
         }
         ctx.body = {
@@ -69,6 +75,7 @@ module.exports = class AuthRouter {
     @tag
     static async register(ctx, next) {
         const {body} = ctx.request;
+        body.password = await bcrypt.hash(body.password, 5)
         let user = await User.find({username: body.username});
         if (!user.length) {
             const newUser = new User(body);

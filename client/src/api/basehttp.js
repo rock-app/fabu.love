@@ -18,6 +18,20 @@ export function getHttp (url, params) {
   })
 }
 
+export function deleteHttp (url) {
+  return new Promise((resolve, reject) => {
+    configAxios()
+    vue.axios.delete(url)
+      .then(response => {
+        setTimeout(() => {
+          resolve(response.data)
+        }, 300)
+      })
+      .catch(error => {
+        reject(error.message)
+      })
+  })
+}
 export function postHttp (url, body, params) {
   return new Promise((resolve, reject) => {
     configAxios()

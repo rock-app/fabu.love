@@ -56,7 +56,7 @@
         LoginApi.login(body)
           .then(response => {
             // 存储token
-            console.log(response.data)
+            console.log(response)
             TokenMgr.add(this.axios.baseURL, response.data)
             let user = {
               'userName': this.userName

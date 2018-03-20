@@ -12,7 +12,7 @@ var userSchema = {
   token: {
     type: String
   },
-  team: [
+  teams: [
     {
       _id:ObjectId,
       name:String,

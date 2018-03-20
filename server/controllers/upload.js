@@ -52,7 +52,7 @@ const tag = tags(['上传']);
 const upload = multer({storage});
 
 module.exports = class UploadRouter {
-  @request('post','/api/app/upload')
+  @request('post','/api/apps/{teamId}/upload')
   @summary('上传apk或者ipa文件到服务器')
   @tag
   @formData({
@@ -62,7 +62,7 @@ module.exports = class UploadRouter {
       description: 'upload file, get url'
     }
   })
-  @query({ teamId: { type: 'String'} })
+  @path({ teamId: { type: 'String',required:true} })
   @middlewares([upload.single('file')])
   static async upload(ctx, next) {
     var file = ctx.req.file
@@ -72,13 +72,10 @@ module.exports = class UploadRouter {
       path.join(os.tmpdir(), Math.random().toString()))
     reader.pipe(stream)
 
-    var teamId = ctx.query.teamId;
-    var team;
-    if (teamId) {
-      team = await Team.findById(teamId)
-      if (!team) {
-        throw new Error("没有找到该团队")
-      }
+    const { teamId } = ctx.validatedParams;
+    var team = await Team.findById(teamId)
+    if (!team) {
+      throw new Error("没有找到该团队")
     }
     var result = await parseAppAndInsertToDB(file.path, ctx.state.user.data,team);
     ctx.body = responseWrapper(result);
@@ -112,28 +109,14 @@ async function parseAppAndInsertToDB(filePath,user,team) {
     var info = await parser(filePath);
     var icon = await extractor(filePath, guid);
 
-    var app;
-    if (team) {
-      app = await App.findOne(
-        {'platform': info['platform'], 'bundleId': info['bundleId'],
-          'ownerType':'team','ownerId':team._id})
-    }else{
-      app = await App.findOne(
-        {'platform': info['platform'], 'bundleId': info['bundleId'],
-          'ownerType':'user','ownerId':user._id})
-    }
+    var app = await App.findOne(
+        {'platform': info['platform'], 'bundleId': info['bundleId'],'ownerId':team._id})
     if (!app) {
       info.creator = user.username;
       info.creatorId = user._id;
       info.icon = icon.fileName;
       app = new App(info)
-      if (team) {
-        app.ownerId = team._id;
-        app.ownerType = "team";
-      }else{
-        app.ownerId = user._id;
-        app.ownerType = "user";
-      }
+      app.ownerId = team._id;
       await app.save()
       info.uploader = user.username;
       info.uploaderId = user._id;

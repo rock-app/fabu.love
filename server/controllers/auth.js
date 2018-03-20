@@ -4,6 +4,8 @@ import {request, summary, tags, body,description} from '../swagger';
 import {User, userSchema} from "../model/user";
 import Team from "../model/team"
 import { responseWrapper } from "../helper/util";
+import bcrypt from "bcrypt"
+import Fawn from "fawn"
 
 const jwt = require('jsonwebtoken');
 
@@ -50,15 +52,20 @@ module.exports = class AuthRouter {
     @body(loginSchema)
     static async login(ctx, next) {
         const {body} = ctx.request
-        const user = await User.findOne({username: body.username,password:body.password},'username');
-        if (!user) {
+        const user = await User.findOne({username: body.username},'username password');
+        if (user) {
+            let valide = await bcrypt.compare(body.password, user.password)
+            if (!valide) {
+                throw new Error('用户名或密码错误')
+            }
+        } else {
             throw new Error('用户名或密码错误')
         }
-
-        ctx.body = responseWrapper(jwt.sign({
-                data: user,
-                exp: Math.floor(Date.now() / 1000) + (60 * 60)
-            }, 'jwt-secret'))  
+        user.token = jwt.sign({
+            data: user,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60)
+        }, 'jwt-secret')
+        ctx.body = responseWrapper(user)
     } 
        
 
@@ -68,33 +75,34 @@ module.exports = class AuthRouter {
     @tag
     static async register(ctx, next) {
         var {body} = ctx.request;
+        body.password = await bcrypt.hash(body.password, 10) // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
         let user = await User.find({username: body.username});
         if (!user.length) {
             var newUser = new User(body);
 
             var team = new Team();
-            team._id = user._id;
+            team._id = newUser._id;
             team.name = "我的团队";
-            team.creatorId = user._id;
+            team.creatorId = newUser._id;
             team.members = [
                 {
-                    _id: user._id,
-                    username: user.username,
+                    _id: newUser._id,
+                    username: newUser.username,
                     role: "owner"
                 }
             ]
-            user.teams = [{
+            newUser.teams = [{
                 _id:team._id,
                 name:team,
-                role:owner
+                role:"owner"
             }]
             var task = Fawn.Task();
             var result = await task
                 .save(team)
-                .save(user)
+                .save(newUser)
                 .run({useMongoose: true});
 
-            ctx.body = responseWrapper(user)
+            ctx.body = responseWrapper(newUser)
         } else {
             throw new Error("用户已存在")
         }

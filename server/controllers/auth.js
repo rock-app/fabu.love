@@ -52,7 +52,7 @@ module.exports = class AuthRouter {
     @body(loginSchema)
     static async login(ctx, next) {
         const {body} = ctx.request
-        const user = await User.findOne({username: body.username},'username password');
+        const user = await User.findOne({username: body.username});
         if (user) {
             let valide = await bcrypt.compare(body.password, user.password)
             if (!valide) {
@@ -62,7 +62,7 @@ module.exports = class AuthRouter {
             throw new Error('用户名或密码错误')
         }
         user.token = jwt.sign({
-            data: user,
+            data: {_id:user._id,username:user.username},
             exp: Math.floor(Date.now() / 1000) + (60 * 60)
         }, 'jwt-secret')
         ctx.body = responseWrapper(user)

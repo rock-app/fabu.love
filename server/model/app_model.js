@@ -32,10 +32,8 @@ var appSchema = new Schema({
     updateAt: {
         type: Date
     },
-    owner:{
-        tag:{type:String,enum:["team","user"]}, // team / user 
-        id:String //团队或者用户的id
-    }
+    ownerType:{type:String,enum:["team","user"]},
+    ownerId:String
 })
 
 // appSchema.virtual('versions').get(function () {     return Version.find })

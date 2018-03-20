@@ -2,6 +2,7 @@ const mongoose = require('../helper/db');
 const Schema = mongoose.Schema;
 
 var versionSchema = new Schema({
+    appId:String, //该版本的应用的id
     bundleId:  {
         type: String,
         index: true

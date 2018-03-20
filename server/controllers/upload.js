@@ -1,14 +1,14 @@
-var {
+import {
   request,
   summary,
   body,
   tags,
   middlewares,
-  path,
   description,
   formData,
-  responses
-} = require('koa-swagger-decorator');
+  responses,
+  query
+} from '../swagger';
 
 const Version = require('../model/version')
 const App = require('../model/app_model')
@@ -20,6 +20,7 @@ var os = require('os')
 var uuidV4 = require('uuid/v4')
 var apkParser3 = require('apk-parser3')
 var extract = require('ipa-extract-info')
+var Team = require('../model/team')
 var AdmZip = require('adm-zip')
 var serverDir = path.resolve(__dirname,"..") + '/uploaded/'
 var ipasDir = serverDir + 'ipa'
@@ -47,7 +48,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 });
 
-const tag = tags(['AppResource']);
+const tag = tags(['上传']);
 const upload = multer({storage});
 
 module.exports = class UploadRouter {
@@ -61,23 +62,25 @@ module.exports = class UploadRouter {
       description: 'upload file, get url'
     }
   })
+  @query({ teamId: { type: 'String'} })
   @middlewares([upload.single('file')])
-  @responses({
-    200: {
-      description: 'file upload success'
-    },
-    500: {
-      description: 'something wrong about server'
-    }
-  })
   static async upload(ctx, next) {
-    const file = ctx.req.file
-    const filePath = file.path
-    const reader = await fs.createReadStream(filePath)
-    const stream = await fs.createWriteStream(
+    var file = ctx.req.file
+    var filePath = file.path
+    var reader = await fs.createReadStream(filePath)
+    var stream = await fs.createWriteStream(
       path.join(os.tmpdir(), Math.random().toString()))
     reader.pipe(stream)
-    var result = await parseAppAndInsertToDB(file.path, ctx.state.user.data);
+
+    var teamId = ctx.query.teamId;
+    var team;
+    if (teamId) {
+      team = await Team.findById(teamId)
+      if (!team) {
+        throw new Error("没有找到该团队")
+      }
+    }
+    var result = await parseAppAndInsertToDB(file.path, ctx.state.user.data,team);
     ctx.body = responseWrapper(result);
   }
 
@@ -93,10 +96,7 @@ module.exports = class UploadRouter {
   }
 }
 
-// module.exports = {   'POST /api/appupload': upload } module.exports = {
-// 'POST /api/appdownload': download }
-
-async function parseAppAndInsertToDB(filePath,user) {
+async function parseAppAndInsertToDB(filePath,user,team) {
   var guid = uuidV4()
     var parser, extractor;
     if (path.extname(filePath) === ".ipa") {
@@ -112,20 +112,36 @@ async function parseAppAndInsertToDB(filePath,user) {
     var info = await parser(filePath);
     var icon = await extractor(filePath, guid);
 
-    var app = await App.findOne(
-      {'platform': info['platform'], 'bundleId': info['bundleId']})
+    var app;
+    if (team) {
+      app = await App.findOne(
+        {'platform': info['platform'], 'bundleId': info['bundleId'],
+          'ownerType':'team','ownerId':team._id})
+    }else{
+      app = await App.findOne(
+        {'platform': info['platform'], 'bundleId': info['bundleId'],
+          'ownerType':'user','ownerId':user._id})
+    }
     if (!app) {
       info.creator = user.username;
       info.creatorId = user._id;
       info.icon = icon.fileName;
       app = new App(info)
+      if (team) {
+        app.ownerId = team._id;
+        app.ownerType = "team";
+      }else{
+        app.ownerId = user._id;
+        app.ownerType = "user";
+      }
       await app.save()
       info.uploader = user.username;
       info.uploaderId = user._id;
       info.size = fs.statSync(filePath).size
       var version = Version(info)
+      version.appId = app._id;
       await version.save()
-      return info
+      return {'app':app,'version':version}
     }
     var version = Version.findOne({appId: app.id})
     if (!version) {
@@ -134,7 +150,7 @@ async function parseAppAndInsertToDB(filePath,user) {
         versionCode: info.versionCode, versionName: info.version, 
         downloadUrl: info.downloadUrl})
       version.save()
-      return info
+      return {'app':app,'version':version}
     } else {
       let err = Error()
       err.code = 408

@@ -61,11 +61,11 @@ module.exports = class AuthRouter {
         } else {
             throw new Error('用户名或密码错误')
         }
-
-        ctx.body = responseWrapper(jwt.sign({
-                data: user,
-                exp: Math.floor(Date.now() / 1000) + (60 * 60)
-            }, 'jwt-secret'))  
+        user.token = jwt.sign({
+            data: user,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60)
+        }, 'jwt-secret')
+        ctx.body = responseWrapper(user)
     } 
        
 
@@ -81,17 +81,17 @@ module.exports = class AuthRouter {
             var newUser = new User(body);
 
             var team = new Team();
-            team._id = user._id;
+            team._id = newUser._id;
             team.name = "我的团队";
-            team.creatorId = user._id;
+            team.creatorId = newUser._id;
             team.members = [
                 {
-                    _id: user._id,
-                    username: user.username,
+                    _id: newUser._id,
+                    username: newUser.username,
                     role: "owner"
                 }
             ]
-            user.teams = [{
+            newUser.teams = [{
                 _id:team._id,
                 name:team,
                 role:"owner"
@@ -99,10 +99,10 @@ module.exports = class AuthRouter {
             var task = Fawn.Task();
             var result = await task
                 .save(team)
-                .save(user)
+                .save(newUser)
                 .run({useMongoose: true});
 
-            ctx.body = responseWrapper(user)
+            ctx.body = responseWrapper(newUser)
         } else {
             throw new Error("用户已存在")
         }

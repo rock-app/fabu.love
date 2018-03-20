@@ -4,6 +4,7 @@ import {request, summary, tags, body,description} from '../swagger';
 import {User, userSchema} from "../model/user";
 import { responseWrapper } from "../helper/util";
 import bcrypt from "bcrypt"
+import mail from './mail'
 
 const jwt = require('jsonwebtoken');
 

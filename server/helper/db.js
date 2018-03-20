@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Fawn = require("fawn");
 
 mongoose.connect('mongodb://localhost:27017/app-publisher', (err) => {
     if (err) {
@@ -11,5 +12,6 @@ mongoose.connect('mongodb://localhost:27017/app-publisher', (err) => {
 mongoose.connection.on('disconnected', function () {    
     console.log('Mongoose connection disconnected')  
 })
+Fawn.init(mongoose);
 
 module.exports = mongoose

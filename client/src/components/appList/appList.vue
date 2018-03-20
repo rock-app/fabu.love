@@ -33,7 +33,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
             <i v-show="item.platform === 'ios'" class="icon-ic_ios appItem-platform"></i>
             <i v-show="item.platform === 'android'" class="icon-ic_android appItem-platform"></i>
-            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail">
+            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail(item)">
             <!--app信息-->
             <div class="appItem-info">
               <div class="appItem-info-namewrapper">
@@ -102,7 +102,8 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
         dataList: [{'flag': 'flag'}],
         queryText: '',
         showUploadView: false,
-        file: FileList
+        file: FileList,
+        currentPage: 0
       }
     },
     components: {
@@ -117,11 +118,11 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     },
     methods: {
       loadAppList() {
-        AppResourceApi.getAppList()
+        AppResourceApi.getAppList(this.currentPage)
           .then(response => {
             console.log(response)
             this.dataList = [{'flag': 'flag'}]
-            response.applist.forEach((item) => {
+            response.data.forEach((item) => {
               this.dataList.push(item)
             })
           }, reject => {
@@ -152,8 +153,11 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
           return 'platformActive'
         }
       },
-      gotoAppDetail() {
-        this.$router.push('appDetail')
+      gotoAppDetail(item) {
+        this.$router.push({
+          name: 'AppDetail',
+          params: {appId: item._id}
+        })
       },
       appItemHovered() {
       },

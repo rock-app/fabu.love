@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import TokenMgr from '../mgr/TokenMgr'
+import { Message } from 'element-ui'
 
 let vue = new Vue()
 
@@ -8,6 +9,10 @@ export function getHttp (url, params) {
     configAxios()
     vue.axios.get(url, {params: params})
       .then(response => {
+        if (response.data.success === false) {
+          Message.error(response.data.message)
+          return
+        }
         setTimeout(() => {
           resolve(response.data)
         }, 300)
@@ -18,6 +23,24 @@ export function getHttp (url, params) {
   })
 }
 
+export function deleteHttp (url) {
+  return new Promise((resolve, reject) => {
+    configAxios()
+    vue.axios.delete(url)
+      .then(response => {
+        setTimeout(() => {
+          if (response.data.success === false) {
+            Message.error(response.data.message)
+            return
+          }
+          resolve(response.data)
+        }, 300)
+      })
+      .catch(error => {
+        reject(error.message)
+      })
+  })
+}
 export function postHttp (url, body, params) {
   return new Promise((resolve, reject) => {
     configAxios()
@@ -28,6 +51,10 @@ export function postHttp (url, body, params) {
       data: body
     }).then(response => {
       setTimeout(() => {
+        if (response.data.success === false) {
+          Message.error(response.data.message)
+          return
+        }
         resolve(response.data)
       }, 300)
     }).catch(error => {

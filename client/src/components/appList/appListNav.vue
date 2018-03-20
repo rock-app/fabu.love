@@ -28,7 +28,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {getUserInfo} from '../../mgr/userMgr'
+  import {getUserInfo, removeUserInfo} from '../../mgr/userMgr'
+  import TokenMgr from '../../mgr/TokenMgr'
 
   export default {
     props: {
@@ -59,6 +60,8 @@
         this.$router.push('userInfo')
       },
       loginout() {
+        TokenMgr.clearTokens()
+        removeUserInfo()
         this.$router.push('/')
       }
     }

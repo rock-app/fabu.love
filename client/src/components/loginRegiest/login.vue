@@ -56,12 +56,12 @@
         LoginApi.login(body)
           .then(response => {
             // 存储token
-            TokenMgr.add(this.axios.baseURL, response.token)
+            console.log(response)
+            TokenMgr.add(this.axios.baseURL, response.data)
             let user = {
               'userName': this.userName
             }
             saveUserInfo(user)
-            console.log(response)
             me.$router.push('applist')
           }, reject => {
             console.log(reject)

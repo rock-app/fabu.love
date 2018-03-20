@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 
 module.exports = class Mail {
   
-  static async send(...email, subject, content) {
+  static async send(email, subject, content) {
     let transporter = nodemailer.createTransport({
       service: 'qq',
       auth: {

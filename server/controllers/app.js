@@ -13,6 +13,8 @@ import { APIError } from "../helper/rest";
 import { responseWrapper } from "../helper/util";
 
 const App = require('../model/app_model')
+const Version = require('../model/version')
+const Team = require('../model/team')
 
 const tag = tags(['AppResource']);
 
@@ -25,7 +27,7 @@ var strategy = {
 }
 
 module.exports = class AppRouter {
-    @request('get','/api/apps')
+    @request('get','/api/apps/{teamId}')
     @summary("获取某用户或某团队下App列表(分页)")
     @query({
         team:{type:'string',description:'团队id(可选),不传则获取该用户下的App'},
@@ -38,34 +40,46 @@ module.exports = class AppRouter {
         var page = ctx.query.page || 0
         var size = ctx.query.size || 10
         var user = ctx.state.user.data;
-        var result;
-        if (team) {
-            result = await App.find(
-                {'ownerType':'team','ownerId':team}
+        var { teamId } = ctx.validatedParams;
+        var result = await App.find(
+                {'ownerId':teamId}
             ).limit(size).skip(page * size)
-        }else{
-            result = await App.find(
-                {'ownerType':'user','ownerId':user._id}
-            ).limit(size).skip(page * size)
-        }
         ctx.body = responseWrapper(result)
     }
 
-    @request('get','/api/app/{id}')
+    @request('get','/api/apps/{teamId}/{id}')
     @summary("获取某个应用详情")
     @tag
     static async getAppDetail(ctx,next){
-
+        var user = ctx.state.user.data
+        var { teamId,id } = ctx.validatedParams;
+        //todo: 这里其实还要判断该用户在不在team中
+        //且该应用也在team中,才有权限查看
+        var app = await App.findById(id)
+        ctx.body = responseWrapper(app)
     }
 
-    @request('delete','/api/app/{id}')
+    @request('delete','/api/apps/{teamId}/{id}')
     @summary("删除某个应用")
     @tag
     static async deleteApp(ctx,next){
-
+        var user = ctx.state.user.data
+        var { teamId,id } = ctx.validatedParams;  
+        var team = await Team.find({_id:teamId,members:{
+            $elemMatch:[
+                { username:user.username,role:"owner" },
+                { username:user.username,role:"manager" },
+            ]},
+        })
+        var app = await App.find({_id:id,ownerId:team._id})
+        if (!app) {
+            throw new Error("应用不存在或您没有权限查询该应用")
+        }
+        await App.deleteOne(app)
+        ctx.body = responseWrapper(true,"应用已删除")
     }
 
-    @request('get','/api/app/{id}/versions')
+    @request('get','/api/apps/{teamId}/{id}/versions')
     @summary("获取某个应用的版本列表(分页)")
     @query({
         page:{type:'number',default:0,description:'分页页码(可选)'},
@@ -73,29 +87,46 @@ module.exports = class AppRouter {
     })
     @tag
     static async getAppVersions(ctx,next){
-
+        var user = ctx.state.user.data
+        var { teamId,id } = ctx.validatedParams;  
+        var team = await Team.find({_id:teamId,members:{
+            $elemMatch:{ username:user.username}
+        }})
+        var app = await App.find({_id:id,ownerId:team._id})
+        if (!app) {
+            throw new Error("应用不存在或您没有权限查询该应用")
+        }
+        var versions = await Version.find({appId:id})
+            .limit(size).skip(page * size)
+        ctx.body = responseWrapper(versions)
     }
 
-    @request('get','/api/app/{id}/version/{versionId}')
+    @request('get','/api/apps/{teamId}/{id}/versions/{versionId}')
     @summary("获取某个应用的某个版本详情")
-    @query({
-        page:{type:'number',default:0,description:'分页页码(可选)'},
-        size:{type:'number',default:10,description:'每页条数(可选)'}
-    })
     @tag
     static async getAppVersionDetail(ctx,next){
-        
+        //todo: 好像暂时用不上
     }
 
-    @request('delete','/api/app/{id}/version/{versionId}')
+    @request('delete','/api/apps/{teamId}/{id}/versions/{versionId}')
     @summary("删除某个版本")
-    @query({
-        page:{type:'number',default:0,description:'分页页码(可选)'},
-        size:{type:'number',default:10,description:'每页条数(可选)'}
-    })
     @tag
     static async deleteAppVersion(ctx,next){
-        
+        var user = ctx.state.user.data
+        var { teamId,id,versionId } = ctx.validatedParams;  
+        var team = await Team.find({_id:teamId,members:{
+            $elemMatch:[
+                { username:user.username,role:"owner" },
+                { username:user.username,role:"manager" },
+            ]},
+        })
+        var app = await App.find({_id:id,ownerId:team._id})
+        if (!app) {
+            throw new Error("应用不存在或您没有权限查询该应用")
+        }
+        var version = await Version.find({_id:versionId})
+        var result = Version.deleteOne(version)
+        ctx.body = responseWrapper(true,"版本已删除")
     }
 
 
@@ -126,6 +157,25 @@ module.exports = class AppRouter {
 }
 
 
+// function appInTeamAndUserIsManager(appId,teamId,userId) {
+//     var team = await Team.find({_id:teamId,members:{
+//         $elemMatch:[
+//             { _id:userId,role:"owner" },
+//             { _id:userId,role:"manager" },
+//         ]},
+//     })
+//     var app = await App.find({_id:id,ownerId:team._id})
+// }
+
+// function appInTeamAndUserIsGuest(appId,teamId,userId) {
+//     var team = await Team.find({_id:teamId,members:{
+//         $elemMatch:[
+//             { _id:userId,role:"owner" },
+//             { _id:userId,role:"manager" },
+//         ]},
+//     })
+//     var app = await App.find({_id:id,ownerId:team._id})
+// }
 
 
 //设置模糊查询

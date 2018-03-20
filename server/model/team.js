@@ -18,13 +18,6 @@ var teamSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    apps: [
-        {
-            _id: ObjectId,
-            appName: String,
-            icon: String
-        }
-    ],
     members: [
         {
             _id: ObjectId,

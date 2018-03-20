@@ -2,9 +2,8 @@
 
 import {request, summary, tags, body,description} from '../swagger';
 import {User, userSchema} from "../model/user";
+import Team from "../model/team"
 import { responseWrapper } from "../helper/util";
-import bcrypt from "bcrypt"
-import mail from './mail'
 
 const jwt = require('jsonwebtoken');
 
@@ -48,25 +47,18 @@ module.exports = class AuthRouter {
     @request('post', '/api/user/login')
     @summary('登录')
     @tag
-    @body(userSchema)
+    @body(loginSchema)
     static async login(ctx, next) {
         const {body} = ctx.request
-        const user = await User.findOne({username: body.username},'username password');
-        if (user) {
-            const valide = await bcrypt.compare(body.password, user.password)
-            if (!valide) {
-                throw new Error('用户名或密码错误')
-            }
-        } else {
+        const user = await User.findOne({username: body.username,password:body.password},'username');
+        if (!user) {
             throw new Error('用户名或密码错误')
         }
-        ctx.body = {
-            message: '登录成功',
-            token: jwt.sign({
+
+        ctx.body = responseWrapper(jwt.sign({
                 data: user,
                 exp: Math.floor(Date.now() / 1000) + (60 * 60)
-            }, 'jwt-secret')
-        }
+            }, 'jwt-secret'))  
     } 
        
 
@@ -75,17 +67,36 @@ module.exports = class AuthRouter {
     @body(registerSchema)
     @tag
     static async register(ctx, next) {
-        const {body} = ctx.request;
-        body.password = await bcrypt.hash(body.password, 5)
+        var {body} = ctx.request;
         let user = await User.find({username: body.username});
         if (!user.length) {
-            const newUser = new User(body);
-            user = await newUser.save();
-            ctx.status = 200;
+            var newUser = new User(body);
+
+            var team = new Team();
+            team._id = user._id;
+            team.name = "我的团队";
+            team.creatorId = user._id;
+            team.members = [
+                {
+                    _id: user._id,
+                    username: user.username,
+                    role: "owner"
+                }
+            ]
+            user.teams = [{
+                _id:team._id,
+                name:team,
+                role:owner
+            }]
+            var task = Fawn.Task();
+            var result = await task
+                .save(team)
+                .save(user)
+                .run({useMongoose: true});
+
             ctx.body = responseWrapper(user)
         } else {
-            ctx.status = 406;
-            ctx.body = responseWrapper(false,"用户已存在")
+            throw new Error("用户已存在")
         }
     }
 }

@@ -1,5 +1,6 @@
 {
   "globalDependencies": {
+    "nodemailer": "registry:dt/nodemailer#1.3.2+20160811111312",
     "uuid": "registry:dt/uuid#3.3.0+20160728152600"
   },
   "globalDevDependencies": {

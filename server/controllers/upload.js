@@ -62,7 +62,6 @@ module.exports = class UploadRouter {
       description: 'upload file, get url'
     }
   })
-  @path({ teamId: { type: 'String',required:true} })
   @middlewares([upload.single('file')])
   static async upload(ctx, next) {
     var file = ctx.req.file

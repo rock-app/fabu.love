@@ -14,6 +14,7 @@ import { responseWrapper } from "../helper/util";
 
 const App = require('../model/app_model')
 const Version = require('../model/version')
+const Team = require('../model/team')
 
 const tag = tags(['AppResource']);
 
@@ -156,25 +157,25 @@ module.exports = class AppRouter {
 }
 
 
-function appInTeamAndUserIsManager(appId,teamId,userId) {
-    var team = await Team.find({_id:teamId,members:{
-        $elemMatch:[
-            { _id:userId,role:"owner" },
-            { _id:userId,role:"manager" },
-        ]},
-    })
-    var app = await App.find({_id:id,ownerId:team._id})
-}
+// function appInTeamAndUserIsManager(appId,teamId,userId) {
+//     var team = await Team.find({_id:teamId,members:{
+//         $elemMatch:[
+//             { _id:userId,role:"owner" },
+//             { _id:userId,role:"manager" },
+//         ]},
+//     })
+//     var app = await App.find({_id:id,ownerId:team._id})
+// }
 
-function appInTeamAndUserIsGuest(appId,teamId,userId) {
-    var team = await Team.find({_id:teamId,members:{
-        $elemMatch:[
-            { _id:userId,role:"owner" },
-            { _id:userId,role:"manager" },
-        ]},
-    })
-    var app = await App.find({_id:id,ownerId:team._id})
-}
+// function appInTeamAndUserIsGuest(appId,teamId,userId) {
+//     var team = await Team.find({_id:teamId,members:{
+//         $elemMatch:[
+//             { _id:userId,role:"owner" },
+//             { _id:userId,role:"manager" },
+//         ]},
+//     })
+//     var app = await App.find({_id:id,ownerId:team._id})
+// }
 
 
 //设置模糊查询

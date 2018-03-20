@@ -59,6 +59,7 @@
   import HighSummary from './/highSummary.vue'
   import ApplicationMerge from './applicationMerge.vue'
   import AppVersions from './appVersions.vue'
+  import * as AppResourceApi from '../../api/moudle/appResourceApi'
 
   export default {
     data() {
@@ -72,7 +73,19 @@
     },
     computed: {
     },
+    created() {
+      this.$nextTick(() => {
+        this.getAppDetailData()
+      })
+    },
     methods: {
+      getAppDetailData() {
+        AppResourceApi.getAppDetail(this.$route.params.appId).then((res) => {
+          console.log(res)
+        }, reject => {
+          this.$message.error(reject)
+        })
+      },
       clickAppIcon() {
         this.currentModule = 'appVersions'
         this.$refs.headerIndicate.style.marginLeft = `30px`

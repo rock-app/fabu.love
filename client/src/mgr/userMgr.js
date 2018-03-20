@@ -12,3 +12,8 @@ export function getUserInfo() {
   let user = StorageMgr.getItem(USERINFO_KEY)
   return user
 }
+
+// 删除用户信息
+export function removeUserInfo() {
+  StorageMgr.setItem(USERINFO_KEY, '')
+}

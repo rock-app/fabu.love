@@ -32,8 +32,14 @@ var appSchema = new Schema({
     updateAt: {
         type: Date
     },
-    ownerType:{type:String,enum:["team","user"]},
-    ownerId:String
+    ownerId:String,
+    changelog:String,
+    strategy:{
+        updateMode:{type:String,default:'normal',enum:['slient','normal','force']},
+        whiteIpList:[String],
+        blackIpList:[String],
+        downloadCountLimit:Number
+    }
 })
 
 // appSchema.virtual('versions').get(function () {     return Version.find })

@@ -19,7 +19,14 @@ var versionSchema = new Schema({
     active:Boolean,
     downloadUrl: String,
     downloadCount: Number, 
-    hidden: { type:Boolean , default:false}
+    changelog:String,
+    hidden: { type:Boolean , default:false},
+    strategy:{
+        updateMode:{type:String,enum:['slient','normal','force']},
+        whiteIpList:[String],
+        blackIpList:[String],
+        downloadCountLimit:Number
+    }
 });
 
 module.exports = mongoose.model('Version', versionSchema);

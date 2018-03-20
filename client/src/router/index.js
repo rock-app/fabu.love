@@ -30,7 +30,7 @@ export default new Router({
       component: Regiest
     },
     {
-      path: '/appDetail',
+      path: '/appDetail/:appId',
       name: 'AppDetail',
       component: AppDetail
     },

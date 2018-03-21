@@ -52,7 +52,7 @@
         }
       },
       gotoHome() {
-        this.$router.push('applist')
+        this.$router.push('/')
       }
     }
   }

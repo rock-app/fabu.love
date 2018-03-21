@@ -1,4 +1,7 @@
 import StorageMgr from './StorageMgr'
+import Vue from 'vue'
+
+let vue = new Vue()
 
 /// 根据域名管理token
 class TokenMgr {
@@ -15,7 +18,7 @@ class TokenMgr {
   write (value) {
     StorageMgr.setItem(TokenMgr.StorageKey, value)
   }
-  
+
   get (url) {
     var host = this.urlhost(url)
     for (var item of this.tokens) {
@@ -38,15 +41,21 @@ class TokenMgr {
       token: token
     })
     this.write(this.tokens)
+    console.log(this.tokens)
+  }
+
+  clearTokens() {
+    StorageMgr.setItem(TokenMgr.StorageKey, [])
   }
 
   /// 获得url对应的域名
   urlhost (url) {
-    let link = document.createElement('a')
-    link.href = url
-    return link.host
+    // let link = document.createElement('a')
+    // link.href = url
+    // return link.host
+    return vue.axios.defaults.baseURL
   }
-  
+
 }
 
 const instance = new TokenMgr()

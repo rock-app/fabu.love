@@ -62,7 +62,7 @@
         }
         LoginApi.register(body)
           .then(response => {
-            console.log(response.data)
+            console.log(response)
             this.$message({
               message: '恭喜你，注册成功',
               type: 'success'
@@ -72,6 +72,7 @@
             }, 800)
           }, reject => {
             console.log(reject)
+            this.$message.error(reject)
           })
       },
       onLoginAgain() {

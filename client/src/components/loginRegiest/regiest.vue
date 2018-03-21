@@ -72,6 +72,7 @@
             }, 800)
           }, reject => {
             console.log(reject)
+            this.$message.error(reject)
           })
       },
       onLoginAgain() {

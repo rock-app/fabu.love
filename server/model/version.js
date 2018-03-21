@@ -18,7 +18,8 @@ var versionSchema = new Schema({
     size: Number,
     active:Boolean,
     downloadUrl: String,
-    downloadCount: Number, 
+    downloadCount: Number,
+    fileDownloadUrl:String, //源文件下载地址
     changelog:String,
     hidden: { type:Boolean , default:false},
     strategy:{

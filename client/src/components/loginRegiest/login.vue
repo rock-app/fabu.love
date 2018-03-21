@@ -35,6 +35,10 @@
         errorInfo: ''
       }
     },
+    created() {
+      this.$nextTick(() => {
+      })
+    },
     components: {
     },
     methods: {
@@ -48,7 +52,6 @@
           return
         }
         this.errorInfo = ''
-        var me = this
         let body = {
           'username': this.userName,
           'password': this.pwd
@@ -57,14 +60,16 @@
           .then(response => {
             // 存储token
             console.log(response)
-            TokenMgr.add(this.axios.baseURL, response.data)
+            TokenMgr.add(this.axios.baseURL, response.data.token)
             let user = {
-              'userName': this.userName
+              'userName': this.userName,
+              'userId': response.data._id,
+              'teamArr': response.data.teams
             }
             saveUserInfo(user)
-            me.$router.push('applist')
+            this.$router.push('/')
           }, reject => {
-            console.log(reject)
+            this.$message.error(reject)
           })
       },
       onRegiest() {

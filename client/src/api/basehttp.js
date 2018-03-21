@@ -6,7 +6,6 @@ let vue = new Vue()
 
 export function getHttp (url, params) {
   return new Promise((resolve, reject) => {
-    configAxios()
     vue.axios.get(url, {params: params})
       .then(response => {
         if (response.data.success === false) {
@@ -43,7 +42,6 @@ export function deleteHttp (url) {
 }
 export function postHttp (url, body, params) {
   return new Promise((resolve, reject) => {
-    configAxios()
     vue.axios({
       method: 'post',
       url: url,

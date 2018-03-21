@@ -29,14 +29,14 @@ var strategy = {
 module.exports = class AppRouter {
     @request('get','/api/apps/{teamId}')
     @summary("获取某用户或某团队下App列表(分页)")
-    @query({
-        team:{type:'string',description:'团队id(可选),不传则获取该用户下的App'},
+    @query(
+        {
         page:{type:'number',default:0,description:'分页页码(可选)'},
         size:{type:'number',default:10,description:'每页条数(可选)'}
     })
+    @path({teamId:{type:'string',description:'团队id(可选),不传则获取该用户下的App'}})
     @tag
     static async getApps(ctx,next){
-        var team = ctx.query.team
         var page = ctx.query.page || 0
         var size = ctx.query.size || 10
         var user = ctx.state.user.data;

@@ -7,6 +7,7 @@ var versionSchema = new Schema({
         type: String,
         index: true
     },
+    icon:String,
     versionStr: String,
     versionCode: String,
     uploadAt: {

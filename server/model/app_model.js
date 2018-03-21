@@ -34,7 +34,7 @@ var appSchema = new Schema({
     },
     shortUrl:{
         type:String,
-        unique:true
+        index:true
     },
     ownerId:String,
     changelog:String,

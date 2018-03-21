@@ -67,15 +67,22 @@
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
+  import {getUserTeam} from '../../mgr/userMgr'
 
   export default {
+    props: {
+      appId: {
+        type: String
+      }
+    },
     components: {},
     data() {
       return {
         isFix: false,
         dataArr: [{'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}],
         showInDownLoadPage: false,
-        currentPage: 0
+        currentPage: 0,
+        userteam: {}
       }
     },
     computed: {
@@ -92,12 +99,13 @@
         console.log(newValue)
       })
       this.$nextTick(() => {
+        this.userteam = getUserTeam()
         this.getAppVersionListData()
       })
     },
     methods: {
       getAppVersionListData() {
-        AppResourceApi.getAppVersionList('', this.currentPage).then(() => {
+        AppResourceApi.getAppVersionList(this.userteam._id, this.appId, this.currentPage).then(() => {
 
         }, reject => {
 

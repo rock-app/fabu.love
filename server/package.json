@@ -25,6 +25,7 @@
         "koa-cors": "0.0.16",
         "koa-router": "7.0.0",
         "koa-multer": "^1.0.2",
+        "koa-static": "^4.0.2",
         "bunyan": "^1.8.12",
         "mongoose": "5.0.4",
         "koa-jwt": "^3.3.0",

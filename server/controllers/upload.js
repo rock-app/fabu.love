@@ -20,7 +20,6 @@ var path = require('path')
 var os = require('os')
 var uuidV4 = require('uuid/v4')
 var apkParser3 = require('apk-parser3')
-var extract = require('ipa-extract-info')
 var Team = require('../model/team')
 var AdmZip = require('adm-zip')
 var serverDir = path.resolve(__dirname,"..") + '/uploaded/'
@@ -28,6 +27,7 @@ var ipasDir = serverDir + 'ipa'
 var apksDir = serverDir + 'apk'
 var iconsDir = serverDir + 'icon'
 var {writeFile,readFile,responseWrapper,exec} = require('../helper/util')
+var ipaMataData = require('ipa-metadata')
 createFolderIfNeeded(serverDir)
 createFolderIfNeeded(ipasDir)
 createFolderIfNeeded(apksDir)
@@ -170,18 +170,23 @@ function storeApp(filename, guid, callback) {
 ///解析ipa
 function parseIpa(filename) {
   return new Promise((resolve, reject) => {
-    var fd = fs.openSync(filename, 'r')
-    extract(fd, (err, info, raw) => {
+    ipaMataData(filename, (err, data) => {
       if (err) 
         reject(err)
-      var data = info[0];
       var info = {}
       info.platform = 'ios'
-      info.bundleId = data.CFBundleIdentifier
-      info.bundleName = data.CFBundleName
-      info.appName = data.CFBundleDisplayName
-      info.versionStr = data.CFBundleShortVersionString
-      info.versionCode = data.CFBundleVersion
+      info.bundleId = data.metadata.CFBundleIdentifier
+      info.bundleName = data.metadata.CFBundleName
+      info.appName = data.metadata.CFBundleDisplayName
+      info.versionStr = data.metadata.CFBundleShortVersionString
+      info.versionCode = data.metadata.CFBundleVersion
+      const environment = data.provisioning.Entitlements['aps-environment']
+      const active = data.provisioning.Entitlements['beta-reports-active']
+      if (environment == 'prodction') {
+          info.appLevel = active ? 'appstore' : 'enterprise'
+      } else {
+        info.appLevel = 'develop'
+      }
       resolve(info)
     })
   })

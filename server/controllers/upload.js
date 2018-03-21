@@ -7,7 +7,8 @@ import {
   description,
   formData,
   responses,
-  query
+  query,
+  path as rpath
 } from '../swagger';
 
 const Version = require('../model/version')
@@ -62,6 +63,7 @@ module.exports = class UploadRouter {
       description: 'upload file, get url'
     }
   })
+  @rpath({ teamId:{ type:'string',required:true }})
   @middlewares([upload.single('file')])
   static async upload(ctx, next) {
     var file = ctx.req.file

@@ -33,7 +33,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
             <i v-show="item.platform === 'ios'" class="icon-ic_ios appItem-platform"></i>
             <i v-show="item.platform === 'android'" class="icon-ic_android appItem-platform"></i>
-            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail">
+            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail(item)">
             <!--app信息-->
             <div class="appItem-info">
               <div class="appItem-info-namewrapper">
@@ -67,7 +67,10 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
                 <span class="icon-ic_editor"></span>
                 <span style="font-size: 14px">编辑</span>
               </div>
-              <div class="appItem-operate-preview appItem-operate-common" @click="clickPreview">
+              <!--<a :href="getPreViewUrl()">-->
+                <!---->
+              <!--</a>-->
+              <div class="appItem-operate-preview appItem-operate-common" @click.stop="clickPreview">
                 <span class="icon-ic_preview"></span>
                 <span style="font-size: 14px">预览</span>
               </div>
@@ -86,7 +89,8 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       </el-row>
     </div>
 
-    <uploadApp v-if="this.showUploadView" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
+    <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
+
   </div>
 </template>
 
@@ -94,6 +98,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
   import AppListNav from './appListNav.vue'
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
+  import {getTeamArr} from '../../mgr/userMgr'
 
   export default {
     data() {
@@ -102,7 +107,9 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
         dataList: [{'flag': 'flag'}],
         queryText: '',
         showUploadView: false,
-        file: FileList
+        file: FileList,
+        currentPage: 0,
+        teamArr: []
       }
     },
     components: {
@@ -117,11 +124,11 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     },
     methods: {
       loadAppList() {
-        AppResourceApi.getAppList()
+        AppResourceApi.getAppList(this.teamArr[0]._id, this.currentPage)
           .then(response => {
             console.log(response)
             this.dataList = [{'flag': 'flag'}]
-            response.applist.forEach((item) => {
+            response.data.forEach((item) => {
               this.dataList.push(item)
             })
           }, reject => {
@@ -152,8 +159,11 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
           return 'platformActive'
         }
       },
-      gotoAppDetail() {
-        this.$router.push('appDetail')
+      gotoAppDetail(item) {
+        this.$router.push({
+          name: 'AppDetail',
+          params: {appId: item._id}
+        })
       },
       appItemHovered() {
       },
@@ -163,19 +173,17 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
         this.$router.push('appDetail')
       },
       clickPreview() {
-        const {href} = this.$router.resolve({
-          name: 'AppPreView'
-        })
-        window.open(href, '_blank')
+        window.open(window.location.origin + '/appPreView', '_blank')
       }
     },
     created () {
       this.$watch('queryText', () => {
         console.log(this.queryText)
       })
-      this.$nextTick(() => {
+      this.teamArr = getTeamArr()
+      if (this.teamArr) {
         this.loadAppList()
-      })
+      }
     }
   }
 </script>

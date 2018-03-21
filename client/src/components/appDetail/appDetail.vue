@@ -42,7 +42,7 @@
       </div>
     </div>
     <!--内容-->
-    <appVersions v-show="this.currentModule === 'appVersions'"></appVersions>
+    <appVersions :appId="this.$route.params.appId" v-show="this.currentModule === 'appVersions'"></appVersions>
     <appBasicInfo v-show="this.currentModule === '基本信息'"></appBasicInfo>
     <appIntegration v-show="this.currentModule === '集成'"></appIntegration>
     <authorControl v-show="this.currentModule === '权限控制'"></authorControl>
@@ -59,12 +59,15 @@
   import HighSummary from './/highSummary.vue'
   import ApplicationMerge from './applicationMerge.vue'
   import AppVersions from './appVersions.vue'
+  import * as AppResourceApi from '../../api/moudle/appResourceApi'
+  import {getUserTeam} from '../../mgr/userMgr'
 
   export default {
     data() {
       return {
         headerOperationData: ['基本信息', '权限控制', '应用合并', '高级统计', '集成'],
-        currentModule: 'appVersions'
+        currentModule: 'appVersions',
+        userteam: {}
       }
     },
     components: {
@@ -72,7 +75,20 @@
     },
     computed: {
     },
+    created() {
+      this.$nextTick(() => {
+        this.userteam = getUserTeam()
+        this.getAppDetailData()
+      })
+    },
     methods: {
+      getAppDetailData() {
+        AppResourceApi.getAppDetail(this.userteam._id, this.$route.params.appId).then((res) => {
+          console.log(res)
+        }, reject => {
+          this.$message.error(reject)
+        })
+      },
       clickAppIcon() {
         this.currentModule = 'appVersions'
         this.$refs.headerIndicate.style.marginLeft = `30px`

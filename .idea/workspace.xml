@@ -2,21 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="da0263f3-143d-4989-a055-65cf7af2f6e0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/App.vue" afterPath="$PROJECT_DIR$/client/src/App.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/api/basehttp.js" afterPath="$PROJECT_DIR$/client/src/api/basehttp.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/api/moudle/appResourceApi.js" afterPath="$PROJECT_DIR$/client/src/api/moudle/appResourceApi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/appDetail/appDetail.vue" afterPath="$PROJECT_DIR$/client/src/components/appDetail/appDetail.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/appDetail/appVersions.vue" afterPath="$PROJECT_DIR$/client/src/components/appDetail/appVersions.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/appList/appList.vue" afterPath="$PROJECT_DIR$/client/src/components/appList/appList.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/appList/appListNav.vue" afterPath="$PROJECT_DIR$/client/src/components/appList/appListNav.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/appList/uploadApp.vue" afterPath="$PROJECT_DIR$/client/src/components/appList/uploadApp.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/loginRegiest/login.vue" afterPath="$PROJECT_DIR$/client/src/components/loginRegiest/login.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/loginRegiest/regiest.vue" afterPath="$PROJECT_DIR$/client/src/components/loginRegiest/regiest.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/user/userInfo.vue" afterPath="$PROJECT_DIR$/client/src/components/user/userInfo.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/main.js" afterPath="$PROJECT_DIR$/client/src/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/mgr/TokenMgr.js" afterPath="$PROJECT_DIR$/client/src/mgr/TokenMgr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/router/index.js" afterPath="$PROJECT_DIR$/client/src/router/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/controllers/app.js" afterPath="$PROJECT_DIR$/server/controllers/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/controllers/upload.js" afterPath="$PROJECT_DIR$/server/controllers/upload.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/mgr/userMgr.js" afterPath="$PROJECT_DIR$/client/src/mgr/userMgr.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -34,21 +24,55 @@
       <file leaf-file-name="appList.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/components/appList/appList.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="180" column="45" lean-forward="false" selection-start-line="180" selection-start-column="10" selection-end-line="180" selection-end-column="45" />
+            <state relative-caret-position="-541">
+              <caret line="91" column="55" lean-forward="false" selection-start-line="91" selection-start-column="55" selection-end-line="91" selection-end-column="55" />
               <folding>
-                <element signature="e#4306#4347#0" expanded="true" />
+                <element signature="e#4297#4338#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="appPreView.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appPreView.vue">
+      <file leaf-file-name="appResourceApi.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/src/api/moudle/appResourceApi.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2738">
-              <caret line="155" column="12" lean-forward="false" selection-start-line="155" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+            <state relative-caret-position="470">
+              <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="appBasicInfo.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appBasicInfo.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-416">
+              <caret line="14" column="21" lean-forward="false" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="appVersions.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appVersions.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="278">
+              <caret line="73" column="11" lean-forward="false" selection-start-line="73" selection-start-column="6" selection-end-line="73" selection-end-column="11" />
+              <folding>
+                <element signature="e#3297#3362#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="appDetail.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appDetail.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="293">
+              <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
+              <folding>
+                <element signature="e#2612#2662#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -65,22 +89,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/router/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-352">
-              <caret line="7" column="0" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="7" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="userInfo.vue" pinned="false" current-in-tab="true">
+      <file leaf-file-name="userInfo.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/components/user/userInfo.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
+            <state relative-caret-position="128">
               <caret line="22" column="11" lean-forward="true" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
               <folding />
             </state>
@@ -90,8 +102,8 @@
       <file leaf-file-name="login.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/components/loginRegiest/login.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+            <state relative-caret-position="439">
+              <caret line="68" column="21" lean-forward="true" selection-start-line="68" selection-start-column="21" selection-end-line="68" selection-end-column="21" />
               <folding>
                 <element signature="e#837#890#0" expanded="true" />
               </folding>
@@ -109,34 +121,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AppList.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/components/AppList.vue">
+      <file leaf-file-name="userMgr.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/mgr/userMgr.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1195">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="481">
+              <caret line="44" column="27" lean-forward="false" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="27" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Login.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/components/Login.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TokenMgr.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/mgr/TokenMgr.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="443">
-              <caret line="56" column="3" lean-forward="true" selection-start-line="51" selection-start-column="2" selection-end-line="56" selection-end-column="3" />
-              <folding>
-                <element signature="e#0#37#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -153,7 +143,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>mouseout</find>
       <find>image</find>
       <find>platformImg</find>
       <find>platform-ios</find>
@@ -183,6 +172,7 @@
       <find>common/scss/base.scss</find>
       <find>gotoAppDetail</find>
       <find>uploadApp</find>
+      <find>userInfo</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -214,12 +204,8 @@
         <option value="$PROJECT_DIR$/client/src/components/user/changePassword.vue" />
         <option value="$PROJECT_DIR$/client/src/components/user/certification.vue" />
         <option value="$PROJECT_DIR$/client/src/components/user/personalInfo.vue" />
-        <option value="$PROJECT_DIR$/client/src/components/appDetail/appDetail.vue" />
-        <option value="$PROJECT_DIR$/client/src/components/appDetail/appVersions.vue" />
-        <option value="$PROJECT_DIR$/client/src/mgr/userMgr.js" />
         <option value="$PROJECT_DIR$/client/config/index.js" />
         <option value="$PROJECT_DIR$/client/src/components/loginRegiest/regiest.vue" />
-        <option value="$PROJECT_DIR$/client/src/api/moudle/appResourceApi.js" />
         <option value="$PROJECT_DIR$/client/src/components/appList/uploadApp.vue" />
         <option value="$PROJECT_DIR$/client/src/api/basehttp.js" />
         <option value="$PROJECT_DIR$/client/src/main.js" />
@@ -227,10 +213,14 @@
         <option value="$PROJECT_DIR$/client/src/components/Login.vue" />
         <option value="$PROJECT_DIR$/client/src/router/index.js" />
         <option value="$PROJECT_DIR$/client/src/components/user/userInfo.vue" />
-        <option value="$PROJECT_DIR$/client/src/components/appList/appList.vue" />
         <option value="$PROJECT_DIR$/client/src/components/appList/appListNav.vue" />
         <option value="$PROJECT_DIR$/client/src/components/loginRegiest/login.vue" />
         <option value="$PROJECT_DIR$/client/src/App.vue" />
+        <option value="$PROJECT_DIR$/client/src/components/appList/appList.vue" />
+        <option value="$PROJECT_DIR$/client/src/mgr/userMgr.js" />
+        <option value="$PROJECT_DIR$/client/src/components/appDetail/appVersions.vue" />
+        <option value="$PROJECT_DIR$/client/src/components/appDetail/appDetail.vue" />
+        <option value="$PROJECT_DIR$/client/src/api/moudle/appResourceApi.js" />
       </list>
     </option>
   </component>
@@ -687,12 +677,12 @@
       <workItem from="1520997438942" duration="1135000" />
       <workItem from="1521507186702" duration="4732000" />
       <workItem from="1521517931310" duration="9626000" />
-      <workItem from="1521543612731" duration="12414000" />
+      <workItem from="1521543612731" duration="15541000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="166306000" />
+    <option name="totallyTimeSpent" value="169433000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="817" extended-state="0" />
@@ -790,13 +780,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appBasicInfo.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="21" lean-forward="false" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -921,22 +904,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appVersions.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="100" column="0" lean-forward="true" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appDetail.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="61" column="20" lean-forward="true" selection-start-line="61" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/mgr/StorageMgr.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -984,16 +951,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/api/moudle/appResourceApi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/api/BaseApi.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1012,14 +969,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/mgr/userMgr.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="16" lean-forward="false" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/appList/uploadApp.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -1033,7 +982,7 @@
         <state relative-caret-position="361">
           <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
           <folding>
-            <element signature="e#140#161#0" expanded="true" />
+            <element signature="e#140#161#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1059,7 +1008,7 @@
         <state relative-caret-position="-352">
           <caret line="7" column="0" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="7" selection-end-column="0" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1069,7 +1018,7 @@
         <state relative-caret-position="443">
           <caret line="56" column="3" lean-forward="true" selection-start-line="51" selection-start-column="2" selection-end-line="56" selection-end-column="3" />
           <folding>
-            <element signature="e#0#37#0" expanded="true" />
+            <element signature="e#0#37#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1082,32 +1031,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/appList/appList.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="180" column="45" lean-forward="false" selection-start-line="180" selection-start-column="10" selection-end-line="180" selection-end-column="45" />
-          <folding>
-            <element signature="e#4306#4347#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/appList/appListNav.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding>
             <element signature="e#1321#1382#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/loginRegiest/login.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-          <folding>
-            <element signature="e#837#890#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1122,8 +1051,72 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/user/userInfo.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
+        <state relative-caret-position="128">
           <caret line="22" column="11" lean-forward="true" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/loginRegiest/login.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="439">
+          <caret line="68" column="21" lean-forward="true" selection-start-line="68" selection-start-column="21" selection-end-line="68" selection-end-column="21" />
+          <folding>
+            <element signature="e#837#890#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/mgr/userMgr.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="481">
+          <caret line="44" column="27" lean-forward="false" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/appList/appList.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-541">
+          <caret line="91" column="55" lean-forward="false" selection-start-line="91" selection-start-column="55" selection-end-line="91" selection-end-column="55" />
+          <folding>
+            <element signature="e#4297#4338#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appVersions.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="73" column="11" lean-forward="false" selection-start-line="73" selection-start-column="6" selection-end-line="73" selection-end-column="11" />
+          <folding>
+            <element signature="e#3297#3362#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appBasicInfo.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-416">
+          <caret line="14" column="21" lean-forward="false" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/appDetail/appDetail.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
+          <folding>
+            <element signature="e#2612#2662#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/api/moudle/appResourceApi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="470">
+          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding />
         </state>
       </provider>

@@ -50,6 +50,10 @@ module.exports = class AppRouter {
     @request('get','/api/apps/{teamId}/{id}')
     @summary("获取某个应用详情")
     @tag
+    @path({
+        teamId:{type:'string'},
+        id:{type:'string',description:'应用id'}
+    })
     static async getAppDetail(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id } = ctx.validatedParams;
@@ -62,6 +66,10 @@ module.exports = class AppRouter {
     @request('delete','/api/apps/{teamId}/{id}')
     @summary("删除某个应用")
     @tag
+    @path({
+        teamId:{type:'string'},
+        id:{type:'string',description:'应用id'}
+    })
     static async deleteApp(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id } = ctx.validatedParams;  
@@ -81,6 +89,10 @@ module.exports = class AppRouter {
 
     @request('get','/api/apps/{teamId}/{id}/versions')
     @summary("获取某个应用的版本列表(分页)")
+    @path({
+        teamId:{type:'string'},
+        id:{type:'string',description:'应用id'}
+    })
     @query({
         page:{type:'number',default:0,description:'分页页码(可选)'},
         size:{type:'number',default:10,description:'每页条数(可选)'}
@@ -88,7 +100,8 @@ module.exports = class AppRouter {
     @tag
     static async getAppVersions(ctx,next){
         var user = ctx.state.user.data
-        var { teamId,id } = ctx.validatedParams;  
+        var { teamId,id } = ctx.validatedParams
+        var { page,size } = ctx.query
         var team = await Team.find({_id:teamId,members:{
             $elemMatch:{ username:user.username}
         }})

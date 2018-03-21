@@ -89,7 +89,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       </el-row>
     </div>
 
-    <uploadApp v-if="this.showUploadView" :teamId="this.userInfo.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
+    <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
   </div>
 </template>
@@ -98,7 +98,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
   import AppListNav from './appListNav.vue'
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
-  import {getUserInfo} from '../../mgr/userMgr'
+  import {getTeamArr} from '../../mgr/userMgr'
 
   export default {
     data() {
@@ -109,8 +109,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
         showUploadView: false,
         file: FileList,
         currentPage: 0,
-        userInfo: {
-        }
+        teamArr: []
       }
     },
     components: {
@@ -125,7 +124,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     },
     methods: {
       loadAppList() {
-        AppResourceApi.getAppList(this.userInfo.teamArr[0]._id, this.currentPage)
+        AppResourceApi.getAppList(this.teamArr[0]._id, this.currentPage)
           .then(response => {
             console.log(response)
             this.dataList = [{'flag': 'flag'}]
@@ -174,11 +173,6 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
         this.$router.push('appDetail')
       },
       clickPreview() {
-//        const {href} = this.$router.resolve({
-//          name: 'AppPreView'
-//        })
-//        console.log(href)
-//        console.log(window.location.origin)
         window.open(window.location.origin + '/appPreView', '_blank')
       }
     },
@@ -186,11 +180,9 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       this.$watch('queryText', () => {
         console.log(this.queryText)
       })
-      let user = getUserInfo()
-      this.userInfo = user
-      if (this.userInfo) {
+      this.teamArr = getTeamArr()
+      if (this.teamArr) {
         this.loadAppList()
-      } else {
       }
     }
   }

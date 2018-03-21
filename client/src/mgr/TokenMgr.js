@@ -32,7 +32,6 @@ class TokenMgr {
   add (url, token) {
     for (var item of this.tokens) {
       if (item.url === this.urlhost(url)) {
-        console.log(this.urlhost(url))
         this.tokens.splice(this.tokens.indexOf(item), 1)
         break
       }

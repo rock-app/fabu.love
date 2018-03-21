@@ -4,26 +4,27 @@
 import {getHttp, deleteHttp} from '../basehttp'
 
 // 获取应用列表
-export function getAppList(page) {
+export function getAppList(teamId, page) {
   let params = {
     'page': page, 'size': 10
   }
-  let url = 'api/apps'
+  let url = `api/apps/${teamId}`
+  console.log(url)
   return getHttp(url, params)
 }
 
 // 获取应用详情
-export function getAppDetail(appId) {
-  let url = `api/app/${appId}`
+export function getAppDetail(teamId, appId) {
+  let url = `api/apps/${teamId}/${appId}`
   return getHttp(url)
 }
 
 // 获取应用的版本列表
-export function getAppVersionList(id, page) {
+export function getAppVersionList(teamId, id, page) {
   let params = {
     'page': page, 'size': 10
   }
-  let url = `api/apps/${id}/versions`
+  let url = `api/apps/${teamId}/${id}/versions`
   return getHttp(url, params)
 }
 

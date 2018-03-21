@@ -2,7 +2,7 @@
   <div>
     <div class="applist-nav">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="applist-nav-left">
-        <el-breadcrumb-item>App-publisher</el-breadcrumb-item>
+        <el-breadcrumb-item>爱发布</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/applist' }">我的应用</el-breadcrumb-item>
         <el-breadcrumb-item v-if="this.appSubModule" v-show="this.appSubModule" v-html="this.appSubModule"></el-breadcrumb-item>
       </el-breadcrumb>
@@ -62,7 +62,7 @@
       loginout() {
         TokenMgr.clearTokens()
         removeUserInfo()
-        this.$router.push('/')
+        this.$router.push('/login')
       }
     }
   }

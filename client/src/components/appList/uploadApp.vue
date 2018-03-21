@@ -13,6 +13,9 @@
     props: {
       appFile: {
         type: FileList
+      },
+      teamId: {
+        type: String
       }
     },
     data() {
@@ -22,7 +25,6 @@
       }
     },
     created() {
-      console.log(this.appFile[0])
       this.$nextTick(() => {
         this.beginLoad()
       })
@@ -55,7 +57,7 @@
 
         axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
 
-        axios.post('api/app/upload', data, config)
+        axios.post(`api/apps/${_this.teamId}/upload`, data, config)
           .then(function (res) {
             console.log(res)
             Message({

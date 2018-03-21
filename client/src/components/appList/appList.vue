@@ -67,7 +67,10 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
                 <span class="icon-ic_editor"></span>
                 <span style="font-size: 14px">编辑</span>
               </div>
-              <div class="appItem-operate-preview appItem-operate-common" @click="clickPreview">
+              <!--<a :href="getPreViewUrl()">-->
+                <!---->
+              <!--</a>-->
+              <div class="appItem-operate-preview appItem-operate-common" @click.stop="clickPreview">
                 <span class="icon-ic_preview"></span>
                 <span style="font-size: 14px">预览</span>
               </div>
@@ -86,7 +89,8 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       </el-row>
     </div>
 
-    <uploadApp v-if="this.showUploadView" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
+    <uploadApp v-if="this.showUploadView" :teamId="this.userInfo.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
+
   </div>
 </template>
 
@@ -94,6 +98,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
   import AppListNav from './appListNav.vue'
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
+  import {getUserInfo} from '../../mgr/userMgr'
 
   export default {
     data() {
@@ -103,7 +108,9 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
         queryText: '',
         showUploadView: false,
         file: FileList,
-        currentPage: 0
+        currentPage: 0,
+        userInfo: {
+        }
       }
     },
     components: {
@@ -118,7 +125,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
     },
     methods: {
       loadAppList() {
-        AppResourceApi.getAppList(this.currentPage)
+        AppResourceApi.getAppList(this.userInfo.teamArr[0]._id, this.currentPage)
           .then(response => {
             console.log(response)
             this.dataList = [{'flag': 'flag'}]
@@ -167,19 +174,24 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
         this.$router.push('appDetail')
       },
       clickPreview() {
-        const {href} = this.$router.resolve({
-          name: 'AppPreView'
-        })
-        window.open(href, '_blank')
+//        const {href} = this.$router.resolve({
+//          name: 'AppPreView'
+//        })
+//        console.log(href)
+//        console.log(window.location.origin)
+        window.open(window.location.origin + '/appPreView', '_blank')
       }
     },
     created () {
       this.$watch('queryText', () => {
         console.log(this.queryText)
       })
-      this.$nextTick(() => {
+      let user = getUserInfo()
+      this.userInfo = user
+      if (this.userInfo) {
         this.loadAppList()
-      })
+      } else {
+      }
     }
   }
 </script>

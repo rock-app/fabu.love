@@ -4,11 +4,12 @@
 import {getHttp, deleteHttp} from '../basehttp'
 
 // 获取应用列表
-export function getAppList(page) {
+export function getAppList(teamId, page) {
   let params = {
     'page': page, 'size': 10
   }
-  let url = 'api/apps'
+  let url = `api/apps/${teamId}`
+  console.log(url)
   return getHttp(url, params)
 }
 

@@ -4,7 +4,13 @@ import nodemailer from 'nodemailer';
 
 module.exports = class Mail {
   
-  static async send(email, subject, content) {
+  /** 
+   * @argument emails [Array || String] 支持输入多个邮箱组成的数组或者单个邮箱
+   * @argument subject String 邮件主题
+   * @argument content String<HTML> 邮件内容
+  */
+  static async send(emails, subject, content) {
+    const email = (emails instanceof Array) ? emails.reduce((pv, cv) => { return pv + "," + cv } ) : emails
     let transporter = nodemailer.createTransport({
       service: 'qq',
       auth: {

@@ -67,6 +67,7 @@
               'teamArr': response.data.teams
             }
             saveUserInfo(user)
+            this.axios.defaults.headers.Authorization = 'Bearer' + ' ' + response.data.token
             this.$router.push('/')
           }, reject => {
             this.$message.error(reject)

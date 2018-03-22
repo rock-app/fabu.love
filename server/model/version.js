@@ -21,8 +21,9 @@ var versionSchema = new Schema({
     downloadUrl: String,
     downloadCount: Number,
     fileDownloadUrl:String, //源文件下载地址
+    appLevel:String,
     changelog:String,
-    hidden: { type:Boolean , default:false},
+    hidden: { type:Boolean , default:false },
     strategy:{
         updateMode:{type:String,enum:['slient','normal','force']},
         whiteIpList:[String],

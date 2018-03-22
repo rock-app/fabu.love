@@ -28,15 +28,15 @@
           </div>
           <div class="appversion-versionList-left-line"></div>
           <div class="appversion-versionList-right">
-            <div class="appversion-versionList-itemtitle" v-html="item.a"></div>
+            <div class="appversion-versionList-itemtitle" v-html="item.versionStr"></div>
             <div class="appversion-versionList-itemInfo">
-              <span>21212121212</span>
-              <span class="versionType">企业版</span>
-              <span>XC:com.hd.123.com-sahnghaiasasasasasasasasas</span>
+              <span>参数未定</span>
+              <span class="versionType">{{item.appLevel}}</span>
+              <span>{{item.bundleId}}</span>
             </div>
             <div class="appversion-versionList-itemBottom" v-show="!item.isEditor">
               <el-button round @click="clickEditorBtn(index)">编辑</el-button>
-              <el-button round><i class="el-icon-upload el-icon--left"></i>10.36M</el-button>
+              <el-button round><i class="el-icon-upload el-icon--left"></i>{{(item.size/1024/1024).toFixed(1)}}M</el-button>
               <el-button @click="clickPreViewBtn" round><i class="icon-ic_preview"></i>预览</el-button>
               <el-button round><i class="el-icon-upload el-icon--left"></i>标记上线</el-button>
               <el-switch
@@ -79,7 +79,7 @@
     data() {
       return {
         isFix: false,
-        dataArr: [{'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}],
+        dataArr: [],
         showInDownLoadPage: false,
         currentPage: 0,
         userteam: {}
@@ -105,8 +105,9 @@
     },
     methods: {
       getAppVersionListData() {
-        AppResourceApi.getAppVersionList(this.userteam._id, this.appId, this.currentPage).then(() => {
-
+        AppResourceApi.getAppVersionList(this.userteam._id, this.appId, this.currentPage).then((res) => {
+          console.log(res)
+          this.dataArr = res.data
         }, reject => {
 
         })

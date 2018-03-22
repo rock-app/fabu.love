@@ -1,10 +1,10 @@
 <template>
   <div>
     <!--导航部分-->
-    <appListNav appSubModule="订货宝"></appListNav>
+    <appListNav :appSubModule="this.appInfo.appName"></appListNav>
     <!--头部-->
     <div class="appDetail-header">
-      <img class="appicon" src="../../assets/backgroundImage.png" alt="" @click="clickAppIcon">
+      <img class="appicon" :src="getIconUrl()" alt="" @click="clickAppIcon">
       <div class="appDetail-appinfo">
         <div class="appDetail-appinfo-info">
           <div class="appDetail-appinfo-link">http://12121212121212</div>
@@ -128,6 +128,13 @@
           name: 'AppPreView'
         })
         window.open(href, '_blank')
+      },
+      getIconUrl() {
+        if (this.appInfo.icon) {
+          return `${this.axios.defaults.baseURL}${this.appInfo.icon}`
+        } else {
+          return `${require('../../assets/logo.png')}`
+        }
       }
     }
   }

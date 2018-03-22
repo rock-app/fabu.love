@@ -170,7 +170,6 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       appItemUnhovered() {
       },
       clickEditorBtn() {
-        this.$router.push('appDetail')
       },
       clickPreview() {
         window.open(window.location.origin + '/appPreView', '_blank')

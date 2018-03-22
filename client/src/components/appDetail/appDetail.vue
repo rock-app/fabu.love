@@ -12,10 +12,10 @@
             <i class="el-icon-download"></i>
             <span>21666666</span>
           </div>
-          <div class="appDetail-appinfo-link appDetail-appinfo-platform">Android</div>
+          <div class="appDetail-appinfo-link appDetail-appinfo-platform" v-html="this.appInfo.platform"></div>
           <div class="appDetail-appinfo-downloadwrapper">
             <p class="appDetail-appinfo-downloadwrapper-packname">PackName</p>
-            <span>21666666</span>
+            <span v-html="this.appInfo.bundleId"></span>
           </div>
         </div>
         <div class="detail-otherinfo">
@@ -67,7 +67,8 @@
       return {
         headerOperationData: ['基本信息', '权限控制', '应用合并', '高级统计', '集成'],
         currentModule: 'appVersions',
-        userteam: {}
+        userteam: {},
+        appInfo: {}
       }
     },
     components: {
@@ -85,6 +86,7 @@
       getAppDetailData() {
         AppResourceApi.getAppDetail(this.userteam._id, this.$route.params.appId).then((res) => {
           console.log(res)
+          this.appInfo = res.data
         }, reject => {
           this.$message.error(reject)
         })

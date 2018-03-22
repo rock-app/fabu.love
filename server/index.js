@@ -17,6 +17,7 @@ const app = new Koa()
 // 解决跨域问题
 app.use(cors())
 app.use(serve(config.fileDir))
+app.use(serve(__dirname + '/dist'));
 app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
   path: ['/api/user/register', '/api/user/login', '/swagger-html', '/swagger-json']
 }))

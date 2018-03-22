@@ -28,6 +28,8 @@ var ipaMataData = require('ipa-metadata')
 var {writeFile,readFile,responseWrapper,exec} = require('../helper/util')
 var tempDir = path.resolve(__dirname, '../temp')
 
+createFolderIfNeeded(tempDir)
+
 function createFolderIfNeeded(path) {
   if (!fs.existsSync(path)) {
     mkdirp.sync(path,function (err) {
@@ -212,7 +214,7 @@ async function extractIpaIcon(filename,guid,team) {
       //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
       var iconRelatePath = path.join(team.id,"/icon")
       var iconSuffix =  "/" + guid + "_i.png"
-      createFolderIfNeeded(config.fileDir + iconRelatePath)
+      createFolderIfNeeded(path.join(config.fileDir,iconRelatePath))
       if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
         await fs.renameSync(tmpOut, path.join(iconRelatePath,iconSuffix))
         return {'success': true,'fileName': iconRelatePath + iconSuffix}

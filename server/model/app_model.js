@@ -36,6 +36,7 @@ var appSchema = new Schema({
         type:String,
         index:true
     },
+    appLevel:String,
     ownerId:String,
     changelog:String,
     strategy:{

@@ -10,7 +10,7 @@ import {
   query,
   path as rpath
 } from '../swagger';
-
+import config from '../config';
 const Version = require('../model/version')
 const App = require('../model/app_model')
 var multer = require('koa-multer');
@@ -23,29 +23,22 @@ var apkParser3 = require('apk-parser3')
 var extract = require('ipa-extract-info')
 var Team = require('../model/team')
 var AdmZip = require('adm-zip')
-var serverDir = path.resolve(__dirname,"..") + '/uploaded/'
-var ipasDir = serverDir + 'ipa'
-var apksDir = serverDir + 'apk'
-var iconsDir = serverDir + 'icon'
+var mkdirp = require('mkdirp')
+
+
 var {writeFile,readFile,responseWrapper,exec} = require('../helper/util')
-createFolderIfNeeded(serverDir)
-createFolderIfNeeded(ipasDir)
-createFolderIfNeeded(apksDir)
-createFolderIfNeeded(iconsDir)
+var tempDir = path.resolve(__dirname, '../temp')
 
 function createFolderIfNeeded(path) {
   if (!fs.existsSync(path)) {
-    fs.mkdirSync(path, err => {
-      if (err) {
-        console.log(err)
-        return
-      }
+    mkdirp.sync(path,function (err) {
+      if (err) console.error(err)
     })
   }
 }
 
 const storage = multer.diskStorage({
-  destination: path.resolve('uploaded/'),
+  destination: tempDir,
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 });
 
@@ -67,18 +60,12 @@ module.exports = class UploadRouter {
   @middlewares([upload.single('file')])
   static async upload(ctx, next) {
     var file = ctx.req.file
-    var filePath = file.path
-    var reader = await fs.createReadStream(filePath)
-    var stream = await fs.createWriteStream(
-      path.join(os.tmpdir(), Math.random().toString()))
-    reader.pipe(stream)
-
     const { teamId } = ctx.validatedParams;
     var team = await Team.findById(teamId)
     if (!team) {
       throw new Error("没有找到该团队")
     }
-    var result = await parseAppAndInsertToDB(file.path, ctx.state.user.data,team);
+    var result = await parseAppAndInsertToDB(file, ctx.state.user.data,team);
     ctx.body = responseWrapper(result);
   }
 
@@ -94,8 +81,8 @@ module.exports = class UploadRouter {
   }
 }
 
-async function parseAppAndInsertToDB(filePath,user,team) {
-  var guid = uuidV4()
+async function parseAppAndInsertToDB(file,user,team) {
+  var filePath = file.path
     var parser, extractor;
     if (path.extname(filePath) === ".ipa") {
       parser = parseIpa
@@ -107,8 +94,18 @@ async function parseAppAndInsertToDB(filePath,user,team) {
       throw(new Error("文件类型有误,仅支持IPA或者APK文件的上传."))
     }
 
+    //解析ipa和apk文件
     var info = await parser(filePath);
-    var icon = await extractor(filePath, guid);
+    var fileName = info.bundleId + "_" +info.versionStr + "_" + info.versionCode
+    //解析icon图标
+    var icon = await extractor(filePath, fileName, team);
+
+    //移动文件到对应目录
+    var fileRelatePath = path.join(team.id,info.platform)
+    createFolderIfNeeded(path.join(config.fileDir, fileRelatePath))
+    var fileRealPath = path.join(config.fileDir,fileRelatePath, fileName + path.extname(filePath))
+    await fs.renameSync(filePath,fileRealPath)
+    info.downloadUrl = path.join(fileRelatePath , fileName + path.extname(filePath))
 
     var app = await App.findOne(
         {'platform': info['platform'], 'bundleId': info['bundleId'],'ownerId':team._id})
@@ -121,7 +118,7 @@ async function parseAppAndInsertToDB(filePath,user,team) {
       await app.save()
       info.uploader = user.username;
       info.uploaderId = user._id;
-      info.size = fs.statSync(filePath).size
+      info.size = fs.statSync(fileRealPath).size
       var version = Version(info)
       version.appId = app._id;
       await version.save()
@@ -132,7 +129,7 @@ async function parseAppAndInsertToDB(filePath,user,team) {
       version = new Version(
         {appId: app.id, bundleId: app.bundleId, 
         versionCode: info.versionCode, versionName: info.version, 
-        downloadUrl: info.downloadUrl})
+        downloadUrl: info.downloadUrl,icon:info.icon})
       version.save()
       return {'app':app,'version':version}
     } else {
@@ -156,15 +153,15 @@ function mapIconAndUrl(result) {
   })
 }
 
-///存在app到指定文件
-function storeApp(filename, guid, callback) {
+///移动相关信息到指定目录
+function storeInfo(filename, guid) {
   var new_path
   if (path.extname(filename) === '.ipa') {
     new_path = path.join(ipasDir, guid + '.ipa')
   } else if (path.extname(filename) === '.apk') {
     new_path = path.join(apksDir, guid + '.apk')
   }
-  fs.rename(filename, new_path, callback)
+  fs.rename(filename, new_path)
 }
 
 ///解析ipa
@@ -188,8 +185,8 @@ function parseIpa(filename) {
 }
 
   ///解析ipa icon
-async function extractIpaIcon(filename, guid) {
-  var tmpOut = iconsDir + '/{0}.png'.format(guid)
+async function extractIpaIcon(filename,guid,team) {
+  var tmpOut = tempDir + '/{0}.png'.format(guid)
   var zip = new AdmZip(filename)
   var ipaEntries = zip.getEntries()
   var found = false
@@ -209,13 +206,16 @@ async function extractIpaIcon(filename, guid) {
         throw stderr;
       }
       //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
+      var iconRelatePath = path.join(team.id,"/icon")
+      var iconSuffix =  "/" + guid + "_i.png"
+      createFolderIfNeeded(config.fileDir + iconRelatePath)
       if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
-        return {'success': true,'fileName':'/{0}.png'.format(guid)}
+        await fs.renameSync(tmpOut, path.join(iconRelatePath,iconSuffix))
+        return {'success': true,'fileName': iconRelatePath + iconSuffix}
       }
-      await fs.unlink(tmpOut)
-      var tmp_path = iconsDir + '/{0}_tmp.png'.format(guid)
-      await fs.rename(tmp_path, tmpOut)
-      return {'success': true,'fileName':'/{0}.png'.format(guid)}
+      await fs.unlinkSync(tmpOut)
+      fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid) ,path.join(config.fileDir, iconRelatePath,iconSuffix))
+      return {'success': true,'fileName':iconRelatePath + iconSuffix}
     }
   }
   if (!found) {
@@ -241,9 +241,9 @@ function parseApk(filename) {
 }
 
 ///解析apk icon
-function extractApkIcon(filename, guid) {
+function extractApkIcon(filepath, guid,team) {
   return new Promise((resolve, reject) => {
-    apkParser3(filename, (err, data) => {
+    apkParser3(filepath, (err, data) => {
       var iconPath = false;
       var iconSize = [640, 320, 240, 160]
       for (var i in iconSize){
@@ -257,8 +257,11 @@ function extractApkIcon(filename, guid) {
       }
 
       iconPath = iconPath.replace(/'/g, '')
-      var tempOut = iconsDir + '/{0}.png'.format(guid)
-      var zip = new AdmZip(filename)
+      var dir = path.join(config.fileDir,team.id,"icon")
+      var realPath = path.join(team.id ,"icon" ,'/{0}_a.png'.format(guid))
+      createFolderIfNeeded(dir)
+      var tempOut = path.join(config.fileDir,realPath)
+      var zip = new AdmZip(filepath)
       var apkEntries = zip.getEntries()
       var found = false
       apkEntries.forEach(apkEntry => {
@@ -270,7 +273,7 @@ function extractApkIcon(filename, guid) {
               if (err) {
                 reject(err)
               }
-              resolve({'success': true})
+              resolve({'success': true,fileName:realPath})
             })
           }
         }
@@ -291,7 +294,7 @@ String.prototype.format = function () {
 }
 
 function parseText(text) {
-  var regx = /(\w+)='([\w\.\d]+)'/g
+  var regx = /(\w+)='([\S]+)'/g
   var match = null;
   var result = {}
   while (match = regx.exec(text)) {

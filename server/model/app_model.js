@@ -32,6 +32,10 @@ var appSchema = new Schema({
     updateAt: {
         type: Date
     },
+    shortUrl:{
+        type:String,
+        index:true
+    },
     ownerId:String,
     changelog:String,
     strategy:{

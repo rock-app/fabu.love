@@ -24,13 +24,12 @@ app.use(function(ctx,next){
     // ctx.redirect('/index.html')
       ctx.response.type = 'html';
       ctx.response.body = fs.createReadStream('./dist/index.html');
-
   }else{
     return next()
   }
 })
 app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
-  path: ['/api/user/register', '/api/user/login', '/swagger-html', '/swagger-json']
+  path: ['/api/user/register', '/api/user/login', '/api/swagger', '/api/swagger.json']
 }))
 app.use(serve(config.fileDir))
 app.use(rest.restify())

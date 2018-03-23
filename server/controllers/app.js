@@ -117,8 +117,34 @@ module.exports = class AppRouter {
     @request('get','/api/apps/{teamId}/{id}/versions/{versionId}')
     @summary("获取某个应用的某个版本详情")
     @tag
+    @path({
+        teamId:{type:'string'},
+        id:{type:'string',description:'应用id'},
+        versionId:{type:'string',description:'版本id'}
+    })
     static async getAppVersionDetail(ctx,next){
         //todo: 好像暂时用不上
+        
+        // if (!version){
+        //     throw new Error("版本不存在")
+        // }
+        // if (version.lasted && version.active){
+        //     ctx.body = responseWrapper(version)
+        //     return
+        // }
+        var user = ctx.state.user.data
+        var { teamId,id,versionId } = ctx.validatedParams
+        var team = await Team.find(
+            {_id:teamId,members:{
+                $elemMatch:{ username:user.username}}})
+        if (!team){
+            throw new Error("没有权限查看该应用")
+        }
+        var version = await Version.findById(versionId)
+        if (!version){
+            throw new Error("应用不存在")
+        }
+        ctx.body = responseWrapper(version)
     }
 
     @request('delete','/api/apps/{teamId}/{id}/versions/{versionId}')

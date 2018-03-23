@@ -26,7 +26,7 @@ var loginSchema = {
         type: 'string',
         required: true
     }
-
+    
 }
 
 var registerSchema = {

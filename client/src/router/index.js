@@ -10,42 +10,6 @@ Vue.use(Router)
 
 const AppList = () => import('components/appList/appList.vue')
 
-// export default new Router({
-//   // 去除#
-//   mode: 'history',
-//   routes: [
-//     // {
-//     //   path: '/login',
-//     //   name: 'Login',
-//     //   component: Login
-//     // },
-//     // {
-//     //   path: '/applist',
-//     //   name: 'AppList',
-//     //   component: AppList
-//     // },
-//     {
-//       path: '/regiest',
-//       name: 'Regiest',
-//       component: Regiest
-//     },
-//     {
-//       path: '/appDetail/:appId',
-//       name: 'AppDetail',
-//       component: AppDetail
-//     },
-//     {
-//       path: '/appPreView',
-//       name: 'AppPreView',
-//       component: AppPreView
-//     },
-//     {
-//       path: '/userInfo',
-//       name: 'UserInfo',
-//       component: UserInfo
-//     }
-//   ]
-// })
 export default new Router({
   // 去除#
   mode: 'history',
@@ -66,21 +30,25 @@ export default new Router({
       component: Regiest
     },
     {
-      path: '/appDetail/:appId',
+      path: '/app/:appId',
       name: 'AppDetail',
       component: AppDetail
     },
     {
-      path: '/appPreView',
+      path: '/preView',
       name: 'AppPreView',
       component: AppPreView
     },
     {
-      path: '/userInfo',
+      path: '/user',
       name: 'UserInfo',
       component: UserInfo
+    },
+    {
+      path: '/:versionId',
+      name: 'AppPreView',
+      component: AppPreView
     }
-
   ]
 })
 

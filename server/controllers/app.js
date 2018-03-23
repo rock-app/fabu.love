@@ -167,7 +167,7 @@ module.exports = class AppRouter {
         }})
         var app = await App.find({_id:id,ownerId:team._id})
         if (!app) {
-            throw new Error("应用不存在或您没有权限查询该应用")
+            throw new Error("应用不存在或您没有权限执行该操作")
         }
         var version = await Version.find({_id:versionId})
         var result = Version.deleteOne(version)
@@ -199,6 +199,66 @@ module.exports = class AppRouter {
         
     }
 
+    @request('get','/api/app/{appShortUrl}')
+    @summary("通过短链接获取应用最新版本")
+    @tag
+    @path({appShortUrl:{type:'string',require:true}})
+    static async getAppByShort(ctx,next){
+        var { appShortUrl } = ctx.validatedParams
+        var app = await App.find({shortUrl:appShortUrl})
+        if (!app) {
+            throw new Error("应用不存在")
+        }
+        var version = await Version.find({
+            app:versionId,
+            versionCode:app.lastVersionCode,
+            released:true
+        })
+        if (!version) {
+            throw new Error("当前没有已发布的版本可供下载")
+        }
+        ctx.body = responseWrapper({'app':app,'version':version})
+    }
+
+    @request('post','/api/apps/{teamId}/{id}/release')
+    @summary("发布某个版本")
+    @tag
+    @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
+    @body({versionId:{type:'string',require:true},release:{type:'bool',require:true}})
+    static async getAppByShort(ctx,next){
+
+        var user = ctx.state.user.data
+        var { body } = ctx.request
+        var { teamId,id } = ctx.validatedParams;  
+        var team = await Team.findOne({_id:teamId,members:{
+            $elemMatch:{
+                 username:user.username,
+                 $or: [
+                    { role: 'owner' },
+                    { role: 'manager' }
+                ]
+            }
+        }})
+        var app = await App.find({_id:id,ownerId:team._id})
+        if (!app) {
+            throw new Error("应用不存在或您没有权限执行该操作")
+        }
+
+        var version = await Version.find({
+            appId:app.id,
+            _id:body.versionId
+        })
+        if (!version) {
+            throw new Error("版本不存在")
+        }
+        version.released = body.release
+        if (app.lastVersionCode && version.versionCode > app.lastVersionCode) {
+            app.lastVersionCode = version.versionCode
+        }
+        await App.updateOne(app)
+        await Version.updateOne(version)
+        ctx.body = responseWrapper(true,body.release ? "版本已发布" : "版本已关闭")
+    }
 }
 
 

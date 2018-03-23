@@ -35,17 +35,12 @@ export default new Router({
       component: AppDetail
     },
     {
-      path: '/preView',
-      name: 'AppPreView',
-      component: AppPreView
-    },
-    {
       path: '/user',
       name: 'UserInfo',
       component: UserInfo
     },
     {
-      path: '/:versionId',
+      path: '/:id',
       name: 'AppPreView',
       component: AppPreView
     }

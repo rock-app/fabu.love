@@ -125,7 +125,9 @@
       },
       clickPreviewBtn() {
         const {href} = this.$router.resolve({
-          name: 'AppPreView'
+          name: 'AppPreView',
+          path: '/',
+          params: { 'id': this.appInfo.shortUrl }
         })
         window.open(href, '_blank')
       },

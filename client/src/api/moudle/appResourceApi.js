@@ -38,3 +38,9 @@ export function delectApp(teamId, appId) {
   let url = `api/apps/${teamId}/${appId}`
   return deleteHttp(url)
 }
+
+// 预览应用
+export function preViewApp(id) {
+  let url = `api/apps/${id}`
+  return getHttp(url)
+}

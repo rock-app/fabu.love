@@ -55,7 +55,7 @@
       this.appName = this.$route.query.appName
       this.platform = this.$route.query.platform
       console.log(this.$route.params)
-      this.loadData()
+//      this.loadData()
     },
     methods: {
       getTableBackground(index) {

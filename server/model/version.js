@@ -18,7 +18,6 @@ var versionSchema = new Schema({
     uploaderId:String,
     size: Number,
     active:Boolean,
-    lasted:Boolean,
     downloadUrl: String,
     downloadCount: Number,
     fileDownloadUrl:String, //源文件下载地址

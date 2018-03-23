@@ -1,7 +1,7 @@
 /**
  * Created by darren on 2018/3/15.
  */
-import {getHttp, deleteHttp} from '../basehttp'
+import {getHttp, deleteHttp, postHttp} from '../basehttp'
 
 // 获取应用列表
 export function getAppList(teamId, page) {
@@ -39,15 +39,18 @@ export function delectApp(teamId, appId) {
   return deleteHttp(url)
 }
 
-// 预览应用
-export function preViewApp(id) {
-  let url = `api/apps/${id}`
+// 通过短链接获取应用最新版本
+export function getAppInfoByShortUrl(appShortUrl) {
+  let url = `api/app/${appShortUrl}`
   return getHttp(url)
 }
 
 // 发布应用
-// api/apps/{teamId}/{id}/release
-export function releaseApp(id) {
-  let url = `api/apps/${id}`
-  return getHttp(url)
+export function releaseApp(teamId, id, versionId, release) {
+  let body = {
+    'versionId': versionId,
+    'release': release
+  }
+  let url = `api/apps/${teamId}/${id}/release`
+  return postHttp(url, body)
 }

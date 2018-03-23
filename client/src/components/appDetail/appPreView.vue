@@ -55,6 +55,7 @@
       this.appName = this.$route.query.appName
       this.platform = this.$route.query.platform
       console.log(this.$route.params)
+      this.getAppInfo(this.$route.params.id)
 //      this.loadData()
     },
     methods: {
@@ -64,6 +65,13 @@
         } else {
           return `backgroundColor: white`
         }
+      },
+      getAppInfo(shortUrl) {
+        AppResourceApi.getAppInfoByShortUrl(shortUrl).then((res) => {
+          console.log(res)
+        }, reject => {
+
+        })
       },
       loadData() {
         AppResourceApi.getAppVersionDetail(this.teamId, this.appId, this.versionId).then((res) => {

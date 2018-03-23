@@ -74,11 +74,11 @@ module.exports = class AppRouter {
         var user = ctx.state.user.data
         var { teamId,id } = ctx.validatedParams;  
         var team = await Team.find({_id:teamId,members:{
-            $elemMatch:[
-                { username:user.username,role:"owner" },
-                { username:user.username,role:"manager" },
-            ]},
-        })
+            $elemMatch:{
+                 username:user.username,
+                 role:{$in:["owner","manager"]}
+            }
+        }})
         var app = await App.find({_id:id,ownerId:team._id})
         if (!app) {
             throw new Error("应用不存在或您没有权限查询该应用")
@@ -128,11 +128,11 @@ module.exports = class AppRouter {
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
         var team = await Team.find({_id:teamId,members:{
-            $elemMatch:[
-                { username:user.username,role:"owner" },
-                { username:user.username,role:"manager" },
-            ]},
-        })
+            $elemMatch:{
+                username:user.username,
+                role:{$in:["owner","manager"]}
+           }
+        }})
         var app = await App.find({_id:id,ownerId:team._id})
         if (!app) {
             throw new Error("应用不存在或您没有权限查询该应用")

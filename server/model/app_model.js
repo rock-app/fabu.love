@@ -39,6 +39,7 @@ var appSchema = new Schema({
     appLevel:String,
     ownerId:String,
     changelog:String,
+    lastVersionCode:String,
     strategy:{
         updateMode:{type:String,default:'normal',enum:['slient','normal','force']},
         whiteIpList:[String],

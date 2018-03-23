@@ -114,6 +114,7 @@ async function parseAppAndInsertToDB(file,user,team) {
       info.creator = user.username;
       info.creatorId = user._id;
       info.icon = icon.fileName;
+      info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
       app = new App(info)
       app.ownerId = team._id;
       await app.save()

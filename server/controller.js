@@ -40,9 +40,9 @@ router.swagger({
   }
 })();
 
-router.get('/', async (ctx, next) => {
-  ctx.redirect("/index.html")
-});
 
+// router.get('/', async (ctx, next) => {
+//   ctx.redirect("/index.html")
+// });
 
 export default router

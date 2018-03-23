@@ -22,7 +22,6 @@ app.use(serve(config.fileDir))
 app.use(serve(__dirname + '/dist'));
 app.use(function(ctx,next){
   if (ctx.request.path.indexOf("/api") != 0) {
-    // ctx.redirect('/index.html')
       ctx.response.type = 'html';
       ctx.response.body = fs.createReadStream('./dist/index.html');
   }else{
@@ -34,8 +33,6 @@ app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
 }))
 app.use(rest.restify())
 app.use(router.routes())
-console.log(router.routes)
-app.use(router.allowedMethods())
 
 export default app.listen(config.port, () => {
   console.log(`App is listening on ${config.port}.`);

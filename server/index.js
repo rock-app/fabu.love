@@ -18,6 +18,7 @@ const app = new Koa()
 // 解决跨域问题
 app.use(cors())
 app.use(bodyParser())
+app.use(serve(config.fileDir))
 app.use(serve(__dirname + '/dist'));
 app.use(function(ctx,next){
   if (ctx.request.path.indexOf("/api") != 0) {
@@ -32,7 +33,6 @@ app.use(function(ctx,next){
 app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
   path: ['/api/user/register', '/api/user/login', '/swagger-html', '/swagger-json']
 }))
-app.use(serve(config.fileDir))
 app.use(rest.restify())
 app.use(router.routes())
 console.log(router.routes)

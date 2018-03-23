@@ -73,10 +73,13 @@ module.exports = class AppRouter {
     static async deleteApp(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id } = ctx.validatedParams;  
-        var team = await Team.find({_id:teamId,members:{
+        var team = await Team.findOne({_id:teamId,members:{
             $elemMatch:{
                  username:user.username,
-                 role:{$in:["owner","manager"]}
+                 $or: [
+                    { role: 'owner' },
+                    { role: 'manager' }
+                ]
             }
         }})
         var app = await App.find({_id:id,ownerId:team._id})
@@ -153,11 +156,14 @@ module.exports = class AppRouter {
     static async deleteAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
-        var team = await Team.find({_id:teamId,members:{
+        var team = await Team.findOne({_id:teamId,members:{
             $elemMatch:{
-                username:user.username,
-                role:{$in:["owner","manager"]}
-           }
+                 username:user.username,
+                 $or: [
+                    { role: 'owner' },
+                    { role: 'manager' }
+                ]
+            }
         }})
         var app = await App.find({_id:id,ownerId:team._id})
         if (!app) {

@@ -33,7 +33,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
             </div>
             <i v-show="item.platform === 'ios'" class="icon-ic_ios appItem-platform"></i>
             <i v-show="item.platform === 'android'" class="icon-ic_android appItem-platform"></i>
-            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail(item)">
+            <img class="appItem-icon" v-if="item.icon" v-lazy="getIcon(item)" alt="" @click="gotoAppDetail(item)">
             <!--app信息-->
             <div class="appItem-info">
               <div class="appItem-info-namewrapper">
@@ -74,7 +74,7 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
                 <span class="icon-ic_preview"></span>
                 <span style="font-size: 14px">预览</span>
               </div>
-              <div class="appItem-operate-delect appItem-operate-common">
+              <div class="appItem-operate-delect appItem-operate-common" @click="delectApp(item)">
                 <i class="el-icon-delete"></i>
               </div>
             </div>
@@ -172,7 +172,21 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
       clickEditorBtn() {
       },
       clickPreview() {
-        window.open(window.location.origin + '/appPreView', '_blank')
+//        window.open(window.location.origin + '/appPreView', '_blank')
+      },
+      getIcon(item) {
+        return `${this.axios.defaults.baseURL}${item.icon}`
+      },
+      delectApp(item) {
+        this.$confirm('确认删除？')
+          .then(_ => {
+            AppResourceApi.delectApp(this.teamArr[0]._id, item._id).then((res) => {
+              this.loadAppList()
+            }, reject => {
+              this.$message.error(reject)
+            })
+          })
+          .catch(_ => {})
       }
     },
     created () {

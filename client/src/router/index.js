@@ -30,21 +30,25 @@ export default new Router({
       component: Regiest
     },
     {
-      path: '/appDetail/:appId',
+      path: '/app/:appId',
       name: 'AppDetail',
       component: AppDetail
     },
     {
-      path: '/appPreView',
+      path: '/preView',
       name: 'AppPreView',
       component: AppPreView
     },
     {
-      path: '/userInfo',
+      path: '/user',
       name: 'UserInfo',
       component: UserInfo
+    },
+    {
+      path: '/:versionId',
+      name: 'AppPreView',
+      component: AppPreView
     }
-
   ]
 })
 

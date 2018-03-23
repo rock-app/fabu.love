@@ -8,6 +8,8 @@ import router from './router'
 import axios from 'axios'
 import {configAxios} from './api/basehttp'
 
+import VueLazyLoad from 'vue-lazyload'
+
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
 
@@ -15,6 +17,9 @@ Vue.prototype.router = router
 
 Vue.use(ElementUI)
 
+Vue.use(VueLazyLoad, {
+  loading: require('./assets/logo.png')
+})
 
 // 配置接口信息
 configAxios()

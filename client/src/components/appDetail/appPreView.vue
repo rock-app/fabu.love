@@ -5,12 +5,12 @@
       <!--中间-->
       <div class="preview-middlewrapper">
         <div class="preview-middlewrapper-header">
-          <p class="title">{{this.appName}}</p>
-          <p class="desc">版本： {{this.appInfo.versionStr}}/ 大小：{{(this.appInfo.size/1024/1024).toFixed(1)}}M / {{this.appInfo.creatDateStr}}</p>
+          <p class="title">{{this.appBaseData.appName}}</p>
+          <p class="desc">版本： {{this.appVersionInfo.versionStr}}/ 大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M / {{this.appVersionInfo.creatDateStr}}</p>
         </div>
         <img class="preview-middlewrapper-appicon" :src="getIconUrl()" alt="">
         <button class="preview-middlewrapper-downloadBtn" @click="clickDownLoadBtn">点击下载</button>
-        <button class="preview-middlewrapper-appdesc">适用于{{this.platform}}设备</button>
+        <button class="preview-middlewrapper-appdesc">适用于{{this.appBaseData.platform}}设备</button>
         <hr class="preview-middlewrapper-line">
         <div class="preview-middlewrapper-downloaddesc">或者用手机扫描二维码下载</div>
         <img class="preview-middlewrapper-ercode" src="../../assets/backgroundImage.png" alt="">
@@ -38,25 +38,15 @@
     data() {
       return {
         versionArr: [['1.3.4', '2017-03-12'], ['1.3.3', '2017-03-11'], ['1.3.2', '2017-03-10'], ['1.3.1', '2017-03-9']],
-        appId: '',
-        versionId: '',
-        teamId: '',
-        appInfo: {},
-        appName: '',
-        platform: ''
+        appVersionInfo: {},
+        appBaseData: {}
       }
     },
     computed: {
     },
     created() {
-      this.appId = this.$route.query.appId
-      this.versionId = this.$route.query.versionId
-      this.teamId = this.$route.query.teamId
-      this.appName = this.$route.query.appName
-      this.platform = this.$route.query.platform
       console.log(this.$route.params)
       this.getAppInfo(this.$route.params.id)
-//      this.loadData()
     },
     methods: {
       getTableBackground(index) {
@@ -69,31 +59,26 @@
       getAppInfo(shortUrl) {
         AppResourceApi.getAppInfoByShortUrl(shortUrl).then((res) => {
           console.log(res)
-        }, reject => {
+          this.appVersionInfo = res.data.version
+          this.appBaseData = res.data.app
 
-        })
-      },
-      loadData() {
-        AppResourceApi.getAppVersionDetail(this.teamId, this.appId, this.versionId).then((res) => {
-          console.log(res)
-          this.appInfo = res.data
-          let releaseDate = new Date(this.appInfo.uploadAt)
-          this.appInfo.creatDateStr = `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
+          let releaseDate = new Date(this.appVersionInfo.uploadAt)
+          this.appVersionInfo.creatDateStr = `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
 
         }, reject => {
 
         })
       },
       getIconUrl() {
-        if (this.appInfo.icon) {
-          return `${this.axios.defaults.baseURL}${this.appInfo.icon}`
+        if (this.appBaseData.icon) {
+          return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
         } else {
           return `${require('../../assets/logo.png')}`
         }
       },
       clickDownLoadBtn() {
         const a = document.createElement('a')
-        a.setAttribute('href', `${this.axios.defaults.baseURL}${this.appInfo.downloadUrl}`)
+        a.setAttribute('href', `${this.axios.defaults.baseURL}${this.appVersionInfo.downloadUrl}`)
         a.click()
       }
     }

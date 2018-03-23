@@ -57,7 +57,7 @@
         this.userHover = false
       },
       clickUserInfoWrapper() {
-        this.$router.push('userInfo')
+        this.$router.push('user')
       },
       loginout() {
         TokenMgr.clearTokens()

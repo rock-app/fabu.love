@@ -6,7 +6,7 @@
       <div class="preview-middlewrapper">
         <div class="preview-middlewrapper-header">
           <p class="title">{{this.appName}}</p>
-          <p class="desc">版本： {{this.appInfo.versionStr}}/ 大小：{{(this.appInfo.size/1024/1024).toFixed(1)}}M / {{this.appInfo.uploadAt.substring(0, 10)}}</p>
+          <p class="desc">版本： {{this.appInfo.versionStr}}/ 大小：{{(this.appInfo.size/1024/1024).toFixed(1)}}M / {{this.appInfo.creatDateStr}}</p>
         </div>
         <img class="preview-middlewrapper-appicon" :src="getIconUrl()" alt="">
         <button class="preview-middlewrapper-downloadBtn" @click="clickDownLoadBtn">点击下载</button>
@@ -54,6 +54,7 @@
       this.teamId = this.$route.query.teamId
       this.appName = this.$route.query.appName
       this.platform = this.$route.query.platform
+      console.log(this.$route.params)
       this.loadData()
     },
     methods: {
@@ -68,6 +69,9 @@
         AppResourceApi.getAppVersionDetail(this.teamId, this.appId, this.versionId).then((res) => {
           console.log(res)
           this.appInfo = res.data
+          let releaseDate = new Date(this.appInfo.uploadAt)
+          this.appInfo.creatDateStr = `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
+
         }, reject => {
 
         })
@@ -80,7 +84,9 @@
         }
       },
       clickDownLoadBtn() {
-        
+        const a = document.createElement('a')
+        a.setAttribute('href', `${this.axios.defaults.baseURL}${this.appInfo.downloadUrl}`)
+        a.click()
       }
     }
   }
@@ -164,7 +170,6 @@
   .preview-middlewrapper-appdesc {
     color: white;
     background-color: green;
-    width: 100px;
     height: 25px;
     font-size: 12px;
     border-radius: 3px;

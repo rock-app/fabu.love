@@ -20,7 +20,8 @@
     "vux": "^2.8.0",
     "vux-loader": "^1.2.1",
     "ipa-extract-info": "^1.2.3",
-    "apk-parser3": "^0.1.7"
+    "apk-parser3": "^0.1.7",
+    "vue-lazyload": "^1.1.4"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

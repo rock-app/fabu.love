@@ -205,12 +205,12 @@ module.exports = class AppRouter {
     @path({appShortUrl:{type:'string',require:true}})
     static async getAppByShort(ctx,next){
         var { appShortUrl } = ctx.validatedParams
-        var app = await App.find({shortUrl:appShortUrl})
+        var app = await App.findOne({shortUrl:appShortUrl})
         if (!app) {
             throw new Error("应用不存在")
         }
-        var version = await Version.find({
-            app:versionId,
+        var version = await Version.findOne({
+            appId:app.id,
             versionCode:app.lastVersionCode,
             released:true
         })
@@ -225,7 +225,7 @@ module.exports = class AppRouter {
     @tag
     @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
     @body({versionId:{type:'string',require:true},release:{type:'bool',require:true}})
-    static async getAppByShort(ctx,next){
+    static async releaseVersion(ctx,next){
 
         var user = ctx.state.user.data
         var { body } = ctx.request

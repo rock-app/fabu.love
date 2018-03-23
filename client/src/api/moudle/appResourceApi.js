@@ -46,10 +46,11 @@ export function getAppInfoByShortUrl(appShortUrl) {
 }
 
 // 发布应用
-export function releaseApp(teamId, id, versionId, release) {
+export function releaseApp(teamId, id, versionId, versionCode, release) {
   let body = {
     'versionId': versionId,
-    'release': release
+    'release': release,
+    'versionCode': versionCode
   }
   let url = `api/apps/${teamId}/${id}/release`
   return postHttp(url, body)

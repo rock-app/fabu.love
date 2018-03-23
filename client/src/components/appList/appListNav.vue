@@ -12,7 +12,7 @@
           <div class="ueserInfo-username nowrap" v-if="this.userInfo">
             {{this.userInfo.userName}}
           </div>
-          <p class="ueserInfo-email nowrap">dede12121212@qq.com</p>
+          <p class="ueserInfo-email nowrap"></p>
         </div>
       </div>
       <ul class="userInfoSubWrapper" v-show="this.userHover" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
@@ -57,7 +57,7 @@
         this.userHover = false
       },
       clickUserInfoWrapper() {
-        this.$router.push('userInfo')
+        this.$router.push('user')
       },
       loginout() {
         TokenMgr.clearTokens()

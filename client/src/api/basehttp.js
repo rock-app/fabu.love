@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import TokenMgr from '../mgr/TokenMgr'
 import { Message } from 'element-ui'
+import {removeUserInfo} from '../mgr/userMgr'
 
 let vue = new Vue()
 
@@ -80,9 +81,11 @@ export function configAxios() {
       case 401:
         error.message = '登录已过期,请重新登录!'
         // 清除用户信息
+        TokenMgr.clearTokens()
+        removeUserInfo()
         // 登录
         setTimeout(() => {
-          vue.router.push('/')
+          vue.router.push('/login')
         }, 500)
         break
       case 403:

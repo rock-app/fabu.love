@@ -28,9 +28,13 @@ export function getAppVersionList(teamId, id, page) {
   return getHttp(url, params)
 }
 
-
+// 获取某个应用的某个版本详情
+export function getAppVersionDetail(teamId, id, versionId) {
+  let url = `api/apps/${teamId}/${id}/versions/${versionId}`
+  return getHttp(url)
+}
 // 删除应用
-export function delectApp(appId) {
-  let url = `api/app/${appId}`
+export function delectApp(teamId, appId) {
+  let url = `api/apps/${teamId}/${appId}`
   return deleteHttp(url)
 }

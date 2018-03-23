@@ -42,7 +42,7 @@
       </div>
     </div>
     <!--内容-->
-    <appVersions :appId="this.$route.params.appId" v-show="this.currentModule === 'appVersions'"></appVersions>
+    <appVersions :platform="this.appInfo.platform" :appName="this.appInfo.appName" :appId="this.$route.params.appId" v-show="this.currentModule === 'appVersions'"></appVersions>
     <appBasicInfo v-show="this.currentModule === '基本信息'"></appBasicInfo>
     <appIntegration v-show="this.currentModule === '集成'"></appIntegration>
     <authorControl v-show="this.currentModule === '权限控制'"></authorControl>

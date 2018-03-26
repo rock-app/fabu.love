@@ -115,19 +115,20 @@ module.exports = class AuthRouter {
         newpwd:{type:'string',require:true}
     })
     @tag
-    static async changePassword(ctx, next) {
-        // var user = ctx.state.user.data
-        // var user = await User.findOne({_id:user._id},"password")
-        // if (!user) {
-        //     throw new Error("用户不存在")
-        // }
-        // let valide = await bcrypt.compare(body.oldpwd, user.password)
-        // if (!valide) {
-        //     throw new Error("原密码不争气")
-        // }
-        // var realPwd = await bcrypt.hash(body.newpwd, 10) 
-        // await User.updateOne({username:body.username},{password:realPwd})
-        // ctx.body = responseWrapper(true,"密码修改成功")
+    static async modifyPassword(ctx, next) {
+        var user = ctx.state.user.data;
+        var body = ctx.request.body;
+        var userData = await User.findOne({_id:user._id},"password");
+        if (!userData) {
+            throw new Error("用户名不存在");
+        } 
+        let valide = await bcrypt.compare(body.oldpwd, userData.password);
+        if (!valide) {
+            throw new Error("密码错误");
+        }
+        body.password = await bcrypt.hash(body.password, 10); // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
+        await User.updateOne({username:user.username}, {password:body.password});
+        ctx.body = responseWrapper(true, "密码修改成功")
     }
 
     @request('post', '/api/user/modify')
@@ -141,7 +142,18 @@ module.exports = class AuthRouter {
     @tag
     static async changeUserInfo(ctx, next) {
         var user = ctx.state.user.data
-        
+        var body = ctx.request.body
+        var userData = await User.findOne({_id:user._id},"password");
+        if (!userData) {
+            throw new Error("用户名不存在");
+        } 
+        await User.updateOne({username:user.username}, {
+            mobile: body.mobile,
+            qq: body.qq,
+            company: body.company,
+            career: body.career
+        })
+        ctx.body = responseWrapper(true, "用户资料修改成功")
     }
 
 }

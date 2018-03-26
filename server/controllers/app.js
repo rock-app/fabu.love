@@ -82,10 +82,11 @@ module.exports = class AppRouter {
                 ]
             }
         }})
-        var app = await App.find({_id:id,ownerId:team._id})
+        var app = await App.findOne({_id:id,ownerId:team._id})
         if (!app) {
             throw new Error("应用不存在或您没有权限查询该应用")
         }
+        await Version.deleteMany({appId:app.id})
         await App.deleteOne(app)
         ctx.body = responseWrapper(true,"应用已删除")
     }
@@ -224,7 +225,11 @@ module.exports = class AppRouter {
     @summary("发布某个版本")
     @tag
     @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
-    @body({versionId:{type:'string',require:true},release:{type:'bool',require:true}})
+    @body({
+        versionId:{type:'string',require:true},
+        versionCode:{type:'string',require:true},
+        release:{type:'bool',require:true}
+    })
     static async releaseVersion(ctx,next){
 
         var user = ctx.state.user.data
@@ -238,25 +243,19 @@ module.exports = class AppRouter {
                     { role: 'manager' }
                 ]
             }
-        }})
-        var app = await App.find({_id:id,ownerId:team._id})
+        },},"_id")
+        var app = await App.findOne({_id:id,ownerId:team._id},"lastVersionCode")
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-
-        var version = await Version.find({
+        var version = await Version.findByIdAndUpdate({
             appId:app.id,
-            _id:body.versionId
-        })
-        if (!version) {
-            throw new Error("版本不存在")
-        }
-        version.released = body.release
+            _id:body.versionId,
+            versionCode:body.versionCode
+        },{released:body.release})
         if (app.lastVersionCode && version.versionCode > app.lastVersionCode) {
-            app.lastVersionCode = version.versionCode
+            await App.updateOne({_id:app.id,lastVersionCode:version.versionCode})
         }
-        await App.updateOne(app)
-        await Version.updateOne(version)
         ctx.body = responseWrapper(true,body.release ? "版本已发布" : "版本已关闭")
     }
 }

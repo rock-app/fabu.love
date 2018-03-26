@@ -37,8 +37,9 @@
             <div class="appversion-versionList-itemBottom" v-show="!item.isEditor">
               <el-button round @click="clickEditorBtn(index)">编辑</el-button>
               <el-button round><i class="el-icon-upload el-icon--left"></i>{{(item.size/1024/1024).toFixed(1)}}M</el-button>
-              <el-button @click="clickPreViewBtn(item)" round><i class="icon-ic_preview"></i>预览</el-button>
+              <!--<el-button @click="clickPreViewBtn(item)" round><i class="icon-ic_preview"></i>预览</el-button>-->
               <el-button round><i class="el-icon-upload el-icon--left"></i>标记上线</el-button>
+              <el-button round @click="releaseApp(item)">发布</el-button>
               <el-switch
                 style="margin-left: 15px"
                 v-model="showInDownLoadPage"
@@ -147,6 +148,14 @@
           query: {'appId': item.appId, 'versionId': item._id, 'teamId': this.userteam._id, 'platform': this.platform, 'appName': this.appName}
         })
         window.open(href, '_blank')
+      },
+      // 发布应用
+      releaseApp(item) {
+        AppResourceApi.releaseApp(this.userteam._id, this.appId, item._id, item.versionCode, true).then((res) => {
+          console.log(res)
+        }, reject => {
+
+        })
       }
     }
   }

@@ -107,4 +107,41 @@ module.exports = class AuthRouter {
             throw new Error("用户已存在")
         }
     }
+
+    @request('post', '/api/user/password/modify')
+    @summary('修改用户密码')
+    @body({
+        oldpwd:{type:'string',require:true},
+        newpwd:{type:'string',require:true}
+    })
+    @tag
+    static async changePassword(ctx, next) {
+        // var user = ctx.state.user.data
+        // var user = await User.findOne({_id:user._id},"password")
+        // if (!user) {
+        //     throw new Error("用户不存在")
+        // }
+        // let valide = await bcrypt.compare(body.oldpwd, user.password)
+        // if (!valide) {
+        //     throw new Error("原密码不争气")
+        // }
+        // var realPwd = await bcrypt.hash(body.newpwd, 10) 
+        // await User.updateOne({username:body.username},{password:realPwd})
+        // ctx.body = responseWrapper(true,"密码修改成功")
+    }
+
+    @request('post', '/api/user/modify')
+    @summary('修改用户资料')
+    @body({
+        mobile:{type:'string'},
+        qq:{type:'string'},
+        company:{type:'string'},
+        career:{type:'string'}
+    })
+    @tag
+    static async changeUserInfo(ctx, next) {
+        var user = ctx.state.user.data
+        
+    }
+
 }

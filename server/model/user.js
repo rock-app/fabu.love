@@ -22,7 +22,11 @@ var userSchema = {
         enum: ["owner", "manager", "guest"]
       }
     }
-  ]
+  ],
+  mobile:String,
+  qq:String,
+  company:String,
+  career:String
 }
 
 module.exports = {

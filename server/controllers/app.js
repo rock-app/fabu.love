@@ -197,7 +197,49 @@ module.exports = class AppRouter {
     @tag
     @body(strategy)
     static async setVersionUpdateStrategy(ctx,next){
-        
+        var user = ctx.state.user.data;
+        var body = ctx.body;
+        var { id,versionId } = ctx.validatedParams;
+        var app = await App.find({_id: id})
+        if (!app) {
+            throw new Error("应用不存在或您没有权限执行该操作")
+        }
+        var version = await Version.find({_id:versionId})
+        if (!version) {
+            throw new Error("版本号有误，或该版本不可用")
+        } 
+        //更新版本策略
+        await Version.update({_id:versionId}, {
+            updateMode: body.updateMode,
+            ipType: body.ipType,
+            ipList: body.ipList,
+            downloadCountLimit: body.downloadCountLimit
+        })
+        ctx.body = responseWrapper(true, "版本发布策略设置成功")
+    }
+
+    @request('post','/api/app/{id}/strategy')
+    @summary("设置应用发布更新策略(ip白名单/黑名单/限制更新次数限制/静默/强制)")
+    @tag
+    @body(strategy)
+    static async setAppUpdateStrategy(ctx,next){
+        var user = ctx.state.user.data;
+        var body = ctx.body;
+        var { id } = ctx.validatedParams;
+        //1.通过appId去查询App
+        var app = await App.find({_id:id});
+        if (!app) {
+            throw new Error("应用不存在或您没有权限执行该操作")
+        }
+        //2.找到应用后，设置策略
+        await App.update({_id: id}, {
+            updateMode: body.updateMode,
+            ipType: body.ipType,
+            ipList: body.ipList,
+            downloadCountLimit: body.downloadCountLimit
+        })
+        //3.返回body
+        ctx.body = responseWrapper(true, "应用发布更新策略设置成功")
     }
 
     @request('get','/api/app/checkupdate/{appId}')

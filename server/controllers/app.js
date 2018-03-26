@@ -200,16 +200,16 @@ module.exports = class AppRouter {
         var user = ctx.state.user.data;
         var body = ctx.body;
         var { id,versionId } = ctx.validatedParams;
-        var app = await App.find({_id: id})
+        var app = await App.findById(id, "appName");
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-        var version = await Version.find({_id:versionId})
+        var version = await Version.findById(versionId)
         if (!version) {
             throw new Error("版本号有误，或该版本不可用")
         } 
         //更新版本策略
-        await Version.update({_id:versionId}, {
+        await Version.findByIdAndUpdate(versionId, {
             updateMode: body.updateMode,
             ipType: body.ipType,
             ipList: body.ipList,
@@ -227,12 +227,12 @@ module.exports = class AppRouter {
         var body = ctx.body;
         var { id } = ctx.validatedParams;
         //1.通过appId去查询App
-        var app = await App.find({_id:id});
+        var app = await App.findById(id, "appName");
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
         //2.找到应用后，设置策略
-        await App.update({_id: id}, {
+        await App.findByIdAndUpdate(id, {
             updateMode: body.updateMode,
             ipType: body.ipType,
             ipList: body.ipList,

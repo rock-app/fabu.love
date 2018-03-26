@@ -19,10 +19,18 @@ const Team = require('../model/team')
 const tag = tags(['AppResource']);
 
 //更新策略
+
+// {
+//     updateMode:{type:String,enum:['slient','normal','force']},
+//     ipType:{type:String,default:'black',enum:['black','white']},
+//     ipList:[String],
+//     downloadCountLimit:Number
+// }
+
 var strategy = {
-    'strategy':'string', //white / black ip地址白名单或者黑名单
-    'iplist':'string', //用|分割的ip地址
-    'updateMode':'string', // force / silent / normal/ 强制或者静默或者普通升级
+    'updateMode':'string', //更新模式  force / silent / normal/ 强制或者静默或者普通升级
+    'ipType':'string', //IP地址限制类型 {type:String,default:'black',enum:['black','white']},
+    'ipList':'string', //ip地址列表
     'downloadCountLimit':'number' //default 0 表示不现在下载次数
 }
 

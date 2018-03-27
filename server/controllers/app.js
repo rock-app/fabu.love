@@ -162,9 +162,19 @@ module.exports = class AppRouter {
     @request('delete','/api/apps/{teamId}/{id}/versions/{versionId}')
     @summary("删除某个版本")
     @tag
+    @path({
+        teamId:{type:'string', description:'团队id'},
+        id:{type:'string',description:'应用id'},
+        versionId:{type:'string',description:'版本id'}
+    })
     static async deleteAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
+
+        console.log(teamId)
+
+        console.log(user.teamId)
+        
         var team = await Team.findOne({_id:teamId,members:{
             $elemMatch:{
                  username:user.username,
@@ -178,7 +188,7 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-        var version = await Version.find({_id:versionId})
+        var version = await Version.findById(versionId)
         var result = Version.deleteOne(version)
         ctx.body = responseWrapper(true,"版本已删除")
     }

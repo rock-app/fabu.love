@@ -52,7 +52,7 @@
             限制次数：<span class="tablecontent" v-html="scope.row.strategy.downloadCountLimit ? scope.row.strategy.downloadCountLimit:'无限制'"></span>
           </div>
           <div class="tabletitle">
-            限制ip：<span class="tablecontent" v-if="scope.row.strategy.blackIpList.length>0">{{scope.row.strategy.blackIpList[0]}}等{{scope.row.strategy.blackIpList.length}}个</span>
+            限制ip：<span class="tablecontent" v-if="scope.row.strategy.blackIpList && scope.row.strategy.blackIpList.length>0">{{scope.row.strategy.blackIpList[0]}}等{{scope.row.strategy.blackIpList.length}}个</span>
           </div>
         </template>
       </el-table-column>

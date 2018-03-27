@@ -59,7 +59,6 @@
         LoginApi.login(body)
           .then(response => {
             // 存储token
-            console.log(response)
             TokenMgr.add(this.axios.baseURL, response.data.token)
             let user = {
               'userName': this.userName,
@@ -68,7 +67,7 @@
             }
             saveUserInfo(user)
             this.axios.defaults.headers.Authorization = 'Bearer' + ' ' + response.data.token
-            this.$router.push('/')
+            this.$router.push('/apps')
           }, reject => {
             this.$message.error(reject)
           })

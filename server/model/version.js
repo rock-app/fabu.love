@@ -26,9 +26,9 @@ var versionSchema = new Schema({
     changelog:String,
     hidden: { type:Boolean , default:false },
     strategy:{
-        updateMode:{type:String,enum:['slient','normal','force']},
-        whiteIpList:[String],
-        blackIpList:[String],
+        updateMode:{type:String,default:'slient',enum:['slient','normal','force']},
+        ipType:{type:String,default:'black',enum:['black','white']},
+        ipList:[String],
         downloadCountLimit:Number
     }
 });

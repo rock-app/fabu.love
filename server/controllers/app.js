@@ -19,10 +19,18 @@ const Team = require('../model/team')
 const tag = tags(['AppResource']);
 
 //更新策略
+
+// {
+//     updateMode:{type:String,enum:['slient','normal','force']},
+//     ipType:{type:String,default:'black',enum:['black','white']},
+//     ipList:[String],
+//     downloadCountLimit:Number
+// }
+
 var strategy = {
-    'strategy':'string', //white / black ip地址白名单或者黑名单
-    'iplist':'string', //用|分割的ip地址
-    'updateMode':'string', // force / silent / normal/ 强制或者静默或者普通升级
+    'updateMode':'string', //更新模式  force / silent / normal/ 强制或者静默或者普通升级
+    'ipType':'string', //IP地址限制类型 {type:String,default:'black',enum:['black','white']},
+    'ipList':'string', //ip地址列表
     'downloadCountLimit':'number' //default 0 表示不现在下载次数
 }
 
@@ -189,7 +197,49 @@ module.exports = class AppRouter {
     @tag
     @body(strategy)
     static async setVersionUpdateStrategy(ctx,next){
-        
+        var user = ctx.state.user.data;
+        var body = ctx.body;
+        var { id,versionId } = ctx.validatedParams;
+        var app = await App.findById(id, "appName");
+        if (!app) {
+            throw new Error("应用不存在或您没有权限执行该操作")
+        }
+        var version = await Version.findById(versionId)
+        if (!version) {
+            throw new Error("版本号有误，或该版本不可用")
+        } 
+        //更新版本策略
+        await Version.findByIdAndUpdate(versionId, {
+            updateMode: body.updateMode,
+            ipType: body.ipType,
+            ipList: body.ipList,
+            downloadCountLimit: body.downloadCountLimit
+        })
+        ctx.body = responseWrapper(true, "版本发布策略设置成功")
+    }
+
+    @request('post','/api/app/{id}/strategy')
+    @summary("设置应用发布更新策略(ip白名单/黑名单/限制更新次数限制/静默/强制)")
+    @tag
+    @body(strategy)
+    static async setAppUpdateStrategy(ctx,next){
+        var user = ctx.state.user.data;
+        var body = ctx.body;
+        var { id } = ctx.validatedParams;
+        //1.通过appId去查询App
+        var app = await App.findById(id, "appName");
+        if (!app) {
+            throw new Error("应用不存在或您没有权限执行该操作")
+        }
+        //2.找到应用后，设置策略
+        await App.findByIdAndUpdate(id, {
+            updateMode: body.updateMode,
+            ipType: body.ipType,
+            ipList: body.ipList,
+            downloadCountLimit: body.downloadCountLimit
+        })
+        //3.返回body
+        ctx.body = responseWrapper(true, "应用发布更新策略设置成功")
     }
 
     @request('get','/api/app/checkupdate/{appId}')

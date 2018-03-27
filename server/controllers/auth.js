@@ -107,4 +107,53 @@ module.exports = class AuthRouter {
             throw new Error("用户已存在")
         }
     }
+
+    @request('post', '/api/user/password/modify')
+    @summary('修改用户密码')
+    @body({
+        oldpwd:{type:'string',require:true},
+        newpwd:{type:'string',require:true}
+    })
+    @tag
+    static async modifyPassword(ctx, next) {
+        var user = ctx.state.user.data;
+        var body = ctx.request.body;
+        var userData = await User.findById(user._id,"password")
+        if (!userData) {
+            throw new Error("用户不存在");
+        } 
+        let valide = await bcrypt.compare(body.oldpwd, userData.password);
+        if (!valide) {
+            throw new Error("密码错误");
+        }
+        body.password = await bcrypt.hash(body.newpwd, 10); // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
+        await User.findByIdAndUpdate(user._id,{password:body.password})
+        ctx.body = responseWrapper(true, "密码修改成功")
+    }
+
+    @request('post', '/api/user/modify')
+    @summary('修改用户资料')
+    @body({
+        mobile:{type:'string'},
+        qq:{type:'string'},
+        company:{type:'string'},
+        career:{type:'string'}
+    })
+    @tag
+    static async changeUserInfo(ctx, next) {
+        var user = ctx.state.user.data
+        var body = ctx.request.body
+        var userData = await User.findById(user._id,"username");
+        if (!userData) {
+            throw new Error("用户不存在");
+        } 
+        await User.updateOne({username:user.username}, {
+            mobile: body.mobile,
+            qq: body.qq,
+            company: body.company,
+            career: body.career
+        })
+        ctx.body = responseWrapper(true, "用户资料修改成功")
+    }
+
 }

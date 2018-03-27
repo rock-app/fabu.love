@@ -72,7 +72,7 @@
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
-  import {getUserTeam, getUserId} from '../../mgr/userMgr'
+  import {getUserTeam} from '../../mgr/userMgr'
 
   export default {
     props: {
@@ -125,9 +125,8 @@
         this.$confirm('确认删除？')
           .then(() => {
             console.log(this.userteam._id)
-            console.log(getUserId())
+            console.log(this.appId)
             console.log(item._id)
-
             AppResourceApi.delectAppVersion(this.userteam._id, this.appId, item._id).then((res) => {
               this.$message.success('删除成功')
               var index = this.dataArr.indexOf(item)

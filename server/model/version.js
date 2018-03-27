@@ -20,7 +20,7 @@ var versionSchema = new Schema({
     active:Boolean,
     released:Boolean,
     downloadUrl: String,
-    downloadCount: Number,
+    downloadCount:{ type:Number, default:0 },
     fileDownloadUrl:String, //源文件下载地址
     appLevel:String,
     changelog:String,

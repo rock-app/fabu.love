@@ -242,12 +242,43 @@ module.exports = class AppRouter {
         ctx.body = responseWrapper(true, "应用发布更新策略设置成功")
     }
 
-    @request('get','/api/app/checkupdate/{appId}')
+    @request('get','/api/app/checkupdate/{appId}/{currentVersionCode}')
     @summary("检查版本更新")
     @tag
-    @path({currentVersionCode:{type:'string'}})
+    @path({
+        appId: String,
+        currentVersionCode: String
+    })
     static async checkUpdate(ctx,next){
-        
+        var user = ctx.state.user.data;
+        var { appId,currentVersionCode } = ctx.validatedParams;
+        var app = await App.findById(id);
+        if (!app) {
+            throw new Error("应用不存在或您没有权限执行该操作")
+        }
+        var lastVersionCode = app.lastVersionCode
+        if (currentVersionCode < lastVersionCode) {
+            //1.拿出最新的version
+            var version = Version.findOne({versionCode: lastVersionCode})
+            //2.判断最新version的策略(下载次数, )
+            // strategy:{
+            //     updateMode:{type:String,default:'slient',enum:['slient','normal','force']},
+            //     ipType:{type:String,default:'black',enum:['black','white']},
+            //     ipList:[String],
+            //     downloadCountLimit:Number
+            // }
+            if (version.downloadCount >= version.strategy.downloadCountLimit) {
+                ctx.body = responseWrapper(false, "暂无可用的更新版本")
+            } else {
+                ctx.body = responseWrapper({
+                    App: app,
+                    version: version
+                })
+            }
+        } else {
+            ctx.body = responseWrapper(false, "您已经是最新版本了")
+        }
+
     }
 
     @request('get','/api/app/{appShortUrl}')

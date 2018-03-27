@@ -10,7 +10,7 @@ $paleGrey: rgb(244, 245, 247);
 $paleGreyTwo: rgb(253, 253, 253);
 $black: rgb(41, 44, 64);
 
-$warmRed: #E2644C;
+$warmRed: #F66161;
 $warmgrey: rgb(163, 166, 178);
 
 
@@ -25,4 +25,9 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.canwrap {
+  word-wrap: break-word;
+  word-break: normal;
 }

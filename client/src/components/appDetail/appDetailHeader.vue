@@ -36,7 +36,7 @@
                   </tr>
                   <tr>
                     <td class="tabletitle">限制ip：</td>
-                    <td class="tablecontent" v-show="appInfo.strategy.blackIpList.length>0">{{appInfo.strategy.blackIpList[0]}}等{{appInfo.strategy.blackIpList.length}}个</td>
+                    <td class="tablecontent" v-if="appInfo.strategy.blackIpList && appInfo.strategy.blackIpList.length>0">{{appInfo.strategy.blackIpList[0]}}等{{appInfo.strategy.blackIpList.length}}个</td>
                   </tr>
                 </table>
               </div>

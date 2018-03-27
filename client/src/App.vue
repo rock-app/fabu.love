@@ -5,16 +5,30 @@
 </template>
 
 <script>
+  import {getUserInfo} from './mgr/userMgr'
+
   export default {
     name: 'App',
+    data() {
+      return {
+      }
+    },
     created() {
-      this._initHttp()
+      this.$nextTick(() => {
+        let user = getUserInfo()
+        if (user) {
+          // 防止新打开的窗口也push到列表页
+          if (window.location.href === (window.location.origin + '/')) {
+            this.$router.push('/apps')
+          }
+        } else {
+          this.$router.push('/login')
+        }
+      })
+    },
+    components: {
     },
     methods: {
-      _initHttp() {
-        this.axios.defaults.baseURL = 'http://localhost:3001/'
-        this.axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
-      }
     }
   }
 </script>

@@ -4,24 +4,38 @@ import Login from '../components/loginRegiest/Login.vue'
 import Regiest from '../components/loginRegiest/regiest.vue'
 import AppDetail from '../components/appDetail/appDetail.vue'
 import AppPreView from '../components/appDetail/appPreView.vue'
+import UserInfo from '../components/user/userInfo.vue'
+import Main from '../components/main/main.vue'
 
 Vue.use(Router)
 
-const AppList = () => import('components/appList/appList.vue')
+const Apps = () => import('components/appList/appList.vue')
 
 export default new Router({
   // 去除#
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'Login',
-      component: Login
+      path: '',
+      name: 'Main',
+      component: Main,
+      children: [
+        {
+          path: '/apps',
+          name: 'Apps',
+          component: Apps
+        },
+        {
+          path: '/app/:appId',
+          name: 'AppDetail',
+          component: AppDetail
+        }
+      ]
     },
     {
-      path: '/applist',
-      name: 'AppList',
-      component: AppList
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/regiest',
@@ -29,14 +43,15 @@ export default new Router({
       component: Regiest
     },
     {
-      path: '/appDetail',
-      name: 'AppDetail',
-      component: AppDetail
+      path: '/user',
+      name: 'UserInfo',
+      component: UserInfo
     },
     {
-      path: '/appPreView',
+      path: '/:id',
       name: 'AppPreView',
       component: AppPreView
     }
   ]
 })
+

@@ -1,10 +1,35 @@
-const mongoose = require('../db.js');
-const Schema = mongoose.Schema;
+const mongoose = require('../helper/db')
+const Schema = mongoose.Schema
+const ObjectId = Schema.ObjectId
 
-var User = new Schema({
-    username: {type: String},
-    password: {type: String},
-    token: {type: String}
-});
+var userSchema = {
+  username: {
+    type: String
+  },
+  password: {
+    type: String
+  },
+  token: {
+    type: String
+  },
+  teams: [
+    {
+      _id:ObjectId,
+      name:String,
+      icon:String,
+      role: {
+        type: String,
+        enum: ["owner", "manager", "guest"]
+      }
+    }
+  ],
+  mobile:String,
+  qq:String,
+  company:String,
+  career:String
+}
 
-module.exports = mongoose.model('User', User);
+module.exports = {
+  User: mongoose.model('User', new Schema(userSchema)),
+  userSchema: userSchema
+}

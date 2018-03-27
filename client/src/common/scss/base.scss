@@ -1,10 +1,16 @@
 
 @import "./reset";
 
+$mainColor: #6477F2;
+$mainTitleColor: #354052;
+$subTitleColor: #9B9B9B;
+$originOne: #FFA042;
+
 $paleGrey: rgb(244, 245, 247);
 $paleGreyTwo: rgb(253, 253, 253);
 $black: rgb(41, 44, 64);
 
+$warmRed: #F66161;
 $warmgrey: rgb(163, 166, 178);
 
 
@@ -19,4 +25,9 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.canwrap {
+  word-wrap: break-word;
+  word-break: normal;
 }

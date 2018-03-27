@@ -74,5 +74,12 @@ body, html{
 
 textarea {
   resize: none;
+  outline: 0;
 }
 
+input {
+  outline: 0;
+}
+button {
+  outline: 0;
+}

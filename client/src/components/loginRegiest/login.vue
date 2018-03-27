@@ -9,8 +9,8 @@
       <ul class="errorInfowrapper">
         <li class="errorInfo">{{errorInfo}}</li>
       </ul>
-      <el-input class="userName input" v-model="userName" placeholder="用户名"></el-input>
-      <el-input class="password input" v-model="pwd" placeholder="密码" type="password"></el-input>
+      <el-input clearable class="userName input" @keyup.enter="onLogin"  v-model="userName" placeholder="用户名"></el-input>
+      <el-input clearable class="password input" @keyup.enter="onLogin"  v-model="pwd" placeholder="密码" type="password"></el-input>
 
       <el-button class="loginBtn btn" @click="onLogin">登录</el-button>
       <div class="regiestwrapper">
@@ -22,7 +22,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import LoginApi from '../../api/LoginApi'
+  import * as LoginApi from '../../api/moudle/loginApi'
+  import TokenMgr from '../../mgr/TokenMgr'
+  import {saveUserInfo} from '../../mgr/userMgr'
 
   export default {
     data() {
@@ -33,8 +35,11 @@
         errorInfo: ''
       }
     },
+    created() {
+      this.$nextTick(() => {
+      })
+    },
     components: {
-      LoginApi
     },
     methods: {
       onLogin() {
@@ -47,14 +52,25 @@
           return
         }
         this.errorInfo = ''
-        var me = this
-        me.$router.push('applist')
-        LoginApi.login(this.userName, this.pwd).then((resp) => {
-          me.$router.push('applist')
-          console.log(resp.data)
-        }).catch((error) => {
-          console.log(error)
-        })
+        let body = {
+          'username': this.userName,
+          'password': this.pwd
+        }
+        LoginApi.login(body)
+          .then(response => {
+            // 存储token
+            TokenMgr.add(this.axios.baseURL, response.data.token)
+            let user = {
+              'userName': this.userName,
+              'userId': response.data._id,
+              'teamArr': response.data.teams
+            }
+            saveUserInfo(user)
+            this.axios.defaults.headers.Authorization = 'Bearer' + ' ' + response.data.token
+            this.$router.push('/apps')
+          }, reject => {
+            this.$message.error(reject)
+          })
       },
       onRegiest() {
         this.$router.push({
@@ -119,7 +135,6 @@
   }
   .login-wrapper .login-content .input {
     width: 360px;
-    height: 50px;
     display: inline-block;
     margin: 0 auto;
   }

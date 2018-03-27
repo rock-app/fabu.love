@@ -6,15 +6,23 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
 import axios from 'axios'
-import BaseApi from './api/BaseApi'
+import {configAxios} from './api/basehttp'
+
+import VueLazyLoad from 'vue-lazyload'
 
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
 
+Vue.prototype.router = router
+
 Vue.use(ElementUI)
 
-BaseApi.init(router)
+Vue.use(VueLazyLoad, {
+  loading: require('./assets/logo.png')
+})
 
+// 配置接口信息
+configAxios()
 
 /* eslint-disable no-new */
 new Vue({

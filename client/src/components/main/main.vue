@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container class="main-container">
-      <el-aside width="190px" class="main-aside">
+      <el-aside width="190px">
         <mainNav>
           <div slot="main-nav" v-if="this.slotName === 'main-nav'">
             <el-menu
@@ -96,7 +96,7 @@
     width: 100%;
     height: 100%;
   }
-  .main-aside {
+  .main-container .el-aside {
     background-color: white;
     border-right: solid 1px #e6e6e6;
   }

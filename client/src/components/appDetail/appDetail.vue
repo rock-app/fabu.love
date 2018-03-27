@@ -5,6 +5,18 @@
       <div class="detail-header-top">
         <img class="appicon" :src="getIconUrl()">
         <p class="appname">{{this.appInfo.appName}}</p>
+        <div class="appType-platform-wrapper">
+          <div class="appType" v-show="this.appInfo.appLevel" v-html="getAppType()"></div>
+          <div class="platform">
+            <i class="icon-ic_ios"></i><span v-html="`适用于${this.appInfo.platform}`"></span>
+          </div>
+        </div>
+        <div class="rightwrapper">
+          <el-button class="uploadWrapper" icon="el-icon-delete">上传应用</el-button>
+          <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0">
+          <button class="preview">预览</button>
+          <button class="delect">删除</button>
+        </div>
       </div>
       <div class="detail-header-bottom"></div>
     </div>
@@ -145,6 +157,17 @@
         } else {
           return `${require('../../assets/logo.png')}`
         }
+      },
+      getAppType() {
+        if (this.appInfo.appLevel === 'enterprise') {
+          return '企业版'
+        } else if (this.appInfo.appLevel === 'develop') {
+          return '内测版'
+        } else if (this.appInfo.appLevel === 'AppStore') {
+          return 'AppStore版'
+        } else {
+          return ''
+        }
       }
     }
   }
@@ -169,6 +192,55 @@
     width: 100%;
     height: 120px;
     background-color: white;
+  }
+  .detail-header-top {
+    position: relative;
+  }
+  .detail-header-top .appicon {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 72px;
+    height: 72px;
+    background-size: cover;
+    border-radius: 8px;
+  }
+  .detail-header-top .appname {
+    position: absolute;
+    top: 24px;
+    left: 120px;
+    line-height: 24px;
+    font-size: 24px;
+    font-family: "PingFang SC";
+  }
+  .detail-header-top .appType-platform-wrapper {
+    position: absolute;
+    top: 75px;
+    left: 120px;
+    font-size: 0px;
+  }
+  .appType-platform-wrapper .appType {
+    display: inline-block;
+    line-height: 12px;
+    font-size: 12px;
+    padding: 3px 6px;
+    background-color: $originOne;
+    border-radius: 2px;
+    color: white;
+    margin-right: 24px;
+  }
+  .appType-platform-wrapper .platform {
+    display: inline-block;
+    font-size: 14px;
+    color: $subTitleColor;
+  }
+  .detail-header-top .rightwrapper {
+    float: right;
+    margin-right: 0px;
+    padding: 36px 24px;
+    position: relative;
+  }
+  .detail-header-top .rightwrapper .delect {
   }
   /*.appDetail-header {*/
     /*height: 225px;*/

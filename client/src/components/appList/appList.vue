@@ -2,7 +2,7 @@
   <div>
     <!--内容头部-->
     <div class="applist-header">
-      <div style="position: relative;background-color: red">
+      <div style="position: relative">
         <el-button class="uploadWrapper" icon="el-icon-delete">上传应用</el-button>
         <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0">
       </div>

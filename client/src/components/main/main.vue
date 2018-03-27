@@ -64,19 +64,19 @@
   export default {
     data() {
       return {
-        slotName: ''
+        slotName: 'main-nav'
       }
     },
     components: {
       MainNav, HeaderNav, FooterWrapper, AppList
     },
     created() {
-      this.$router.push('/apps')
       Bus.$on('appdetail', () => {
         this.slotName = 'detail-nav'
       })
       Bus.$on('applist', () => {
         this.slotName = 'main-nav'
+        this.$router.push('/apps')
       })
     },
     methods: {

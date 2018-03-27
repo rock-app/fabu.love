@@ -7,7 +7,7 @@
     >
     </appDetailHeader>
 
-    <appVersions v-if="appInfo._id" :appId="appInfo._id"></appVersions>
+    <appVersions v-if="appInfo._id" :appId="appInfo._id" :shortUrl="this.appInfo.shortUrl"></appVersions>
   </div>
 </template>
 

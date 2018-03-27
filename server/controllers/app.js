@@ -95,7 +95,7 @@ module.exports = class AppRouter {
             throw new Error("应用不存在或您没有权限查询该应用")
         }
         await Version.deleteMany({appId:app.id})
-        await App.deleteOne(app)
+        await App.deleteOne({_id:app.id})
         ctx.body = responseWrapper(true,"应用已删除")
     }
 

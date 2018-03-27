@@ -39,6 +39,7 @@ var appSchema = new Schema({
     appLevel:String,
     ownerId:String,
     changelog:String,
+    totalDownloadCount:Number,
     lastVersionCode:String,
     strategy:{
         updateMode:{type:String,default:'slient',enum:['slient','normal','force']},

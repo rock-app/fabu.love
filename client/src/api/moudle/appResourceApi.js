@@ -55,3 +55,8 @@ export function releaseApp(teamId, id, versionId, versionCode, release) {
   let url = `api/apps/${teamId}/${id}/release`
   return postHttp(url, body)
 }
+// 删除某个版本
+export function delectAppVersion(teamId, appId, versionId) {
+  let url = `api/apps/${teamId}/${appId}/versions/${versionId}`
+  return deleteHttp(url)
+}

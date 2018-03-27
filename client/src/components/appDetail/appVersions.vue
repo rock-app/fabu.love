@@ -61,9 +61,9 @@
         width="200"
       >
         <template slot-scope="scope">
-          <button class="appversion-elButton">编辑</button>
-          <button class="appversion-elButton" @click="handleClick(scope.row)">预览</button>
-          <button class="appversion-elButton">删除</button>
+          <button class="appversion-elButton" @click="clickEditor(scope.row)">编辑</button>
+          <button class="appversion-elButton" @click="clickPreview(scope.row)">预览</button>
+          <button class="appversion-elButton" @click="clickDelect(scope.row)">删除</button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,14 +72,14 @@
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
-  import {getUserTeam} from '../../mgr/userMgr'
+  import {getUserTeam, getUserId} from '../../mgr/userMgr'
 
   export default {
     props: {
       appId: {
         type: String
       },
-      appName: {
+      shortUrl: {
         type: String
       },
       platform: {
@@ -89,26 +89,13 @@
     components: {},
     data() {
       return {
-        isFix: false,
         dataArr: [],
-        showInDownLoadPage: false,
-        currentPage: 0,
         userteam: {}
       }
     },
     computed: {
-      setBackgroudColor() {
-        if (this.isFix) {
-          return `backgroundColor: white;`
-        } else {
-          return `backgroundColor: rgb(244,245,247);`
-        }
-      }
     },
     created() {
-      this.$watch('showInDownLoadPage', (newValue) => {
-        console.log(newValue)
-      })
       this.$nextTick(() => {
         this.userteam = getUserTeam()
         this.getAppVersionListData()
@@ -119,43 +106,37 @@
         AppResourceApi.getAppVersionList(this.userteam._id, this.appId, this.currentPage).then((res) => {
           console.log(res)
           this.dataArr = res.data
-          this.dataArr = this.dataArr.concat(res.data)
-          this.dataArr = this.dataArr.concat(res.data)
-          this.dataArr = this.dataArr.concat(res.data)
-          this.dataArr = this.dataArr.concat(res.data)
         }, reject => {
 
         })
       },
-      clickFixBtn() {
-        this.isFix = !this.isFix
-      },
-      clickCancelBtn() {
-        this.isFix = false
-      },
-      loadMore() {
-        setTimeout(() => {
-          this.dataArr.push(...['5555', '6666666'], '77777')
-        }, 1000)
-      },
-      clickEditorBtn(index) {
-        this.dataArr[index].isEditor = true
-      },
-      clickCancel(index) {
-        this.dataArr[index].isEditor = false
-      },
-      clickSave(index) {
+      clickEditor(item) {
 
       },
-      changeSwitch(index) {
-        console.log(index)
-      },
-      clickPreViewBtn(item) {
+      clickPreview(item) {
         const {href} = this.$router.resolve({
           name: 'AppPreView',
-          query: {'appId': item.appId, 'versionId': item._id, 'teamId': this.userteam._id, 'platform': this.platform, 'appName': this.appName}
+          path: '/',
+          params: { 'id': this.shortUrl }
         })
         window.open(href, '_blank')
+      },
+      clickDelect(item) {
+        this.$confirm('确认删除？')
+          .then(() => {
+            console.log(this.userteam._id)
+            console.log(getUserId())
+            console.log(item._id)
+
+            AppResourceApi.delectAppVersion(this.userteam._id, this.appId, item._id).then((res) => {
+              this.$message.success('删除成功')
+              var index = this.dataArr.indexOf(item)
+              this.dataArr.splice(index, 1)
+              console.log(this.dataArr)
+            }, reject => {
+              this.$message.error(reject)
+            })
+          }).catch(() => {})
       },
       // 发布应用
       releaseApp(item) {
@@ -164,9 +145,6 @@
         }, reject => {
 
         })
-      },
-      handleClick(row) {
-        console.log(row)
       },
       getCreatTime(date) {
         let releaseDate = new Date(date)

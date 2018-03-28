@@ -16,6 +16,7 @@
   import {getUserTeam} from '../../mgr/userMgr'
   import AppDetailHeader from './appDetailHeader.vue'
   import AppVersions from './appVersions.vue'
+  import Bus from '../../common/js/bus'
 
   export default {
     data() {
@@ -32,6 +33,7 @@
     },
     created() {
       this.$nextTick(() => {
+        Bus.$emit('appdetail')
         this.userteam = getUserTeam()
         this.getAppDetailData()
       })

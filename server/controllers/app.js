@@ -170,11 +170,6 @@ module.exports = class AppRouter {
     static async deleteAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
-
-        console.log(teamId)
-
-        console.log(user.teamId)
-        
         var team = await Team.findOne({_id:teamId,members:{
             $elemMatch:{
                  username:user.username,

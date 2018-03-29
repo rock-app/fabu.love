@@ -7,7 +7,7 @@
     <!--内容-->
     <el-table
       :data="dataArr"
-      style="width: 100%"
+      style="width: 100%;padding-left: 24px;box-sizing: border-box"
       stripe
       >
       <el-table-column
@@ -124,9 +124,6 @@
       clickDelect(item) {
         this.$confirm('确认删除？')
           .then(() => {
-            console.log(this.userteam._id)
-            console.log(this.appId)
-            console.log(item._id)
             AppResourceApi.delectAppVersion(this.userteam._id, this.appId, item._id).then((res) => {
               this.$message.success('删除成功')
               var index = this.dataArr.indexOf(item)

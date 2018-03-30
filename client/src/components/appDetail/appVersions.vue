@@ -71,7 +71,7 @@
         width="200"
       >
         <template slot-scope="scope">
-          <button class="appversion-elButton"><i class="icon-ic_ios"></i></button>
+          <button class="appversion-elButton" @click="releaseApp(scope.row)"><i class="icon-ic_ios"></i></button>
           <button class="appversion-elButton" @click="clickDownLoad(scope.row)"><i class="icon-ic_editor"></i></button>
           <button class="appversion-elButton" @click="clickEditor(scope.row)"><i class="icon-ic_editor"></i></button>
           <button class="appversion-elButton" @click="clickDelect(scope.row)"><i class="icon-ic_editor"></i></button>

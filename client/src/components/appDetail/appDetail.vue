@@ -50,7 +50,6 @@
         this.userteam = getUserTeam()
         this.getAppDetailData()
       })
-
       Bus.$on('appSummary', () => {
         this.showAppSetting = false
       })

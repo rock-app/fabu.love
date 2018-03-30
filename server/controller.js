@@ -10,9 +10,9 @@ router.swagger({
   title: 'App-publish Server', description: 'API DOC', version: '1.0.0', 
   // [optional] default is root path. prefix : '/api', [optional] default is
   // /swagger-html
-  swaggerHtmlEndpoint: '/swagger-html',
+  swaggerHtmlEndpoint: '/api/swagger',
   // [optional] default is /swagger-json
-  swaggerJsonEndpoint: '/swagger-json',
+  swaggerJsonEndpoint: '/api/swagger.json',
 
   // [optional] additional options for building swagger doc eg. add api_key as
   // shown below
@@ -39,5 +39,10 @@ router.swagger({
     router.map(mapping)
   }
 })();
+
+
+// router.get('/', async (ctx, next) => {
+//   ctx.redirect("/index.html")
+// });
 
 export default router

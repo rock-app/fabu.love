@@ -5,12 +5,12 @@
       <!--中间-->
       <div class="preview-middlewrapper">
         <div class="preview-middlewrapper-header">
-          <p class="title">订货宝</p>
-          <p class="desc">版本： 1.3.4（build24）/ 大小：7.9M / 2018-3-23</p>
+          <p class="title">{{this.appBaseData.appName}}</p>
+          <p class="desc">版本： {{this.appVersionInfo.versionStr}}/ 大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M / {{this.appVersionInfo.creatDateStr}}</p>
         </div>
-        <img class="preview-middlewrapper-appicon" src="../../assets/backgroundImage.png" alt="">
-        <button class="preview-middlewrapper-downloadBtn">点击安装</button>
-        <button class="preview-middlewrapper-appdesc">适用于安卓设备</button>
+        <img class="preview-middlewrapper-appicon" :src="getIconUrl()" alt="">
+        <button class="preview-middlewrapper-downloadBtn" @click="clickDownLoadBtn">点击下载</button>
+        <button class="preview-middlewrapper-appdesc">适用于{{this.appBaseData.platform}}设备</button>
         <hr class="preview-middlewrapper-line">
         <div class="preview-middlewrapper-downloaddesc">或者用手机扫描二维码下载</div>
         <img class="preview-middlewrapper-ercode" src="../../assets/backgroundImage.png" alt="">
@@ -32,15 +32,21 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import * as AppResourceApi from '../../api/moudle/appResourceApi'
+
   export default {
     data() {
       return {
-        versionArr: [['1.3.4', '2017-03-12'], ['1.3.3', '2017-03-11'], ['1.3.2', '2017-03-10'], ['1.3.1', '2017-03-9']]
+        versionArr: [['1.3.4', '2017-03-12'], ['1.3.3', '2017-03-11'], ['1.3.2', '2017-03-10'], ['1.3.1', '2017-03-9']],
+        appVersionInfo: {},
+        appBaseData: {}
       }
     },
     computed: {
     },
     created() {
+      console.log(this.$route.params)
+      this.getAppInfo(this.$route.params.id)
     },
     methods: {
       getTableBackground(index) {
@@ -49,6 +55,31 @@
         } else {
           return `backgroundColor: white`
         }
+      },
+      getAppInfo(shortUrl) {
+        AppResourceApi.getAppInfoByShortUrl(shortUrl).then((res) => {
+          console.log(res)
+          this.appVersionInfo = res.data.version
+          this.appBaseData = res.data.app
+
+          let releaseDate = new Date(this.appVersionInfo.uploadAt)
+          this.appVersionInfo.creatDateStr = `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
+
+        }, reject => {
+
+        })
+      },
+      getIconUrl() {
+        if (this.appBaseData.icon) {
+          return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
+        } else {
+          return `${require('../../assets/logo.png')}`
+        }
+      },
+      clickDownLoadBtn() {
+        const a = document.createElement('a')
+        a.setAttribute('href', `${this.axios.defaults.baseURL}${this.appVersionInfo.downloadUrl}`)
+        a.click()
       }
     }
   }
@@ -132,7 +163,6 @@
   .preview-middlewrapper-appdesc {
     color: white;
     background-color: green;
-    width: 100px;
     height: 25px;
     font-size: 12px;
     border-radius: 3px;

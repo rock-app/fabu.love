@@ -1,0 +1,151 @@
+<template>
+  <div class="mainNav-wrapper">
+    <div class="mainNav-logo">
+      <i class="el-icon-menu"></i>
+    </div>
+
+    <div>
+      <el-menu
+        default-active="应用概述"
+        class="mainNav-el-menu"
+      >
+        <div v-if="this.slotName === 'main-nav'">
+          <el-menu-item index="创建团队">
+            <i class="el-icon-menu"></i>
+            <span slot="title">创建团队</span>
+          </el-menu-item>
+          <el-menu-item index="团队管理">
+            <i class="el-icon-menu"></i>
+            <span slot="title">团队管理</span>
+          </el-menu-item>
+          <el-menu-item index="邀请队员">
+            <i class="el-icon-setting"></i>
+            <span slot="title">邀请队员</span>
+          </el-menu-item>
+        </div>
+
+        <div v-if="this.slotName === 'detail-nav'">
+          <el-menu-item index="应用概述" @click="clickSubItem">
+            <i class="el-icon-menu"></i>
+            <span slot="title">应用概述</span>
+          </el-menu-item>
+          <el-menu-item index="应用设置" @click="clickSubItem">
+            <i class="el-icon-menu"></i>
+            <span slot="title">应用设置</span>
+          </el-menu-item>
+        </div>
+      </el-menu>
+    </div>
+
+    <div class="mainNav-footer">
+      <el-menu
+        class="mainNav-footer-list"
+      >
+        <el-menu-item index="0">
+          <i class="el-icon-menu"></i>
+          <span slot="title">API文档</span>
+        </el-menu-item>
+        <el-menu-item index="1">
+          <i class="el-icon-menu"></i>
+          <span slot="title">Help</span>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <i class="el-icon-setting"></i>
+          <span slot="title">GitHub</span>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <i class="el-icon-setting"></i>
+          <span slot="title">About</span>
+        </el-menu-item>
+      </el-menu>
+    </div>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  import Bus from '../../common/js/bus'
+
+  export default {
+    data() {
+      return {
+        slotName: 'main-nav'
+      }
+    },
+    created() {
+      Bus.$on('appdetail', () => {
+        this.slotName = 'detail-nav'
+      })
+      Bus.$on('applist', () => {
+        this.slotName = 'main-nav'
+        this.$router.push('/apps')
+      })
+    },
+    methods: {
+      clickSubItem(data) {
+        console.log(data.index)
+        if (data.index === '应用概述') {
+          Bus.$emit('appSummary')
+        }
+        if (data.index === '应用设置') {
+          Bus.$emit('appSetting')
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../common/scss/base";
+
+  .mainNav-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .mainNav-logo {
+    width: 100%;
+    height: 72px;
+  }
+  .mainNav-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 0px;
+    width: 100%;
+  }
+  .mainNav-footer .mainNav-footer-list {
+    border-right-width: 0px;
+  }
+  .mainNav-footer .mainNav-footer-list .el-menu-item {
+    height: 48px;
+    line-height: 48px;
+  }
+  .mainNav-footer .mainNav-footer-list .el-menu-item span {
+    color: $subTitleColor;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .mainNav-footer .mainNav-footer-list .is-active {
+    color: white;
+    background-color: $mainColor;
+  }
+  .mainNav-footer .mainNav-footer-list .is-active span {
+    color: white;
+  }
+  .mainNav-wrapper .mainNav-el-menu {
+    margin-top: 28px;
+    border-right-width: 0px;
+  }
+  .mainNav-wrapper .mainNav-el-menu .el-menu-item {
+    margin-bottom: 20px;
+  }
+  .mainNav-wrapper .mainNav-el-menu .el-menu-item span {
+    font-size: 20px;
+  }
+  .mainNav-wrapper .mainNav-el-menu .is-active {
+    color: white;
+    background-color: $mainColor;
+  }
+  .mainNav-wrapper .mainNav-el-menu .is-active span {
+    color: white;
+  }
+</style>

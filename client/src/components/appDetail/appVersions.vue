@@ -1,103 +1,117 @@
 <template>
   <div class="appVersion-wrapper">
-    <!--头部-->
-    <div class="appversion-header">
-      <div class="appversion-header-leftLine">
-        <div class="appversion-header-leftLine-dot"></div>
-        <div class="appversion-header-leftLine-line"></div>
-      </div>
-      <div class="appversion-header-right">
-        <el-form ref="form">
-          <el-form-item class="appversion-header-form" label="版本更新">
-            <button type="button" class="appversion-header-backbtn">回退</button>
-          </el-form-item>
-          <el-form-item class="appversion-header-form-address" label="商店地址：">
-            <input :disabled="!this.isFix" :style="setBackgroudColor" type="text" placeholder="未填写">
-            <button type="button" @click="clickFixBtn" v-html="this.isFix ? `保存`:`修改`"></button>
-            <button type="button" @click="clickCancelBtn" style="margin-left: 3px" v-show="this.isFix">取消</button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
-    <!--内容-->
-    <div class="appversion-versionList">
-      <ul style="position: relative">
-        <li v-for="(item, index) in dataArr" :key="index" class="appversion-versionList-item">
-          <div class="appversion-versionList-left-iconWrapper">
-            <img src="../../assets/uploadVersion.png" alt="">
+    <div class="detail-header-bottom">
+      <ul>
+        <li v-for="(item, index) in this.headerOperationData" :key="index" class="itemwrapper">
+          <div class="top">
+            <p class="title">{{item}}</p>
           </div>
-          <div class="appversion-versionList-left-line"></div>
-          <div class="appversion-versionList-right">
-            <div class="appversion-versionList-itemtitle" v-html="item.a"></div>
-            <div class="appversion-versionList-itemInfo">
-              <span>21212121212</span>
-              <span class="versionType">企业版</span>
-              <span>XC:com.hd.123.com-sahnghaiasasasasasasasasas</span>
-            </div>
-            <div class="appversion-versionList-itemBottom" v-show="!item.isEditor">
-              <el-button round @click="clickEditorBtn(index)">编辑</el-button>
-              <el-button round><i class="el-icon-upload el-icon--left"></i>10.36M</el-button>
-              <el-button @click="clickPreViewBtn" round><i class="icon-ic_preview"></i>预览</el-button>
-              <el-button round><i class="el-icon-upload el-icon--left"></i>标记上线</el-button>
-              <el-switch
-                style="margin-left: 15px"
-                v-model="showInDownLoadPage"
-                active-color="#F8BA0B"
-                inactive-color="#999"
-                @change="changeSwitch(index)"
-              >
-              </el-switch><span style="color: #999; font-size: 15px;vertical-align: middle;margin-left: 10px">显示在下载页面</span>
-            </div>
-
-            <!--更新日志的展示-->
-            <div class="appversion-versionList-updateNote" v-show="item.isEditor">
-              <textarea autofocus="true" name="" id="" placeholder="更新日志"></textarea>
-              <div style="text-align: right">
-                <button class="appversion-versionList-updateNote-cancel" @click="clickCancel(index)">取消</button>
-                <button class="appversion-versionList-updateNote-save" @click="clickSave(index)">保存</button>
-              </div>
-            </div>
+          <div class="subWrapper" v-if="appInfo._id">
+            <p class="subtitle">{{subTitleArr[index]}}</p>
           </div>
         </li>
-        <div class="appversion-versionList-itemFooter" @click="loadMore">显示更多版本</div>
       </ul>
     </div>
+    <!--头部-->
+    <div class="detail-content-top">
+      <span class="icon-ic_ios"></span>版本信息
+    </div>
+    <!--内容-->
+    <el-table
+      :data="dataArr"
+      style="width: 100%;box-sizing: border-box"
+      stripe
+      class="version-table"
+      >
+      <el-table-column
+        width="60"
+        label=""
+        class="version-table-one"
+      >
+        <template slot-scope="scope">
+          <i class="icon-ic_ios"></i>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="versionStr"
+        width="60"
+        label="版本"
+      >
+      </el-table-column>
+      <el-table-column
+        label="更新时间"
+        width="150"
+      >
+        <template slot-scope="scope">
+          <p v-html="getCreatTime(scope.row.uploadAt)"></p>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="文件大小"
+        width="120"
+      >
+        <template slot-scope="scope">
+          <p v-html="getAppSize(scope.row.size)"></p>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="下载次数"
+        width="120"
+      >
+        <template slot-scope="scope">
+          <p style="display: inline-block" v-html="getDownLoadCount(scope.row.downloadCount)"></p>/<span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row.strategy)"></span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="changelog"
+        label="更新日志">
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        width="200"
+      >
+        <template slot-scope="scope">
+          <button class="appversion-elButton"><i class="icon-ic_ios"></i></button>
+          <button class="appversion-elButton" @click="clickDownLoad(scope.row)"><i class="icon-ic_editor"></i></button>
+          <button class="appversion-elButton" @click="clickEditor(scope.row)"><i class="icon-ic_editor"></i></button>
+          <button class="appversion-elButton" @click="clickDelect(scope.row)"><i class="icon-ic_editor"></i></button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo"></editorVersion>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import {getUserTeam} from '../../mgr/userMgr'
+  import EditorVersion from './editorVersion.vue'
 
   export default {
     props: {
-      appId: {
-        type: String
+      appInfo: {
+        type: Object
+      },
+      subTitleArr: {
+        type: Array
       }
     },
-    components: {},
+    components: {
+      EditorVersion
+    },
     data() {
       return {
-        isFix: false,
-        dataArr: [{'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}, {'a': '1.1.0', 'isEditor': false}],
-        showInDownLoadPage: false,
-        currentPage: 0,
-        userteam: {}
+        headerOperationData: ['Bundle ID', '下载地址', 'App Key'],
+        dataArr: [],
+        userteam: {},
+        showEditorVersion: false,
+        versionInfo: {}
       }
     },
     computed: {
-      setBackgroudColor() {
-        if (this.isFix) {
-          return `backgroundColor: white;`
-        } else {
-          return `backgroundColor: rgb(244,245,247);`
-        }
-      }
     },
     created() {
-      this.$watch('showInDownLoadPage', (newValue) => {
-        console.log(newValue)
-      })
       this.$nextTick(() => {
         this.userteam = getUserTeam()
         this.getAppVersionListData()
@@ -105,40 +119,73 @@
     },
     methods: {
       getAppVersionListData() {
-        AppResourceApi.getAppVersionList(this.userteam._id, this.appId, this.currentPage).then(() => {
-
+        AppResourceApi.getAppVersionList(this.userteam._id, this.appInfo._id, this.currentPage).then((res) => {
+          console.log(res)
+          this.dataArr = res.data
         }, reject => {
 
         })
       },
-      clickFixBtn() {
-        this.isFix = !this.isFix
-      },
-      clickCancelBtn() {
-        this.isFix = false
-      },
-      loadMore() {
-        setTimeout(() => {
-          this.dataArr.push(...['5555', '6666666'], '77777')
-        }, 1000)
-      },
-      clickEditorBtn(index) {
-        this.dataArr[index].isEditor = true
-      },
-      clickCancel(index) {
-        this.dataArr[index].isEditor = false
-      },
-      clickSave(index) {
+      clickDownLoad(item) {
 
       },
-      changeSwitch(index) {
-        console.log(index)
+      clickEditor(item) {
+        this.showEditorVersion = true
+        item.appName = this.appInfo.appName
+        this.versionInfo = item
       },
-      clickPreViewBtn() {
+      clickPreview(item) {
         const {href} = this.$router.resolve({
-          name: 'AppPreView'
+          name: 'AppPreView',
+          path: '/',
+          params: { 'id': this.appInfo.shortUrl }
         })
         window.open(href, '_blank')
+      },
+      clickDelect(item) {
+        this.$confirm('确认删除？')
+          .then(() => {
+            AppResourceApi.delectAppVersion(this.userteam._id, this.appInfo._id, item._id).then((res) => {
+              this.$message.success('删除成功')
+              var index = this.dataArr.indexOf(item)
+              this.dataArr.splice(index, 1)
+              console.log(this.dataArr)
+            }, reject => {
+              this.$message.error(reject)
+            })
+          }).catch(() => {})
+      },
+      // 发布应用
+      releaseApp(item) {
+        AppResourceApi.releaseApp(this.userteam._id, this.appInfo._id, item._id, item.versionCode, true).then((res) => {
+          console.log(res)
+        }, reject => {
+
+        })
+      },
+      getCreatTime(date) {
+        let releaseDate = new Date(date)
+        return `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
+      },
+      getAppSize(size) {
+        return `${(size / 1024 / 1024).toFixed(2)}M`
+      },
+      getDownLoadCount(count) {
+        if (count) {
+          return count
+        } else {
+          return 0
+        }
+      },
+      getAllowDownLoadCount(strategy) {
+        if (strategy.downloadCountLimit) {
+          return strategy.downloadCountLimit
+        } else {
+          return '不限'
+        }
+      },
+      cancel() {
+        this.showEditorVersion = false
       }
     }
   }
@@ -147,165 +194,73 @@
 <style lang="scss">
   @import "../../common/scss/base";
 
-  .appVersion-wrapper {
-    padding: 80px 15%;
+  .appVersion-wrapper .detail-header-bottom {
+    background-color: white;
   }
-  .appversion-header {
-  }
-  .appversion-header-leftLine {
+  .appVersion-wrapper .detail-header-bottom .itemwrapper {
     display: inline-block;
-  }
-  .appversion-header-leftLine-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: #666;
-  }
-  .appversion-header-leftLine-line {
-    width: 1px;
-    height: 125px;
-    background-color: #ccc;
-    margin-left: 4px;
-  }
-  .appversion-header-right {
-    width: 80%;
-    display: inline-block;
-    margin-left: 50px;
+    width: 33%;
+    height: 108px;
     vertical-align: top;
   }
-  .appversion-header-form {
-    margin-top: -13px;
-  }
-  .appversion-header-form .el-form-item__label {
-    font-size: 14px;
-    font-weight: bold;
-    text-align: left;
-  }
-  .appversion-header-right .appversion-header-form-address .el-form-item__label {
-    font-size: 14px;
-    text-align: left;
-  }
-  .appversion-header-right .appversion-header-form-address input {
-    width: 400px;
-    height: 40px;
-    border: solid 1px #999;
-    border-radius: 5px;
-    background-color: $paleGrey;
-    padding-left: 8px;
-    outline: 0;
-  }
-  .appversion-header-right .appversion-header-form-address button {
-    width: 50px;
-    height: 40px;
-    border: solid 1px #999;
-    color: #999;
-    border-radius: 4px;
-    background-color: $paleGrey;
-    vertical-align: top;
-    margin-left: 10px;
-  }
-  .appversion-header-backbtn {
-    background-color: $paleGrey;
-    width: 80px;
-    height: 30px;
-    margin-left: 20px;
-    border-radius: 15px;
-    color: #666;
-  }
-  /*列表的样式*/
-  .appversion-versionList-item {
-    position: relative;
-    padding-bottom: 60px;
-  }
-  .appversion-versionList-left-iconWrapper {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-    border: solid 1px #999;
-    background-color: $paleGrey;
-    text-align: center;
-    position: absolute;
-    left: -20px;
-  }
-  .appversion-versionList-left-iconWrapper img {
-    width: 25px;
-    height: 25px;
-    margin-top: 12.5px;
-  }
-  .appversion-versionList-left-line {
-    width: 1px;
-    background-color: #ccc;
-    position: absolute;
-    top: 50px;
-    left: 5px;
-    bottom: 0px;
-  }
-  .appversion-versionList-right {
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 65px;
-  }
-  .appversion-versionList-itemtitle {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 5px;
-  }
-  .appversion-versionList-itemInfo {
-    font-size: 10px;
-    color: #999;
-    margin-top: 15px;
-  }
-  .versionType:before {
-    content: "·";
-    color: #999;
-    margin-left: 8px;
-    margin-right: 8px;
-  }
-  .versionType:after {
-    content: "·";
-    color: #999;
-    margin-left: 8px;
-    margin-right: 8px;
-  }
-  .appversion-versionList-itemBottom {
-    margin-top: 20px;
-  }
-  .appversion-versionList-itemBottom .el-button {
-    background-color: $paleGrey !important;
-    color: #999 !important;
-  }
-  .appversion-versionList-itemFooter {
-    position: absolute;
-    width: 160px;
-    height: 40px;
-    left: -20px;
-    border-radius: 20px;
-    border: solid 1px #999;
-    font-size: 15px;
-    color: #999;
-    text-align: center;
-    line-height: 40px;
-  }
-  .appversion-versionList-updateNote textarea {
+  .appVersion-wrapper .detail-header-bottom .itemwrapper .top {
+    border-left: solid 4px $mainColor;
     width: 100%;
-    height: 100px;
-    border: solid 1px #ccc;
-    font-size: 15px;
-    outline: 0;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 20px;
-    padding: 8px 8px;
-    margin-bottom: 10px;
-    resize: none;
+    height: 24px;
+    margin-left: 24px;
+    margin-top: 24px;
   }
-  .appversion-versionList-updateNote-save {
-    width: 60px;
-    height: 35px;
-    border-radius: 17.5px;
-    background-color: #F8BA0B;
-    border-color: transparent;
+  .appVersion-wrapper .detail-header-bottom .itemwrapper .top .title {
+    font-size: 18px;
+    line-height: 24px;
+    margin-left: 8px;
+    font-family: "PingFang SC";
+    color: $mainTitleColor;
+  }
+  .appVersion-wrapper .detail-header-bottom .itemwrapper .subWrapper {
+    margin-left: 36px;
+    margin-top: 12px;
+    height: 48px;
+    width: calc(100% - 36px);
+  }
+  .appVersion-wrapper .detail-header-bottom .itemwrapper .subWrapper .subtitle {
+    font-size: 14px;
+    color: $subTitleColor;
+    line-height: 16px;
+    word-wrap: break-word;
+    word-break: normal;
+  }
+  .detail-content-top {
+    width: 100%;
+    height: 48px;
+    background-color: white;
+    color: $mainTitleColor;
     font-size: 16px;
-    color: white;
+    line-height: 48px;
+    margin-top: 10px;
+    padding-left: 24px;
+    box-sizing: border-box;
+  }
+  .appVersion-wrapper .tabletitle {
+    font-size: 12px;
+    color: $subTitleColor;
+    line-height: 16px;
+  }
+  .appVersion-wrapper .tablecontent {
+    font-size: 12px;
+    color: $mainTitleColor;
+    line-height: 16px;
+  }
+  .appversion-elButton {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    border: solid 1px #D5DFED;
+    color: #D5DFED;
+    border-radius: 12px;
+    margin-right: 6px;
+  }
+  .appVersion-wrapper .version-table .cell {
+    text-align: center;
   }
 </style>

@@ -4,7 +4,7 @@
     "description": "Hello Koa 2 example with async",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon --exec babel-node index.js",
+        "start": "babel-node index.js",
         "build": "babel src -d dist --source-maps",
         "preLaunchTask": "npm run build",
         "debug": "babel-node index.js --inspect --debug-brk --nolazy index.js"
@@ -41,15 +41,14 @@
         "bcrypt": "^1.0.3",
         "nodemailer": "^4.6.3",
         "ipa-metadata": "^1.4.0",
-        "x509": "^0.3.3"
+        "nunjucks": "^2.4.2"
     },
     "devDependencies": {
-        "babel-cli": "^6.26.0",
+        "babel-cli": "^6.24.1",
         "babel-core": "^6.26.0",
         "babel-eslint": "^8.2.1",
-        "babel-preset-env": "^1.6.0",
-        "babel-preset-latest": "^6.24.1",
         "babel-plugin-transform-decorators-legacy": "^1.3.4",
+        "babel-preset-env": "^1.6.0",
         "chai": "^4.1.2",
         "eslint": "^4.17.0",
         "eslint-config-airbnb": "^16.1.0",
@@ -59,7 +58,6 @@
         "eslint-plugin-node": "^6.0.1",
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
-        "mocha": "^5.0.1",
-        "nodemon": "^1.17.2"
+        "mocha": "^5.0.1"
     }
 }

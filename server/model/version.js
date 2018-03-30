@@ -18,17 +18,15 @@ var versionSchema = new Schema({
     uploaderId:String,
     size: Number,
     active:Boolean,
+    released:Boolean,
     downloadUrl: String,
-    downloadCount: Number,
+    downloadCount:{ type:Number, default:0 },
     fileDownloadUrl:String, //源文件下载地址
+    showOnDownloadPage:{type:Boolean,default:false},
+    appLevel:String,
     changelog:String,
-    hidden: { type:Boolean , default:false},
-    strategy:{
-        updateMode:{type:String,enum:['slient','normal','force']},
-        whiteIpList:[String],
-        blackIpList:[String],
-        downloadCountLimit:Number
-    }
+    hidden: { type:Boolean , default:false },
+    updateMode:{type:String,default:'slient',enum:['slient','normal','force']},
 });
 
 module.exports = mongoose.model('Version', versionSchema);

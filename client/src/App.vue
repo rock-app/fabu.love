@@ -11,7 +11,6 @@
     name: 'App',
     data() {
       return {
-        isLogined: false
       }
     },
     created() {
@@ -20,7 +19,7 @@
         if (user) {
           // 防止新打开的窗口也push到列表页
           if (window.location.href === (window.location.origin + '/')) {
-            this.$router.push('/')
+            this.$router.push('/apps')
           }
         } else {
           this.$router.push('/login')

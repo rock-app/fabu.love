@@ -1,93 +1,37 @@
 <template>
-  <div>
-    <!--导航部分-->
-    <appListNav></appListNav>
+  <div class="applist-wrapper">
     <!--内容头部-->
     <div class="applist-header">
-      <div class="platform-wrapper">
-        <div class="platform-ios" :class="getActiveClass('ios')" @click="clickIosPlatform">
-          <img class="platformImg" src="../../assets/ios.png" alt="">
-        </div>
-        <div class="platform-android" :class="getActiveClass('android')" @click="clickAndroidPlatform">
-          <img class="platformImg" src="../../assets/android.png" alt="">
-        </div>
+      <div style="position: relative">
+        <el-button class="uploadWrapper" icon="el-icon-delete">上传应用</el-button>
+        <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0">
       </div>
-      <div class="search-wrapper">
-        <i class="el-icon-search"></i>
-        <input class="applist-header-search" v-model="queryText" type="text" placeholder="输入名称搜索">
+
+      <div class="applist-header-right">
+        <div class="platform-wrapper">
+          <div class="platform-ios" :class="getActiveClass('ios')" @click="clickIosPlatform">
+            <img class="platformImg" src="../../assets/ios.png" alt="">
+          </div>
+          <div class="platform-android" :class="getActiveClass('android')" @click="clickAndroidPlatform">
+            <img class="platformImg" src="../../assets/android.png" alt="">
+          </div>
+        </div>
+        <div class="search-wrapper">
+          <i class="el-icon-search"></i>
+          <input class="applist-header-search" v-model="queryText" type="text" placeholder="输入名称搜索">
+        </div>
       </div>
     </div>
     <!--应用列表-->
-    <div class="applist-content">
-      <el-row>
-        <el-col
-          class="appItem-wrapper"
-          :span="7" v-for="(item,index) in dataList" :key="item.id"
-          :offset="1"
-          @mouseover="appItemHovered"
-          @mouseout="appItemUnhovered"
-        >
-          <div>
-            <div :style="index%2===0? `borderTopColor: #A4C639;borderLeftColor:transparent`:`borderTopColor: lightGray;borderLeftColor:transparent`" style="width: 0px;height: 0px;position: absolute;top: 0;
-right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
-            </div>
-            <i v-show="item.platform === 'ios'" class="icon-ic_ios appItem-platform"></i>
-            <i v-show="item.platform === 'android'" class="icon-ic_android appItem-platform"></i>
-            <img class="appItem-icon" src="../../assets/backgroundImage.png" alt="" @click="gotoAppDetail(item)">
-            <!--app信息-->
-            <div class="appItem-info">
-              <div class="appItem-info-namewrapper">
-                <span class="icon-ic_application"></span>
-                <p class="nowrap" @click="gotoAppDetail">{{item.appName}}</p>
-              </div>
-              <table style="width: 100%;table-layout: fixed">
-                <tr>
-                  <td class="appItem-info-title">短链接:</td>
-                  <td>
-                    <div class="appItem-info-appInfo nowrap">参数无</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="appItem-info-title">PackageName:</td>
-                  <td>
-                    <div class="appItem-info-appInfo nowrap">{{item.bundleId}}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="appItem-info-title">最新版本:</td>
-                  <td>
-                    <div class="appItem-info-appInfo nowrap">参数无</div>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <!--删除等操作-->
-            <div class="appItem-operate">
-              <div class="appItem-operate-editor appItem-operate-common" @click="clickEditorBtn">
-                <span class="icon-ic_editor"></span>
-                <span style="font-size: 14px">编辑</span>
-              </div>
-              <!--<a :href="getPreViewUrl()">-->
-                <!---->
-              <!--</a>-->
-              <div class="appItem-operate-preview appItem-operate-common" @click.stop="clickPreview">
-                <span class="icon-ic_preview"></span>
-                <span style="font-size: 14px">预览</span>
-              </div>
-              <div class="appItem-operate-delect appItem-operate-common">
-                <i class="el-icon-delete"></i>
-              </div>
-            </div>
+    <collectionView
+      :dataArr="this.dataList"
+      @gotoAppDetail="gotoAppDetail"
+    >
+    </collectionView>
 
-            <div v-show="index === 0" class="list-firstChild" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;background-color: #F8BA0B;text-align: center">
-              <img src="../../assets/uploadVersion_w.png" alt="">
-              <p>拖拽到这里上传</p>
-              <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;opacity: 0">
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+    <!--<div v-show="!busy" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">-->
+      <!--加载中-->
+    <!--</div>-->
 
     <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
@@ -99,41 +43,58 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
   import {getTeamArr} from '../../mgr/userMgr'
+  import CollectionView from '../base/collectionView.vue'
+  import Bus from '../../common/js/bus'
 
   export default {
     data() {
       return {
         currentPlatform: '',
-        dataList: [{'flag': 'flag'}],
+        dataList: [],
         queryText: '',
         showUploadView: false,
         file: FileList,
         currentPage: 0,
-        teamArr: []
+        teamArr: [],
+        busy: true
       }
     },
     components: {
-      AppListNav, UploadApp
+      AppListNav, UploadApp, CollectionView
     },
     computed: {
-      getTitleActiveClass() {
-        if (this.hoverFlag) {
-          return `color: red`
-        }
-      }
     },
     methods: {
-      loadAppList() {
+      loadAppList(isfooter) {
+        if (isfooter) {
+          this.currentPage = this.currentPage + 1
+        } else {
+          this.currentPage = 0
+        }
         AppResourceApi.getAppList(this.teamArr[0]._id, this.currentPage)
           .then(response => {
             console.log(response)
-            this.dataList = [{'flag': 'flag'}]
-            response.data.forEach((item) => {
-              this.dataList.push(item)
-            })
+            if (isfooter) {
+              this.dataList = this.dataList.concat(response.data)
+              if (response.data.length === 0) {
+                this.busy = true
+              } else {
+                this.busy = false
+              }
+            } else {
+              this.dataList = []
+              this.dataList = response.data
+              this.busy = false
+            }
           }, reject => {
             this.$message.error(reject)
           })
+      },
+      loadMore() {
+        this.busy = true
+        setTimeout(() => {
+          this.loadAppList(true)
+        }, 800)
       },
       referenceUpload(e) {
         this.file = e.target.files
@@ -164,25 +125,37 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
           name: 'AppDetail',
           params: {appId: item._id}
         })
+        Bus.$emit('appdetail')
       },
       appItemHovered() {
       },
       appItemUnhovered() {
       },
       clickEditorBtn() {
-        this.$router.push('appDetail')
       },
       clickPreview() {
-        window.open(window.location.origin + '/appPreView', '_blank')
+      },
+      delectApp(item) {
+        this.$confirm('确认删除？')
+          .then(_ => {
+            AppResourceApi.delectApp(this.teamArr[0]._id, item._id).then((res) => {
+              this.loadAppList()
+            }, reject => {
+              this.$message.error(reject)
+            })
+          })
+          .catch(_ => {})
       }
     },
     created () {
+      console.log('applist')
+      Bus.$emit('applist')
       this.$watch('queryText', () => {
         console.log(this.queryText)
       })
       this.teamArr = getTeamArr()
       if (this.teamArr) {
-        this.loadAppList()
+        this.loadAppList(false)
       }
     }
   }
@@ -191,32 +164,82 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
 <style lang="scss">
   @import "../../common/scss/base";
 
+  .applist-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
   .applist-header {
-    margin-left: 15%;
-    margin-top: 50px;
+    height: 75px;
+    padding-top: 25px;
+  }
+  .applist-header .uploadWrapper {
+    width: 144px;
+    height: 48px;
+    background-color: $mainColor;
+    float: left;
+    font-size: 14px;
+    color: white;
+    border-radius: 24px;
+    border-width: 0px;
+    box-shadow: 0 2px 6px rgba(115, 109, 216, 0.5);
+  }
+  .applist-header-right {
+    float: right;
+  }
+  .applist-header .search-wrapper {
+    width: 312px;
+    height: 48px;
+    border-radius: 24px;
+    border: solid 1px $mainColor;
+    position: relative;
+    display: inline-block;
+  }
+  .el-icon-search {
+    position: absolute;
+    left: 15px;
+    top: 17px;
+    color: $mainColor;
+  }
+  .applist-header-search {
+    position: absolute;
+    left: 45px;
+    top: 0px;
+    width: 235px;
     height: 50px;
-    margin-bottom: 60px;
+    background-color: rgba(0,0,0,0);
+    outline: 0;
+    color: $mainColor;
+  }
+  .applist-header-search::-webkit-input-placeholder {
+    color: $mainColor;
+  }
+  .applist-header-search:-moz-placeholder {
+    color: $mainColor;
+  }
+  .applist-header-search:-ms-input-placeholder {
+    color: $mainColor;
   }
   .applist-header .platform-wrapper {
-    width: 120px;
-    height: 50px;
-    border-radius: 25px;
+    display: inline-block;
+    width: 144px;
+    height: 48px;
+    border-radius: 24px;
     overflow: hidden;
     font-size: 0px;
-    border: solid 1px #999;
-    display: inline-block;
+    border: solid 1px $mainColor;
+    margin-right: 22px;
   }
   .applist-header .platform-wrapper .platform-ios {
     display: inline-block;
-    width: 60px;
+    width: 72px;
     height: 100%;
     text-align: center;
-    border-right: solid 1px #999;
+    border-right: solid 1px $mainColor;
     box-sizing: border-box;
   }
   .applist-header .platform-wrapper .platform-android {
     display: inline-block;
-    width: 60px;
+    width: 72px;
     height: 100%;
     text-align: center;
   }
@@ -228,177 +251,5 @@ right: 0px;border-top: 50px solid #A4C639;border-left: 50px solid transparent">
   .platformActive {
     background-color: #9b9b9b;
   }
-  .applist-header .search-wrapper {
-    display: inline-block;
-    width: 280px;
-    height: 50px;
-    border-radius: 25px;
-    border: solid 1px #999;
-    margin-left: 20px;
-    position: relative;
-  }
-  .el-icon-search {
-    position: absolute;
-    left: 15px;
-    top: 17px;
-  }
-  .applist-header-search {
-    position: absolute;
-    left: 45px;
-    top: 0px;
-    width: 235px;
-    height: 50px;
-    background-color: rgba(0,0,0,0);
-    outline: 0;
-  }
-  .applist-content {
-    margin-left: 12%;
-    margin-right: 15%;
-  }
-  .appItem-wrapper {
-    margin-bottom: 20px;
-    height: 460px;
-    background-color: white;
-    position: relative;
-    transition: all 0.25s;
-  }
-  .appItem-wrapper:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 30px rgba(0,0,0,.1);
-  }
-  .appItem-wrapper:hover .appItem-info-namewrapper p {
-    color: #000;
-  }
-  .appItem-wrapper:hover .list-firstChild img {
-    transform: scale(1.5);
-  }
-  .appItem-wrapper .appItem-platform{
-    position: absolute;
-    right: 0px;
-    top: 5px;
-    width: 25px;
-    height: 25px;
-    background-size: 25px 25px;
-  }
-  .appItem-wrapper .appItem-icon {
-    position: absolute;
-    left: 45px;
-    top: 50px;
-    width: 100px;
-    height: 100px;
-    background-size: cover;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-  }
-  .appItem-wrapper .appItem-info {
-    position: absolute;
-    left: 45px;
-    top: 190px;
-    right: 45px;
-    height: 120px;
-    overflow: hidden;
-  }
-  .appItem-wrapper .appItem-operate {
-    position: absolute;
-    left: 45px;
-    right: 45px;
-    bottom: 50px;
-    height: 30px;
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    color: #999;
-  }
-  .appItem-info-namewrapper {
-    height: 40px;
-  }
-  .appItem-info-namewrapper span {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    background-size: cover;
-  }
-  .appItem-info-namewrapper p {
-    font-size: 18px;
-    cursor: pointer;
-    display: inline-block;
-    color: #666;
-    font-weight: 300;
-    vertical-align: top;
-  }
-  .appItem-info-namewrapper p:hover{
-    color: #000;
-  }
-  .appItem-info-title {
-    font-size: 10px;
-    color: #999;
-  }
-  .appItem-info-appInfo {
-    font-size: 10px;
-    color: #333;
-    max-width: 100%;
-    line-height: 25px;
-  }
-  .appItem-operate i {
-    margin-top: 5px;
-  }
-  .appItem-operate span {
-    line-height: 30px;
-    vertical-align: middle;
-  }
-  .appItem-operate-editor:hover {
-    border-color: #F8BA0B;
-    color: #F8BA0B;
-  }
-  .appItem-operate-editor:hover span:before {
-    color: #F8BA0B;
-  }
-  .appItem-operate-preview:hover {
-    border-color: #F8BA0B;
-    color: #F8BA0B;
-  }
-  .appItem-operate-preview:hover span:before {
-    color: #F8BA0B;
-  }
-  .appItem-operate-common {
-    border: solid 1px #999;
-    height: 100%;
-    width: 32%;
-    margin-right: 5%;
-    border-radius: 15px;
-  }
-  .appItem-operate-delect {
-    width: 30px;
-    text-align: center;
-  }
-  .appItem-operate-delect:hover {
-    background-color: crimson;
-    border-color: transparent;
-  }
-  .appItem-operate-delect:hover i {
-    color: white;
-  }
-  .list-firstChild img {
-    width: 60px;
-    height: 60px;
-    background-size: 60px 60px;
-    margin-top: 160px;
-    color: white;
-    transition: all 0.25s;
-  }
-  .list-firstChild img:hover {
-    transform: scale(1.5);
-  }
-  .list-firstChild p {
-    color: white;
-    font-size: 14px;
-    margin-top: 40px;
-  }
-  .appItem-wrapper .icon-ic_ios:before {
-    color: white;
-  }
-  .appItem-wrapper .icon-ic_android:before {
-    color: white;
-  }
+
 </style>

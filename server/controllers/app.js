@@ -27,11 +27,18 @@ const tag = tags(['AppResource']);
 //     downloadCountLimit:Number
 // }
 
-var strategy = {
-    'updateMode':'string', //更新模式  force / silent / normal/ 强制或者静默或者普通升级
-    'ipType':'string', //IP地址限制类型 {type:String,default:'black',enum:['black','white']},
-    'ipList':'string', //ip地址列表
-    'downloadCountLimit':'number' //default 0 表示不现在下载次数
+var grayRelease = {
+    strategy:{
+    'updateMode':{type:'string'}, //更新模式  force / silent / normal/ 强制或者静默或者普通升级
+    'ipType':{type:'string'}, //IP地址限制类型 {type:String,default:'black',enum:['black','white']},
+    'ipList':{type:'string'}, //ip地址列表
+    'downloadCountLimit':{type:'number'} //default 0 表示不现在下载次数
+    },
+    version:{
+        versionId:{type:'string',require:true},
+        versionCode:{type:'string',require:true},
+        release:{type:'bool',require:true}
+    }
 }
 
 var appProfile = {
@@ -144,13 +151,6 @@ module.exports = class AppRouter {
     static async getAppVersionDetail(ctx,next){
         //todo: 好像暂时用不上
         
-        // if (!version){
-        //     throw new Error("版本不存在")
-        // }
-        // if (version.lasted && version.active){
-        //     ctx.body = responseWrapper(version)
-        //     return
-        // }
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams
         var team = await Team.find(
@@ -177,81 +177,49 @@ module.exports = class AppRouter {
     static async deleteAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
-        var team = await Team.findOne({_id:teamId,members:{
-            $elemMatch:{
-                 username:user.username,
-                 $or: [
-                    { role: 'owner' },
-                    { role: 'manager' }
-                ]
-            }
-        }})
-        var app = await App.find({_id:id,ownerId:team._id})
-        if (!app) {
-            throw new Error("应用不存在或您没有权限执行该操作")
-        }
+        var app = await appInTeamAndUserIsManager(appId,teamId,user.id)
         var version = await Version.findById(versionId)
         var result = Version.deleteOne(version)
         ctx.body = responseWrapper(true,"版本已删除")
     }
 
-    @request('post','/api/app/{id}/version/{versionId}/updateMode')
-    @summary("设置版本发布更新方式/静默/强制/普通)")
+    @request('post','/api/apps/{teamId}/{id}/updateMode')
+    @summary("设置应用或版发布更新方式/静默/强制/普通)")
     @tag
-    @body({updateMode:{type:'string',require:true}})
-    @path({id:{type:'string',require:true},versionId:{type:'string',require:true}})
-    static async setVersionUpdateStrategy(ctx,next){
+    @body({
+        updateMode:{type:'string',require:true},
+        versionId:{type:'string',description:"如果传入了versionId则表示设置某个版本的更新方式"}
+    })
+    @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
+    static async setUpdateMode(ctx,next){
         var user = ctx.state.user.data;
         var body = ctx.body;
-        var { id,versionId } = ctx.validatedParams;
-        var app = await App.findById(id, "appName");
-        if (!app) {
-            throw new Error("应用不存在或您没有权限执行该操作")
+        var { teamId,id } = ctx.validatedParams;
+        var app = await appInTeamAndUserIsManager(id,)
+        if (body.versionId) {
+            //更新版本策略
+            await Version.findByIdAndUpdate(versionId, {
+                updateMode: body.updateMode
+            })
+        }else{
+            await App.findByIdAndUpdate(id, {
+                updateMode: body.updateMode
+            })
         }
-        var version = await Version.findById(versionId)
-        if (!version) {
-            throw new Error("版本号有误，或该版本不可用")
-        } 
-        //更新版本策略
-        await Version.findByIdAndUpdate(versionId, {
-            updateMode: body.updateMode
-        })
         ctx.body = responseWrapper(true, "版本发布策略设置成功")
     }
 
-    @request('post','/api/app/{id}/updateMode')
-    @summary("设置应用发布更新方式/静默/强制/普通)")
-    @tag
-    @body({updateMode:{type:'string',require:true}})
-    @path({id:{type:'string',require:true}})
-    static async setAppUpdateStrategy(ctx,next){
-        var user = ctx.state.user.data;
-        var body = ctx.body;
-        var { id } = ctx.validatedParams;
-        //1.通过appId去查询App
-        var app = await App.findById(id, "appName");
-        if (!app) {
-            throw new Error("应用不存在或您没有权限执行该操作")
-        }
-        //2.找到应用后，设置更新方式
-        await App.findByIdAndUpdate(id, {
-            updateMode: body.updateMode,
-        })
-        //3.返回body
-        ctx.body = responseWrapper(true, "应用发布更新策略设置成功")
-    }
-
-    @request('post','/api/app/{id}/profile')
+    @request('post','/api/apps/{teamId}/{id}/profile')
     @summary("更新应用设置")
     @tag
     @body(appProfile)
-    @path({id:{type:'string',require:true}})
+    @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
     static async setAppUpdateStrategy(ctx,next){
         var user = ctx.state.user.data;
         var body = ctx.body;
-        var { id } = ctx.validatedParams;
+        var { teamId,id } = ctx.validatedParams;
         //1.通过appId去查询App
-        var app = await App.findById(id, "appName");
+        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
@@ -261,29 +229,21 @@ module.exports = class AppRouter {
         ctx.body = responseWrapper(true, "应用设置已更新")
     }
 
-    @request('post','/api/app/{id}/version/{versionId}/grayPublish')
+    @request('post','/api/apps/{teamId}/{id}/grayPublish')
     @summary("灰度发布一个版本")
     @tag
-    @body(strategy)
-    @path({id:{type:'string',require:true},versionId:{type:'string',require:true}})
+    @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
+    @body(grayRelease)
     static async grayReleaseAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { body } = ctx.request
         var { teamId,id } = ctx.validatedParams;  
-        var team = await Team.findOne({_id:teamId,members:{
-            $elemMatch:{
-                 username:user.username,
-                 $or: [
-                    { role: 'owner' },
-                    { role: 'manager' }
-                ]
-            }
-        },},"_id")
-        var app = await App.findOne({_id:id,ownerId:team._id},"lastVersionCode")
+
+        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-        var version = await Version.findById(versionId,"versionStr")
+        var version = await Version.findById(body.version.versionId,"versionStr")
 
         await App.updateOne({_id:app.id},
             {
@@ -291,7 +251,7 @@ module.exports = class AppRouter {
                     versionId:version.id,
                     versionStr:version.versionStr
                 },
-                grayStrategy:body
+                grayStrategy:body.strategy
         })
         ctx.body = responseWrapper(true,"版本已灰度发布")
     }
@@ -306,20 +266,11 @@ module.exports = class AppRouter {
         release:{type:'bool',require:true}
     })
     static async releaseVersion(ctx,next){
-
         var user = ctx.state.user.data
         var { body } = ctx.request
         var { teamId,id } = ctx.validatedParams;  
-        var team = await Team.findOne({_id:teamId,members:{
-            $elemMatch:{
-                 username:user.username,
-                 $or: [
-                    { role: 'owner' },
-                    { role: 'manager' }
-                ]
-            }
-        },},"_id")
-        var app = await App.findOne({_id:id,ownerId:team._id},"lastVersionCode")
+
+        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
@@ -353,12 +304,7 @@ module.exports = class AppRouter {
             //1.拿出最新的version
             var version = Version.findOne({versionCode: lastVersionCode})
             //2.判断最新version的策略(下载次数, )
-            // strategy:{
-            //     updateMode:{type:String,default:'slient',enum:['slient','normal','force']},
-            //     ipType:{type:String,default:'black',enum:['black','white']},
-            //     ipList:[String],
-            //     downloadCountLimit:Number
-            // }
+
             if (version.downloadCount >= version.strategy.downloadCountLimit) {
                 ctx.body = responseWrapper(false, "暂无可用的更新版本")
             } else {
@@ -396,25 +342,38 @@ module.exports = class AppRouter {
 }
 
 
-// function appInTeamAndUserIsManager(appId,teamId,userId) {
-//     var team = await Team.find({_id:teamId,members:{
-//         $elemMatch:[
-//             { _id:userId,role:"owner" },
-//             { _id:userId,role:"manager" },
-//         ]},
-//     })
-//     var app = await App.find({_id:id,ownerId:team._id})
-// }
+async function appInTeamAndUserIsManager(appId,teamId,userId) {
+    var team = await Team.findOne({_id:teamId,members:{
+        $elemMatch:{
+             username:user.username,
+             $or: [
+                { role: 'owner' },
+                { role: 'manager' }
+            ]
+        }
+    },},"_id")
 
-// function appInTeamAndUserIsGuest(appId,teamId,userId) {
-//     var team = await Team.find({_id:teamId,members:{
-//         $elemMatch:[
-//             { _id:userId,role:"owner" },
-//             { _id:userId,role:"manager" },
-//         ]},
-//     })
-//     var app = await App.find({_id:id,ownerId:team._id})
-// }
+    var app = await App.find({_id:id,ownerId:team._id})
+    if (!app) {
+        throw new Error("应用不存在或您没有权限执行该操作")
+    }else{
+        return app
+    }
+}
+
+async function appInTeamAndUserIsGuest(appId,teamId,userId) {
+    var team = await Team.findOne({_id:teamId,members:{
+        $elemMatch:{
+             username:user.username
+        }
+    },},"_id")
+    var app = await App.find({_id:id,ownerId:team._id})
+    if (!app) {
+        throw new Error("应用不存在或您不在该团队中")
+    }else{
+        return app
+    }
+}
 
 
 //设置模糊查询

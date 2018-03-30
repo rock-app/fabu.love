@@ -4,7 +4,7 @@
       <i class="icon-ic_ios"></i>设置
     </div>
     <div class="content">
-      <el-form labelWidth="120px" label-position="left">
+      <el-form labelWidth="150px" label-position="left">
         <el-form-item label="应用短链接">
           <el-input v-model="appInfo.shortUrl" class="shorturl"></el-input>
         </el-form-item>
@@ -84,7 +84,7 @@
     margin-left: 120px;
   }
   .appsetting-wrapper .content .el-form .el-form-item label {
-    font-size: 12px;
+    font-size: 14px;
     color: $subTitleColor;
     margin-right: 20px;
   }
@@ -93,7 +93,7 @@
     border-left-width: 0px;
     border-top-width: 0px;
     border-radius: 0px;
-    font-size: 12px;
+    font-size: 14px;
     outline: 0;
     height: 24px !important;
   }
@@ -112,7 +112,7 @@
     margin-left: calc(50% - 48px);
   }
   .appsetting-wrapper .content .el-form .el-form-item .el-radio span {
-    font-size: 12px !important;
+    font-size: 14px !important;
   }
   .appsetting-wrapper .content .el-radio__input.is-checked .el-radio__inner {
     background-color: $mainColor;

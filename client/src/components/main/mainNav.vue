@@ -6,10 +6,11 @@
 
     <div>
       <el-menu
-        default-active="应用概述"
+        :default-active="this.slotName === 'detail-nav' ? '应用概述' : ''"
         class="mainNav-el-menu"
       >
-        <div v-if="this.slotName === 'main-nav'">
+        <!--不可以用v-if，否则会因为控件加载时序问题导致，指定选中的item失效-->
+        <div v-show="this.slotName === 'main-nav'">
           <el-menu-item index="创建团队">
             <i class="el-icon-menu"></i>
             <span slot="title">创建团队</span>
@@ -24,7 +25,7 @@
           </el-menu-item>
         </div>
 
-        <div v-if="this.slotName === 'detail-nav'">
+        <div v-show="this.slotName === 'detail-nav'">
           <el-menu-item index="应用概述" @click="clickSubItem">
             <i class="el-icon-menu"></i>
             <span slot="title">应用概述</span>
@@ -82,13 +83,16 @@
     },
     methods: {
       clickSubItem(data) {
-        console.log(data.index)
         if (data.index === '应用概述') {
           Bus.$emit('appSummary')
         }
         if (data.index === '应用设置') {
           Bus.$emit('appSetting')
         }
+      }
+    },
+    watch: {
+      '$route': (to) => {
       }
     }
   }

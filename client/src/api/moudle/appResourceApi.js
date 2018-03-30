@@ -9,7 +9,6 @@ export function getAppList(teamId, page) {
     'page': page, 'size': 10
   }
   let url = `api/apps/${teamId}`
-  console.log(url)
   return getHttp(url, params)
 }
 

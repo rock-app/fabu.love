@@ -148,7 +148,6 @@
       }
     },
     created () {
-      console.log('applist')
       Bus.$emit('applist')
       this.$watch('queryText', () => {
         console.log(this.queryText)

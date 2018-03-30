@@ -4,12 +4,41 @@
       <i class="el-icon-menu"></i>
     </div>
 
-    <slot name="main-nav"></slot>
-    <slot name="detail-nav"></slot>
+    <div>
+      <el-menu
+        default-active="应用概述"
+        class="mainNav-el-menu"
+      >
+        <div v-if="this.slotName === 'main-nav'">
+          <el-menu-item index="创建团队">
+            <i class="el-icon-menu"></i>
+            <span slot="title">创建团队</span>
+          </el-menu-item>
+          <el-menu-item index="团队管理">
+            <i class="el-icon-menu"></i>
+            <span slot="title">团队管理</span>
+          </el-menu-item>
+          <el-menu-item index="邀请队员">
+            <i class="el-icon-setting"></i>
+            <span slot="title">邀请队员</span>
+          </el-menu-item>
+        </div>
+
+        <div v-if="this.slotName === 'detail-nav'">
+          <el-menu-item index="应用概述" @click="clickSubItem">
+            <i class="el-icon-menu"></i>
+            <span slot="title">应用概述</span>
+          </el-menu-item>
+          <el-menu-item index="应用设置" @click="clickSubItem">
+            <i class="el-icon-menu"></i>
+            <span slot="title">应用设置</span>
+          </el-menu-item>
+        </div>
+      </el-menu>
+    </div>
 
     <div class="mainNav-footer">
       <el-menu
-        default-active=""
         class="mainNav-footer-list"
       >
         <el-menu-item index="0">
@@ -34,12 +63,33 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import Bus from '../../common/js/bus'
+
   export default {
     data() {
-      return {}
+      return {
+        slotName: 'main-nav'
+      }
     },
-    created() {},
+    created() {
+      Bus.$on('appdetail', () => {
+        this.slotName = 'detail-nav'
+      })
+      Bus.$on('applist', () => {
+        this.slotName = 'main-nav'
+        this.$router.push('/apps')
+      })
+    },
     methods: {
+      clickSubItem(data) {
+        console.log(data.index)
+        if (data.index === '应用概述') {
+          Bus.$emit('appSummary')
+        }
+        if (data.index === '应用设置') {
+          Bus.$emit('appSetting')
+        }
+      }
     }
   }
 </script>
@@ -55,14 +105,6 @@
   .mainNav-logo {
     width: 100%;
     height: 72px;
-  }
-  .el-menu-vertical-demo {
-    margin-top: 28px;
-    border-right-width: 0px;
-  }
-  .mainNav-wrapper .el-menu-vertical-demo .el-menu-item span {
-    color: $mainTitleColor;
-    font-size: 20px;
   }
   .mainNav-footer {
     position: absolute;
@@ -83,9 +125,27 @@
     line-height: 24px;
   }
   .mainNav-footer .mainNav-footer-list .is-active {
-    color: $mainColor;
+    color: white;
+    background-color: $mainColor;
   }
   .mainNav-footer .mainNav-footer-list .is-active span {
-    color: $mainColor;
+    color: white;
+  }
+  .mainNav-wrapper .mainNav-el-menu {
+    margin-top: 28px;
+    border-right-width: 0px;
+  }
+  .mainNav-wrapper .mainNav-el-menu .el-menu-item {
+    margin-bottom: 20px;
+  }
+  .mainNav-wrapper .mainNav-el-menu .el-menu-item span {
+    font-size: 20px;
+  }
+  .mainNav-wrapper .mainNav-el-menu .is-active {
+    color: white;
+    background-color: $mainColor;
+  }
+  .mainNav-wrapper .mainNav-el-menu .is-active span {
+    color: white;
   }
 </style>

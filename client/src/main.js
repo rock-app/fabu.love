@@ -9,6 +9,9 @@ import axios from 'axios'
 import {configAxios} from './api/basehttp'
 
 import VueLazyLoad from 'vue-lazyload'
+import infiniteScroll from 'vue-infinite-scroll'
+
+Vue.use(infiniteScroll)
 
 Vue.config.productionTip = false
 Vue.prototype.axios = axios

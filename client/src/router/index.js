@@ -5,55 +5,32 @@ import Regiest from '../components/loginRegiest/regiest.vue'
 import AppDetail from '../components/appDetail/appDetail.vue'
 import AppPreView from '../components/appDetail/appPreView.vue'
 import UserInfo from '../components/user/userInfo.vue'
+import Main from '../components/main/main.vue'
 
 Vue.use(Router)
 
-const AppList = () => import('components/appList/appList.vue')
+const Apps = () => import('components/appList/appList.vue')
 
-// export default new Router({
-//   // 去除#
-//   mode: 'history',
-//   routes: [
-//     // {
-//     //   path: '/login',
-//     //   name: 'Login',
-//     //   component: Login
-//     // },
-//     // {
-//     //   path: '/applist',
-//     //   name: 'AppList',
-//     //   component: AppList
-//     // },
-//     {
-//       path: '/regiest',
-//       name: 'Regiest',
-//       component: Regiest
-//     },
-//     {
-//       path: '/appDetail/:appId',
-//       name: 'AppDetail',
-//       component: AppDetail
-//     },
-//     {
-//       path: '/appPreView',
-//       name: 'AppPreView',
-//       component: AppPreView
-//     },
-//     {
-//       path: '/userInfo',
-//       name: 'UserInfo',
-//       component: UserInfo
-//     }
-//   ]
-// })
 export default new Router({
   // 去除#
   mode: 'history',
   routes: [
     {
       path: '',
-      name: 'AppList',
-      component: AppList
+      name: 'Main',
+      component: Main,
+      children: [
+        {
+          path: '/apps',
+          name: 'Apps',
+          component: Apps
+        },
+        {
+          path: '/app/:appId',
+          name: 'AppDetail',
+          component: AppDetail
+        }
+      ]
     },
     {
       path: '/login',
@@ -66,21 +43,15 @@ export default new Router({
       component: Regiest
     },
     {
-      path: '/appDetail/:appId',
-      name: 'AppDetail',
-      component: AppDetail
-    },
-    {
-      path: '/appPreView',
-      name: 'AppPreView',
-      component: AppPreView
-    },
-    {
-      path: '/userInfo',
+      path: '/user',
       name: 'UserInfo',
       component: UserInfo
+    },
+    {
+      path: '/:id',
+      name: 'AppPreView',
+      component: AppPreView
     }
-
   ]
 })
 

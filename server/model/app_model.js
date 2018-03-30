@@ -13,7 +13,7 @@ var appSchema = new Schema({
     bundleName: {
         type: String
     },
-    appName:String,
+    appName: String,
     currentVersion: {
         type: String
     },
@@ -32,18 +32,45 @@ var appSchema = new Schema({
     updateAt: {
         type: Date
     },
-    shortUrl:{
-        type:String,
-        index:true
+    shortUrl: {
+        type: String,
+        unique: true
     },
-    ownerId:String,
-    changelog:String,
-    strategy:{
-        updateMode:{type:String,default:'normal',enum:['slient','normal','force']},
-        whiteIpList:[String],
-        blackIpList:[String],
-        downloadCountLimit:Number
+    autoPublish: {  //是否自动发布
+        type: String,
+        default: false
+    },
+    installWithPwd: {
+        Boolean,
+        default: false
+    },
+    installPwd: {
+        type: String
+    },
+    appLevel: String,
+    ownerId: String,
+    changelog: String,
+    totalDownloadCount: Number,
+    lastVersionCode: String,
+    updateMode: {
+        type: String,
+        default: 'slient',
+        enum: ['slient', 'normal', 'force']
+    },
+
+    gray_release_version: {
+        versionId:String,
+        versionName:String
+    },
+    gray_strategy: {
+        ipType: {
+            type: String,
+            enum: ['black', 'white']
+        },
+        ipList: [String],
+        downloadCountLimit: Number
     }
+
 })
 
 // appSchema.virtual('versions').get(function () {     return Version.find })

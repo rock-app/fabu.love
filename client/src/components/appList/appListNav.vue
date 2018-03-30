@@ -3,7 +3,7 @@
     <div class="applist-nav">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="applist-nav-left">
         <el-breadcrumb-item>爱发布</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/applist' }">我的应用</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">我的应用</el-breadcrumb-item>
         <el-breadcrumb-item v-if="this.appSubModule" v-show="this.appSubModule" v-html="this.appSubModule"></el-breadcrumb-item>
       </el-breadcrumb>
       <div class="userInfoBottomWrapper" :style="this.userHover? 'background-color: rgb(244, 245, 247)':'background-color: white'" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
@@ -12,7 +12,7 @@
           <div class="ueserInfo-username nowrap" v-if="this.userInfo">
             {{this.userInfo.userName}}
           </div>
-          <p class="ueserInfo-email nowrap">dede12121212@qq.com</p>
+          <p class="ueserInfo-email nowrap"></p>
         </div>
       </div>
       <ul class="userInfoSubWrapper" v-show="this.userHover" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
@@ -57,7 +57,7 @@
         this.userHover = false
       },
       clickUserInfoWrapper() {
-        this.$router.push('userInfo')
+        this.$router.push('user')
       },
       loginout() {
         TokenMgr.clearTokens()

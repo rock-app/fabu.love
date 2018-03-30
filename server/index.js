@@ -1,7 +1,6 @@
 // 导入koa，和koa 1.x不同，在koa2中，我们导入的是一个class，因此用大写的Koa表示:
 import router from './controller';
 import config from './config';
-
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 // 导入controller middleware:
@@ -9,7 +8,6 @@ const rest = require('./helper/rest')
 const serve = require('koa-static');
 var cors = require('koa-cors')
 const koajwt = require('koa-jwt')
-
 
 // 创建一个Koa对象表示web app本身
 const app = new Koa()

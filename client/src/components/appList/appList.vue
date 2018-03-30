@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="applist-wrapper">
     <!--内容头部-->
     <div class="applist-header">
       <div style="position: relative">
@@ -29,6 +29,10 @@
     >
     </collectionView>
 
+    <!--<div v-show="!busy" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">-->
+      <!--加载中-->
+    <!--</div>-->
+
     <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
   </div>
@@ -51,7 +55,8 @@
         showUploadView: false,
         file: FileList,
         currentPage: 0,
-        teamArr: []
+        teamArr: [],
+        busy: true
       }
     },
     components: {
@@ -60,17 +65,36 @@
     computed: {
     },
     methods: {
-      loadAppList() {
+      loadAppList(isfooter) {
+        if (isfooter) {
+          this.currentPage = this.currentPage + 1
+        } else {
+          this.currentPage = 0
+        }
         AppResourceApi.getAppList(this.teamArr[0]._id, this.currentPage)
           .then(response => {
             console.log(response)
-            this.dataList = []
-            response.data.forEach((item) => {
-              this.dataList.push(item)
-            })
+            if (isfooter) {
+              this.dataList = this.dataList.concat(response.data)
+              if (response.data.length === 0) {
+                this.busy = true
+              } else {
+                this.busy = false
+              }
+            } else {
+              this.dataList = []
+              this.dataList = response.data
+              this.busy = false
+            }
           }, reject => {
             this.$message.error(reject)
           })
+      },
+      loadMore() {
+        this.busy = true
+        setTimeout(() => {
+          this.loadAppList(true)
+        }, 800)
       },
       referenceUpload(e) {
         this.file = e.target.files
@@ -124,13 +148,14 @@
       }
     },
     created () {
+      console.log('applist')
       Bus.$emit('applist')
       this.$watch('queryText', () => {
         console.log(this.queryText)
       })
       this.teamArr = getTeamArr()
       if (this.teamArr) {
-        this.loadAppList()
+        this.loadAppList(false)
       }
     }
   }
@@ -139,6 +164,10 @@
 <style lang="scss">
   @import "../../common/scss/base";
 
+  .applist-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
   .applist-header {
     height: 75px;
     padding-top: 25px;

@@ -2,7 +2,7 @@
     <div>
       <div class="detail-header">
         <div class="detail-header-top">
-          <img class="appicon" :src="getIconUrl()">
+          <img class="appicon" v-lazy="getIconUrl()">
           <p class="appname">{{this.appInfo.appName}}</p>
           <div class="appType-platform-wrapper">
             <div class="appType" v-show="this.appInfo.appLevel" v-html="getAppType()"></div>
@@ -17,32 +17,6 @@
             <button class="delect" @click="delectApp">删除</button>
           </div>
         </div>
-        <div class="detail-header-bottom">
-          <ul>
-            <li v-for="(item, index) in this.headerOperationData" :key="index" class="itemwrapper">
-              <div class="top">
-                <p class="title">{{item}}</p>
-              </div>
-              <div class="subWrapper" v-if="appInfo._id">
-                <p class="subtitle" v-show="index !== 3">{{subTitleArr[index]}}</p>
-                <table v-show="index === 3">
-                  <tr>
-                    <td class="tabletitle">更新方式：</td>
-                    <td class="tablecontent" v-if="appInfo.strategy.updateMode">{{appInfo.strategy.updateMode}}</td>
-                  </tr>
-                  <tr>
-                    <td class="tabletitle">限制次数：</td>
-                    <td class="tablecontent" v-html="appInfo.strategy.downloadCountLimit ? appInfo.strategy.downloadCountLimit:'无限制'"></td>
-                  </tr>
-                  <tr>
-                    <td class="tabletitle">限制ip：</td>
-                    <td class="tablecontent" v-if="appInfo.strategy.blackIpList && appInfo.strategy.blackIpList.length>0">{{appInfo.strategy.blackIpList[0]}}等{{appInfo.strategy.blackIpList.length}}个</td>
-                  </tr>
-                </table>
-              </div>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
 </template>
@@ -55,14 +29,10 @@
     props: {
       appInfo: {
         type: Object
-      },
-      subTitleArr: {
-        type: Array
       }
     },
     data() {
       return {
-        headerOperationData: ['Bundle ID', '下载地址', 'App Key', '更新策略'],
         team: {}
       }
     },
@@ -79,11 +49,7 @@
         window.open(href, '_blank')
       },
       getIconUrl() {
-        if (this.appInfo.icon) {
-          return `${this.axios.defaults.baseURL}${this.appInfo.icon}`
-        } else {
-          return `${require('../../assets/logo.png')}`
-        }
+        return `${this.axios.defaults.baseURL}${this.appInfo.icon}`
       },
       getAppType() {
         if (this.appInfo.appLevel === 'enterprise') {
@@ -120,7 +86,6 @@
 
   .detail-header {
     width: 100%;
-    height: 240px;
     background-color: $paleGrey;
     margin-top: 24px;
   }
@@ -128,11 +93,6 @@
     width: 100%;
     height: 120px;
     margin-bottom: 1px;
-    background-color: white;
-  }
-  .detail-header-bottom {
-    width: 100%;
-    height: 120px;
     background-color: white;
   }
   .detail-header-top {
@@ -212,49 +172,5 @@
     border-width: 0px;
     box-shadow: 0 2px 6px rgba(115, 109, 216, 0.5);
     margin-right: 12px;
-  }
-  .detail-header-bottom .itemwrapper {
-    display: inline-block;
-    width: 23%;
-    height: 120px;
-    vertical-align: top;
-  }
-  .detail-header-bottom .itemwrapper .top {
-    border-left: solid 4px $mainColor;
-    width: 100%;
-    height: 24px;
-    margin-left: 24px;
-    margin-top: 24px;
-  }
-  .detail-header-bottom .itemwrapper .top .title {
-    font-size: 18px;
-    line-height: 24px;
-    margin-left: 8px;
-    font-family: "PingFang SC";
-    color: $mainTitleColor;
-  }
-  .detail-header-bottom .itemwrapper .subWrapper {
-    margin-left: 36px;
-    margin-top: 12px;
-    height: 48px;
-    width: calc(100% - 36px);
-  }
-  .detail-header-bottom .itemwrapper .subWrapper .subtitle {
-    font-size: 14px;
-    color: $subTitleColor;
-    line-height: 16px;
-    word-wrap: break-word;
-    word-break: normal;
-  }
-  .detail-header-bottom .itemwrapper .subWrapper .tabletitle {
-    font-size: 12px;
-    color: $subTitleColor;
-    width: 72px;
-    line-height: 16px;
-  }
-  .detail-header-bottom .itemwrapper .subWrapper .tablecontent {
-    font-size: 12px;
-    color: $mainTitleColor;
-    line-height: 16px;
   }
 </style>

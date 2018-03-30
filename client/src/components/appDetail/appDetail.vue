@@ -3,11 +3,22 @@
     <!--头部-->
     <appDetailHeader
       :appInfo="this.appInfo"
-      :subTitleArr="this.subTitleArr"
     >
     </appDetailHeader>
 
-    <appVersions v-if="appInfo._id" :appId="appInfo._id" :shortUrl="this.appInfo.shortUrl"></appVersions>
+    <appVersions
+      v-show="!showAppSetting"
+      v-if="appInfo._id"
+      :appInfo="appInfo"
+      :subTitleArr="subTitleArr"
+    >
+    </appVersions>
+
+    <appSetting
+      v-if="showAppSetting"
+      :appInfo="appInfo"
+    >
+    </appSetting>
   </div>
 </template>
 
@@ -17,17 +28,19 @@
   import AppDetailHeader from './appDetailHeader.vue'
   import AppVersions from './appVersions.vue'
   import Bus from '../../common/js/bus'
+  import AppSetting from './appSetting.vue'
 
   export default {
     data() {
       return {
         subTitleArr: ['', '', ''],
         userteam: {},
-        appInfo: {}
+        appInfo: {},
+        showAppSetting: false
       }
     },
     components: {
-      AppDetailHeader, AppVersions
+      AppDetailHeader, AppVersions, AppSetting
     },
     computed: {
     },
@@ -37,15 +50,23 @@
         this.userteam = getUserTeam()
         this.getAppDetailData()
       })
+
+      Bus.$on('appSummary', () => {
+        this.showAppSetting = false
+      })
+      Bus.$on('appSetting', () => {
+        this.showAppSetting = true
+      })
     },
     methods: {
       getAppDetailData() {
         AppResourceApi.getAppDetail(this.userteam._id, this.$route.params.appId).then((res) => {
           console.log(res)
           this.appInfo = res.data
+          this.appInfo.shortUrl = this.axios.defaults.baseURL + this.appInfo.shortUrl
           this.subTitleArr = []
           this.subTitleArr.push(this.appInfo.bundleId)
-          this.subTitleArr.push(this.axios.defaults.baseURL + this.appInfo.shortUrl)
+          this.subTitleArr.push(this.appInfo.shortUrl)
           this.subTitleArr.push(this.appInfo._id)
         }, reject => {
           this.$message.error(reject)

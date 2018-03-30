@@ -19,7 +19,7 @@
         </el-form-item>
       </el-form>
 
-      <button class="bottomBtn" @click="clickSure">立即生效</button>
+      <button type="button" class="bottomBtn el-button" @click="clickSure">立即生效</button>
     </div>
   </div>
 </template>

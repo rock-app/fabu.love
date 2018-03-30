@@ -115,6 +115,7 @@
     height: 72px;
     border-radius: 50%;
     margin-top: 24px;
+    cursor: pointer;
   }
   .itemWrapper .appItem-info {
     margin-top: 24px;
@@ -145,65 +146,4 @@
     line-height: 25px;
     text-align: left;
   }
-  /*.appItem-operate i {*/
-    /*margin-top: 5px;*/
-  /*}*/
-  /*.appItem-operate span {*/
-    /*line-height: 30px;*/
-    /*vertical-align: middle;*/
-  /*}*/
-  /*.appItem-operate-editor:hover {*/
-    /*border-color: #F8BA0B;*/
-    /*color: #F8BA0B;*/
-  /*}*/
-  /*.appItem-operate-editor:hover span:before {*/
-    /*color: #F8BA0B;*/
-  /*}*/
-  /*.appItem-operate-preview:hover {*/
-    /*border-color: #F8BA0B;*/
-    /*color: #F8BA0B;*/
-  /*}*/
-  /*.appItem-operate-preview:hover span:before {*/
-    /*color: #F8BA0B;*/
-  /*}*/
-  /*.appItem-operate-common {*/
-    /*border: solid 1px #999;*/
-    /*height: 100%;*/
-    /*width: 32%;*/
-    /*margin-right: 5%;*/
-    /*border-radius: 15px;*/
-  /*}*/
-  /*.appItem-operate-delect {*/
-    /*width: 30px;*/
-    /*text-align: center;*/
-  /*}*/
-  /*.appItem-operate-delect:hover {*/
-    /*background-color: crimson;*/
-    /*border-color: transparent;*/
-  /*}*/
-  /*.appItem-operate-delect:hover i {*/
-    /*color: white;*/
-  /*}*/
-  /*.list-firstChild img {*/
-    /*width: 60px;*/
-    /*height: 60px;*/
-    /*background-size: 60px 60px;*/
-    /*margin-top: 160px;*/
-    /*color: white;*/
-    /*transition: all 0.25s;*/
-  /*}*/
-  /*.list-firstChild img:hover {*/
-    /*transform: scale(1.5);*/
-  /*}*/
-  /*.list-firstChild p {*/
-    /*color: white;*/
-    /*font-size: 14px;*/
-    /*margin-top: 40px;*/
-  /*}*/
-  /*.appItem-wrapper .icon-ic_ios:before {*/
-    /*color: white;*/
-  /*}*/
-  /*.appItem-wrapper .icon-ic_android:before {*/
-    /*color: white;*/
-  /*}*/
 </style>

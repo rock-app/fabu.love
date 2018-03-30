@@ -184,7 +184,7 @@ module.exports = class AppRouter {
     }
 
     @request('post','/api/apps/{teamId}/{id}/updateMode')
-    @summary("设置应用或版发布更新方式/静默/强制/普通)")
+    @summary("设置应用或版发布更新方式/静默/强制/普通")
     @tag
     @body({
         updateMode:{type:'string',require:true},

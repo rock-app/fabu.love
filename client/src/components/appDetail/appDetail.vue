@@ -62,10 +62,9 @@
         AppResourceApi.getAppDetail(this.userteam._id, this.$route.params.appId).then((res) => {
           console.log(res)
           this.appInfo = res.data
-          this.appInfo.shortUrl = this.axios.defaults.baseURL + this.appInfo.shortUrl
           this.subTitleArr = []
           this.subTitleArr.push(this.appInfo.bundleId)
-          this.subTitleArr.push(this.appInfo.shortUrl)
+          this.subTitleArr.push(this.axios.defaults.baseURL + this.appInfo.shortUrl)
           this.subTitleArr.push(this.appInfo._id)
         }, reject => {
           this.$message.error(reject)

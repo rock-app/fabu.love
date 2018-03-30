@@ -59,3 +59,9 @@ export function delectAppVersion(teamId, appId, versionId) {
   let url = `api/apps/${teamId}/${appId}/versions/${versionId}`
   return deleteHttp(url)
 }
+
+// 更新应用设置
+export function updateAppSetting(appId, body) {
+  let url = `api/app/${appId}/profile`
+  return postHttp(url, body)
+}

@@ -65,7 +65,9 @@
               'userId': response.data._id,
               'teamArr': response.data.teams
             }
+            // 保存用户信息
             saveUserInfo(user)
+            // 更新token
             this.axios.defaults.headers.Authorization = 'Bearer' + ' ' + response.data.token
             this.$router.push('/apps')
           }, reject => {

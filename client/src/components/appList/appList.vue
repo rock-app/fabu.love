@@ -3,8 +3,9 @@
     <!--内容头部-->
     <div class="applist-header">
       <div style="position: relative">
-        <el-button class="uploadWrapper" icon="el-icon-delete">上传应用</el-button>
-        <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0">
+        <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
+        <el-button class="uploadWrapper button-style-main" icon="el-icon-delete">上传应用</el-button>
+        <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
       </div>
 
       <div class="applist-header-right">
@@ -51,6 +52,7 @@
       return {
         currentPlatform: '',
         dataList: [],
+        originDataList: [],
         queryText: '',
         showUploadView: false,
         file: FileList,
@@ -86,6 +88,7 @@
               this.dataList = response.data
               this.busy = false
             }
+            this.originDataList = this.dataList
           }, reject => {
             this.$message.error(reject)
           })
@@ -150,11 +153,34 @@
     created () {
       Bus.$emit('applist')
       this.$watch('queryText', () => {
-        console.log(this.queryText)
+        let newArr = []
+        this.dataList.forEach((item) => {
+          if (item.appName.search(this.queryText) !== -1) {
+            newArr.push(item)
+          }
+        })
+        this.dataList = newArr
+
+        if (this.queryText.length === 0) {
+          this.dataList = this.originDataList
+        }
       })
       this.teamArr = getTeamArr()
       if (this.teamArr) {
         this.loadAppList(false)
+      }
+    },
+    watch: {
+      currentPlatform(val) {
+        console.log(val)
+        this.dataList = this.originDataList
+        let newArr = []
+        this.dataList.forEach((item) => {
+          if (item.platform === val) {
+            newArr.push(item)
+          }
+        })
+        this.dataList = newArr
       }
     }
   }
@@ -173,14 +199,7 @@
   }
   .applist-header .uploadWrapper {
     width: 144px;
-    height: 48px;
-    background-color: $mainColor;
     float: left;
-    font-size: 14px;
-    color: white;
-    border-radius: 24px;
-    border-width: 0px;
-    box-shadow: 0 2px 6px rgba(115, 109, 216, 0.5);
   }
   .applist-header-right {
     float: right;

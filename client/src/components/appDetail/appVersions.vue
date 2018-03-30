@@ -15,6 +15,9 @@
     <!--头部-->
     <div class="detail-content-top">
       <span class="icon-ic_ios"></span>版本信息
+      <div class="top-right">
+        <span class="icon-ic_ios"></span>设置灰度版本
+      </div>
     </div>
     <!--内容-->
     <el-table
@@ -78,6 +81,23 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <div class="appversion-footerwrapper">
+      <div class="totalwrapper">
+        <div class="downloadwrapper">
+          <i class="icon-ic_ios"></i>
+        </div>
+        <p>总下载次数</p>
+        <div class="downloadCount">1221212</div>
+      </div>
+      <div class="todaywrapper">
+        <div class="downloadwrapper">
+          <i class="icon-ic_ios"></i>
+        </div>
+        <p>今日下载次数</p>
+        <div class="downloadCount">1221212</div>
+      </div>
+    </div>
 
     <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo"></editorVersion>
   </div>
@@ -240,6 +260,13 @@
     margin-top: 10px;
     padding-left: 24px;
     box-sizing: border-box;
+    border-bottom: solid 1px #eee;
+  }
+  .detail-content-top .top-right {
+    float: right;
+    margin-right: 36px;
+    font-size: 12px;
+    color: $mainColor;
   }
   .appVersion-wrapper .tabletitle {
     font-size: 12px;
@@ -260,7 +287,60 @@
     border-radius: 12px;
     margin-right: 6px;
   }
+  .appVersion-wrapper .version-table {
+    margin-bottom: 12px;
+  }
   .appVersion-wrapper .version-table .cell {
     text-align: center;
+  }
+  .appversion-footerwrapper {
+    width: 100%;
+    padding: 24px;
+    background-color: white;
+    font-size: 0px;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+  }
+  .appversion-footerwrapper .totalwrapper {
+    width: 50%;
+    height: 48px;
+  }
+  .appversion-footerwrapper .totalwrapper:after {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 72px;
+    background-color: #eee;
+    float: right;
+    margin-top: -13px;
+  }
+  .appversion-footerwrapper .downloadwrapper {
+    width: 48px;
+    height: 48px;
+    text-align: center;
+    display: inline-block;
+  }
+  .appversion-footerwrapper .downloadwrapper .icon-ic_ios {
+    font-size: 15px;
+    line-height: 48px;
+  }
+  .appversion-footerwrapper  p {
+    display: inline-block;
+    font-size: 16px;
+    color: $mainTitleColor;
+    margin-left: 24px;
+    line-height: 48px;
+  }
+  .appversion-footerwrapper .downloadCount {
+    font-size: 16px;
+    color: $mainTitleColor;
+    display: inline-block;
+    margin-left: 80px;
+  }
+  .appversion-footerwrapper .todaywrapper {
+    display: inline-block;
+    width: 50%;
+    height: 48px;
   }
 </style>

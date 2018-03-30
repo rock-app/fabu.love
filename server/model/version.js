@@ -22,15 +22,11 @@ var versionSchema = new Schema({
     downloadUrl: String,
     downloadCount:{ type:Number, default:0 },
     fileDownloadUrl:String, //源文件下载地址
+    showOnDownloadPage:{type:Boolean,default:false},
     appLevel:String,
     changelog:String,
     hidden: { type:Boolean , default:false },
-    strategy:{
-        updateMode:{type:String,default:'slient',enum:['slient','normal','force']},
-        ipType:{type:String,default:'black',enum:['black','white']},
-        ipList:[String],
-        downloadCountLimit:Number
-    }
+    updateMode:{type:String,default:'slient',enum:['slient','normal','force']},
 });
 
 module.exports = mongoose.model('Version', versionSchema);

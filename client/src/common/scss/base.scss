@@ -57,3 +57,24 @@ body {
   border-radius: 24px;
   cursor:pointer;
 }
+
+// el-button圆角高度36，宽度96
+.elbutton-style {
+  width: 96px !important;
+  height: 36px !important;
+  border: solid 1px $mainColor !important;
+  color: $mainColor !important;
+  background-color: white !important;
+  padding: 0px !important;
+  font-size: 12px !important;
+}
+
+// 底部有横线的input
+.borderLine-input {
+  height: 24px;
+  border-bottom: solid 1px #eee;
+  padding: 0 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: $mainTitleColor;
+}

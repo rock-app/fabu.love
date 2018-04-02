@@ -11,6 +11,9 @@
           <option name="FORCE_QUOTE_STYlE" value="true" />
           <option name="SPACES_WITHIN_IMPORTS" value="true" />
         </JSCodeStyleSettings>
+        <MarkdownNavigatorCodeStyleSettings>
+          <option name="RIGHT_MARGIN" value="72" />
+        </MarkdownNavigatorCodeStyleSettings>
         <codeStyleSettings language="JavaScript">
           <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
           <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />

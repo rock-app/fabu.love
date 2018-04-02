@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import User from '../components/loginRegiest/User.vue'
 import Login from '../components/loginRegiest/Login.vue'
 import Regiest from '../components/loginRegiest/regiest.vue'
 import AppDetail from '../components/appDetail/appDetail.vue'
@@ -31,6 +32,11 @@ export default new Router({
           component: AppDetail
         }
       ]
+    },
+    {
+      path: '/user',
+      name: 'User',
+      component: User
     },
     {
       path: '/login',

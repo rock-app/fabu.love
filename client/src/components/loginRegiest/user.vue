@@ -25,27 +25,54 @@
     </div>
     <div class="user-right">
       <div class="user-login-panel">
-        <div class="user-login-title">
+        <div class="user-login-title" v-if="showType==='login'">
           <p> 登&nbsp;&nbsp;&nbsp;&nbsp;录 <span>/Login</span></p>
         </div>
+        <div class="user-login-title" v-if="showType==='register'">
+          <p> 注&nbsp;&nbsp;&nbsp;&nbsp;册 <span>/Register</span></p>
+        </div>
+        <div class="user-login-title" v-if="showType==='forget'">
+          <p> 找回密码 <span>/Register</span></p>
+        </div>
 
-        <div class="user-login-form">
+        <div v-bind:class="[showType==='login' ? 'user-login-form' : 'user-register-form']">
           <el-input
+            type="text"
             class="user-login-form-input"
+            v-model="username"
             placeholder="请输入用户名"
             prefix-icon="el-icon-edit">
           </el-input>
 
           <el-input
+            v-if="showType==='register'"
             class="user-login-form-input"
-            placeholder="请输入密码"
+            placeholder="请输入邮箱"
+            v-model="email"
+            type="email"
             prefix-icon="el-icon-time">
           </el-input>
 
-          <el-button class="user-login-form-btn" type="primary">立即登录</el-button>
+          <el-input
+            class="user-login-form-input"
+            placeholder="请输入密码"
+            v-model="password"
+            type="password"
+            prefix-icon="el-icon-time">
+          </el-input>
 
-          <div class="user-login-form-label">
-            <p>没用账号？<span>立即注册</span></p>
+
+
+          <button @click="onSubmit" class="user-login-form-btn" type="submit">立即登录</button>
+
+          <div class="user-login-form-label" v-if="showType==='login'">
+            <p>没有账号？<span @click="onRegister">立即注册</span></p>
+          </div>
+          <div class="user-login-form-label" v-if="showType==='register'">
+            <p>已有账号？<span @click="onRegister">现在登录</span></p>
+          </div>
+          <div class="user-login-form-label user-login-form-bottom">
+            <p @click="onForget">忘记密码</p>
           </div>
         </div>
 
@@ -59,6 +86,115 @@
 </template>
 
 <script type="text/ecmascript-6">
+
+  import * as LoginApi from '../../api/moudle/loginApi'
+  import TokenMgr from '../../mgr/TokenMgr'
+  import {saveUserInfo} from '../../mgr/userMgr'
+
+  export default {
+    data() {
+      return {
+        username: '',
+        password: '',
+        isLogin: false,
+        errorInfo: '',
+        showType: 'login'
+      }
+    },
+    created() {
+      this.$nextTick(() => {
+      })
+    },
+    components: {},
+    methods: {
+
+      onSubmit() {
+        if (this.showType === 'login') {
+          this.login()
+        } else if (this.showType === 'register') {
+          this.regist()
+        } else {
+          this.requestPassword()
+        }
+      },
+      onRegister() {
+        this.showType = this.showType === 'register' ? 'login' : 'register'
+      },
+      onForget() {
+        this.showType = 'forget'
+      },
+      login() {
+        if (this.username.length === 0) {
+          this.errorInfo = '* 用户名不能为空'
+          return
+        }
+        if (this.password.length === 0) {
+          this.errorInfo = '* 密码不能为空'
+          return
+        }
+        this.errorInfo = ''
+        let body = {
+          'username': this.username,
+          'password': this.password
+        }
+        LoginApi.login(body)
+          .then(response => {
+            // 存储token
+            TokenMgr.add(this.axios.baseURL, response.data.token)
+            let user = {
+              'userName': this.userName,
+              'userId': response.data._id,
+              'teamArr': response.data.teams
+            }
+            // 保存用户信息
+            saveUserInfo(user)
+            // 更新token
+            this.axios.defaults.headers.Authorization = 'Bearer' + ' ' + response.data.token
+            this.$router.push('/apps')
+          }, reject => {
+            this.$message.error(reject)
+          })
+      },
+      regist() {
+        if (this.form.userName.length === 0) {
+          this.errorInfo = '* 用户名不能为空'
+          return
+        }
+        if (this.form.password.length === 0) {
+          this.errorInfo = '* 密码不能为空'
+          return
+        }
+        if (this.form.password !== this.form.repassword) {
+          this.errorInfo = '* 两次输入密码不一致'
+          return
+        }
+        this.errorInfo = ''
+        let body = {
+          'username': this.username,
+          'password': this.password,
+          'email': this.email
+        }
+        LoginApi.register(body)
+          .then(response => {
+            console.log(response)
+            this.$message({
+              message: '恭喜你，注册成功',
+              type: 'success'
+            })
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 800)
+          }, reject => {
+            console.log(reject)
+            this.$message.error(reject)
+          })
+      },
+      requestPassword() {
+
+      }
+
+    }
+  }
 
 </script>
 
@@ -91,11 +227,12 @@
   }
 
   .user-right {
-    width: 60%;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     overflow: hidden;
   }
 
@@ -142,8 +279,8 @@
   .user-login-panel {
     height: 528px;
     width: 408px;
-    margin-top: 18.43vh;
     background-color: white;
+    position: absolute;
     border-radius: 8px;
   }
 
@@ -166,38 +303,61 @@
     color: rgba(155, 155, 155, 1);
   }
 
-  .user-login-form {
+  .user-login-form,.user-register-form {
     width: 100%;
     text-align: center;
+  }
+
+  .user-login-form .user-login-form-input{
+    margin-top: 48px;
+  }
+
+  .user-register-form .user-login-form-input{
+    margin-top: 16px;
   }
 
   .user-login-form-input {
     width: 312px;
     height: 48px;
-    margin-top: 48px;
+  }
+
+  .user-login-form-input input {
     border-radius: 24px;
+    height: 48px;
     border: 1px #6477F2 solid;
   }
 
-  .user-login-form-btn {
+  .user-login-form-btn, .user-login-form-btn:hover {
     width: 312px;
     height: 48px;
     margin-top: 48px;
     border-radius: 24px;
     background: rgba(100, 119, 242, 1);
+    border: rgba(100, 119, 242, 1);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
   }
 
   .user-login-form-label {
     margin-top: 48px;
   }
 
+  .user-login-form-bottom {
+    float: right;
+    margin-right: 48px;
+    font-size: 14px;
+    color: rgba(155, 155, 155, 1);
+    margin-bottom: 24px;
+    cursor: pointer;
+  }
+
   .user-footer-label {
     display: block;
     width: 100%;
-    height: 5rem;
-    bottom: 0px;
+    position: fixed;
     text-align: center;
-    margin-top: 18.43vh;
+    bottom: 24px;
   }
 
   .user-footer-label p {
@@ -206,5 +366,18 @@
     margin: 0 auto;
   }
 
+  @media screen and (max-width: 768px) {
+    .user-left {
+      display: none;
+      position: relative;
+    }
+  }
+
+  @media screen and (max-height: 650px) {
+    .user-footer-label {
+      display: none;
+    }
+
+  }
 
 </style>

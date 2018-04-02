@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import User from '../components/loginRegiest/User.vue'
-import Login from '../components/loginRegiest/Login.vue'
-import Regiest from '../components/loginRegiest/regiest.vue'
+// import Login from '../components/loginRegiest/Login.vue'
+// import Regiest from '../components/loginRegiest/regiest.vue'
 import AppDetail from '../components/appDetail/appDetail.vue'
 import AppPreView from '../components/appDetail/appPreView.vue'
 import UserInfo from '../components/user/userInfo.vue'
@@ -34,19 +34,9 @@ export default new Router({
       ]
     },
     {
-      path: '/user',
-      name: 'User',
-      component: User
-    },
-    {
       path: '/login',
       name: 'Login',
-      component: Login
-    },
-    {
-      path: '/regiest',
-      name: 'Regiest',
-      component: Regiest
+      component: User
     },
     {
       path: '/user',

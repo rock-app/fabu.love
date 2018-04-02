@@ -58,11 +58,11 @@ var appSchema = new Schema({
         enum: ['slient', 'normal', 'force']
     },
 
-    gray_release_version: {
+    grayReleaseVersion: {
         versionId:String,
-        versionName:String
+        versionStr:String
     },
-    gray_strategy: {
+    grayStrategy: {
         ipType: {
             type: String,
             enum: ['black', 'white']

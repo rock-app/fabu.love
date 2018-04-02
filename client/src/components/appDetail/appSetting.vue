@@ -4,14 +4,14 @@
       <i class="icon-ic_ios"></i>设置
     </div>
     <div class="content">
-      <el-form labelWidth="120px" label-position="left">
+      <el-form labelWidth="150px" label-position="left">
         <el-form-item label="应用短链接">
           <el-input v-model="appInfo.shortUrl" class="shorturl"></el-input>
         </el-form-item>
         <el-form-item label="安装方式">
           <el-radio v-model="installType" label="公开">公开</el-radio>
           <el-radio v-model="installType" label="密码安装">密码安装</el-radio>
-          <el-input type="password" class="installtype"></el-input>
+          <el-input v-show="installType === '密码安装'" v-model="installPwd" type="password" class="installtype" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item label="新版本内测发布方式">
           <el-radio v-model="pulishType" label="手动发布">手动发布</el-radio>
@@ -19,12 +19,14 @@
         </el-form-item>
       </el-form>
 
-      <button type="button" class="bottomBtn el-button" @click="clickSure">立即生效</button>
+      <button type="button" class="bottomBtn button-style-border" @click="clickSure">立即生效</button>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as AppResourceApi from '../../api/moudle/appResourceApi'
+
   export default {
     props: {
       appInfo: {
@@ -34,13 +36,26 @@
     data() {
       return {
         installType: '公开',
-        pulishType: '手动发布'
+        pulishType: '手动发布',
+        installPwd: ''
       }
     },
     created() {},
     methods: {
       clickSure() {
-        console.log(this.installType)
+        let body = {
+          'shortUrl': this.appInfo.shortUrl,
+          'installWithPwd': this.installType === '公开' ? 0 : 1,
+          'installPwd': this.installPwd,
+          'autoPublish': this.pulishType === '手动发布' ? 0 : 1
+        }
+        AppResourceApi.updateAppSetting(this.appInfo._id, body).then((res) => {
+            if (res.success) {
+              this.$message.success(res.message)
+            }
+        }, reject => {
+
+        })
       }
     }
   }
@@ -69,7 +84,7 @@
     margin-left: 120px;
   }
   .appsetting-wrapper .content .el-form .el-form-item label {
-    font-size: 12px;
+    font-size: 14px;
     color: $subTitleColor;
     margin-right: 20px;
   }
@@ -78,7 +93,7 @@
     border-left-width: 0px;
     border-top-width: 0px;
     border-radius: 0px;
-    font-size: 12px;
+    font-size: 14px;
     outline: 0;
     height: 24px !important;
   }
@@ -92,18 +107,12 @@
     width: 96px;
     height: 36px;
     border-radius: 18px;
-    border: solid 1px $mainColor;
-    color: $mainColor;
-    background-color: white;
-    font-size: 12px;
     line-height: 36px;
-    margin: 0 auto;
     margin-top: 18px;
-    padding: 0px;
     margin-left: calc(50% - 48px);
   }
   .appsetting-wrapper .content .el-form .el-form-item .el-radio span {
-    font-size: 12px !important;
+    font-size: 14px !important;
   }
   .appsetting-wrapper .content .el-radio__input.is-checked .el-radio__inner {
     background-color: $mainColor;

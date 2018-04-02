@@ -9,7 +9,6 @@ export function getAppList(teamId, page) {
     'page': page, 'size': 10
   }
   let url = `api/apps/${teamId}`
-  console.log(url)
   return getHttp(url, params)
 }
 
@@ -59,4 +58,10 @@ export function releaseApp(teamId, id, versionId, versionCode, release) {
 export function delectAppVersion(teamId, appId, versionId) {
   let url = `api/apps/${teamId}/${appId}/versions/${versionId}`
   return deleteHttp(url)
+}
+
+// 更新应用设置
+export function updateAppSetting(appId, body) {
+  let url = `api/app/${appId}/profile`
+  return postHttp(url, body)
 }

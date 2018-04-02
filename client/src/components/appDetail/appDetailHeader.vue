@@ -10,11 +10,15 @@
               <i class="icon-ic_ios"></i><span v-html="`适用于${this.appInfo.platform}`"></span>
             </div>
           </div>
-          <div class="rightwrapper">
-            <el-button class="uploadWrapper" icon="el-icon-delete">上传新版本</el-button>
-            <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 36px;left: 0px;width: 144px;height: 48px;opacity: 0">
-            <button class="preview" @click="clickPreviewBtn">预览</button>
-            <button class="delect" @click="delectApp">删除</button>
+          <div class="rightwrapper" style="z-index: 1">
+
+            <el-button class="uploadWrapper button-style-main" icon="el-icon-delete">上传新版本</el-button>
+            <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 36px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer">
+            <button class="preview button-style-border" @click="clickPreviewBtn">预览</button>
+            <button class="delete button-style-border" @click="delectApp">删除</button>
+
+            <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 68px;left: 36px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
+
           </div>
         </div>
       </div>
@@ -142,35 +146,18 @@
     padding: 36px 24px;
     position: relative;
   }
-  .detail-header-top .rightwrapper .delect {
+  .detail-header-top .rightwrapper .delete {
     width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    border: solid 1px $warmRed;
+    border-color: $warmRed;
     color: $warmRed;
-    font-size: 12px;
-    background-color: white;
   }
   .detail-header-top .rightwrapper .preview {
     width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    border: solid 1px $mainColor;
-    color: $mainColor;
-    font-size: 12px;
-    background-color: white;
     margin-right: 8px;
   }
   .detail-header-top .rightwrapper .uploadWrapper {
     width: 144px;
-    height: 48px;
-    background-color: $mainColor;
     float: left;
-    font-size: 14px;
-    color: white;
-    border-radius: 24px;
-    border-width: 0px;
-    box-shadow: 0 2px 6px rgba(115, 109, 216, 0.5);
     margin-right: 12px;
   }
 </style>

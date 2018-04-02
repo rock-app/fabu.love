@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <router-view/>
   </div>
 </template>
@@ -22,7 +23,7 @@
             this.$router.push('/apps')
           }
         } else {
-          this.$router.push('/user')
+          this.$router.push('/login')
         }
       })
     },

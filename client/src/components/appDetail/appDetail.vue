@@ -2,29 +2,26 @@
   <div>
     <!--头部-->
     <appDetailHeader
-      :appInfo="this.appInfo"
-    >
+      :appInfo="this.appInfo">
     </appDetailHeader>
 
     <appVersions
       v-show="!showAppSetting"
       v-if="appInfo._id"
       :appInfo="appInfo"
-      :subTitleArr="subTitleArr"
-    >
+      :subTitleArr="subTitleArr">
     </appVersions>
 
     <appSetting
       v-if="showAppSetting"
-      :appInfo="appInfo"
-    >
+      :appInfo="appInfo">
     </appSetting>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
-  import {getUserTeam} from '../../mgr/userMgr'
+  import { getUserTeam } from '../../mgr/userMgr'
   import AppDetailHeader from './appDetailHeader.vue'
   import AppVersions from './appVersions.vue'
   import Bus from '../../common/js/bus'
@@ -42,8 +39,7 @@
     components: {
       AppDetailHeader, AppVersions, AppSetting
     },
-    computed: {
-    },
+    computed: {},
     created() {
       this.$nextTick(() => {
         Bus.$emit('appdetail')

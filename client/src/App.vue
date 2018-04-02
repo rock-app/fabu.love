@@ -22,7 +22,7 @@
             this.$router.push('/apps')
           }
         } else {
-          this.$router.push('/login')
+          this.$router.push('/user')
         }
       })
     },

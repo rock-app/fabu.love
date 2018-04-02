@@ -34,8 +34,8 @@
           </el-form-item>
         </el-form>
 
-        <el-button round class="sureBtn" @click="sure">确认</el-button>
-        <el-button round class="cancelBtn" @click="cancel">取消</el-button>
+        <el-button round class="elbutton-style sureBtn" @click="sure">确认</el-button>
+        <el-button round class="elbutton-style cancelBtn" @click="cancel">取消</el-button>
       </div>
     </transition>
   </div>
@@ -62,7 +62,10 @@
     },
     methods: {
       cancel() {
-        this.$emit('cancel')
+        this.show = false
+        setTimeout(() => {
+          this.$emit('cancel')
+        }, 500)
       },
       sure() {
 
@@ -148,16 +151,16 @@
     margin-bottom: 5px;
   }
   .editorVersion-content .el-form .el-form-item label {
-    font-size: 12px;
+    font-size: 14px;
     color: $subTitleColor;
   }
   .editorVersion-content .el-form .el-form-item .versioninput {
     width: calc(100% - 72px - 24px);
-    font-size: 12px;
+    font-size: 14px;
     color: $mainTitleColor;
   }
   .editorVersion-content .el-form .el-form-item .versiondownload {
-    font-size: 12px;
+    font-size: 14px;
     color: $mainTitleColor;
   }
   .editorVersion-content .el-form .el-form-item .textareacount {
@@ -166,7 +169,7 @@
   }
   .editorVersion-content .editorVersion-updatatextarea {
     width: calc(100% - 72px);
-    font-size: 12px;
+    font-size: 14px;
     color: $mainTitleColor;
   }
   .editorVersion-content .editorVersion-updatatextarea textarea {
@@ -175,14 +178,7 @@
     padding-left: 5px;
   }
   .editorVersion-content .el-button {
-    width: 96px !important;
-    height: 36px !important;
-    border: solid 1px $mainColor !important;
-    color: $mainColor !important;
-    background-color: white !important;
-    font-size: 12px;
     margin-top: 48px;
-    padding: 0px;
   }
   .editorVersion-content .el-button span {
     line-height: 36px !important;

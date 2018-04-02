@@ -65,3 +65,9 @@ export function updateAppSetting(appId, body) {
   let url = `api/app/${appId}/profile`
   return postHttp(url, body)
 }
+
+// 灰度版本
+export function grayVersion(teamId, id, body) {
+  let url = `api/apps/${teamId}/${id}/grayPublish`
+  return postHttp(url, body)
+}

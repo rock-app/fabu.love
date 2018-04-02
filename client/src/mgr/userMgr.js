@@ -4,7 +4,7 @@ const USERINFO_KEY = '__userInfo__'
 const CURRENT_USERTRAM_KEY = '__userTeam__'
 
 
-// 存储用户信息
+// 存储用户信息（登录）
 export function saveUserInfo(user) {
   StorageMgr.setItem(USERINFO_KEY, user)
 

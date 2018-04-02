@@ -2,73 +2,59 @@
   <div class="personalInfo-wrapper">
     <ul>
       <li class="emailWrapper">
-        <p class="emailTitle">邮箱</p><span class="email">1212121@qq.com</span>
+        <i class="icon-ic_ios"></i>
+        <p class="emailTitle">邮箱</p>
+        <span class="email">1212121@qq.com</span>
       </li>
       <li class="personalInfoItem" v-for="(item, index) in dataArr" :key="index">
-        <div class="itemNoEditor" v-show="!item.isEditor">
-          <p class="title">{{item.title}}</p>
-          <span class="content">{{item.subTitle}}</span>
-          <span class="icon-ic_editor" @click="clickEditor(item)"></span>
-        </div>
-
-        <!--手机号的编辑状态-->
-        <div class="phoneEditorWrapper" v-show="item.isEditor && index === 0">
-          <div class="top">
-            <p>手机</p>
-            <input type="text">
-            <button>保存</button>
-          </div>
-          <div class="code">
-            <input type="text" placeholder="验证码">
-            <button>获取验证码</button>
-          </div>
-        </div>
-        <!--qq的编辑状态-->
-        <div class="phoneEditorWrapper" v-show="item.isEditor && index === 1">
-          <p style="display: inline-block;">QQ</p>
-          <input style="margin-left: 15px" type="text" placeholder="可选">
-          <button>保存</button>
-        </div>
-        <!--公司的编辑状态-->
-        <div class="phoneEditorWrapper" v-show="item.isEditor && index === 2">
-          <p style="display: inline-block;">公司</p>
-          <input style="margin-left: 10px" type="text" placeholder="可选">
-          <button @click="clickSaveCompany">保存</button>
-        </div>
-        <!--职位-->
-        <div class="phoneEditorWrapper" v-show="item.isEditor && index === 3">
-          <p style="display: inline-block;">职位</p>
-          <input style="margin-left: 10px" type="text" placeholder="可选">
-          <button @click="clickSaveEmployee">保存</button>
-        </div>
+        <i class="icon-ic_ios"></i>
+        <p v-html="item.title"></p>
+        <input v-model="item.subTitle" class="borderLine-input" type="text" :placeholder="item.placeHoder">
       </li>
     </ul>
+
+    <el-button round class="elbutton-style sureBtn" @click="sure">确认</el-button>
+    <el-button round class="elbutton-style cancelBtn" @click="cancel">取消</el-button>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as UserApi from '../../api/moudle/userApi'
   export default {
+    props: {
+      userInfo: {
+        type: Object
+      }
+    },
     data() {
       return {
         dataArr: [
-          {'title': '手机', 'subTitle': '1332323232', 'isEditor': false},
-          {'title': 'QQ', 'subTitle': 'QQ', 'isEditor': false},
-          {'title': '公司', 'subTitle': '公司', 'isEditor': false},
-          {'title': '职位', 'subTitle': '职位', 'isEditor': false}
+          {'title': '手机', 'subTitle': '', 'placeHoder': '输入手机号'},
+          {'title': 'QQ', 'subTitle': '', 'placeHoder': '输入QQ号'},
+          {'title': '公司', 'subTitle': '', 'placeHoder': '输入您的公司名称'},
+          {'title': '职位', 'subTitle': '', 'placeHoder': '输入您的职位'}
         ]
       }
     },
     created() {
     },
     methods: {
-      clickEditor(item) {
-        item.isEditor = true
+      cancel() {
+        this.$emit('cancel')
       },
-      clickSaveCompany() {
+      sure() {
+        let body = {
+          'mobile': this.dataArr[0].subTitle,
+          'qq': this.dataArr[1].subTitle,
+          'company': this.dataArr[2].subTitle,
+          'career': this.dataArr[3].subTitle
+        }
+        UserApi.updateUserInfo(body).then((res) => {
+          this.$message.success(res.message)
+          // 保存用户填写的信息
+        }, reject => {
 
-      },
-      clickSaveEmployee () {
-
+        })
       }
     }
   }
@@ -78,97 +64,56 @@
   @import "../../common/scss/base";
 
   .personalInfo-wrapper {
-    width: 400px;
+    width: 100%;
     margin: 0 auto;
     padding-bottom: 100px;
+    padding-left: 48px;
+    box-sizing: border-box;
   }
   .personalInfo-wrapper .email {
     display: inline-block;
-    margin-left: 10px;
-    font-size: 13px;
-    color: #999;
+    font-size: 14px;
+    color: $mainTitleColor;
   }
   .personalInfo-wrapper .emailTitle {
     display: inline-block;
+    width: 60px;
     font-size: 14px;
+    color: $subTitleColor;
   }
   .emailWrapper {
-    margin-top: 50px;
-    margin-bottom: 30px;
+    margin-top: 24px;
     text-align: left;
-    padding: 0 10px;
+  }
+  .personalInfoItem i {
+    line-height: 24px;
   }
   .personalInfoItem {
-    margin-bottom: 30px;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: row;
+    height: 24px;
+    line-height: 24px;
   }
-  .personalInfoItem .itemNoEditor {
-    height: 40px;
-    border-bottom: solid 1px #ccc;
-    text-align: left;
-    padding: 0 10px;
-  }
-  .itemNoEditor .title {
-    display: inline-block;
+  .personalInfoItem p {
     font-size: 14px;
-    margin-bottom: 5px;
+    color: $subTitleColor;
+    width: 60px;
+    margin-left: 6px;
   }
-  .itemNoEditor .content {
-    display: inline-block;
-    margin-left: 10px;
-    font-size: 13px;
-    color: #999;
-    margin-top: 20px;
+  .personalInfoItem input {
+    width: 216px;
   }
-  .itemNoEditor .icon-ic_editor {
-    float: right;
-    margin-top: 20px;
+  .personalInfo-wrapper .el-button {
+    margin-top: 100px;
+    margin-bottom: 100px;
   }
-  .itemNoEditor .icon-ic_editor:before {
-    color: $warmRed;
+  .personalInfo-wrapper .el-button span {
+    line-height: 36px !important;
   }
-  /*修改手机*/
-  .phoneEditorWrapper {
-    text-align: left;
-    padding-left: 10px;
-    font-size: 0px;
-  }
-  .phoneEditorWrapper p {
-    display: inline-block;
-    font-size: 14px;
-  }
-  .phoneEditorWrapper input {
-    display: inline-block;
-    width: 240px;
-    height: 40px;
-    box-sizing: border-box;
-    border: solid 1px $warmRed;
-    border-radius: 5px;
-    padding: 0 8px;
-    vertical-align: middle;
-    font-size: 14px;
-  }
-  .phoneEditorWrapper button {
-    display: inline-block;
-    width: 100px;
-    height: 40px;
-    background-color: $warmRed;
-    border-radius: 5px;
-    color: white;
-    font-size: 14px;
-    margin-left: 5px;
-    vertical-align: bottom;
-    border-color: transparent;
-  }
-  .phoneEditorWrapper .top input {
-    margin-left: 8px;
-    width: 240px;
-  }
-  .phoneEditorWrapper .top button {
-    vertical-align: top;
-  }
-  .phoneEditorWrapper .code input {
-    margin-top: 8px;
-    margin-left: 37px;
-    border: solid 1px #999;
+  .personalInfo-wrapper .sureBtn {
+    background-color: $mainColor !important;
+    color: white !important;
+    margin-left: calc(100% - 72px - 96px - 96px - 10px);
   }
 </style>

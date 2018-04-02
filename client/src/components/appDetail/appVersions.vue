@@ -15,7 +15,7 @@
     <!--头部-->
     <div class="detail-content-top">
       <span class="icon-ic_ios"></span>版本信息
-      <div class="top-right">
+      <div class="top-right" @click="setGrayVersion">
         <span class="icon-ic_ios"></span>设置灰度版本
       </div>
     </div>
@@ -100,6 +100,7 @@
     </div>
 
     <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo"></editorVersion>
+    <graySetting v-if="this.showGraySetting" @cancel="cancelGraySetting" :versionList="this.dataArr" :appInfo="this.appInfo"></graySetting>
   </div>
 </template>
 
@@ -107,6 +108,7 @@
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import {getUserTeam} from '../../mgr/userMgr'
   import EditorVersion from './editorVersion.vue'
+  import GraySetting from './graySetting.vue'
 
   export default {
     props: {
@@ -118,7 +120,7 @@
       }
     },
     components: {
-      EditorVersion
+      EditorVersion, GraySetting
     },
     data() {
       return {
@@ -126,6 +128,7 @@
         dataArr: [],
         userteam: {},
         showEditorVersion: false,
+        showGraySetting: false,
         versionInfo: {}
       }
     },
@@ -206,6 +209,12 @@
       },
       cancel() {
         this.showEditorVersion = false
+      },
+      setGrayVersion() {
+        this.showGraySetting = true
+      },
+      cancelGraySetting() {
+        this.showGraySetting = false
       }
     }
   }

@@ -14,6 +14,9 @@
         </el-main>
       </el-container>
     </el-container>
+
+    <!--用户信息-->
+    <userInfo v-if="this.showUserInfo"></userInfo>
   </div>
 </template>
 
@@ -22,16 +25,25 @@
   import HeaderNav from './headerNav.vue'
   import FooterWrapper from './footerWrapper.vue'
   import AppList from '../appList/appList.vue'
+  import UserInfo from '../user/userInfo.vue'
+  import Bus from '../../common/js/bus'
 
   export default {
     data() {
       return {
+        showUserInfo: false
       }
     },
     components: {
-      MainNav, HeaderNav, FooterWrapper, AppList
+      MainNav, HeaderNav, FooterWrapper, AppList, UserInfo
     },
     created() {
+      Bus.$on('showUserInfo', () => {
+        this.showUserInfo = true
+      })
+      Bus.$on('hiddenUserInfo', () => {
+        this.showUserInfo = false
+      })
     },
     methods: {
     }
@@ -54,7 +66,6 @@
     background-color: white;
     margin-left: 2px;
     height: 72px !important;
-    overflow: hidden;
   }
   .main-contentWrapper {
     padding: 0 24px;

@@ -9,8 +9,8 @@
       <ul class="errorInfowrapper">
         <li class="errorInfo">{{errorInfo}}</li>
       </ul>
-      <el-input clearable class="userName input" @keyup.enter="onLogin"  v-model="userName" placeholder="用户名"></el-input>
-      <el-input clearable class="password input" @keyup.enter="onLogin"  v-model="pwd" placeholder="密码" type="password"></el-input>
+      <el-input clearable class="userName input" @keyup.enter.native="onLogin"  v-model="userName" placeholder="用户名"></el-input>
+      <el-input clearable class="password input" @keyup.enter.native="onLogin"  v-model="pwd" placeholder="密码" type="password"></el-input>
 
       <el-button class="loginBtn btn" @click="onLogin">登录</el-button>
       <div class="regiestwrapper">

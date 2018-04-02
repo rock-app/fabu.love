@@ -41,6 +41,7 @@ export function deleteHttp (url) {
       })
   })
 }
+
 export function postHttp (url, body, params) {
   return new Promise((resolve, reject) => {
     vue.axios({

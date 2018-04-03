@@ -2,7 +2,9 @@
   <div class="headernav-wrapper">
     <div class="leftWrapper"></div>
     <div class="rightWrapper">
-      <i class="icon-ic_notice"></i>
+      <el-badge is-dot class="item">
+        <i class="icon-ic_notice"></i>
+      </el-badge>
       <div class="userwrapper" @click="clickUserIcon" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
         <img src="../../assets/ic_touxiang.png" alt="" class="userIcon">
         <p class="nowrap">{{this.userInfo.userName}}</p>
@@ -29,7 +31,9 @@
     data() {
       return {
         userInfo: {},
-        userHover: false
+        userHover: false,
+        messageArr: [{'msg': '12121212121'}, {'msg': '2121212121212'}],
+        redDocHidden: false
       }
     },
     created() {
@@ -69,6 +73,7 @@
     margin-top: 0px;
     text-align: right;
     position: relative;
+    font-size: 0px;
   }
   .headernav-wrapper .rightWrapper .userwrapper {
     display: inline-block;
@@ -81,7 +86,7 @@
   }
   .headernav-wrapper .rightWrapper .userInfoSubWrapper {
     position: absolute;
-    left: 18px;
+    left: 27px;
     top: 72px;
     right: 0px;
     z-index: 100;
@@ -89,12 +94,15 @@
     border-right: solid 1px #eee;
     box-sizing: border-box;
   }
-  .headernav-wrapper .rightWrapper i {
+  .headernav-wrapper .rightWrapper .item {
     display: inline-block;
     vertical-align: middle;
-    line-height: 24px;
-    margin-top: 24px;
+    margin-top: 18px;
     width: 15px;
+    margin-right: 12px;
+  }
+  .headernav-wrapper .rightWrapper i {
+    font-size: 18px;
   }
   .headernav-wrapper .rightWrapper p {
     display: inline-block;
@@ -109,9 +117,9 @@
     margin-left: 5px;
   }
   .headernav-wrapper .rightWrapper .userIcon {
-    margin-left: 15px;
+    margin-left: 12px;
     vertical-align: middle;
-    margin-top: 24px;
+    margin-top: 20px;
   }
   .headernav-wrapper .rightWrapper .userInfoSub {
     width: 100%;
@@ -121,5 +129,6 @@
     background-color: white;
     border-bottom: solid 1px #eee;
     box-sizing: border-box;
+    font-size: 14px;
   }
 </style>

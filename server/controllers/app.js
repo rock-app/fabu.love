@@ -50,7 +50,7 @@ var appProfile = {
 
 module.exports = class AppRouter {
     @request('get','/api/apps/{teamId}')
-    @summary("获取某用户或某团队下App列表(分页)")
+    @summary("获取团队下App列表(分页)")
     @query(
         {
         page:{type:'number',default:0,description:'分页页码(可选)'},
@@ -62,7 +62,8 @@ module.exports = class AppRouter {
         var page = ctx.query.page || 0
         var size = ctx.query.size || 10
         var user = ctx.state.user.data;
-        var { teamId } = ctx.validatedParams;
+        var { teamId } = ctx.validatedParams;        
+
         var result = await App.find(
                 {'ownerId':teamId}
             ).limit(size).skip(page * size)
@@ -177,9 +178,8 @@ module.exports = class AppRouter {
     static async deleteAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
-        var app = await appInTeamAndUserIsManager(appId,teamId,user.id)
-        var version = await Version.findById(versionId)
-        var result = Version.deleteOne(version)
+        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        var result = await Version.deleteOne({_id:versionId})
         ctx.body = responseWrapper(true,"版本已删除")
     }
 
@@ -216,7 +216,7 @@ module.exports = class AppRouter {
     @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
     static async setAppUpdateStrategy(ctx,next){
         var user = ctx.state.user.data;
-        var body = ctx.body;
+        var body = ctx.request.body;
         var { teamId,id } = ctx.validatedParams;
         //1.通过appId去查询App
         var app = await appInTeamAndUserIsManager(id,teamId,user.id)
@@ -345,7 +345,7 @@ module.exports = class AppRouter {
 async function appInTeamAndUserIsManager(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
-             _id:userId,
+             id:userId,
              $or: [
                 { role: 'owner' },
                 { role: 'manager' }
@@ -353,7 +353,7 @@ async function appInTeamAndUserIsManager(appId,teamId,userId) {
         }
     },},"_id")
 
-    var app = await App.find({_id:id,ownerId:team._id})
+    var app = await App.findOne({_id:appId,ownerId:team._id})
     if (!app) {
         throw new Error("应用不存在或您没有权限执行该操作")
     }else{
@@ -361,13 +361,13 @@ async function appInTeamAndUserIsManager(appId,teamId,userId) {
     }
 }
 
-async function appInTeamAndUserIsGuest(appId,teamId,userId) {
+async function appAndUserInTeam(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
-             _id:userId
+             id:userId
         }
     },},"_id")
-    var app = await App.find({_id:id,ownerId:team._id})
+    var app = await App.find({_id:appId,ownerId:team._id})
     if (!app) {
         throw new Error("应用不存在或您不在该团队中")
     }else{
@@ -375,6 +375,19 @@ async function appInTeamAndUserIsGuest(appId,teamId,userId) {
     }
 }
 
+async function userInTeam(appId,teamId,userId) {
+    var team = await Team.findOne({_id:teamId,members:{
+        $elemMatch:{
+             _id:userId
+        }
+    },},"_id")
+    var app = await App.findOne({_id:id,ownerId:team._id})
+    if (!app) {
+        throw new Error("应用不存在或您不在该团队中")
+    }else{
+        return app
+    }
+}
 
 //设置模糊查询
 function modifyFilter(filter) {

@@ -142,7 +142,7 @@
             // 存储token
             TokenMgr.add(this.axios.baseURL, response.data.token)
             let user = {
-              'userName': this.userName,
+              'userName': this.username,
               'userId': response.data._id,
               'teamArr': response.data.teams
             }

@@ -2,9 +2,9 @@
   <div class="headernav-wrapper">
     <div class="leftWrapper"></div>
     <div class="rightWrapper">
-      <i class="icon-ic_ios"></i>
+      <i class="icon-ic_notice"></i>
       <div class="userwrapper" @click="clickUserIcon" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
-        <i class="icon-ic_ios userIcon"></i>
+        <img src="../../assets/ic_touxiang.png" alt="" class="userIcon">
         <p class="nowrap">{{this.userInfo.userName}}</p>
       </div>
 
@@ -74,18 +74,27 @@
     display: inline-block;
     height: 100%;
   }
+  .headernav-wrapper .rightWrapper .userwrapper:hover {
+    background-color: $paleGrey;
+    border: solid 1px #eee;
+    box-sizing: border-box;
+  }
   .headernav-wrapper .rightWrapper .userInfoSubWrapper {
     position: absolute;
-    left: 20px;
+    left: 18px;
     top: 72px;
     right: 0px;
     z-index: 100;
+    border-left: solid 1px #eee;
+    border-right: solid 1px #eee;
+    box-sizing: border-box;
   }
   .headernav-wrapper .rightWrapper i {
     display: inline-block;
     vertical-align: middle;
     line-height: 24px;
     margin-top: 24px;
+    width: 15px;
   }
   .headernav-wrapper .rightWrapper p {
     display: inline-block;
@@ -101,6 +110,8 @@
   }
   .headernav-wrapper .rightWrapper .userIcon {
     margin-left: 15px;
+    vertical-align: middle;
+    margin-top: 24px;
   }
   .headernav-wrapper .rightWrapper .userInfoSub {
     width: 100%;
@@ -108,5 +119,7 @@
     text-align: center;
     line-height: 44px;
     background-color: white;
+    border-bottom: solid 1px #eee;
+    box-sizing: border-box;
   }
 </style>

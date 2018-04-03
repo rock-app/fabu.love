@@ -4,17 +4,17 @@
     <div class="applist-header">
       <div style="position: relative">
         <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
-        <el-button class="uploadWrapper button-style-main" icon="el-icon-delete">上传应用</el-button>
+        <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传应用</el-button>
         <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
       </div>
 
       <div class="applist-header-right">
         <div class="platform-wrapper">
           <div class="platform-ios" :class="getActiveClass('ios')" @click="clickIosPlatform">
-            <img class="platformImg" src="../../assets/ios.png" alt="">
+            <img class="platformImg" src="../../assets/ic_ios.png" alt="">
           </div>
           <div class="platform-android" :class="getActiveClass('android')" @click="clickAndroidPlatform">
-            <img class="platformImg" src="../../assets/android.png" alt="">
+            <img class="platformImg" src="../../assets/ic_android.png" alt="">
           </div>
         </div>
         <div class="search-wrapper">
@@ -201,6 +201,9 @@
     width: 144px;
     float: left;
   }
+  .applist-header .uploadWrapper i {
+    margin-right: 15px;
+  }
   .applist-header-right {
     float: right;
   }
@@ -267,7 +270,7 @@
     margin-top: 11px;
   }
   .platformActive {
-    background-color: #9b9b9b;
+    background-color: #ddd;
   }
 
 </style>

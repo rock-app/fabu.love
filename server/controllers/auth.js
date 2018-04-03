@@ -156,4 +156,15 @@ module.exports = class AuthRouter {
         ctx.body = responseWrapper(true, "用户资料修改成功")
     }
 
+    @request('get', '/api/user/info')
+    @summary('获取用户资料')
+    @tag
+    static async getUserInfo(ctx, next) {
+        var user = ctx.state.user.data
+        var user = await User.findById(user._id,"-teams -password");
+        if (!user) {
+            throw new Error("用户不存在");
+        } 
+        ctx.body = responseWrapper(user)
+    }
 }

@@ -217,7 +217,7 @@ module.exports = class AppRouter {
     @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
     static async setAppUpdateStrategy(ctx,next){
         var user = ctx.state.user.data;
-        var body = ctx.body;
+        var body = ctx.request.body;
         var { teamId,id } = ctx.validatedParams;
         //1.通过appId去查询App
         var app = await appInTeamAndUserIsManager(id,teamId,user.id)

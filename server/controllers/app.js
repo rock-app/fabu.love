@@ -50,7 +50,7 @@ var appProfile = {
 
 module.exports = class AppRouter {
     @request('get','/api/apps/{teamId}')
-    @summary("获取某用户或某团队下App列表(分页)")
+    @summary("获取团队下App列表(分页)")
     @query(
         {
         page:{type:'number',default:0,description:'分页页码(可选)'},
@@ -62,7 +62,8 @@ module.exports = class AppRouter {
         var page = ctx.query.page || 0
         var size = ctx.query.size || 10
         var user = ctx.state.user.data;
-        var { teamId } = ctx.validatedParams;
+        var { teamId } = ctx.validatedParams;        
+
         var result = await App.find(
                 {'ownerId':teamId}
             ).limit(size).skip(page * size)
@@ -345,7 +346,7 @@ module.exports = class AppRouter {
 async function appInTeamAndUserIsManager(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
-             _id:userId,
+             id:userId,
              $or: [
                 { role: 'owner' },
                 { role: 'manager' }
@@ -353,7 +354,7 @@ async function appInTeamAndUserIsManager(appId,teamId,userId) {
         }
     },},"_id")
 
-    var app = await App.find({_id:id,ownerId:team._id})
+    var app = await App.find({_id:appId,ownerId:team._id})
     if (!app) {
         throw new Error("应用不存在或您没有权限执行该操作")
     }else{
@@ -361,7 +362,21 @@ async function appInTeamAndUserIsManager(appId,teamId,userId) {
     }
 }
 
-async function appInTeamAndUserIsGuest(appId,teamId,userId) {
+async function appAndUserInTeam(appId,teamId,userId) {
+    var team = await Team.findOne({_id:teamId,members:{
+        $elemMatch:{
+             id:userId
+        }
+    },},"_id")
+    var app = await App.find({_id:appId,ownerId:team._id})
+    if (!app) {
+        throw new Error("应用不存在或您不在该团队中")
+    }else{
+        return app
+    }
+}
+
+async function userInTeam(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
              _id:userId
@@ -374,7 +389,6 @@ async function appInTeamAndUserIsGuest(appId,teamId,userId) {
         return app
     }
 }
-
 
 //设置模糊查询
 function modifyFilter(filter) {

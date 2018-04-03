@@ -157,10 +157,10 @@
     border-right-width: 0px;
   }
   .mainNav-wrapper .mainNav-el-menu .el-menu-item {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
   .mainNav-wrapper .mainNav-el-menu .el-menu-item span {
-    font-size: 20px;
+    font-size: 18px;
   }
   .mainNav-wrapper .mainNav-el-menu .is-active {
     color: white;

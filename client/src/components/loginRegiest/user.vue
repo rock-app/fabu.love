@@ -32,7 +32,7 @@
           <p> 注&nbsp;&nbsp;&nbsp;&nbsp;册 <span>/Register</span></p>
         </div>
         <div class="user-login-title" v-if="showType==='forget'">
-          <p> 找回密码 <span>/Register</span></p>
+          <p> 找回密码 <span>/Request Password</span></p>
         </div>
 
         <div v-bind:class="[showType==='login' ? 'user-login-form' : 'user-register-form']">
@@ -61,9 +61,9 @@
             prefix-icon="el-icon-time">
           </el-input>
 
-
-
-          <button @click="onSubmit" class="user-login-form-btn" type="submit">立即登录</button>
+          <button @click="onSubmit"
+                  v-bind:class="[showType==='login' ? 'user-login-form-btn' : 'user-register-form-btn']"
+                  type="submit">{{ showType==='login' ? '立即登录' : '立即注册'}}</button>
 
           <div class="user-login-form-label" v-if="showType==='login'">
             <p>没有账号？<span @click="onRegister">立即注册</span></p>
@@ -121,7 +121,22 @@
         this.showType = this.showType === 'register' ? 'login' : 'register'
       },
       onForget() {
-        this.showType = 'forget'
+        this.$prompt('请输入邮箱,我们会发送新密码到您到邮箱', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+          inputErrorMessage: '邮箱格式不正确'
+        }).then(({ value }) => {
+          this.$message({
+            type: 'success',
+            message: '你的邮箱是: ' + value
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          })
+        })
       },
       login() {
         if (this.username.length === 0) {
@@ -313,7 +328,7 @@
   }
 
   .user-register-form .user-login-form-input{
-    margin-top: 16px;
+    margin-top: 24px;
   }
 
   .user-login-form-input {
@@ -327,16 +342,23 @@
     border: 1px #6477F2 solid;
   }
 
-  .user-login-form-btn, .user-login-form-btn:hover {
+  .user-register-form-btn,.user-login-form-btn, .user-login-form-btn:hover {
     width: 312px;
     height: 48px;
-    margin-top: 48px;
     border-radius: 24px;
     background: rgba(100, 119, 242, 1);
     border: rgba(100, 119, 242, 1);
     color: white;
     font-size: 14px;
     cursor: pointer;
+  }
+
+  .user-login-form-btn{
+    margin-top: 48px;
+  }
+
+  .user-register-form-btn{
+    margin-top: 24px;
   }
 
   .user-login-form-label {

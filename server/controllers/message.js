@@ -26,10 +26,10 @@ module.exports = class MessageRouter {
       var page = ctx.query.page || 0
       var size = ctx.query.size || 10
       var user = ctx.state.user.data;
-      var { userId } = ctx.validatedParams;        
+  
 
       var result = await Message.find(
-              {'receiver':userId}
+              {'receiver':user._id}
           ).limit(size).skip(page * size)
       ctx.body = responseWrapper(result)
   }
@@ -47,9 +47,7 @@ module.exports = class MessageRouter {
       var page = ctx.query.page || 0
       var size = ctx.query.size || 10
       var user = ctx.state.user.data;
-      var { userId } = ctx.validatedParams;        
-
-      await Message.deleteMany({'receiver':userId})
+      await Message.deleteMany({'receiver':user._id})
       ctx.body = responseWrapper(true,"消息已清空")
   }
 

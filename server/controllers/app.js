@@ -178,9 +178,8 @@ module.exports = class AppRouter {
     static async deleteAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
-        var app = await appInTeamAndUserIsManager(appId,teamId,user.id)
-        var version = await Version.findById(versionId)
-        var result = Version.deleteOne(version)
+        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        var result = await Version.deleteOne({_id:versionId})
         ctx.body = responseWrapper(true,"版本已删除")
     }
 
@@ -354,7 +353,7 @@ async function appInTeamAndUserIsManager(appId,teamId,userId) {
         }
     },},"_id")
 
-    var app = await App.find({_id:appId,ownerId:team._id})
+    var app = await App.findOne({_id:appId,ownerId:team._id})
     if (!app) {
         throw new Error("应用不存在或您没有权限执行该操作")
     }else{
@@ -382,7 +381,7 @@ async function userInTeam(appId,teamId,userId) {
              _id:userId
         }
     },},"_id")
-    var app = await App.find({_id:id,ownerId:team._id})
+    var app = await App.findOne({_id:id,ownerId:team._id})
     if (!app) {
         throw new Error("应用不存在或您不在该团队中")
     }else{

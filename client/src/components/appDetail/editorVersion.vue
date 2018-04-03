@@ -81,7 +81,7 @@
         }
       },
       getAllowDownLoadCount(strategy) {
-        if (strategy.downloadCountLimit) {
+        if (strategy && strategy.downloadCountLimit) {
           return strategy.downloadCountLimit
         } else {
           return '不限'

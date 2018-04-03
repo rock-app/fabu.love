@@ -1,7 +1,8 @@
 <template>
   <div class="mainNav-wrapper">
     <div class="mainNav-logo">
-      <i class="el-icon-menu"></i>
+      <img src="../../assets/logo_s.png" alt="">
+      <div class="line"></div>
     </div>
 
     <div>
@@ -42,20 +43,20 @@
       <el-menu
         class="mainNav-footer-list"
       >
-        <el-menu-item index="0">
-          <i class="el-icon-menu"></i>
+        <el-menu-item index="0" @click="gotoApiDoc">
+          <i class="icon-ic_api1"></i>
           <span slot="title">API文档</span>
         </el-menu-item>
         <el-menu-item index="1">
-          <i class="el-icon-menu"></i>
+          <i class="icon-ic_help1"></i>
           <span slot="title">Help</span>
         </el-menu-item>
         <el-menu-item index="2">
-          <i class="el-icon-setting"></i>
+          <i class="icon-ic_github1"></i>
           <span slot="title">GitHub</span>
         </el-menu-item>
         <el-menu-item index="3">
-          <i class="el-icon-setting"></i>
+          <i class="icon-ic_about1"></i>
           <span slot="title">About</span>
         </el-menu-item>
       </el-menu>
@@ -89,6 +90,9 @@
         if (data.index === '应用设置') {
           Bus.$emit('appSetting')
         }
+      },
+      gotoApiDoc() {
+
       }
     },
     watch: {
@@ -109,6 +113,19 @@
   .mainNav-logo {
     width: 100%;
     height: 72px;
+    text-align: center;
+  }
+  .mainNav-logo img {
+    width: 96px;
+    height: 30px;
+    margin-top: 20px;
+  }
+  .mainNav-logo .line {
+    display: inline-block;
+    width: 96px;
+    height: 6px;
+    margin-top: 15px;
+    background-color: $mainColor;
   }
   .mainNav-footer {
     position: absolute;

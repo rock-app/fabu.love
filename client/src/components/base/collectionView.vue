@@ -112,12 +112,13 @@
     text-align: center;
     border-radius: 4px ;
     transition: 0.5s;
-    &:nth-child(2n-1) {
-      margin-right: 2.6%;
-    }
-    &:nth-child(4n-2) {
-      margin-right: 2.6%;
-    }
+    margin-right: 2.6%;
+    /*&:nth-child(2n-1) {*/
+      /*margin-right: 2.6%;*/
+    /*}*/
+    /*&:nth-child(4n-2) {*/
+      /*margin-right: 2.6%;*/
+    /*}*/
   }
   .itemWrapper:hover {
     transform: translateY(-4px);

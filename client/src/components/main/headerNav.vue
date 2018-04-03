@@ -26,6 +26,7 @@
   import {getUserInfo, removeUserInfo} from '../../mgr/userMgr'
   import Bus from '../../common/js/bus'
   import TokenMgr from '../../mgr/TokenMgr'
+  import * as UserApi from '../../api/moudle/userApi'
 
   export default {
     data() {
@@ -38,6 +39,7 @@
     },
     created() {
       this.userInfo = getUserInfo()
+      this.loadMessage()
     },
     methods: {
       clickUserIcon() {
@@ -59,8 +61,17 @@
         this.$router.push('/login')
       },
       clickMessage() {
-        console.log(4444444)
         Bus.$emit('showUserMessage')
+      },
+      loadMessage() {
+        UserApi.getUserMessage(0).then((res) => {
+          console.log(res)
+          if (res.data.length > 0) {
+            this.redDocHidden = false
+          }
+        }, reject => {
+
+        })
       }
     }
   }

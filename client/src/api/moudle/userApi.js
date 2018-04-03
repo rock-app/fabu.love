@@ -1,7 +1,7 @@
 /**
  * Created by darren on 2018/4/2.
  */
-import {postHttp} from '../basehttp'
+import {postHttp, getHttp} from '../basehttp'
 
 // 修改用户信息
 export function updateUserInfo(body) {
@@ -13,4 +13,13 @@ export function updateUserInfo(body) {
 export function updateUserPassword(body) {
   let url = `api/user/password/modify`
   return postHttp(url, body)
+}
+
+// 获取用户消息列表
+export function getUserMessage(page) {
+  let params = {
+    'page': page, 'size': 10
+  }
+  let url = `api/messages`
+  return getHttp(url, params)
 }

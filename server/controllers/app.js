@@ -41,6 +41,12 @@ var grayRelease = {
     }
 }
 
+var versionProfile = {
+    'fileDownloadUrl':'string', //更新文件的下载地址
+    'showOnDownloadPage':'boolean', //是否显示到下载页
+    'changelog':'string', //修改日志
+}
+
 var appProfile = {
     'shortUrl':'string', //应用短连接
     'installWithPwd':'boolean', //应用安装是否需要密码
@@ -213,20 +219,35 @@ module.exports = class AppRouter {
     @summary("更新应用设置")
     @tag
     @body(appProfile)
-    @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
-    static async setAppUpdateStrategy(ctx,next){
+    @path({teamId:{type:'string',required:true},id:{type:'string',required:true}})
+    static async setAppProfile(ctx,next){
         var user = ctx.state.user.data;
         var body = ctx.request.body;
         var { teamId,id } = ctx.validatedParams;
-        //1.通过appId去查询App
+
         var app = await appInTeamAndUserIsManager(id,teamId,user.id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-        //2.找到应用后，设置策略
         await App.findByIdAndUpdate(id, body)
-        //3.返回body
         ctx.body = responseWrapper(true, "应用设置已更新")
+    }
+
+    @request('post','/api/apps/{teamId}/{id}/{versionId}/profile')
+    @summary("更新版本设置设置")
+    @tag
+    @body(versionProfile)
+    @path({teamId:{type:'string',required:true},id:{type:'string',required:true},versionId:{type:'string',required:true}})
+    static async setVersionProfile(ctx,next){
+        var user = ctx.state.user.data;
+        var body = ctx.request.body;
+        var { teamId,id, versionId} = ctx.validatedParams;
+        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        if (!app) {
+            throw new Error("应用不存在或您没有权限执行该操作")
+        }
+        await Version.findByIdAndUpdate(versionId, body)
+        ctx.body = responseWrapper(true, "版本设置已更新")
     }
 
     @request('post','/api/apps/{teamId}/{id}/grayPublish')

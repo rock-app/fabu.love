@@ -121,10 +121,9 @@
     margin-top: 20px;
   }
   .mainNav-logo .line {
-    display: inline-block;
     width: 96px;
     height: 6px;
-    margin-top: 15px;
+    margin: 15px auto 0px auto;
     background-color: $mainColor;
   }
   .mainNav-footer {

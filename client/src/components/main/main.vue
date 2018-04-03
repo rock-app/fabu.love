@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-container class="main-container">
-      <el-aside width="190px">
+      <div class="side-menu" width="192px">
         <mainNav></mainNav>
-      </el-aside>
+      </div>
       <el-container>
         <el-header class="main-header">
           <headerNav></headerNav>
@@ -58,13 +58,12 @@
     width: 100%;
     height: 100%;
   }
-  .main-container .el-aside {
+  .main-container .side-menu {
     background-color: white;
     border-right: solid 1px #e6e6e6;
   }
   .main-header {
     background-color: white;
-    margin-left: 2px;
     height: 72px !important;
   }
   .main-contentWrapper {

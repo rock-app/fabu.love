@@ -56,7 +56,7 @@ module.exports = class AppRouter {
         page:{type:'number',default:0,description:'分页页码(可选)'},
         size:{type:'number',default:10,description:'每页条数(可选)'}
     })
-    @path({teamId:{type:'string',description:'团队id(可选),不传则获取该用户下的App'}})
+    @path({teamId:{type:'string',description:'团队id'}})
     @tag
     static async getApps(ctx,next){
         var page = ctx.query.page || 0

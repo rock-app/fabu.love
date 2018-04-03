@@ -15,18 +15,11 @@ var loginSchema = {
     username: {
         type: 'string',
         required: true
-        // a: {
-        //     type: 'string'
-        // },
-        // b: {
-        //     type: 'string'
-        // }
     },
     password: {
         type: 'string',
         required: true
     }
-    
 }
 
 var registerSchema = {

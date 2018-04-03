@@ -44,11 +44,11 @@
         class="mainNav-footer-list"
       >
         <el-menu-item index="0" @click="gotoApiDoc">
-          <i class="icon-ic_api1"></i>
+          <i class="icon-ic_API"></i>
           <span slot="title">API文档</span>
         </el-menu-item>
         <el-menu-item index="1">
-          <i class="icon-ic_help1"></i>
+          <i class="icon-ic_help"></i>
           <span slot="title">Help</span>
         </el-menu-item>
         <el-menu-item index="2">
@@ -56,7 +56,7 @@
           <span slot="title">GitHub</span>
         </el-menu-item>
         <el-menu-item index="3">
-          <i class="icon-ic_about1"></i>
+          <i class="icon-ic_about_s"></i>
           <span slot="title">About</span>
         </el-menu-item>
       </el-menu>

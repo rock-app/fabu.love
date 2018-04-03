@@ -2,8 +2,8 @@
   <div class="headernav-wrapper">
     <div class="leftWrapper"></div>
     <div class="rightWrapper">
-      <el-badge is-dot class="item">
-        <i class="icon-ic_notice"></i>
+      <el-badge is-dot class="item" :hidden="this.redDocHidden">
+        <i class="icon-ic_notice" @click="clickMessage"></i>
       </el-badge>
       <div class="userwrapper" @click="clickUserIcon" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
         <img src="../../assets/ic_touxiang.png" alt="" class="userIcon">
@@ -57,6 +57,10 @@
         TokenMgr.clearTokens()
         removeUserInfo()
         this.$router.push('/login')
+      },
+      clickMessage() {
+        console.log(4444444)
+        Bus.$emit('showUserMessage')
       }
     }
   }

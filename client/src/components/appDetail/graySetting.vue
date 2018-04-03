@@ -122,6 +122,8 @@
         }
         AppResourceApi.grayVersion(getUserTeam()._id, this.appInfo._id, body).then((res) => {
           console.log(res)
+          this.$message.success(res.message)
+          this.cancel()
         }, reject => {
 
         })

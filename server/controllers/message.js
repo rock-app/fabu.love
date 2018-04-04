@@ -35,6 +35,18 @@ module.exports = class MessageRouter {
   }
 
 
+    @request('get','/api/messages/count')
+    @summary("获取消息总数")
+    @tag
+    static async getMessageCount(ctx,next){
+        var page = ctx.query.page || 0
+        var size = ctx.query.size || 10
+        var user = ctx.state.user.data;
+        var count = await Message.count({'receiver':user._id})
+        ctx.body = responseWrapper(count)
+    }
+
+
   @request('delete','/api/messages')
   @summary("清空消息列表")
   @query(

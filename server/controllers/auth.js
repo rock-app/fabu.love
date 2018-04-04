@@ -86,7 +86,7 @@ module.exports = class AuthRouter {
             ]
             newUser.teams = [{
                 _id:team._id,
-                name:team,
+                name:team.name,
                 role:"owner"
             }]
             var task = Fawn.Task();

@@ -33,8 +33,7 @@
       return {
         userInfo: {},
         userHover: false,
-        messageArr: [{'msg': '12121212121'}, {'msg': '2121212121212'}],
-        redDocHidden: false
+        redDocHidden: true
       }
     },
     created() {
@@ -68,6 +67,8 @@
           console.log(res)
           if (res.data.length > 0) {
             this.redDocHidden = false
+          } else {
+            this.redDocHidden = true
           }
         }, reject => {
 

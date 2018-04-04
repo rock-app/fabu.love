@@ -56,7 +56,7 @@ module.exports = class AuthRouter {
             throw new Error('用户名或密码错误')
         }
         user.token = jwt.sign({
-            data: {_id:user._id,username:user.username},
+            data: {_id:user._id,username:user.username,email:user.email},
             exp: Math.floor(Date.now() / 1000) + (60 * 60)
         }, 'jwt-secret')
         ctx.body = responseWrapper(user)
@@ -82,6 +82,7 @@ module.exports = class AuthRouter {
                 {
                     _id: newUser._id,
                     username: newUser.username,
+                    email:newUser.email,
                     role: "owner"
                 }
             ]

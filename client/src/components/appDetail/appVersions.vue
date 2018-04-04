@@ -15,7 +15,7 @@
     <div v-if="this.dataArr.length>0">
       <!--头部-->
       <div class="detail-content-top">
-        <span class="icon-ic_ios"></span>版本信息
+        <span style="margin-right: 6px" class="el-icon-tickets"></span>版本信息
         <div class="top-right" @click="setGrayVersion">
           <span class="icon-ic_greyfb" style="margin-right: 8px"></span>设置灰度版本
         </div>
@@ -33,7 +33,7 @@
           class="version-table-one"
         >
           <template slot-scope="scope">
-            <i class="icon-ic_ios"></i>
+            <span :class="getIconClass(scope.row)"></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -101,7 +101,13 @@
       </div>
     </div>
 
-    <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo" :appInfo="this.appInfo"></editorVersion>
+    <editorVersion
+      v-if="this.showEditorVersion"
+      @cancel="cancel"
+      :versionInfo="this.versionInfo"
+      :appInfo="this.appInfo"
+      @updateSuccess="updateSuccess"
+    ></editorVersion>
     <graySetting v-if="this.showGraySetting" @cancel="cancelGraySetting" :versionList="this.dataArr" :appInfo="this.appInfo"></graySetting>
   </div>
 </template>
@@ -186,6 +192,7 @@
       releaseApp(item) {
         AppResourceApi.releaseApp(this.userteam._id, this.appInfo._id, item._id, item.versionCode, true).then((res) => {
           console.log(res)
+          this.$message.success(res.message)
         }, reject => {
 
         })
@@ -219,6 +226,17 @@
       },
       cancelGraySetting() {
         this.showGraySetting = false
+      },
+      updateSuccess() {
+        this.$emit('updateAppInfoSuccess')
+        this.getAppVersionListData()
+      },
+      getIconClass(item) {
+        if (this.appInfo.releaseVersionId && this.appInfo.releaseVersionId === item._id) {
+            return 'version-table-one-gray'
+        } else {
+          return 'version-table-one-lighting'
+        }
       }
     }
   }
@@ -308,6 +326,20 @@
   }
   .appVersion-wrapper .version-table {
     margin-bottom: 12px;
+  }
+  .version-table-one-gray {
+    display: inline-block;
+    width: 18px;
+    height: 16px;
+    background-size: 18px 18px;
+    background-image: url("../../assets/sign_grey.png");
+  }
+  .version-table-one-lighting {
+    display: inline-block;
+    width: 18px;
+    height: 16px;
+    background-size: 18px 18px;
+    background-image: url("../../assets/sign_now.png");
   }
   .appVersion-wrapper .version-table .cell {
     text-align: center;

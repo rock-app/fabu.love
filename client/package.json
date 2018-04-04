@@ -20,9 +20,11 @@
     "vue": "^2.5.2",
     "vue-infinite-scroll": "^2.0.2",
     "vue-lazyload": "^1.1.4",
+    "vue-qr": "^1.2.8",
     "vue-router": "^3.0.1",
     "vux": "^2.8.0",
-    "vux-loader": "^1.2.1"
+    "vux-loader": "^1.2.1",
+    "vue-qr":"^1.2.8"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

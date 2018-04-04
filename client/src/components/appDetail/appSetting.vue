@@ -6,7 +6,7 @@
     <div class="content">
       <el-form labelWidth="150px" label-position="left">
         <el-form-item label="应用短链接">
-          <el-input v-model="appInfo.shortUrl" class="shorturl"></el-input>
+          {{this.axios.defaults.baseURL}}<el-input v-model="appInfo.shortUrl" class="shorturl"></el-input>
         </el-form-item>
         <el-form-item label="安装方式">
           <el-radio v-model="installType" label="公开">公开</el-radio>
@@ -99,7 +99,8 @@
     height: 24px !important;
   }
   .appsetting-wrapper .content .el-form .el-form-item .shorturl {
-    width: 300px;
+    width: 150px;
+    display: inline-block;
   }
   .appsetting-wrapper .content .el-form .el-form-item .installtype {
     width: 150px;

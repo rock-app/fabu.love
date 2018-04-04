@@ -48,7 +48,7 @@ module.exports = class MessageRouter {
     var result = await Message.update({ receiver: user._id ,status:'unread'},{
         status: "hasread"
     });
-    ctx.body = responseWrapper(true,'所有消息已标记未已读');
+    ctx.body = responseWrapper(true,'所有消息已标记已读');
   }
 
   @request("delete", "/api/messages")

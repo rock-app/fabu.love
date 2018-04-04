@@ -14,3 +14,10 @@ export function login(body) {
   let url = 'api/user/login'
   return postHttp(url, body)
 }
+
+
+// 登录
+export function resetPassword(body) {
+  let url = 'api/user/resetPassword'
+  return postHttp(url, body)
+}

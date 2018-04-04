@@ -26,6 +26,7 @@
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
+  import {getUserTeam} from '../../mgr/userMgr'
 
   export default {
     props: {
@@ -49,7 +50,7 @@
           'installPwd': this.installPwd,
           'autoPublish': this.pulishType === '手动发布' ? 0 : 1
         }
-        AppResourceApi.updateAppSetting(this.appInfo._id, body).then((res) => {
+        AppResourceApi.updateAppSetting(getUserTeam()._id, this.appInfo._id, body).then((res) => {
             if (res.success) {
               this.$message.success(res.message)
             }

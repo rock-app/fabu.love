@@ -98,7 +98,8 @@
         password: '',
         isLogin: false,
         errorInfo: '',
-        showType: 'login'
+        showType: 'login',
+        email: ''
       }
     },
     created() {
@@ -127,10 +128,12 @@
           inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
           inputErrorMessage: '邮箱格式不正确'
         }).then(({ value }) => {
-          this.$message({
-            type: 'success',
-            message: '你的邮箱是: ' + value
-          })
+          // this.$message({
+          //   type: 'success',
+          //   message: '你的邮箱是: ' + value
+          // })
+          this.email = value
+          this.requestPassword()
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -154,10 +157,11 @@
         }
         LoginApi.login(body)
           .then(response => {
+            console.log(response)
             // 存储token
             TokenMgr.add(this.axios.baseURL, response.data.token)
             let user = {
-              'userName': this.userName,
+              'userName': this.username,
               'userId': response.data._id,
               'teamArr': response.data.teams
             }
@@ -171,19 +175,18 @@
           })
       },
       regist() {
-        if (this.form.userName.length === 0) {
-          this.errorInfo = '* 用户名不能为空'
+        if (this.username.length === 0) {
+          this.$message.error('用户名不能为空')
           return
         }
-        if (this.form.password.length === 0) {
-          this.errorInfo = '* 密码不能为空'
+        if (this.email.length === 0) {
+          this.$message.error('邮箱不能为空')
           return
         }
-        if (this.form.password !== this.form.repassword) {
-          this.errorInfo = '* 两次输入密码不一致'
+        if (this.password.length === 0) {
+          this.$message.error('密码不能为空')
           return
         }
-        this.errorInfo = ''
         let body = {
           'username': this.username,
           'password': this.password,
@@ -197,15 +200,29 @@
               type: 'success'
             })
             setTimeout(() => {
-              this.$router.go(-1)
-            }, 800)
+              this.onRegister()
+            }, 500)
           }, reject => {
             console.log(reject)
             this.$message.error(reject)
           })
       },
       requestPassword() {
-
+        if (this.email.length === 0) {
+          this.$message.error('邮箱不能为空')
+          return
+        }
+        LoginApi.resetPassword({ email: this.email })
+          .then(response => {
+            console.log(response)
+            this.$message({
+              message: '密码已重置,新密码已通过邮件发送至您的邮箱.',
+              type: 'success'
+            })
+          }, reject => {
+            console.log(reject)
+            this.$message.error(reject)
+          })
       }
 
     }

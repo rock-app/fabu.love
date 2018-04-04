@@ -7,7 +7,6 @@ var teamSchema = new Schema({
     name: {
         type: String,
         required: true,
-        index: true
     },
     icon: String,
     creatorId: {
@@ -22,6 +21,7 @@ var teamSchema = new Schema({
         {
             _id: ObjectId,
             username: String,
+            email:String,
             role: {
                 type: String,
                 enum: ["owner", "manager", "guest"]

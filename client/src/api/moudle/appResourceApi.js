@@ -61,8 +61,8 @@ export function delectAppVersion(teamId, appId, versionId) {
 }
 
 // 更新应用设置
-export function updateAppSetting(appId, body) {
-  let url = `api/app/${appId}/profile`
+export function updateAppSetting(teamId, appId, body) {
+  let url = `api/apps/${teamId}/${appId}/profile`
   return postHttp(url, body)
 }
 

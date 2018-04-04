@@ -56,8 +56,8 @@ var appSchema = new Schema({
         default: 'slient',
         enum: ['slient', 'normal', 'force']
     },
-    lastVersionCode: String, //当前对外发布的版本号
-    releaseVersionId:String,         //当前对外发布的最新版本号
+    releaseVersionCode: String,     //当前对外发布的code号
+    releaseVersionId:String,        //当前对外发布的最新版本号
     grayReleaseVersionId:String,
     grayStrategy: {
         ipType: {

@@ -297,7 +297,7 @@ module.exports = class AppRouter {
             _id:body.versionId,
         },{released:body.release})
         if (body.release) {
-            await App.updateOne({_id:app.id},{releaseVersionId:version.versionCode})
+            await App.updateOne({_id:app.id},{releaseVersionId:version._id})
         }else{
             await App.updateOne({_id:app.id},{releaseVersionId:''})
         }

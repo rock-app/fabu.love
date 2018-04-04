@@ -2,26 +2,35 @@
   <div class="userMessage-wrapper" @click="cancel">
     <transition name="fadeRight">
       <div v-show="this.show" class="userMessage-wrapper-body" @click.stop="clickcontent">
-        <div class="top">
-          <button>清空消息</button>
-          <button>全部标记已读</button>
-          <div style="width: 100%;height: 1px;background-color: #eee;margin-top: 10px"></div>
-        </div>
-        <ul class="messageListWrapper">
-          <li class="messageItem" v-for="(item, index) in this.dataArr" :key="index">
-            <span></span>
-            <p class="canwrap content">121212121211212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121221212121212121212</p>
-            <p class="timer" v-html="getTimer(Date())"></p>
-          </li>
-        </ul>
+        <div style="position: relative;width: 100%;height: 100%">
+          <div class="top">
+            <button @click="clearMessage">清空消息</button>
+            <button @click="allread">全部标记已读</button>
+            <div style="width: 100%;height: 1px;background-color: #eee;margin-top: 10px"></div>
+          </div>
+          <ul class="messageListWrapper">
+            <li class="messageItem" v-for="(item, index) in this.dataArr" :key="index">
+              <el-badge is-dot class="item" :hidden="item.status !== 'unread'">
+                <span class="el-icon-message"></span>
+              </el-badge>
+              <p class="canwrap content">{{item.content}}</p>
+              <p class="timer" v-html="getTimer(item.sendAt)"></p>
+            </li>
+          </ul>
 
-        <el-pagination
-          v-show="this.totalCount > 0"
-          style="margin: 0 auto;text-align: center;margin-top: 20px"
-          layout="prev, pager, next"
-          @handleCurrentChange="handleCurrentChange()"
-          :total="this.totalCount">
-        </el-pagination>
+          <el-pagination
+            v-show="this.totalCount > 0"
+            style="margin: 0 auto;text-align: center;margin-top: 20px"
+            layout="prev, pager, next"
+            @handleCurrentChange="handleCurrentChange()"
+            :total="this.totalCount">
+          </el-pagination>
+
+          <div class="nomessage" v-show="this.dataArr.length === 0">
+            <img src="../../assets/box.png" alt="">
+            <p>暂无消息</p>
+          </div>
+        </div>
       </div>
     </transition>
 
@@ -41,7 +50,7 @@
       return {
         show: false,
         userInfo: {},
-        dataArr: ['', '', '', '', '', '', '', ''],
+        dataArr: [],
         currentPage: 0,
         totalCount: 0
       }
@@ -68,11 +77,7 @@
       loadData() {
         UserApi.getUserMessage(this.currentPage).then((res) => {
           console.log(res)
-          if (res.data.length > 0) {
-            this.redDocHidden = false
-          } else {
-            this.redDocHidden = true
-          }
+          this.dataArr = res.data
         }, reject => {
 
         })
@@ -95,6 +100,17 @@
       },
       getTimer(timer) {
         // 今天显示时分，昨天显示昨天时分，其余显示日期
+        if (this.isToday(timer)) {
+          return `${timer.getHours()}:${timer.getMinutes()}`
+        } else if (this.isYestday(timer)) {
+          return `昨天 ${timer.getHours()}:${timer.getMinutes()}`
+        } else {
+          return `${timer.getFullYear()}-${timer.getMonth() + 1}-${timer.getDay()} ${timer.getHours()}:${timer.getMinutes()}`
+        }
+      },
+      isToday(theDate) {
+        let today = new Date()
+       return theDate.getFullYear() === today.getFullYear() && theDate.getMonth() === today.getMonth() && theDate.getDay() === today.getDay()
       },
       isYestday(theDate) {
         // 当前时间
@@ -104,7 +120,23 @@
         var yestday = new Date(today - 24 * 3600 * 1000).getTime()
         return theDate.getTime() < today && yestday <= theDate.getTime()
       },
-      clickcontent() {}
+      clickcontent() {},
+      clearMessage() {
+        UserApi.clearMessage().then((res) => {
+          this.$message.success(res.message)
+          this.loadData()
+        }, reject => {
+
+        })
+      },
+      allread() {
+        UserApi.allRead().then((res) => {
+          this.$message.success(res.message)
+          this.loadData()
+        }, reject => {
+
+        })
+      }
     }
   }
 </script>
@@ -164,17 +196,10 @@
     display: flex;
     padding: 20px 10px;
   }
-  .userMessage-wrapper-body .messageItem span {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    background-image: url("../../assets/ic_about1.png");
-    background-size: 25px 25px;
-  }
   .userMessage-wrapper-body .messageItem .content {
     font-size: 15px;
     color: $mainTitleColor;
-    max-width: 480px - 20px - 80px - 25px - 10px;
+    width: 480px - 20px - 80px - 25px - 10px;
     margin-left: 8px;
   }
   .userMessage-wrapper-body .messageItem .timer {
@@ -182,5 +207,21 @@
     font-size: 13px;
     color: $subTitleColor;
     width: 80px;
+  }
+  .userMessage-wrapper-body .nomessage {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    text-align: center;
+  }
+  .userMessage-wrapper-body .nomessage img {
+    width: 100px;
+    height: 100px;
+    margin-top: 30%;
+  }
+  .userMessage-wrapper-body .nomessage p {
+    margin-top: 20px;
   }
 </style>

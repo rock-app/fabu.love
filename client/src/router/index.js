@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import User from '../components/loginRegiest/User.vue'
+import User from '../components/auth/auth.vue'
 import AppDetail from '../components/appDetail/appDetail.vue'
 import AppPreView from '../components/appDetail/appPreView.vue'
 import UserInfo from '../components/user/userInfo.vue'

@@ -59,9 +59,6 @@
           return `color: #6477F2;borderBottomColor: #6477F2`
         }
       },
-      gotoHome() {
-        this.$router.push('/')
-      },
       cancel() {
         this.show = false
         setTimeout(() => {

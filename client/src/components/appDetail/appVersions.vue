@@ -12,94 +12,96 @@
         </li>
       </ul>
     </div>
-    <!--头部-->
-    <div class="detail-content-top">
-      <span class="icon-ic_ios"></span>版本信息
-      <div class="top-right" @click="setGrayVersion">
-        <span class="icon-ic_ios"></span>设置灰度版本
+    <div v-if="this.dataArr.length>0">
+      <!--头部-->
+      <div class="detail-content-top">
+        <span class="icon-ic_ios"></span>版本信息
+        <div class="top-right" @click="setGrayVersion">
+          <span class="icon-ic_greyfb" style="margin-right: 8px"></span>设置灰度版本
+        </div>
       </div>
+      <!--内容-->
+      <el-table
+        :data="dataArr"
+        style="width: 100%;box-sizing: border-box"
+        stripe
+        class="version-table"
+      >
+        <el-table-column
+          width="60"
+          label=""
+          class="version-table-one"
+        >
+          <template slot-scope="scope">
+            <i class="icon-ic_ios"></i>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="versionStr"
+          width="60"
+          label="版本"
+        >
+        </el-table-column>
+        <el-table-column
+          label="更新时间"
+          width="150"
+        >
+          <template slot-scope="scope">
+            <p v-html="getCreatTime(scope.row.uploadAt)"></p>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="文件大小"
+          width="120"
+        >
+          <template slot-scope="scope">
+            <p v-html="getAppSize(scope.row.size)"></p>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="下载次数"
+          width="120"
+        >
+          <template slot-scope="scope">
+            <p style="display: inline-block" v-html="getDownLoadCount(scope.row.downloadCount)"></p>/<span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row.strategy)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="changelog"
+          label="更新日志">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="200"
+        >
+          <template slot-scope="scope">
+            <button class="appversion-elButton" @click="releaseApp(scope.row)"><i class="icon-ic_overview"></i></button>
+            <button class="appversion-elButton" @click="clickDownLoad(scope.row)"><i class="icon-ic_download"></i></button>
+            <button class="appversion-elButton" @click="clickEditor(scope.row)"><i class="icon-ic_edit"></i></button>
+            <button class="appversion-elButton" @click="clickDelect(scope.row)"><i class="icon-ic_delete"></i></button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    <!--内容-->
-    <el-table
-      :data="dataArr"
-      style="width: 100%;box-sizing: border-box"
-      stripe
-      class="version-table"
-      >
-      <el-table-column
-        width="60"
-        label=""
-        class="version-table-one"
-      >
-        <template slot-scope="scope">
-          <i class="icon-ic_ios"></i>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="versionStr"
-        width="60"
-        label="版本"
-      >
-      </el-table-column>
-      <el-table-column
-        label="更新时间"
-        width="150"
-      >
-        <template slot-scope="scope">
-          <p v-html="getCreatTime(scope.row.uploadAt)"></p>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="文件大小"
-        width="120"
-      >
-        <template slot-scope="scope">
-          <p v-html="getAppSize(scope.row.size)"></p>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="下载次数"
-        width="120"
-      >
-        <template slot-scope="scope">
-          <p style="display: inline-block" v-html="getDownLoadCount(scope.row.downloadCount)"></p>/<span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row.strategy)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="changelog"
-        label="更新日志">
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="200"
-      >
-        <template slot-scope="scope">
-          <button class="appversion-elButton" @click="releaseApp(scope.row)"><i class="icon-ic_ios"></i></button>
-          <button class="appversion-elButton" @click="clickDownLoad(scope.row)"><i class="icon-ic_editor"></i></button>
-          <button class="appversion-elButton" @click="clickEditor(scope.row)"><i class="icon-ic_editor"></i></button>
-          <button class="appversion-elButton" @click="clickDelect(scope.row)"><i class="icon-ic_editor"></i></button>
-        </template>
-      </el-table-column>
-    </el-table>
 
     <div class="appversion-footerwrapper">
       <div class="totalwrapper">
         <div class="downloadwrapper">
-          <i class="icon-ic_ios"></i>
+          <i class="icon-ic_download_s"></i>
         </div>
         <p>总下载次数</p>
         <div class="downloadCount">1221212</div>
       </div>
       <div class="todaywrapper">
         <div class="downloadwrapper">
-          <i class="icon-ic_ios"></i>
+          <i class="icon-ic_download_s"></i>
         </div>
         <p>今日下载次数</p>
         <div class="downloadCount">1221212</div>
       </div>
     </div>
 
-    <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo"></editorVersion>
+    <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo" :appInfo="this.appInfo"></editorVersion>
     <graySetting v-if="this.showGraySetting" @cancel="cancelGraySetting" :versionList="this.dataArr" :appInfo="this.appInfo"></graySetting>
   </div>
 </template>
@@ -150,7 +152,9 @@
         })
       },
       clickDownLoad(item) {
-
+        const a = document.createElement('a')
+        a.setAttribute('href', `${this.axios.defaults.baseURL}${item.downloadUrl}`)
+        a.click()
       },
       clickEditor(item) {
         this.showEditorVersion = true
@@ -201,7 +205,7 @@
         }
       },
       getAllowDownLoadCount(strategy) {
-        if (strategy.downloadCountLimit) {
+        if (strategy && strategy.downloadCountLimit) {
           return strategy.downloadCountLimit
         } else {
           return '不限'
@@ -295,6 +299,12 @@
     color: #D5DFED;
     border-radius: 12px;
     margin-right: 6px;
+    padding: 0;
+  }
+  .appversion-elButton i {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
   }
   .appVersion-wrapper .version-table {
     margin-bottom: 12px;
@@ -329,8 +339,9 @@
     height: 48px;
     text-align: center;
     display: inline-block;
+    background-color: #97DFF9;
   }
-  .appversion-footerwrapper .downloadwrapper .icon-ic_ios {
+  .appversion-footerwrapper .downloadwrapper i {
     font-size: 15px;
     line-height: 48px;
   }
@@ -351,5 +362,9 @@
     display: inline-block;
     width: 50%;
     height: 48px;
+    padding-left: 24px;
+  }
+  .appversion-footerwrapper .todaywrapper .downloadwrapper {
+    background-color: #D5DFED;
   }
 </style>

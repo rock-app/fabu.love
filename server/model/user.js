@@ -4,10 +4,15 @@ const ObjectId = Schema.ObjectId
 
 var userSchema = {
   username: {
-    type: String
+    type: String,
+    index:true
   },
   password: {
     type: String
+  },
+  email:{
+    type: String,
+    index:true
   },
   token: {
     type: String

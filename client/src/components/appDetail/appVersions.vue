@@ -33,7 +33,7 @@
           class="version-table-one"
         >
           <template slot-scope="scope">
-            <i class="icon-ic_ios"></i>
+            <i :class="getIconClass(scope.row)"></i>
           </template>
         </el-table-column>
         <el-table-column
@@ -229,6 +229,13 @@
       updateSuccess() {
         this.$emit('updateAppInfoSuccess')
         this.getAppVersionListData()
+      },
+      getIconClass(item) {
+        if (this.appInfo.grayReleaseVersion.versionId === item._id) {
+            return 'gray'
+        } else {
+          return 'lighting'
+        }
       }
     }
   }
@@ -318,6 +325,18 @@
   }
   .appVersion-wrapper .version-table {
     margin-bottom: 12px;
+  }
+  .version-table-one .gray {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background-image: url("../../assets/sign_grey.png");
+  }
+  .version-table-one .lighting {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background-image: url("../../assets/sign_now.png");
   }
   .appVersion-wrapper .version-table .cell {
     text-align: center;

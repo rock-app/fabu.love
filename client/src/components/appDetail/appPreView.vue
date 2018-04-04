@@ -1,33 +1,20 @@
 <template>
     <div class="previewapp-wrapper">
-      <!--左边-->
-      <div class="preview-leftwrapper"></div>
       <!--中间-->
       <div class="preview-middlewrapper">
-        <div class="preview-middlewrapper-header">
-          <p class="title">{{this.appBaseData.appName}}</p>
-          <p class="desc">版本： {{this.appVersionInfo.versionStr}}/ 大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M / {{this.appVersionInfo.creatDateStr}}</p>
-        </div>
-        <img class="preview-middlewrapper-appicon" :src="getIconUrl()" alt="">
-        <button class="preview-middlewrapper-downloadBtn" @click="clickDownLoadBtn">点击下载</button>
-        <button class="preview-middlewrapper-appdesc">适用于{{this.appBaseData.platform}}设备</button>
-        <hr class="preview-middlewrapper-line">
-        <div class="preview-middlewrapper-downloaddesc">或者用手机扫描二维码下载</div>
-        <img class="preview-middlewrapper-ercode" src="../../assets/backgroundImage.png" alt="">
-        <hr class="preview-middlewrapper-line" style="margin-top: 80px">
-        <div class="preview-middlewrapper-oldVersion">
-          <div style="background-color: #3AB2A7;width: 100%;height: 44px;line-height: 44px;font-size: 14px;font-weight: bold;text-align: left;padding-left: 10px;color: white;">历史版本</div>
-          <table class="preview-middlewrapper-oldVersion-item" v-for="(item, index) in versionArr" :key="index">
-            <tr :style="getTableBackground(index)">
-              <td>{{item[0]}}</td>
-              <td>{{item[1]}}</td>
-            </tr>
-          </table>
-          <div style="width: 100%;height: 40px;background-color: bisque;font-size: 14px;color: #333;line-height: 40px">查看更多</div>
-        </div>
+        <img class="appicon" :src="getIconUrl()" alt="">
+        <p class="title">{{this.appBaseData.appName}}</p>
+        <p class="desc">版本： {{this.appVersionInfo.versionStr}}   大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M / {{this.appVersionInfo.creatDateStr}}</p>
+        <p class="date">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
+        <el-button @click="clickDownLoadBtn" icon="el-icon-search"  class="downloadBtn" type="primary" round>下载安装</el-button>
       </div>
-      <!--右边-->
-      <div class="preview-rightwrapper"></div>
+      <!--手机视图-->
+      <div class="preview-mobilewrapper">
+        <img class="mobieImg" src='../../assets/ic_mobilphone.png'>
+        <img class="qrcodeImg" src='../../assets/ic_scan.png'>
+        <p class="codetips">请扫描二维码下载APP</p>
+        <p class="platform">适用于iOS系统</p>
+      </div>
     </div>
 </template>
 
@@ -95,124 +82,117 @@
     background-color: white;
     width: 100%;
     height: 100%;
-  }
-  .preview-leftwrapper {
-    float: left;
-    margin-top: 0;
-    width: 15%;
-    margin-left: 0;
-    height: 100%;
-    background-image: url("../../assets/download_pattern_left.png");
-    background-size: cover;
-  }
-  .preview-rightwrapper {
-    position: absolute;
-    top: 0;
-    width: 15%;
-    right: 0;
-    height: 100%;
-    background-image: url("../../assets/download_pattern_right.png");
+    background-image: url("../../assets/bg_picture.png");
     background-size: cover;
   }
   .preview-middlewrapper {
     margin-top: 0px;
-    width: 70%;
-    margin-left: 15%;
+    margin-left: 25%;
+    width: 25%;
     display: flex;
     flex-direction: column;
     text-align: center;
+    position: absolute;
   }
-  .preview-middlewrapper-header {
-    width: 100%;
-    height: 80px;
-    border-bottom: solid 1px $paleGrey;
+  .preview-mobilewrapper {
+    margin-top: 170px;
+    width: 359px;
+    height: 561px;
+    left: 51%;
+    position: absolute;
   }
-  .preview-middlewrapper-header .title {
-    color: #333;
-    font-weight: bold;
-    font-size: 20px;
-    float: left;
-    line-height: 80px;
+
+  .preview-middlewrapper .appicon {
+    width: 126px;
+    height: 126px;
+    margin-top: 260px;
     margin-left: 10%;
   }
-  .preview-middlewrapper-header .desc {
-    color: #333;
-    font-size: 14px;
-    float: right;
-    line-height: 80px;
-  }
-  .preview-middlewrapper-appicon {
-    width: 100px;
-    height: 100px;
-    background-size: 100px 100px;
-    margin: 0 auto;
-    margin-top: 80px;
-    border-radius: 10px;
-  }
-  .preview-middlewrapper-downloadBtn{
-    background-color: #3AB2A7;
-    width: 120px;
-    height: 40px;
-    color: white;
-    font-size: 18px;
+
+  .preview-middlewrapper .title {
+    color: #354052;
     font-weight: bold;
-    margin: 0 auto;
-    margin-top: 30px;
-    border-color: transparent;
+    font-size: 26px;
+    float: left;
+    text-align: left;
+    height: 37px;
+    line-height: 37px;
+    margin-left: 10%;
+    margin-top: 33px;
   }
-  .preview-middlewrapper-appdesc {
-    color: white;
-    background-color: green;
-    height: 25px;
-    font-size: 12px;
-    border-radius: 3px;
-    margin: 0 auto;
-    margin-top: 20px;
-    border-color: transparent;
-  }
-  .preview-middlewrapper-downloaddesc {
+  .preview-middlewrapper .desc {
+    color: #242A34;
     font-size: 14px;
-    color: #333;
+    float: left;
+    text-align: left;
+    line-height: 20px;
+    height: 20px;
+    margin-left: 10%;
+    margin-top: 12px;
+    opacity: 0.5;
   }
-  .preview-middlewrapper-ercode {
-    width: 150px;
-    height: 150px;
-    background-size: cover;
-    margin: 0 auto;
-    margin-top: 30px;
-    transition: all 0.6s;
+  .preview-middlewrapper .date {
+    color: #242A34;
+    font-size: 14px;
+    float: left;
+    text-align: left;
+    line-height: 20px;
+    height: 20px;
+    margin-top: 2px;
+    margin-left: 10%;
+    opacity: 0.5;
   }
-  .preview-middlewrapper-ercode:hover {
-    transform: scale(2);
-  }
-  .preview-middlewrapper-line {
-    border-top: 2px dotted #eee;
-    width: 100%;
-    height: 1px;
-    border-left: solid 0px;
-    border-bottom: solid 0px;
-    border-right: solid 0px;
-    margin-top: 40px;
-    margin-bottom: 30px
-  }
-  .preview-middlewrapper-oldVersion {
-    width: 70%;
-    margin: 0 auto;
-    border: solid 1px #3AB2A7;
-    margin-bottom: 100px;
-    overflow: hidden;
-  }
-  .preview-middlewrapper-oldVersion-item {
-    width: 100%;
-  }
-  .preview-middlewrapper-oldVersion-item tr {
-    width: 100%;
+  .preview-middlewrapper .downloadBtn{
+    background-color: #8393F5;
+    width: 184px;
     height: 44px;
-    background-color: white;
-    border-bottom: solid 1px $paleGrey;
+    color: white;
+    font-size: 14px;
+    margin-top: 16px;
+    margin-left: 10%;
+    border-color: transparent;
+    /*float: left;*/
   }
-  .preview-middlewrapper-oldVersion-item td {
-    line-height: 44px;
-    width: 50%;
+  .preview-mobilewrapper .mobieImg {
+    width: 359px;
+    height: 561px;
+    margin-left: 0px;
+    margin-top: 0px;
+    position: absolute;
+    icon: url('../../assets/ic_apple.png');
   }
+  .preview-mobilewrapper .qrcodeImg {
+    width: 160px;
+    height: 160px;
+    margin-left: 46px;
+    margin-top: 116px;
+    position: absolute;
+  }
+
+  .preview-mobilewrapper .codetips {
+    color: #354052;
+    font-size: 14px;
+    text-align: center;
+    line-height: 20px;
+    float: left;
+    height: 20px;
+    margin-left: 55px;
+    margin-top: 288px;
+    width: 140px;
+    position: absolute;
+  }
+  .preview-mobilewrapper .platform {
+    color: #354052;
+    opacity: 0.5;
+    font-size: 14px;
+    text-align: center;
+    line-height: 20px;
+    float: left;
+    height: 20px;
+    margin-left: 55px;
+    margin-top: 312px;
+    width: 140px;
+    position: absolute;
+  }
+
 </style>

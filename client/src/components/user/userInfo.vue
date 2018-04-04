@@ -16,7 +16,7 @@
         </ul>
 
         <personalInfo :userInfo="this.userInfo" v-if="this.currentItem === '个人资料'" @cancel="cancel"></personalInfo>
-        <changePassword v-if="this.currentItem === '修改密码'"></changePassword>
+        <changePassword v-if="this.currentItem === '修改密码'" @cancel="cancel"></changePassword>
       </div>
     </transition>
 

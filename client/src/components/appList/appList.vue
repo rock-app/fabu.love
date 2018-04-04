@@ -152,6 +152,9 @@
     },
     created () {
       Bus.$emit('applist')
+      Bus.$on('refreshList', () => {
+        this.loadAppList(false)
+      })
       this.$watch('queryText', () => {
         let newArr = []
         this.dataList.forEach((item) => {

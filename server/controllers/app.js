@@ -269,17 +269,14 @@ module.exports = class AppRouter {
 
         await App.updateOne({_id:app.id},
             {
-                grayReleaseVersion:{
-                    versionId:version.id,
-                    versionStr:version.versionStr
-                },
+                grayReleaseVersionId:version.id,
                 grayStrategy:body.strategy
         })
         ctx.body = responseWrapper(true,"版本已灰度发布")
     }
 
     @request('post','/api/apps/{teamId}/{id}/release')
-    @summary("发布某个版本")
+    @summary("发布或者取消发布某个版本")
     @tag
     @path({teamId:{type:'string',require:true},id:{type:'string',require:true}})
     @body({
@@ -297,12 +294,12 @@ module.exports = class AppRouter {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
         var version = await Version.findByIdAndUpdate({
-            appId:app.id,
             _id:body.versionId,
-            versionCode:body.versionCode
         },{released:body.release})
-        if (app.lastVersionCode && version.versionCode > app.lastVersionCode) {
-            await App.updateOne({_id:app.id},{lastVersionCode:version.versionCode})
+        if (body.release) {
+            await App.updateOne({_id:app.id},{releaseVersionId:version.versionCode})
+        }else{
+            await App.updateOne({_id:app.id},{releaseVersionId:''})
         }
         ctx.body = responseWrapper(true,body.release ? "版本已发布" : "版本已关闭")
     }

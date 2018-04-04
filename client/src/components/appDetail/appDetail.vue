@@ -9,7 +9,9 @@
       v-show="!showAppSetting"
       v-if="appInfo._id"
       :appInfo="appInfo"
-      :subTitleArr="subTitleArr">
+      :subTitleArr="subTitleArr"
+      @updateAppInfoSuccess="updateAppInfoSuccess"
+    >
     </appVersions>
 
     <appSetting
@@ -65,6 +67,9 @@
         }, reject => {
           this.$message.error(reject)
         })
+      },
+      updateAppInfoSuccess() {
+        this.getAppDetailData()
       }
     }
   }

@@ -15,7 +15,7 @@
     <div v-if="this.dataArr.length>0">
       <!--头部-->
       <div class="detail-content-top">
-        <span class="icon-ic_ios"></span>版本信息
+        <span style="margin-right: 6px" class="el-icon-tickets"></span>版本信息
         <div class="top-right" @click="setGrayVersion">
           <span class="icon-ic_greyfb" style="margin-right: 8px"></span>设置灰度版本
         </div>
@@ -101,7 +101,13 @@
       </div>
     </div>
 
-    <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo" :appInfo="this.appInfo"></editorVersion>
+    <editorVersion
+      v-if="this.showEditorVersion"
+      @cancel="cancel"
+      :versionInfo="this.versionInfo"
+      :appInfo="this.appInfo"
+      @updateSuccess="updateSuccess"
+    ></editorVersion>
     <graySetting v-if="this.showGraySetting" @cancel="cancelGraySetting" :versionList="this.dataArr" :appInfo="this.appInfo"></graySetting>
   </div>
 </template>
@@ -219,6 +225,10 @@
       },
       cancelGraySetting() {
         this.showGraySetting = false
+      },
+      updateSuccess() {
+        this.$emit('updateAppInfoSuccess')
+        this.getAppVersionListData()
       }
     }
   }

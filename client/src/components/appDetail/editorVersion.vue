@@ -23,7 +23,7 @@
             <p class="versiondownload" style="display: inline-block" v-html="getDownLoadCount(this.versionInfo.downloadCount)"></p>/<span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(this.versionInfo.strategy)"></span>
           </el-form-item>
           <el-form-item label="更新下载地址">
-            <input style="width: calc(100% - 40px)" v-model="this.downloadUrl" class="borderLine-input" type="text">
+            <input style="width: calc(100% - 40px)" v-model="downloadUrl" class="borderLine-input" type="text">
           </el-form-item>
           <el-form-item label="更新日志">
             <p class="textareacount">{{this.updataContent.length}}/100</p>
@@ -45,6 +45,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import * as AppResourceApi from '../../api/moudle/appResourceApi'
+  import {getUserTeam} from '../../mgr/userMgr'
+
   export default {
     props: {
       versionInfo: {
@@ -64,8 +67,11 @@
     },
     created() {
       setTimeout(() => {
+        console.log(this.versionInfo)
         this.show = true
         this.downloadUrl = `${this.axios.defaults.baseURL}${this.appInfo.shortUrl}`
+        this.updataContent = this.versionInfo.changelog
+        this.showinDownLoadPage = this.versionInfo.showOnDownloadPage
       }, 200)
     },
     methods: {
@@ -76,7 +82,18 @@
         }, 500)
       },
       sure() {
+        let body = {
+          'fileDownloadUrl': this.downloadUrl,
+          'showOnDownloadPage': this.showinDownLoadPage,
+          'changelog': this.updataContent
+        }
+        AppResourceApi.updateNote(getUserTeam()._id, this.appInfo._id, this.versionInfo._id, body).then((res) => {
+          console.log(res)
+          this.$message.success(res.message)
+          this.$emit('updateSuccess')
+        }, reject => {
 
+        })
       },
       clickcontent() {
 

@@ -31,7 +31,7 @@ export default new Router({
           component: AppDetail
         },
         {
-          path: '/teamMgr',
+          path: '/members',
           name: 'TeamMgr',
           component: TeamMgr
         }

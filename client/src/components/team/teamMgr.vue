@@ -9,13 +9,13 @@
       <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected"></item>
     </div>
    <!-- <invite-member v-show="isShowInvite" @invited="invited"></invite-member> -->
-   <el-dialog title="邀请成员" 
+   <el-dialog title="邀请成员"
    :visible.sync="isShowInvite"
    width=50%
    center>
-    <el-input placeholder="多个邮箱使用空格分开" 
+    <el-input placeholder="多个邮箱使用空格分开"
     :rows="10"
-    type="textarea" 
+    type="textarea"
     v-model="invitedEmails">
     </el-input>
     <span slot="footer" class="dialog-footer">
@@ -99,8 +99,8 @@ export default {
             break
           case 'manager':
             this.message = '确定要移除' + name + '吗?'
-            this.isManager = true   
-            break  
+            this.isManager = true
+            break
           default:
             this.message = '围观群众权限无法使用该功能，可联系项目创建者修改权限哦'
             this.isManager = false

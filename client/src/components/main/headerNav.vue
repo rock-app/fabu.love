@@ -5,7 +5,7 @@
       <div class="team" v-show="isTeam">
         <el-popover ref="popover" placement="bottom" width="160" trigger="click">
           <ul>
-            <li v-for="(item, index) in this.userInfo.teamArr" :key="index" @click="changeTeam(item)">
+            <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
               {{item.name}}
             </li>
           </ul>
@@ -74,7 +74,8 @@
         dialogFormVisible: false,
         form: {
           'name': ''
-        }
+        },
+        teamArr: []
       }
     },
     created() {
@@ -88,6 +89,7 @@
 
       this.userInfo = getUserInfo()
       this.currentTeam = getUserTeam()
+      this.teamArr = this.userInfo.teamId
       this.loadMessage()
     },
     methods: {
@@ -128,6 +130,8 @@
         saveUserTeam(item)
         // 刷新app列表
         Bus.$emit('refreshList')
+        // 更新team
+        this.currentTeam = getUserTeam()
       },
       sure() {
         if (this.form.name.length === 0) {
@@ -143,6 +147,11 @@
       },
       clickTeamBtn() {
         // 获取我的团队列表
+        UserApi.getUserTeams().then((res) => {
+          this.teamArr = res.data.teams
+        }, reject => {
+
+        })
       }
     }
   }
@@ -157,12 +166,19 @@
     display: flex;
     flex-direction: row;
   }
+  .leftWrapper-item {
+    height: 44px;
+    line-height: 44px;
+    border-bottom: solid 1px #eee;
+    box-sizing: border-box;
+  }
   .headernav-wrapper .leftWrapper .team .el-button {
     margin-top: 15px;
     font-size: 20px;
     font-family: "PingFang SC";
     color: $mainTitleColor;
     border-color: transparent;
+    max-width: 300px;
   }
   .headernav-wrapper .leftWrapper .el-breadcrumb {
     height: 72px;

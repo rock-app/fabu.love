@@ -2,22 +2,19 @@
   <div class="headernav-wrapper">
     <div class="leftWrapper">
       <!--团队，切换团队-->
-      <div class="team" v-show="isTeam">
-        <el-popover ref="popover" placement="bottom" width="160" trigger="click">
+      <div class="team">
+        <el-popover ref="popover" placement="bottom" width="160" trigger="click" :disabled="!this.isTeam || teamArr.length === 0">
           <ul>
             <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
               {{item.name}}
             </li>
           </ul>
         </el-popover>
-        <el-button v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down"></i></el-button>
+        <el-button v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
       </div>
       <!--详情-->
       <div class="detail" v-show="!isTeam">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/apps' }">应用列表</el-breadcrumb-item>
-          <el-breadcrumb-item>{{this.appName}}</el-breadcrumb-item>
-        </el-breadcrumb>
+        <p>{{this.appName}}</p>
       </div>
     </div>
     <div class="rightWrapper">
@@ -79,18 +76,22 @@
       }
     },
     created() {
-      Bus.$on('applist', () => {
-        this.isTeam = true
-      })
-      Bus.$on('appdetail', (appName) => {
-        this.isTeam = false
-        this.appName = appName
-      })
+      this.$nextTick(() => {
+        Bus.$on('applist', () => {
+          this.isTeam = true
+          this.$refs.arrow.style.transform = `rotate(0deg)`
+        })
+        Bus.$on('appdetail', (appName) => {
+          this.isTeam = false
+          this.appName = appName
+          this.$refs.arrow.style.transform = `rotate(-90deg)`
+        })
 
-      this.userInfo = getUserInfo()
-      this.currentTeam = getUserTeam()
-      this.teamArr = this.userInfo.teamId
-      this.loadMessage()
+        this.userInfo = getUserInfo()
+        this.currentTeam = getUserTeam()
+        this.teamArr = this.userInfo.teamArr
+        this.loadMessage()
+      })
     },
     methods: {
       clickUserIcon() {
@@ -126,6 +127,8 @@
         })
       },
       changeTeam(item) {
+        // 模拟点击，取消弹框
+        document.querySelector('#app').click()
         // 更新当前团队
         saveUserTeam(item)
         // 刷新app列表
@@ -146,12 +149,16 @@
         this.dialogFormVisible = false
       },
       clickTeamBtn() {
-        // 获取我的团队列表
-        UserApi.getUserTeams().then((res) => {
-          this.teamArr = res.data.teams
-        }, reject => {
+        if (this.isTeam) {
+          // 获取我的团队列表
+          UserApi.getUserTeams().then((res) => {
+            this.teamArr = res.data.teams
+          }, reject => {
 
-        })
+          })
+        } else {
+          this.$router.push('/apps')
+        }
       }
     }
   }
@@ -173,14 +180,22 @@
     box-sizing: border-box;
   }
   .headernav-wrapper .leftWrapper .team .el-button {
-    margin-top: 15px;
-    font-size: 20px;
-    font-family: "PingFang SC";
+    padding: 0px 10px;
+    margin-top: 9px;
     color: $mainTitleColor;
     border-color: transparent;
     max-width: 300px;
   }
-  .headernav-wrapper .leftWrapper .el-breadcrumb {
+  .headernav-wrapper .leftWrapper .team .el-button:hover {
+    background-color: transparent !important;
+  }
+  .headernav-wrapper .leftWrapper .team .el-button span {
+    height: 50px;
+    line-height: 50px;
+    font-family: "PingFang SC";
+    font-size: 20px;
+  }
+  .headernav-wrapper .leftWrapper .detail p {
     height: 72px;
     line-height: 72px;
     font-family: "PingFang SC";

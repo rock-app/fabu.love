@@ -40,13 +40,11 @@
     created() {
       this.$nextTick(() => {
         this.loadData()
-        console.log(this.userInfo)
       })
     },
     methods: {
       loadData() {
         UserApi.getUserInfo().then((res) => {
-          console.log(res)
           this.dataArr[0].subTitle = res.data.mobile
           this.dataArr[1].subTitle = res.data.qq
           this.dataArr[2].subTitle = res.data.company

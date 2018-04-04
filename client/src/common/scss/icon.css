@@ -30,6 +30,7 @@
 }
 .icon-ic_about:before {
   content: "\e901";
+  color: #d5dfed;
 }
 .icon-ic_about1:before {
   content: "\e902";
@@ -44,6 +45,7 @@
 }
 .icon-ic_API:before {
   content: "\e905";
+  color: #d5dfed;
 }
 .icon-ic_api1:before {
   content: "\e906";
@@ -55,6 +57,7 @@
 }
 .icon-ic_downdrop:before {
   content: "\e908";
+  color: #d5dfed;
 }
 .icon-ic_download_s:before {
   content: "\e909";
@@ -74,6 +77,7 @@
 }
 .icon-ic_email:before {
   content: "\e90d";
+  color: #d5dfed;
 }
 .icon-ic_github_s:before {
   content: "\e90e";
@@ -93,9 +97,11 @@
 }
 .icon-ic_help_s:before {
   content: "\e912";
+  color: #d5dfed;
 }
 .icon-ic_help:before {
   content: "\e913";
+  color: #d5dfed;
 }
 .icon-ic_help1:before {
   content: "\e914";

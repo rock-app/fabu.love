@@ -17,6 +17,8 @@
 
     <!--用户信息-->
     <userInfo v-if="this.showUserInfo"></userInfo>
+    <!--消息列表-->
+    <userMessage v-if="this.showUserMessage"></userMessage>
   </div>
 </template>
 
@@ -24,18 +26,19 @@
   import MainNav from './mainNav.vue'
   import HeaderNav from './headerNav.vue'
   import FooterWrapper from './footerWrapper.vue'
-  import AppList from '../appList/appList.vue'
   import UserInfo from '../user/userInfo.vue'
   import Bus from '../../common/js/bus'
+  import UserMessage from '../user/userMessage.vue'
 
   export default {
     data() {
       return {
-        showUserInfo: false
+        showUserInfo: false,
+        showUserMessage: false
       }
     },
     components: {
-      MainNav, HeaderNav, FooterWrapper, AppList, UserInfo
+      MainNav, HeaderNav, FooterWrapper, UserInfo, UserMessage
     },
     created() {
       Bus.$on('showUserInfo', () => {
@@ -43,6 +46,12 @@
       })
       Bus.$on('hiddenUserInfo', () => {
         this.showUserInfo = false
+      })
+      Bus.$on('showUserMessage', () => {
+        this.showUserMessage = true
+      })
+      Bus.$on('hiddenUserMessage', () => {
+        this.showUserMessage = false
       })
     },
     methods: {

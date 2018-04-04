@@ -6,6 +6,7 @@ import AppPreView from '../components/appDetail/appPreView.vue'
 import UserInfo from '../components/user/userInfo.vue'
 import Main from '../components/main/main.vue'
 import Apps from '../components/appList/appList.vue'
+import TeamMgr from '../components/team/teamMgr.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
           path: '/app/:appId',
           name: 'AppDetail',
           component: AppDetail
+        },
+        {
+          path: '/teamMgr',
+          name: 'TeamMgr',
+          component: TeamMgr
         }
       ]
     },

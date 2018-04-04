@@ -56,23 +56,24 @@ var appProfile = {
 
 module.exports = class AppRouter {
     @request('get','/api/apps/{teamId}')
-    @summary("获取团队下App列表(分页)")
-    @query(
-        {
-        page:{type:'number',default:0,description:'分页页码(可选)'},
-        size:{type:'number',default:10,description:'每页条数(可选)'}
-    })
+    @summary("获取团队下App列表")
+    // @query(
+    //     {
+    //     page:{type:'number',default:0,description:'分页页码(可选)'},
+    //     size:{type:'number',default:10,description:'每页条数(可选)'}
+    // })
     @path({teamId:{type:'string',description:'团队id'}})
     @tag
     static async getApps(ctx,next){
-        var page = ctx.query.page || 0
-        var size = ctx.query.size || 10
+        // var page = ctx.query.page || 0
+        // var size = ctx.query.size || 10
         var user = ctx.state.user.data;
         var { teamId } = ctx.validatedParams;        
 
         var result = await App.find(
                 {'ownerId':teamId}
-            ).limit(size).skip(page * size)
+            )
+            // .limit(size).skip(page * size)
         ctx.body = responseWrapper(result)
     }
 

@@ -74,7 +74,7 @@
         })
       },
       cancel() {
-
+        this.$emit('cancel')
       }
     }
   }

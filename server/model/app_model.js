@@ -51,17 +51,14 @@ var appSchema = new Schema({
     ownerId: String,
     changelog: String,
     totalDownloadCount: Number,
-    lastVersionCode: String,
     updateMode: {
         type: String,
         default: 'slient',
         enum: ['slient', 'normal', 'force']
     },
-
-    grayReleaseVersion: {
-        versionId:String,
-        versionStr:String
-    },
+    releaseVersionCode: String,     //当前对外发布的code号
+    releaseVersionId:String,        //当前对外发布的最新版本号
+    grayReleaseVersionId:String,
     grayStrategy: {
         ipType: {
             type: String,

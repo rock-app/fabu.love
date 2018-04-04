@@ -36,6 +36,14 @@ export function getTeamArr() {
   return user.teamArr
 }
 
+// 更新team数组
+export function updateTeamArr(teamArr) {
+  let user = this.getUserInfo()
+  user.teamArr = teamArr
+  // 存储新的用户信息
+  StorageMgr.setItem(USERINFO_KEY, user)
+}
+
 // 存储当前用户选择的team
 export function saveUserTeam(team) {
   StorageMgr.setItem(CURRENT_USERTRAM_KEY, team)

@@ -7,26 +7,23 @@
 
     <div>
       <el-menu
-        :default-active="this.slotName === 'detail-nav' ? '应用概述' : ''"
+        :default-active="this.activeIndex"
         class="mainNav-el-menu"
+        ref="elmenu"
       >
         <!--不可以用v-if，否则会因为控件加载时序问题导致，指定选中的item失效-->
-        <div v-show="this.slotName === 'main-nav'">
-          <el-menu-item index="创建团队">
-            <i class="el-icon-menu"></i>
-            <span slot="title">创建团队</span>
+        <div v-show="this.activeIndex !== '应用概述'">
+          <el-menu-item index="应用列表" @click="clickSubItem">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">应用列表</span>
           </el-menu-item>
           <el-menu-item index="团队管理" @click="clickSubItem">
             <i class="el-icon-menu"></i>
             <span slot="title">团队管理</span>
           </el-menu-item>
-          <el-menu-item index="邀请队员">
-            <i class="el-icon-setting"></i>
-            <span slot="title">邀请队员</span>
-          </el-menu-item>
         </div>
 
-        <div v-show="this.slotName === 'detail-nav'">
+        <div v-show="this.activeIndex === '应用概述'">
           <el-menu-item index="应用概述" @click="clickSubItem">
             <i class="el-icon-menu"></i>
             <span slot="title">应用概述</span>
@@ -70,20 +67,29 @@
   export default {
     data() {
       return {
-        slotName: 'main-nav'
+        activeIndex: '应用列表'
       }
     },
     created() {
-      Bus.$on('appdetail', () => {
-        this.slotName = 'detail-nav'
+      this.$nextTick(() => {
+        Bus.$on('appdetail', () => {
+          this.activeIndex = '应用概述'
+        })
+        Bus.$on('applist', () => {
+          this.activeIndex = '应用列表'
+          this.$router.push('/apps')
+        })
+        if (this.$route.fullPath === '/members') {
+          this.activeIndex = '团队管理'
+        }
       })
-      Bus.$on('applist', () => {
-        this.slotName = 'main-nav'
-        this.$router.push('/apps')
-      })
+
     },
     methods: {
       clickSubItem(data) {
+        if (data.index === '应用列表') {
+          this.$router.push('/apps')
+        }
         if (data.index === '应用概述') {
           Bus.$emit('appSummary')
         }
@@ -91,7 +97,7 @@
           Bus.$emit('appSetting')
         }
         if (data.index === '团队管理') {
-          this.$router.push('/teamMgr')
+          this.$router.push('/members')
         }
         if (data.index === 'API文档') {
           let href = `${this.axios.defaults.baseURL}api/swagger`

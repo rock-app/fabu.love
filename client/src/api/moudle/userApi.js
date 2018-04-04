@@ -41,3 +41,22 @@ export function allRead() {
   let url = `api/messages/markread`
   return getHttp(url)
 }
+
+// 获取用户团队列表
+export function getUserTeams() {
+  let url = `api/user/teams`
+  return getHttp(url)
+}
+
+// 获取用户信息
+export function getUserInfo() {
+  let url = `api/user/info`
+  return getHttp(url)
+}
+
+// 创建一个团队
+export function createdTeam(name) {
+  let body = {'name': name}
+  let url = `api/team/create`
+  return postHttp(url, body)
+}

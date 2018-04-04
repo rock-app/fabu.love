@@ -4,7 +4,7 @@
       <li class="emailWrapper">
         <i class="icon-ic_ios"></i>
         <p class="emailTitle">邮箱</p>
-        <span class="email">1212121@qq.com</span>
+        <span class="email">{{this.userInfo.email}}</span>
       </li>
       <li class="personalInfoItem" v-for="(item, index) in dataArr" :key="index">
         <i class="icon-ic_ios"></i>
@@ -20,6 +20,7 @@
 
 <script type="text/ecmascript-6">
   import * as UserApi from '../../api/moudle/userApi'
+
   export default {
     props: {
       userInfo: {
@@ -37,8 +38,23 @@
       }
     },
     created() {
+      this.$nextTick(() => {
+        this.loadData()
+        console.log(this.userInfo)
+      })
     },
     methods: {
+      loadData() {
+        UserApi.getUserInfo().then((res) => {
+          console.log(res)
+          this.dataArr[0].subTitle = res.data.mobile
+          this.dataArr[1].subTitle = res.data.qq
+          this.dataArr[2].subTitle = res.data.company
+          this.dataArr[3].subTitle = res.data.career
+
+        }, reject => {
+        })
+      },
       cancel() {
         this.$emit('cancel')
       },
@@ -51,7 +67,7 @@
         }
         UserApi.updateUserInfo(body).then((res) => {
           this.$message.success(res.message)
-          // 保存用户填写的信息
+          this.loadData()
         }, reject => {
 
         })
@@ -80,6 +96,7 @@
     width: 60px;
     font-size: 14px;
     color: $subTitleColor;
+    margin-left: 8px;
   }
   .emailWrapper {
     margin-top: 24px;

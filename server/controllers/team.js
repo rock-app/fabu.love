@@ -244,5 +244,28 @@ module.exports = class TeamRouter {
             }).run({useMongoose: true});
         ctx.body = responseWrapper(true,"请求成功")
     }
+    
+
+    @request('delete', '/api/team/{teamId}/members')
+    @summary('获取团队成员列表')
+    @tag
+    @path({
+        id: {
+            type: 'string',
+            required: true
+        }
+    })
+    static async getMembers(ctx, next) {
+        var { teamId } = ctx.validatedParams;
+        var user = ctx.state.user.data;
+        //如果传入的id和当前登录用户的id相等 表示是自己离开团队
+        var team = await Team.find({
+            _id: teamId,
+        })
+        if (!team) {
+            throw new Error("团队不存在")
+        }
+        ctx.body = responseWrapper(team)
+    }
 
 }

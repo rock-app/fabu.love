@@ -162,11 +162,23 @@ module.exports = class AuthRouter {
         ctx.body = responseWrapper(user)
     }
 
-    @request('post', '/api/user/repassword')
+    @request('get', '/api/user/teams')
+    @summary('获取用户团队列表')
+    @tag
+    static async getuserTeams(ctx, next) {
+        var user = ctx.state.user.data
+        var user = await User.findById(user._id,"teams");
+        if (!user) {
+            throw new Error("用户不存在");
+        } 
+        ctx.body = responseWrapper(user)
+    }
+
+    @request('post', '/api/user/resetPassword')
     @summary('通过邮箱重置密码')
     @tag
     @body({email:{type:'string',required:true}})
-    static async requestPassword(ctx, next) {
+    static async resetPassword(ctx, next) {
         var body = ctx.request.body
 
         var user = await User.findOne({ email:body.email },"-teams -password");

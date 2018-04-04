@@ -16,7 +16,7 @@
             <i class="icon-ic_mnggp"></i>
             <span slot="title">应用列表</span>
           </el-menu-item>
-          <el-menu-item index="团队管理">
+          <el-menu-item index="团队管理" @click="clickSubItem">
             <i class="el-icon-menu"></i>
             <span slot="title">团队管理</span>
           </el-menu-item>
@@ -89,6 +89,9 @@
         }
         if (data.index === '应用设置') {
           Bus.$emit('appSetting')
+        }
+        if (data.index === '团队管理') {
+          this.$router.push('/teamMgr')
         }
         if (data.index === 'API文档') {
           let href = `${this.axios.defaults.baseURL}api/swagger`

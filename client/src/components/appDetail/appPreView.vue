@@ -1,3 +1,5 @@
+
+
 <template>
     <div class="previewapp-wrapper">
       <!--中间-->
@@ -11,22 +13,28 @@
       <!--手机视图-->
       <div class="preview-mobilewrapper">
         <img class="mobieImg" src='../../assets/ic_mobilphone.png'>
-        <img class="qrcodeImg" src='../../assets/ic_scan.png'>
+        <vue-qr class="qrcodeImg" :text="downloadUrl" height="140" width="140" margin="20"></vue-qr>
         <p class="codetips">请扫描二维码下载APP</p>
-        <p class="platform">适用于iOS系统</p>
+        <p class="platform">适用于{{this.platformStr}}系统</p>
       </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
+  import VueQr from 'vue-qr'
 
   export default {
+    components:{
+      VueQr
+    },
     data() {
       return {
         versionArr: [['1.3.4', '2017-03-12'], ['1.3.3', '2017-03-11'], ['1.3.2', '2017-03-10'], ['1.3.1', '2017-03-9']],
         appVersionInfo: {},
-        appBaseData: {}
+        appBaseData: {},
+        downloadUrl: '',
+        platformStr: ''
       }
     },
     computed: {
@@ -48,8 +56,9 @@
           console.log(res)
           this.appVersionInfo = res.data.version
           this.appBaseData = res.data.app
-
           let releaseDate = new Date(this.appVersionInfo.uploadAt)
+          this.downloadUrl = `${this.axios.defaults.baseURL}${this.appVersionInfo.downloadUrl}`
+          this.platformStr = res.data.app.platform
           this.appVersionInfo.creatDateStr = `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
 
         }, reject => {
@@ -65,7 +74,7 @@
       },
       clickDownLoadBtn() {
         const a = document.createElement('a')
-        a.setAttribute('href', `${this.axios.defaults.baseURL}${this.appVersionInfo.downloadUrl}`)
+        a.setAttribute('href', this.downloadUrl)
         a.click()
       }
     }
@@ -123,21 +132,18 @@
   .preview-middlewrapper .desc {
     color: #242A34;
     font-size: 14px;
-    float: left;
     text-align: left;
     line-height: 20px;
-    height: 20px;
     margin-left: 10%;
     margin-top: 12px;
+    width: 100px;
     opacity: 0.5;
   }
   .preview-middlewrapper .date {
     color: #242A34;
     font-size: 14px;
-    float: left;
     text-align: left;
     line-height: 20px;
-    height: 20px;
     margin-top: 2px;
     margin-left: 10%;
     opacity: 0.5;
@@ -164,8 +170,8 @@
   .preview-mobilewrapper .qrcodeImg {
     width: 160px;
     height: 160px;
-    margin-left: 46px;
-    margin-top: 116px;
+    margin-left: 26px;
+    margin-top: 86px;
     position: absolute;
   }
 

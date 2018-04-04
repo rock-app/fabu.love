@@ -2,7 +2,7 @@
   <div class="collectionView-wrapper">
     <ul class="collectionView-wrapper-ul">
       <li v-for="(item, index) in this.dataArr" :key="index" class="itemWrapper">
-        <i :class="item.platform === 'ios' ? 'icon-ic_ios':'icon-ic_android'" class="appItem-platform"></i>
+        <span :class="item.platform === 'ios' ? 'appItem-platform-ios':'appItem-platform-android'" class="appItem-platform"></span>
         <img class="appItem-icon" v-if="item.icon" v-lazy="getIcon(item)" alt="" @click="gotoAppDetail(item)">
 
         <div class="appItem-info">
@@ -30,6 +30,15 @@
             </tr>
         </table>
         </div>
+
+        <button class="preview button-style-border" @click="clickPreviewBtn(item)">
+          <i class="icon-ic_overview"></i>
+          <span>预览</span>
+        </button>
+        <button class="editor button-style-border" @click="clickEditorBtn(item)">
+          <i class="icon-ic_edit"></i>
+          <span>编辑</span>
+        </button>
       </li>
     </ul>
   </div>
@@ -51,9 +60,13 @@
       }
     },
     data() {
-      return {}
+      return {
+      }
     },
-    created() {},
+    computed: {
+    },
+    created() {
+    },
     methods: {
       gotoAppDetail(item) {
         this.$emit('gotoAppDetail', item)
@@ -63,6 +76,17 @@
       },
       getShortUrl(item) {
         return `${this.axios.defaults.baseURL}${item.shortUrl}`
+      },
+      clickEditorBtn(item) {
+        this.$emit('gotoAppDetail', item)
+      },
+      clickPreviewBtn(item) {
+        const {href} = this.$router.resolve({
+          name: 'AppPreView',
+          path: '/',
+          params: { 'id': item.shortUrl }
+        })
+        window.open(href, '_blank')
       }
     }
   }
@@ -88,12 +112,13 @@
     text-align: center;
     border-radius: 4px ;
     transition: 0.5s;
-    &:nth-child(2n-1) {
-      margin-right: 2.6%;
-    }
-    &:nth-child(4n-2) {
-      margin-right: 2.6%;
-    }
+    margin-right: 2.6%;
+    /*&:nth-child(2n-1) {*/
+      /*margin-right: 2.6%;*/
+    /*}*/
+    /*&:nth-child(4n-2) {*/
+      /*margin-right: 2.6%;*/
+    /*}*/
   }
   .itemWrapper:hover {
     transform: translateY(-4px);
@@ -109,7 +134,12 @@
     width: 52px;
     height: 38px;
     background-size: 52px 38px;
-    background-color: red;
+  }
+  .collectionView-wrapper .itemWrapper .appItem-platform-ios {
+    background-image: url("../../assets/tag_ios.png");
+  }
+  .collectionView-wrapper .itemWrapper .appItem-platform-android {
+    background-image: url("../../assets/tag_android.png");
   }
   .itemWrapper .appItem-icon {
     width: 72px;
@@ -146,5 +176,36 @@
     max-width: 100%;
     line-height: 25px;
     text-align: left;
+  }
+  .collectionView-wrapper-ul .itemWrapper button {
+    width: 36px;
+    height: 36px;
+    margin-top: 36px;
+    float: right;
+    border-color: #eee;
+    position: relative;
+    overflow: hidden;
+  }
+  .collectionView-wrapper-ul .itemWrapper button span {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    line-height: 36px;
+    background-color: white;
+    opacity: 0;
+  }
+  .collectionView-wrapper-ul .itemWrapper button:hover {
+    border-color: $mainColor;
+  }
+  .collectionView-wrapper-ul .itemWrapper button span:hover {
+    opacity: 1;
+  }
+  .collectionView-wrapper-ul .itemWrapper .editor {
+    margin-right: 12px;
+  }
+  .collectionView-wrapper-ul .itemWrapper .preview {
+    margin-right: 24px;
   }
 </style>

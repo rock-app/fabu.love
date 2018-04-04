@@ -29,7 +29,8 @@ app.use(function(ctx,next){
   }
 })
 app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
-  path: ['/api/user/register', '/api/user/login', '/api/swagger', '/api/swagger.json']
+  path: ['/api/user/register', '/api/user/login', '/api/user/resetPassword'
+  ,'/api/swagger', '/api/swagger.json']
 }))
 app.use(rest.restify())
 app.use(router.routes())

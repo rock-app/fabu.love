@@ -16,7 +16,7 @@
         </div>
       </el-form-item>
       <el-form-item label="应用图标" style="margin-top: 30px">
-        <img class="appBaseInfo-appicon" src="../../assets/backgroundImage.png" alt="">
+        <img class="appBaseInfo-appicon" src="" alt="">
       </el-form-item>
       <el-form-item label="应用描述" style="margin-top: 30px">
         <el-input type="textarea" v-model="form.appDesc"></el-input>

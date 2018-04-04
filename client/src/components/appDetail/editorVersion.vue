@@ -12,7 +12,7 @@
           </el-switch>
           <p>显示到下载页</p>
         </div>
-        <el-form label-position="left">
+        <el-form label-position="left" labelWidth="100px">
           <el-form-item label="版本名称">
             <p class="versioninput">{{this.versionInfo.appName}}</p>
           </el-form-item>
@@ -21,6 +21,9 @@
           </el-form-item>
           <el-form-item label="下载次数">
             <p class="versiondownload" style="display: inline-block" v-html="getDownLoadCount(this.versionInfo.downloadCount)"></p>/<span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(this.versionInfo.strategy)"></span>
+          </el-form-item>
+          <el-form-item label="更新下载地址">
+            <input style="width: calc(100% - 40px)" v-model="this.downloadUrl" class="borderLine-input" type="text">
           </el-form-item>
           <el-form-item label="更新日志">
             <p class="textareacount">{{this.updataContent.length}}/100</p>
@@ -46,18 +49,23 @@
     props: {
       versionInfo: {
         type: Object
+      },
+      appInfo: {
+        type: Object
       }
     },
     data() {
       return {
         show: false,
         updataContent: '',
-        showinDownLoadPage: false
+        showinDownLoadPage: false,
+        downloadUrl: ''
       }
     },
     created() {
       setTimeout(() => {
         this.show = true
+        this.downloadUrl = `${this.axios.defaults.baseURL}${this.appInfo.shortUrl}`
       }, 200)
     },
     methods: {
@@ -81,7 +89,7 @@
         }
       },
       getAllowDownLoadCount(strategy) {
-        if (strategy.downloadCountLimit) {
+        if (strategy && strategy.downloadCountLimit) {
           return strategy.downloadCountLimit
         } else {
           return '不限'
@@ -155,7 +163,7 @@
     color: $subTitleColor;
   }
   .editorVersion-content .el-form .el-form-item .versioninput {
-    width: calc(100% - 72px - 24px);
+    width: calc(100% - 40px);
     font-size: 14px;
     color: $mainTitleColor;
   }
@@ -165,10 +173,10 @@
   }
   .editorVersion-content .el-form .el-form-item .textareacount {
     text-align: right;
-    padding-right: 72px;
+    padding-right: 40px;
   }
   .editorVersion-content .editorVersion-updatatextarea {
-    width: calc(100% - 72px);
+    width: calc(100% - 40px);
     font-size: 14px;
     color: $mainTitleColor;
   }
@@ -186,6 +194,6 @@
   .editorVersion-content .sureBtn {
     background-color: $mainColor !important;
     color: white !important;
-    margin-left: calc(100% - 72px - 96px - 96px - 10px);
+    margin-left: calc(100% - 40px - 96px - 96px - 10px);
   }
 </style>

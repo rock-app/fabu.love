@@ -3,13 +3,27 @@
     <div class="teamMgr-header">{{teamName}}</div>
     <div class="teamMgr-content">
       <div class="teamMgr-group-header">
-        <div><label>团队人数 {{memberCount}}</label><button @click="addMember">添加</button></div>
+        <div><label>团队人数 {{members.length}}</label><img src="../../assets/add.png" @click="addClick"/></div>
         <label>成员权限</label>
       </div>
       <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected"></item>
     </div>
-   <invite-member v-show="isShowInvite" @invited="invited"></invite-member>
-   <el-dialog
+   <!-- <invite-member v-show="isShowInvite" @invited="invited"></invite-member> -->
+   <el-dialog title="邀请成员" 
+   :visible.sync="isShowInvite"
+   width=50%
+   center>
+    <el-input placeholder="多个邮箱使用空格分开" 
+    :rows="10"
+    type="textarea" 
+    v-model="invitedEmails">
+    </el-input>
+    <span slot="footer" class="dialog-footer">
+          <el-button @click="isShowInvite=false">取 消</el-button>
+          <el-button type="primary" @click="sendInvite">确 定</el-button>
+    </span>
+  </el-dialog>
+  <el-dialog
     title="提示"
     :visible.sync="dialogVisible"
     width="30%">
@@ -25,29 +39,43 @@
 <script>
 import Item from './teamItem'
 import InviteMember from '../appDetail/inviteMember'
+import * as TeamApi from '../../api/moudle/teamApi'
+import * as useMgr from '../../mgr/userMgr'
 export default {
   data() {
     return {
       teamName: '研发中心',
-      memberCount: 10,
       members: [{name: '开发者', email: 'kaifazhe@qq.com', owner: 'creator'},
                 {name: '设计师', email: 'shejishi@qq.com', owner: 'manager'},
-                {name: '测试员', email: 'ceshiyuan@qq.com', owner: 'role'}],
+                {name: '测试员', email: 'ceshiyuan@qq.com', owner: 'guest'}],
       isShowInvite: false,
       dialogVisible: false,
       isManager: false,
       currentIndex: -1,
-      message: ''
+      message: '',
+      invitedEmails: ''
     }
   },
   computed: {
   },
   methods: {
-    addMember () {
+    addClick () {
       this.isShowInvite = true
     },
-    invited () {
+    sendInvite () {
       this.isShowInvite = false
+      let emailList = this.invitedEmails.split(' ')
+      let validedEmailList = []
+      for (var email of emailList) {
+        alert(this.valideEmail(email))
+        if (this.valideEmail(email)) {
+          validedEmailList.push(email)
+        }
+      }
+      if (validedEmailList.length > 0) {
+        this.request(validedEmailList)
+      }
+      console.log(validedEmailList)
     },
     itemSelected (index) {
       this.currentIndex = index
@@ -80,8 +108,15 @@ export default {
         }
       }
     },
-    request () {
-      
+    request (emailList) {
+      let teamId = useMgr.getUserTeam().id
+      TeamApi.inviteMembers(teamId, emailList).then(resp => {
+        alert(alert)
+      })
+    },
+    valideEmail(email) {
+      var re = /\S+@\S+\.\S+/
+      return re.test(email)
     }
   },
   components: {
@@ -114,10 +149,15 @@ export default {
         line-height: 100px;
         display: flex;
         justify-content: space-between;
-
+        align-items: center;
+        margin-left: 24px;
         & > div:first-child  {
-          margin-left: 24px;
-          button {
+          height: 22px;
+          display: flex;
+          align-items: center;
+          img {
+            width: 22px;
+            height: 22px;
             margin-left: 10px;
           }
         }

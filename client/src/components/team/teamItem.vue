@@ -61,7 +61,6 @@ export default {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(10, 10, 10, 0.1);
-
     .teamItem-circle {
       height: 44px;
       width: 44px;
@@ -73,11 +72,9 @@ export default {
       font-size: 20px;
       margin-left: 24px;
     }
-
     .teamItem-name {
         margin-left: 10px;
     }
-
     .teamItem-owner {
       margin-right: 24px;
     }

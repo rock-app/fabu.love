@@ -69,7 +69,8 @@ export default {
       for (var email of emailList) {
         alert(this.valideEmail(email))
         if (this.valideEmail(email)) {
-          validedEmailList.push(email)
+          var changedEmail = email.replace(/[\r\n]/g, '')
+          validedEmailList.push(changedEmail)
         }
       }
       if (validedEmailList.length > 0) {
@@ -109,7 +110,7 @@ export default {
       }
     },
     request (emailList) {
-      let teamId = useMgr.getUserTeam().id
+      let teamId = useMgr.getUserTeam()._id
       TeamApi.inviteMembers(teamId, emailList).then(resp => {
         alert(alert)
       })

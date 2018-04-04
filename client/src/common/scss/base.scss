@@ -78,3 +78,35 @@ body {
   font-size: 14px;
   color: $mainTitleColor;
 }
+
+@mixin border($position: top, $color: rgb(233, 236, 240)) {
+  content: '';
+  position: absolute;
+  color: $color;
+  //transform-origin: 0 0;
+  //transform: scaleY(0.5);
+
+  @if $position == top {
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid $color;
+  } @else if $position == bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid $color;
+  } @else if $position == left {
+    bottom: 0;
+    top: 0;
+    left: 0;
+    border-left: 1px solid $color;
+  } @else if $position == right {
+    bottom: 0;
+    top: 0;
+    right: 0;
+    border-right: 1px solid $color;
+  }
+}

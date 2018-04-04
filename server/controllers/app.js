@@ -293,13 +293,20 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-        var version = await Version.findByIdAndUpdate({
-            _id:body.versionId,
-        },{released:body.release})
+        var version = await Version.findById(body.versionId)
+        if (!version) {
+            throw new Error("版本不存在")
+        }
         if (body.release) {
-            await App.updateOne({_id:app.id},{releaseVersionId:version._id})
+            await App.updateOne({_id:app.id},{
+                releaseVersionId:version._id,
+                releaseVersionCode:version.versionCode
+            })
         }else{
-            await App.updateOne({_id:app.id},{releaseVersionId:''})
+            await App.updateOne({_id:app.id},{
+                releaseVersionId:'',
+                releaseVersionCode:''
+            })
         }
         ctx.body = responseWrapper(true,body.release ? "版本已发布" : "版本已关闭")
     }

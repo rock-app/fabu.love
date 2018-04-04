@@ -16,9 +16,11 @@
         </ul>
 
         <el-pagination
-          style="margin: 0 auto;text-align: center"
+          v-show="this.totalCount > 0"
+          style="margin: 0 auto;text-align: center;margin-top: 20px"
           layout="prev, pager, next"
-          :total="1000">
+          @handleCurrentChange="handleCurrentChange()"
+          :total="this.totalCount">
         </el-pagination>
       </div>
     </transition>
@@ -40,18 +42,29 @@
         show: false,
         userInfo: {},
         dataArr: ['', '', '', '', '', '', '', ''],
-        currentPage: 0
+        currentPage: 0,
+        totalCount: 0
       }
     },
     created() {
       setTimeout(() => {
         this.show = true
+
+        this.loadMessageCount()
+        this.loadData()
       }, 100)
       this.userInfo = getUserInfo()
     },
     computed: {
     },
     methods: {
+      loadMessageCount() {
+        UserApi.getMessageCount().then((res) => {
+          this.totalCount = res.data.total
+        }, reject => {
+
+        })
+      },
       loadData() {
         UserApi.getUserMessage(this.currentPage).then((res) => {
           console.log(res)
@@ -78,6 +91,7 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
+        this.currentPage = val
       },
       getTimer(timer) {
         // 今天显示时分，昨天显示昨天时分，其余显示日期

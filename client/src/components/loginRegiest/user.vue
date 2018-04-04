@@ -154,6 +154,7 @@
         }
         LoginApi.login(body)
           .then(response => {
+            console.log(response)
             // 存储token
             TokenMgr.add(this.axios.baseURL, response.data.token)
             let user = {

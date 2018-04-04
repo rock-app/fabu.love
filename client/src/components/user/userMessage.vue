@@ -4,15 +4,24 @@
       <div v-show="this.show" class="userMessage-wrapper-body" @click.stop="clickcontent">
         <div class="top">
           <button>清空消息</button>
+          <button>全部标记已读</button>
           <div style="width: 100%;height: 1px;background-color: #eee;margin-top: 10px"></div>
         </div>
-        <ul>
+        <ul class="messageListWrapper">
           <li class="messageItem" v-for="(item, index) in this.dataArr" :key="index">
             <span></span>
             <p class="canwrap content">121212121211212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121221212121212121212</p>
-            <p class="timer">19:00</p>
+            <p class="timer" v-html="getTimer(Date())"></p>
           </li>
         </ul>
+
+        <el-pagination
+          v-show="this.totalCount > 0"
+          style="margin: 0 auto;text-align: center;margin-top: 20px"
+          layout="prev, pager, next"
+          @handleCurrentChange="handleCurrentChange()"
+          :total="this.totalCount">
+        </el-pagination>
       </div>
     </transition>
 
@@ -23,6 +32,7 @@
 
   import {getUserInfo} from '../../mgr/userMgr'
   import Bus from '../../common/js/bus'
+  import * as UserApi from '../../api/moudle/userApi'
 
   export default {
     components: {
@@ -31,18 +41,42 @@
       return {
         show: false,
         userInfo: {},
-        dataArr: ['']
+        dataArr: ['', '', '', '', '', '', '', ''],
+        currentPage: 0,
+        totalCount: 0
       }
     },
     created() {
       setTimeout(() => {
         this.show = true
+
+        this.loadMessageCount()
+        this.loadData()
       }, 100)
       this.userInfo = getUserInfo()
     },
     computed: {
     },
     methods: {
+      loadMessageCount() {
+        UserApi.getMessageCount().then((res) => {
+          this.totalCount = res.data.total
+        }, reject => {
+
+        })
+      },
+      loadData() {
+        UserApi.getUserMessage(this.currentPage).then((res) => {
+          console.log(res)
+          if (res.data.length > 0) {
+            this.redDocHidden = false
+          } else {
+            this.redDocHidden = true
+          }
+        }, reject => {
+
+        })
+      },
       clickItem(item) {
         this.currentItem = item
       },
@@ -51,6 +85,24 @@
         setTimeout(() => {
           Bus.$emit('hiddenUserMessage')
         }, 500)
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
+        this.currentPage = val
+      },
+      getTimer(timer) {
+        // 今天显示时分，昨天显示昨天时分，其余显示日期
+      },
+      isYestday(theDate) {
+        // 当前时间
+        var date = (new Date())
+        // 今天凌晨
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+        var yestday = new Date(today - 24 * 3600 * 1000).getTime()
+        return theDate.getTime() < today && yestday <= theDate.getTime()
       },
       clickcontent() {}
     }
@@ -90,14 +142,23 @@
   .userMessage-wrapper-body .top {
     width: 100%;
     height: 60px;
-    text-align: right;
+    text-align: left;
   }
   .userMessage-wrapper-body .top button {
-    height: 40px;
-    line-height: 40px;
     margin-top: 10px;
-    padding: 0px;
-    margin-right: 10px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0px 10px;
+    margin-left: 10px;
+    background-color: transparent;
+    border-color:  $mainColor;
+    color: $mainColor;
+    border-radius: 15px;
+  }
+  .userMessage-wrapper-body .messageListWrapper {
+    width: 100%;
+    height: calc(100% - 60px - 80px);
+    overflow: scroll;
   }
   .userMessage-wrapper-body .messageItem {
     display: flex;

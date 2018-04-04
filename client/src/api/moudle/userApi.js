@@ -23,3 +23,9 @@ export function getUserMessage(page) {
   let url = `api/messages`
   return getHttp(url, params)
 }
+
+// 获取消息总数和未读消息总数
+export function getMessageCount() {
+  let url = 'api/messages/count'
+  return getHttp(url)
+}

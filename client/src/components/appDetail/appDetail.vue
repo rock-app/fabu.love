@@ -42,7 +42,6 @@
     computed: {},
     created() {
       this.$nextTick(() => {
-        Bus.$emit('appdetail')
         this.userteam = getUserTeam()
         this.getAppDetailData()
       })
@@ -62,6 +61,7 @@
           this.subTitleArr.push(this.appInfo.bundleId)
           this.subTitleArr.push(this.axios.defaults.baseURL + this.appInfo.shortUrl)
           this.subTitleArr.push(this.appInfo._id)
+          Bus.$emit('appdetail', res.data.appName)
         }, reject => {
           this.$message.error(reject)
         })

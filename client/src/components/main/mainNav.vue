@@ -43,19 +43,19 @@
       <el-menu
         class="mainNav-footer-list"
       >
-        <el-menu-item index="0" @click="gotoApiDoc">
-          <i class="icon-ic_API"></i>
+        <el-menu-item index="API文档" @click="clickSubItem">
+          <i class="icon-ic_api_s"></i>
           <span slot="title">API文档</span>
         </el-menu-item>
-        <el-menu-item index="1">
-          <i class="icon-ic_help"></i>
+        <el-menu-item index="Help" @click="clickSubItem">
+          <i class="icon-ic_help_s"></i>
           <span slot="title">Help</span>
         </el-menu-item>
-        <el-menu-item index="2">
-          <i class="icon-ic_github1"></i>
+        <el-menu-item index="GitHub" @click="clickSubItem">
+          <i class="icon-ic_github_s"></i>
           <span slot="title">GitHub</span>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="About" @click="clickSubItem">
           <i class="icon-ic_about_s"></i>
           <span slot="title">About</span>
         </el-menu-item>
@@ -89,6 +89,16 @@
         }
         if (data.index === '应用设置') {
           Bus.$emit('appSetting')
+        }
+        if (data.index === 'API文档') {
+          let href = `${this.axios.defaults.baseURL}api/swagger`
+          window.open(href, '_blank')
+        }
+        if (data.index === 'Help') {
+        }
+        if (data.index === 'GitHub') {
+        }
+        if (data.index === 'About') {
         }
       },
       gotoApiDoc() {
@@ -144,10 +154,6 @@
     font-size: 16px;
     line-height: 24px;
   }
-  .mainNav-footer .mainNav-footer-list .is-active {
-    color: white;
-    background-color: $mainColor;
-  }
   .mainNav-footer .mainNav-footer-list .is-active span {
     color: white;
   }
@@ -167,5 +173,11 @@
   }
   .mainNav-wrapper .mainNav-el-menu .is-active span {
     color: white;
+  }
+  .mainNav-footer .mainNav-footer-list .is-active {
+    background-color: transparent;
+  }
+  .mainNav-footer .mainNav-footer-list .is-active span {
+    color: $subTitleColor;
   }
 </style>

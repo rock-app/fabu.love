@@ -10,7 +10,7 @@
             </li>
           </ul>
         </el-popover>
-        <el-button v-popover:popover>{{this.currentTeam.name}}  <i class="el-icon-arrow-down"></i></el-button>
+        <el-button v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down"></i></el-button>
       </div>
       <!--详情-->
       <div class="detail" v-show="!isTeam">
@@ -33,11 +33,26 @@
         <li class="userInfoSub" @click="clickUserInfoWrapper">
           <span>个人设置</span>
         </li>
+        <li class="userInfoSub" @click="dialogFormVisible = true">
+          <span>创建团队</span>
+        </li>
         <li class="userInfoSub" @click="loginout">
           <span>退出</span>
         </li>
       </ul>
     </div>
+
+    <el-dialog title="创建团队" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="团队名称">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sure">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -55,7 +70,11 @@
         redDocHidden: true,
         currentTeam: {},
         isTeam: true,
-        appName: ''
+        appName: '',
+        dialogFormVisible: false,
+        form: {
+          'name': ''
+        }
       }
     },
     created() {
@@ -105,11 +124,25 @@
         })
       },
       changeTeam(item) {
-        console.log(item)
         // 更新当前团队
         saveUserTeam(item)
         // 刷新app列表
         Bus.$emit('refreshList')
+      },
+      sure() {
+        if (this.form.name.length === 0) {
+          this.$message.error('请输入团队名称')
+          return
+        }
+        UserApi.createdTeam(this.form.name).then((res) => {
+          this.$message.success('创建成功')
+        }, reject => {
+
+        })
+        this.dialogFormVisible = false
+      },
+      clickTeamBtn() {
+        // 获取我的团队列表
       }
     }
   }

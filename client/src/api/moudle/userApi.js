@@ -41,3 +41,10 @@ export function allRead() {
   let url = `api/messages/markread`
   return getHttp(url)
 }
+
+// 创建一个团队
+export function createdTeam(name) {
+  let body = {'name': name}
+  let url = `api/team/create`
+  return postHttp(url, body)
+}

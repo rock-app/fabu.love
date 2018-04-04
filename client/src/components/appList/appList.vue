@@ -3,20 +3,18 @@
     <!--内容头部-->
     <div class="applist-header">
       <div style="position: relative">
-        <div
-          style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
-        <el-button class="uploadWrapper button-style-main" icon="el-icon-delete">上传应用</el-button>
-        <input ref="referenceUpload" accept=".ipa, .apk" @change="referenceUpload" type="file"
-               style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
+        <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
+        <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传应用</el-button>
+        <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
       </div>
 
       <div class="applist-header-right">
         <div class="platform-wrapper">
           <div class="platform-ios" :class="getActiveClass('ios')" @click="clickIosPlatform">
-            <img class="platformImg" src="../../assets/ios.png" alt="">
+            <img class="platformImg" src="../../assets/ic_ios.png" alt="">
           </div>
           <div class="platform-android" :class="getActiveClass('android')" @click="clickAndroidPlatform">
-            <img class="platformImg" src="../../assets/android.png" alt="">
+            <img class="platformImg" src="../../assets/ic_android.png" alt="">
           </div>
         </div>
         <div class="search-wrapper">
@@ -28,16 +26,15 @@
     <!--应用列表-->
     <collectionView
       :dataArr="this.dataList"
-      @gotoAppDetail="gotoAppDetail">
+      @gotoAppDetail="gotoAppDetail"
+    >
     </collectionView>
 
     <!--<div v-show="!busy" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">-->
-    <!--加载中-->
+      <!--加载中-->
     <!--</div>-->
 
-    <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file"
-               v-show="this.showUploadView" @closeUpload="closeUploadMethod"
-               @uploadSuccess="uploadSuccessMethod"></uploadApp>
+    <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
   </div>
 </template>
@@ -67,7 +64,8 @@
     components: {
       AppListNav, UploadApp, CollectionView
     },
-    computed: {},
+    computed: {
+    },
     methods: {
       loadAppList(isfooter) {
         if (isfooter) {
@@ -149,11 +147,10 @@
               this.$message.error(reject)
             })
           })
-          .catch(_ => {
-          })
+          .catch(_ => {})
       }
     },
-    created() {
+    created () {
       Bus.$emit('applist')
       this.$watch('queryText', () => {
         let newArr = []
@@ -196,21 +193,20 @@
     padding-left: 20px;
     padding-right: 20px;
   }
-
   .applist-header {
     height: 75px;
     padding-top: 25px;
   }
-
   .applist-header .uploadWrapper {
     width: 144px;
     float: left;
   }
-
+  .applist-header .uploadWrapper i {
+    margin-right: 15px;
+  }
   .applist-header-right {
     float: right;
   }
-
   .applist-header .search-wrapper {
     width: 312px;
     height: 48px;
@@ -219,37 +215,31 @@
     position: relative;
     display: inline-block;
   }
-
   .el-icon-search {
     position: absolute;
     left: 15px;
     top: 17px;
     color: $mainColor;
   }
-
   .applist-header-search {
     position: absolute;
     left: 45px;
     top: 0px;
     width: 235px;
     height: 50px;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0,0,0,0);
     outline: 0;
     color: $mainColor;
   }
-
   .applist-header-search::-webkit-input-placeholder {
     color: $mainColor;
   }
-
   .applist-header-search:-moz-placeholder {
     color: $mainColor;
   }
-
   .applist-header-search:-ms-input-placeholder {
     color: $mainColor;
   }
-
   .applist-header .platform-wrapper {
     display: inline-block;
     width: 144px;
@@ -260,7 +250,6 @@
     border: solid 1px $mainColor;
     margin-right: 22px;
   }
-
   .applist-header .platform-wrapper .platform-ios {
     display: inline-block;
     width: 72px;
@@ -269,22 +258,19 @@
     border-right: solid 1px $mainColor;
     box-sizing: border-box;
   }
-
   .applist-header .platform-wrapper .platform-android {
     display: inline-block;
     width: 72px;
     height: 100%;
     text-align: center;
   }
-
   .platformImg {
     width: 25px;
     height: 25px;
     margin-top: 11px;
   }
-
   .platformActive {
-    background-color: #9b9b9b;
+    background-color: #ddd;
   }
 
 </style>

@@ -1,10 +1,31 @@
-<template>
+<template xmlns:v-popover="">
   <div class="headernav-wrapper">
-    <div class="leftWrapper"></div>
+    <div class="leftWrapper">
+      <!--团队，切换团队-->
+      <div class="team" v-show="isTeam">
+        <el-popover ref="popover" placement="bottom" width="160" trigger="click">
+          <ul>
+            <li v-for="(item, index) in this.userInfo.teamArr" :key="index">
+              1212121212
+            </li>
+          </ul>
+        </el-popover>
+        <el-button v-popover:popover>我的团队  <i class="el-icon-arrow-down"></i></el-button>
+      </div>
+      <!--详情-->
+      <div class="detail" v-show="!isTeam">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/apps' }">应用列表</el-breadcrumb-item>
+          <el-breadcrumb-item>{{this.appName}}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+    </div>
     <div class="rightWrapper">
-      <i class="icon-ic_ios"></i>
+      <el-badge is-dot class="item" :hidden="this.redDocHidden">
+        <i class="icon-ic_notice" @click="clickMessage"></i>
+      </el-badge>
       <div class="userwrapper" @click="clickUserIcon" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
-        <i class="icon-ic_ios userIcon"></i>
+        <img src="../../assets/ic_touxiang.png" alt="" class="userIcon">
         <p class="nowrap">{{this.userInfo.userName}}</p>
       </div>
 
@@ -21,19 +42,35 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {getUserInfo, removeUserInfo} from '../../mgr/userMgr'
+  import {getUserInfo, removeUserInfo, getUserTeam} from '../../mgr/userMgr'
   import Bus from '../../common/js/bus'
   import TokenMgr from '../../mgr/TokenMgr'
+  import * as UserApi from '../../api/moudle/userApi'
 
   export default {
     data() {
       return {
         userInfo: {},
-        userHover: false
+        userHover: false,
+        redDocHidden: true,
+        currentTeam: {},
+        isTeam: true,
+        appName: ''
       }
     },
     created() {
+      Bus.$on('applist', () => {
+        this.isTeam = true
+      })
+      Bus.$on('appdetail', (appName) => {
+        this.isTeam = false
+        this.appName = appName
+      })
+
       this.userInfo = getUserInfo()
+      this.currentTeam = getUserTeam()
+      console.log(this.userInfo)
+      this.loadMessage()
     },
     methods: {
       clickUserIcon() {
@@ -53,6 +90,20 @@
         TokenMgr.clearTokens()
         removeUserInfo()
         this.$router.push('/login')
+      },
+      clickMessage() {
+        Bus.$emit('showUserMessage')
+      },
+      loadMessage() {
+        UserApi.getMessageCount().then((res) => {
+          if (res.data.unread > 0) {
+            this.redDocHidden = false
+          } else {
+            this.redDocHidden = true
+          }
+        }, reject => {
+
+        })
       }
     }
   }
@@ -62,6 +113,25 @@
   @import "../../common/scss/base";
   .headernav-wrapper {
   }
+  .headernav-wrapper .leftWrapper {
+    float: left;
+    display: flex;
+    flex-direction: row;
+  }
+  .headernav-wrapper .leftWrapper .team .el-button {
+    margin-top: 15px;
+    font-size: 20px;
+    font-family: "PingFang SC";
+    color: $mainTitleColor;
+    border-color: transparent;
+  }
+  .headernav-wrapper .leftWrapper .el-breadcrumb {
+    height: 72px;
+    line-height: 72px;
+    font-family: "PingFang SC";
+    font-size: 20px;
+    color: $mainTitleColor;
+  }
   .headernav-wrapper .rightWrapper {
     float: right;
     height: 72px;
@@ -69,23 +139,36 @@
     margin-top: 0px;
     text-align: right;
     position: relative;
+    font-size: 0px;
   }
   .headernav-wrapper .rightWrapper .userwrapper {
     display: inline-block;
     height: 100%;
   }
+  .headernav-wrapper .rightWrapper .userwrapper:hover {
+    background-color: $paleGrey;
+    border: solid 1px #eee;
+    box-sizing: border-box;
+  }
   .headernav-wrapper .rightWrapper .userInfoSubWrapper {
     position: absolute;
-    left: 20px;
+    left: 27px;
     top: 72px;
     right: 0px;
     z-index: 100;
+    border-left: solid 1px #eee;
+    border-right: solid 1px #eee;
+    box-sizing: border-box;
   }
-  .headernav-wrapper .rightWrapper i {
+  .headernav-wrapper .rightWrapper .item {
     display: inline-block;
     vertical-align: middle;
-    line-height: 24px;
-    margin-top: 24px;
+    margin-top: 18px;
+    width: 15px;
+    margin-right: 12px;
+  }
+  .headernav-wrapper .rightWrapper i {
+    font-size: 18px;
   }
   .headernav-wrapper .rightWrapper p {
     display: inline-block;
@@ -100,7 +183,9 @@
     margin-left: 5px;
   }
   .headernav-wrapper .rightWrapper .userIcon {
-    margin-left: 15px;
+    margin-left: 12px;
+    vertical-align: middle;
+    margin-top: 20px;
   }
   .headernav-wrapper .rightWrapper .userInfoSub {
     width: 100%;
@@ -108,5 +193,8 @@
     text-align: center;
     line-height: 44px;
     background-color: white;
+    border-bottom: solid 1px #eee;
+    box-sizing: border-box;
+    font-size: 14px;
   }
 </style>

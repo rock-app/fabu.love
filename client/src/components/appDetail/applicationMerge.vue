@@ -1,12 +1,12 @@
 <template>
   <div class="applicationMerge-wrapper">
     <div class="currentApplication">
-      <img src="../../assets/backgroundImage.png" alt="">
+      <img src="" alt="">
     </div>
     <div class="otherApplication">
       <div class="otherApplication-left">
         <p class="title">选择已有的应用进行合并</p>
-        <img src="../../assets/backgroundImage.png" alt="">
+        <img src="." alt="">
         <p class="appname">好乡亲</p>
       </div>
       <hr>

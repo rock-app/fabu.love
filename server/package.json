@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "babel-node index.js",
-        "build": "babel src -d dist --source-maps",
+        "build": "babel src -d sdist --source-maps",
         "preLaunchTask": "npm run build",
         "debug": "babel-node index.js --inspect --debug-brk --nolazy index.js"
     },

@@ -3,7 +3,7 @@
     <div class="teamMgr-header">{{teamName}}</div>
     <div class="teamMgr-content">
       <div class="teamMgr-group-header">
-        <div><label>团队人数 {{members.length}}</label><img src="../../assets/add.png" @click="addClick"/></div>
+        <div><label>团队人数 {{members.length}}</label><img src="../../assets/add_user.png" @click="addClick"/></div>
         <label>成员权限</label>
       </div>
       <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected"></item>
@@ -32,7 +32,7 @@
       <el-button @click="dialogVisible=false">取 消</el-button>
       <el-button type="primary" @click="deleteMember">确 定</el-button>
     </span>
-    </el-dialog>
+  </el-dialog>
   </div>
 </template>
 
@@ -44,10 +44,8 @@ import * as useMgr from '../../mgr/userMgr'
 export default {
   data() {
     return {
-      teamName: '研发中心',
-      members: [{name: '开发者', email: 'kaifazhe@qq.com', owner: 'creator'},
-                {name: '设计师', email: 'shejishi@qq.com', owner: 'manager'},
-                {name: '测试员', email: 'ceshiyuan@qq.com', owner: 'guest'}],
+      teamName: '',
+      members: [],
       isShowInvite: false,
       dialogVisible: false,
       isManager: false,
@@ -55,6 +53,9 @@ export default {
       message: '',
       invitedEmails: ''
     }
+  },
+  mounted () {
+    this.requestMembers()
   },
   computed: {
   },
@@ -86,15 +87,25 @@ export default {
     deleteMember () {
       this.dialogVisible = false
       if (this.currentIndex >= 0) {
-
+        let teamId = useMgr.getUserTeam()._id
+        let userId = this.members[this.currentIndex]._id
+        TeamApi.deleteMembers(teamId, userId).then(resp => {
+          this.$message({
+            message: resp.message,
+            type: 'success'
+          })
+          this.requestMembers()
+        })
       }
     },
     stateUpdate () {
       if (this.currentIndex >= 0) {
-        let owner = this.members[this.currentIndex].owner
-        let name = this.members[this.currentIndex].name
+        let owner = this.members.filter(member => {
+          return member._id === useMgr.getUserId()
+        })[0].role
+        let name = this.members[this.currentIndex].username
         switch (owner) {
-          case 'creator':
+          case 'owner':
             this.message = '确定要移除' + name + '吗?'
             this.isManager = true
             break
@@ -112,7 +123,20 @@ export default {
     request (emailList) {
       let teamId = useMgr.getUserTeam()._id
       TeamApi.inviteMembers(teamId, emailList).then(resp => {
-        alert(alert)
+        if (resp.success) {
+          this.$message({
+            message: resp.message,
+            type: 'success'
+          })
+          this.requestMembers()
+        }
+      })
+    },
+    requestMembers () {
+      let teamId = useMgr.getUserTeam()._id
+      TeamApi.getTeamMembers(teamId).then(resp => {
+        this.teamName = resp.data.name
+        this.members = resp.data.members
       })
     },
     valideEmail(email) {

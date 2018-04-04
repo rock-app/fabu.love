@@ -33,7 +33,7 @@
           class="version-table-one"
         >
           <template slot-scope="scope">
-            <i :class="getIconClass(scope.row)"></i>
+            <span :class="getIconClass(scope.row)"></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -192,6 +192,7 @@
       releaseApp(item) {
         AppResourceApi.releaseApp(this.userteam._id, this.appInfo._id, item._id, item.versionCode, true).then((res) => {
           console.log(res)
+          this.$message.success(res.message)
         }, reject => {
 
         })
@@ -231,10 +232,10 @@
         this.getAppVersionListData()
       },
       getIconClass(item) {
-        if (this.appInfo.grayReleaseVersion.versionId === item._id) {
-            return 'gray'
+        if (this.appInfo.releaseVersionId && this.appInfo.releaseVersionId === item._id) {
+            return 'version-table-one-gray'
         } else {
-          return 'lighting'
+          return 'version-table-one-lighting'
         }
       }
     }
@@ -326,16 +327,18 @@
   .appVersion-wrapper .version-table {
     margin-bottom: 12px;
   }
-  .version-table-one .gray {
+  .version-table-one-gray {
     display: inline-block;
-    width: 36px;
-    height: 36px;
+    width: 18px;
+    height: 16px;
+    background-size: 18px 18px;
     background-image: url("../../assets/sign_grey.png");
   }
-  .version-table-one .lighting {
+  .version-table-one-lighting {
     display: inline-block;
-    width: 36px;
-    height: 36px;
+    width: 18px;
+    height: 16px;
+    background-size: 18px 18px;
     background-image: url("../../assets/sign_now.png");
   }
   .appVersion-wrapper .version-table .cell {

@@ -71,3 +71,9 @@ export function grayVersion(teamId, id, body) {
   let url = `api/apps/${teamId}/${id}/grayPublish`
   return postHttp(url, body)
 }
+
+// 更新日志
+export function updateNote(teamId, id, versionId, body) {
+  let url = `api/apps/${teamId}/${id}/${versionId}/profile`
+  return postHttp(url, body)
+}

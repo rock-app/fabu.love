@@ -4,6 +4,7 @@
       <div v-show="this.show" class="userMessage-wrapper-body" @click.stop="clickcontent">
         <div class="top">
           <button>清空消息</button>
+          <button>全部标记已读</button>
           <div style="width: 100%;height: 1px;background-color: #eee;margin-top: 10px"></div>
         </div>
         <ul class="messageListWrapper">
@@ -81,6 +82,14 @@
       getTimer(timer) {
         // 今天显示时分，昨天显示昨天时分，其余显示日期
       },
+      isYestday(theDate) {
+        // 当前时间
+        var date = (new Date())
+        // 今天凌晨
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+        var yestday = new Date(today - 24 * 3600 * 1000).getTime()
+        return theDate.getTime() < today && yestday <= theDate.getTime()
+      },
       clickcontent() {}
     }
   }
@@ -119,16 +128,18 @@
   .userMessage-wrapper-body .top {
     width: 100%;
     height: 60px;
-    text-align: right;
+    text-align: left;
   }
   .userMessage-wrapper-body .top button {
-    height: 40px;
-    line-height: 40px;
     margin-top: 10px;
-    padding: 0px;
-    margin-right: 10px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0px 10px;
+    margin-left: 10px;
     background-color: transparent;
-    border-color: transparent;
+    border-color:  $mainColor;
+    color: $mainColor;
+    border-radius: 15px;
   }
   .userMessage-wrapper-body .messageListWrapper {
     width: 100%;

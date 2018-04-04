@@ -7,7 +7,6 @@ var teamSchema = new Schema({
     name: {
         type: String,
         required: true,
-        index: true
     },
     icon: String,
     creatorId: {

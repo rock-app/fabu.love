@@ -56,7 +56,7 @@ module.exports = class AuthRouter {
             throw new Error('用户名或密码错误')
         }
         user.token = jwt.sign({
-            data: {_id:user._id,username:user.username},
+            data: {_id:user._id,username:user.username,email:user.email},
             exp: Math.floor(Date.now() / 1000) + (60 * 60)
         }, 'jwt-secret')
         ctx.body = responseWrapper(user)
@@ -82,6 +82,7 @@ module.exports = class AuthRouter {
                 {
                     _id: newUser._id,
                     username: newUser.username,
+                    email:newUser.email,
                     role: "owner"
                 }
             ]
@@ -187,10 +188,8 @@ module.exports = class AuthRouter {
         } 
 
         var newPassword = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
-
-
-        // var hashPassword = await bcrypt.hash(body.newpwd, 10); // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
-        // await User.findByIdAndUpdate(user._id,{password:hashPassword})
+        var hashPassword = await bcrypt.hash(newPassword, 10); // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
+        await User.findByIdAndUpdate(user._id,{password:hashPassword})
         Mail.send(['dzq1993@qq.com'],"爱发布密码重置邮件",`您的密码已重置${newPassword}`)
         ctx.body = responseWrapper("密码已重置,并通过邮件发送到您的邮箱")
     }

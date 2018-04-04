@@ -246,11 +246,11 @@ module.exports = class TeamRouter {
     }
     
 
-    @request('delete', '/api/team/{teamId}/members')
+    @request('get', '/api/team/{teamId}/members')
     @summary('获取团队成员列表')
     @tag
     @path({
-        id: {
+        teamId: {
             type: 'string',
             required: true
         }

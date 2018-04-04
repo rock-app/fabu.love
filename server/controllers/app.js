@@ -367,7 +367,7 @@ module.exports = class AppRouter {
 async function appInTeamAndUserIsManager(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
-             id:userId,
+             _id:userId,
              $or: [
                 { role: 'owner' },
                 { role: 'manager' }
@@ -386,7 +386,7 @@ async function appInTeamAndUserIsManager(appId,teamId,userId) {
 async function appAndUserInTeam(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
-             id:userId
+             _id:userId
         }
     },},"_id")
     var app = await App.find({_id:appId,ownerId:team._id})

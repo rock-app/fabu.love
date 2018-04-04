@@ -87,14 +87,14 @@
     <div class="appversion-footerwrapper">
       <div class="totalwrapper">
         <div class="downloadwrapper">
-          <i class="icon-ic_download1"></i>
+          <i class="icon-ic_download_s"></i>
         </div>
         <p>总下载次数</p>
         <div class="downloadCount">1221212</div>
       </div>
       <div class="todaywrapper">
         <div class="downloadwrapper">
-          <i class="icon-ic_download1"></i>
+          <i class="icon-ic_download_s"></i>
         </div>
         <p>今日下载次数</p>
         <div class="downloadCount">1221212</div>
@@ -341,7 +341,7 @@
     display: inline-block;
     background-color: #97DFF9;
   }
-  .appversion-footerwrapper .downloadwrapper .icon-ic_download1 {
+  .appversion-footerwrapper .downloadwrapper i {
     font-size: 15px;
     line-height: 48px;
   }

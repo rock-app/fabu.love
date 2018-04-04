@@ -48,6 +48,7 @@ module.exports = class TeamRouter {
             {
                 _id: user._id,
                 username: user.username,
+                email:user.email,
                 role: "owner"
             }
         ]
@@ -246,11 +247,11 @@ module.exports = class TeamRouter {
     }
     
 
-    @request('delete', '/api/team/{teamId}/members')
+    @request('get', '/api/team/{teamId}/members')
     @summary('获取团队成员列表')
     @tag
     @path({
-        id: {
+        teamId: {
             type: 'string',
             required: true
         }
@@ -268,4 +269,5 @@ module.exports = class TeamRouter {
         ctx.body = responseWrapper(team)
     }
 
+    
 }

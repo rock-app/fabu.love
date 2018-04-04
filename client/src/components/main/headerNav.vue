@@ -5,12 +5,12 @@
       <div class="team" v-show="isTeam">
         <el-popover ref="popover" placement="bottom" width="160" trigger="click">
           <ul>
-            <li v-for="(item, index) in this.userInfo.teamArr" :key="index">
-              1212121212
+            <li v-for="(item, index) in this.userInfo.teamArr" :key="index" @click="changeTeam(item)">
+              {{item.name}}
             </li>
           </ul>
         </el-popover>
-        <el-button v-popover:popover>我的团队  <i class="el-icon-arrow-down"></i></el-button>
+        <el-button v-popover:popover>{{this.currentTeam.name}}  <i class="el-icon-arrow-down"></i></el-button>
       </div>
       <!--详情-->
       <div class="detail" v-show="!isTeam">
@@ -42,7 +42,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {getUserInfo, removeUserInfo, getUserTeam} from '../../mgr/userMgr'
+  import {getUserInfo, removeUserInfo, getUserTeam, saveUserTeam} from '../../mgr/userMgr'
   import Bus from '../../common/js/bus'
   import TokenMgr from '../../mgr/TokenMgr'
   import * as UserApi from '../../api/moudle/userApi'
@@ -69,7 +69,6 @@
 
       this.userInfo = getUserInfo()
       this.currentTeam = getUserTeam()
-      console.log(this.userInfo)
       this.loadMessage()
     },
     methods: {
@@ -104,6 +103,13 @@
         }, reject => {
 
         })
+      },
+      changeTeam(item) {
+        console.log(item)
+        // 更新当前团队
+        saveUserTeam(item)
+        // 刷新app列表
+        Bus.$emit('refreshList')
       }
     }
   }

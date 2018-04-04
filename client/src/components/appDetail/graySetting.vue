@@ -108,9 +108,9 @@
           'strategy': {
             // 更新模式  force / silent / normal/ 强制或者静默或者普通升级
             'updateMode': this.updateType,
-            'ipType': this.ipList,
+            'ipType': this.iplimit,
             // default:'black',enum:['black','white']
-            'ipList': this.iplimit,
+            'ipList': this.ipList,
             // default 0 表示不现在下载次数
             'downloadCountLimit': number
           },
@@ -122,6 +122,8 @@
         }
         AppResourceApi.grayVersion(getUserTeam()._id, this.appInfo._id, body).then((res) => {
           console.log(res)
+          this.$message.success(res.message)
+          this.cancel()
         }, reject => {
 
         })

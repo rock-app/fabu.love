@@ -101,7 +101,7 @@
       </div>
     </div>
 
-    <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo"></editorVersion>
+    <editorVersion v-if="this.showEditorVersion" @cancel="cancel" :versionInfo="this.versionInfo" :appInfo="this.appInfo"></editorVersion>
     <graySetting v-if="this.showGraySetting" @cancel="cancelGraySetting" :versionList="this.dataArr" :appInfo="this.appInfo"></graySetting>
   </div>
 </template>

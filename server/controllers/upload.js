@@ -180,12 +180,18 @@ function parseIpa(filename) {
       info.appName = data.metadata.CFBundleDisplayName
       info.versionStr = data.metadata.CFBundleShortVersionString
       info.versionCode = data.metadata.CFBundleVersion
-      const environment = data.provisioning.Entitlements['aps-environment']
-      const active = data.provisioning.Entitlements['beta-reports-active']
-      if (environment == 'production') {
-          info.appLevel = active ? 'appstore' : 'enterprise'
-      } else {
+
+      try{
+        const environment = data.provisioning.Entitlements['aps-environment']
+        const active = data.provisioning.Entitlements['beta-reports-active']
+        if (environment == 'production') {
+            info.appLevel = active ? 'appstore' : 'enterprise'
+        } else {
+          info.appLevel = 'develop'
+        }
+      }catch(err){
         info.appLevel = 'develop'
+        reject("应用未签名,暂不支持")
       }
       resolve(info)
     })

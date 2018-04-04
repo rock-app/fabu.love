@@ -98,7 +98,8 @@
         password: '',
         isLogin: false,
         errorInfo: '',
-        showType: 'login'
+        showType: 'login',
+        email: ''
       }
     },
     created() {
@@ -172,19 +173,18 @@
           })
       },
       regist() {
-        if (this.form.userName.length === 0) {
-          this.errorInfo = '* 用户名不能为空'
+        if (this.username.length === 0) {
+          this.$message.error('用户名不能为空')
           return
         }
-        if (this.form.password.length === 0) {
-          this.errorInfo = '* 密码不能为空'
+        if (this.email.length === 0) {
+          this.$message.error('邮箱不能为空')
           return
         }
-        if (this.form.password !== this.form.repassword) {
-          this.errorInfo = '* 两次输入密码不一致'
+        if (this.password.length === 0) {
+          this.$message.error('密码不能为空')
           return
         }
-        this.errorInfo = ''
         let body = {
           'username': this.username,
           'password': this.password,
@@ -198,8 +198,8 @@
               type: 'success'
             })
             setTimeout(() => {
-              this.$router.go(-1)
-            }, 800)
+              this.onRegister()
+            }, 500)
           }, reject => {
             console.log(reject)
             this.$message.error(reject)

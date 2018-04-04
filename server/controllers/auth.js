@@ -6,6 +6,7 @@ import Team from "../model/team"
 import { responseWrapper } from "../helper/util";
 import bcrypt from "bcrypt"
 import Fawn from "fawn"
+import Mail from '../helper/mail'
 
 const jwt = require('jsonwebtoken');
 
@@ -159,5 +160,38 @@ module.exports = class AuthRouter {
             throw new Error("用户不存在");
         } 
         ctx.body = responseWrapper(user)
+    }
+
+    @request('get', '/api/user/teams')
+    @summary('获取用户团队列表')
+    @tag
+    static async getuserTeams(ctx, next) {
+        var user = ctx.state.user.data
+        var user = await User.findById(user._id,"teams");
+        if (!user) {
+            throw new Error("用户不存在");
+        } 
+        ctx.body = responseWrapper(user)
+    }
+
+    @request('post', '/api/user/resetPassword')
+    @summary('通过邮箱重置密码')
+    @tag
+    @body({email:{type:'string',required:true}})
+    static async resetPassword(ctx, next) {
+        var body = ctx.request.body
+
+        var user = await User.findOne({ email:body.email },"-teams -password");
+        if (!user) {
+            throw new Error("邮箱有误,没有该用户");
+        } 
+
+        var newPassword = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
+
+
+        // var hashPassword = await bcrypt.hash(body.newpwd, 10); // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
+        // await User.findByIdAndUpdate(user._id,{password:hashPassword})
+        Mail.send(['dzq1993@qq.com'],"爱发布密码重置邮件",`您的密码已重置${newPassword}`)
+        ctx.body = responseWrapper("密码已重置,并通过邮件发送到您的邮箱")
     }
 }

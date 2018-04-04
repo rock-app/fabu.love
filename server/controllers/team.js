@@ -117,22 +117,23 @@ module.exports = class TeamRouter {
         }
     })
     static async addMember(ctx, next) {
-        var {teamId, emailList} = ctx.validatedParams;
+        var {teamId} = ctx.validatedParams;
         var user = ctx.state.user.data;
+        var emailList = ctx.request.body.emailList;
         var body = ctx.request.body
-        if (!(body.role === 'manager' || body.role === 'role')) {
+        if (!(body.role === 'manager' || body.role === 'guest')) {
             throw new Error("请传入正确的用户角色")
         }
 
         var team = await Team.findOne({_id:teamId,members:{
             $elemMatch:{
-                 id:userId,
+                 _id:user._id,
                  $or: [
                     { role: 'owner' },
                     { role: 'manager' }
                 ]
             }
-        },},"_id")
+        },},"_id name")
 
         if (!team) {
             throw new Error("团队不存在,或者您没有权限邀请用户加入")
@@ -143,7 +144,7 @@ module.exports = class TeamRouter {
         },"username email")
 
         var teamList = []
-        for (u in userList){
+        for (var u of userList){
             teamList.push({
                 _id:u.id,
                 username:u.username,
@@ -170,12 +171,12 @@ module.exports = class TeamRouter {
             .run({useMongoose: true});
 
 
-        for (u in userList){
+        for (var u of userList){
             var message = new Message();
             message.category = "INVITE";
-            message.content = user.name + "邀请您加入" + team.name + "团队."
+            message.content = user.username + "邀请您加入" + team.name + "团队."
             message.sender = user._id;
-            message.receiver = u.id;
+            message.receiver = u._id;
             // message.data = jwt.sign({
             //     data: {
             //         teamId: team._id,

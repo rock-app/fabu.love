@@ -70,7 +70,6 @@ var appSchema = new Schema({
         ipList: [String],
         downloadCountLimit: Number
     }
-
 })
 
 // appSchema.virtual('versions').get(function () {     return Version.find })

@@ -6,13 +6,19 @@
           <button>清空消息</button>
           <div style="width: 100%;height: 1px;background-color: #eee;margin-top: 10px"></div>
         </div>
-        <ul>
+        <ul class="messageListWrapper">
           <li class="messageItem" v-for="(item, index) in this.dataArr" :key="index">
             <span></span>
             <p class="canwrap content">121212121211212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121221212121212121212</p>
-            <p class="timer">19:00</p>
+            <p class="timer" v-html="getTimer(Date())"></p>
           </li>
         </ul>
+
+        <el-pagination
+          style="margin: 0 auto;text-align: center"
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </div>
     </transition>
 
@@ -23,6 +29,7 @@
 
   import {getUserInfo} from '../../mgr/userMgr'
   import Bus from '../../common/js/bus'
+  import * as UserApi from '../../api/moudle/userApi'
 
   export default {
     components: {
@@ -31,7 +38,8 @@
       return {
         show: false,
         userInfo: {},
-        dataArr: ['']
+        dataArr: ['', '', '', '', '', '', '', ''],
+        currentPage: 0
       }
     },
     created() {
@@ -43,6 +51,18 @@
     computed: {
     },
     methods: {
+      loadData() {
+        UserApi.getUserMessage(this.currentPage).then((res) => {
+          console.log(res)
+          if (res.data.length > 0) {
+            this.redDocHidden = false
+          } else {
+            this.redDocHidden = true
+          }
+        }, reject => {
+
+        })
+      },
       clickItem(item) {
         this.currentItem = item
       },
@@ -51,6 +71,15 @@
         setTimeout(() => {
           Bus.$emit('hiddenUserMessage')
         }, 500)
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
+      },
+      getTimer(timer) {
+        // 今天显示时分，昨天显示昨天时分，其余显示日期
       },
       clickcontent() {}
     }
@@ -98,6 +127,13 @@
     margin-top: 10px;
     padding: 0px;
     margin-right: 10px;
+    background-color: transparent;
+    border-color: transparent;
+  }
+  .userMessage-wrapper-body .messageListWrapper {
+    width: 100%;
+    height: calc(100% - 60px - 80px);
+    overflow: scroll;
   }
   .userMessage-wrapper-body .messageItem {
     display: flex;

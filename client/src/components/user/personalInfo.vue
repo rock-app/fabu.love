@@ -96,6 +96,7 @@
     width: 60px;
     font-size: 14px;
     color: $subTitleColor;
+    margin-left: 8px;
   }
   .emailWrapper {
     margin-top: 24px;

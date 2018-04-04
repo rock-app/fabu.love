@@ -7,14 +7,14 @@
 
     <div>
       <el-menu
-        :default-active="this.slotName === 'detail-nav' ? '应用概述' : ''"
+        :default-active="this.slotName === 'detail-nav' ? '应用概述' : '应用列表'"
         class="mainNav-el-menu"
       >
         <!--不可以用v-if，否则会因为控件加载时序问题导致，指定选中的item失效-->
         <div v-show="this.slotName === 'main-nav'">
-          <el-menu-item index="创建团队">
-            <i class="el-icon-menu"></i>
-            <span slot="title">创建团队</span>
+          <el-menu-item index="应用列表">
+            <i class="icon-ic_mnggp"></i>
+            <span slot="title">应用列表</span>
           </el-menu-item>
           <el-menu-item index="团队管理">
             <i class="el-icon-menu"></i>

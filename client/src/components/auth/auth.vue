@@ -163,7 +163,8 @@
             let user = {
               'userName': this.username,
               'userId': response.data._id,
-              'teamArr': response.data.teams
+              'teamArr': response.data.teams,
+              'email': response.data.email
             }
             // 保存用户信息
             saveUserInfo(user)

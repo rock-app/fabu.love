@@ -25,7 +25,7 @@
   import VueQr from 'vue-qr'
 
   export default {
-    components:{
+    components: {
       VueQr
     },
     data() {

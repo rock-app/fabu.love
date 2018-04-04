@@ -10,7 +10,7 @@
           v-model="content">
         </el-input>
       </div>
-      <button class="inviteMember-inviteBtn">发送邀请</button>
+      <button class="inviteMember-inviteBtn" @click="sendInvite">发送邀请</button>
     </div>
   </div>
 </template>
@@ -30,6 +30,9 @@
       },
       clickContent(event) {
         event.stopImmediatePropagation()
+      },
+      sendInvite () {
+        this.$emit('invited')
       }
     }
   }

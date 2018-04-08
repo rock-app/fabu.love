@@ -1,7 +1,7 @@
 <template>
   <div class="appsetting-wrapper">
     <div class="top">
-      <i class="icon-ic_ios"></i>设置
+      <i class="el-icon-setting"></i>  设置
     </div>
     <div class="content">
       <el-form labelWidth="150px" label-position="left">

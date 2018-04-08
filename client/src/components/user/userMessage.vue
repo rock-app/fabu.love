@@ -40,7 +40,6 @@
 <script type="text/ecmascript-6">
 
   import {getUserInfo} from '../../mgr/userMgr'
-  import Bus from '../../common/js/bus'
   import * as UserApi from '../../api/moudle/userApi'
 
   export default {
@@ -88,7 +87,7 @@
       cancel() {
         this.show = false
         setTimeout(() => {
-          Bus.$emit('hiddenUserMessage')
+          this.bus.$emit('hiddenUserMessage')
         }, 500)
       },
       handleSizeChange(val) {

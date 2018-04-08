@@ -56,6 +56,13 @@ export default {
   },
   mounted () {
     this.requestMembers()
+
+    this.bus.$on('refreshList', () => {
+      this.requestMembers()
+    })
+  },
+  destroyed() {
+    this.bus.$off('refreshList')
   },
   computed: {
   },

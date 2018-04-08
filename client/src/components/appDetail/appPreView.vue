@@ -4,18 +4,24 @@
     <div class="previewapp-wrapper">
       <!--中间-->
       <div class="preview-middlewrapper">
-        <img class="appicon" :src="getIconUrl()" alt="">
-        <p class="title">{{this.appBaseData.appName}}</p>
-        <p class="desc">版本： {{this.appVersionInfo.versionStr}}   大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M / {{this.appVersionInfo.creatDateStr}}</p>
-        <p class="date">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
-        <el-button @click="clickDownLoadBtn" icon="el-icon-search"  class="downloadBtn" type="primary" round>下载安装</el-button>
-      </div>
-      <!--手机视图-->
-      <div class="preview-mobilewrapper">
-        <img class="mobieImg" src='../../assets/ic_mobilphone.png'>
-        <vue-qr class="qrcodeImg" :text="downloadUrl" height="140" width="140" margin="20"></vue-qr>
-        <p class="codetips">请扫描二维码下载APP</p>
-        <p class="platform">适用于{{this.platformStr}}系统</p>
+        <div class="left">
+          <img class="appicon" :src="getIconUrl()" alt="">
+          <p class="title">{{this.appBaseData.appName}}</p>
+          <div class="info">
+            <p class="desc">版本：{{this.appVersionInfo.versionStr}}</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
+          </div>
+          <p class="date">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
+          <el-button @click="clickDownLoadBtn" class="downloadBtn" type="primary" round><i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>    下载安装</el-button>
+        </div>
+
+
+        <!--手机视图-->
+        <div class="preview-mobilewrapper" v-show="this.showQRCode">
+          <img class="mobieImg" src='../../assets/ic_mobilphone.png'>
+          <vue-qr class="qrcodeImg" :text="downloadUrl" height="140" width="140" :margin="20"></vue-qr>
+          <p class="codetips">请扫描二维码下载APP</p>
+          <p class="platform">适用于{{this.platformStr}}系统</p>
+        </div>
       </div>
     </div>
 </template>
@@ -34,14 +40,32 @@
         appVersionInfo: {},
         appBaseData: {},
         downloadUrl: '',
-        platformStr: ''
+        platformStr: '',
+        showQRCode: true
       }
     },
     computed: {
+      isIos() {
+        var u = navigator.userAgent
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+        return isiOS
+      },
+      isAndroid() {
+        var u = navigator.userAgent
+        var isAndroid = !!(u.match(/(Android)\s+([\d.]+)/))
+        return isAndroid
+      }
     },
     created() {
       console.log(this.$route.params)
       this.getAppInfo(this.$route.params.id)
+
+      // 判断是否是手机设备
+      if (this.isIos || this.isAndroid) {
+        this.showQRCode = false
+      } else {
+        this.showQRCode = true
+      }
     },
     methods: {
       getTableBackground(index) {
@@ -66,16 +90,18 @@
         })
       },
       getIconUrl() {
-        if (this.appBaseData.icon) {
-          return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
-        } else {
-          return `${require('../../assets/logo.png')}`
-        }
+        return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
       },
       clickDownLoadBtn() {
-        const a = document.createElement('a')
-        a.setAttribute('href', this.downloadUrl)
-        a.click()
+        if (this.isIos) {
+          const a = document.createElement('a')
+          a.setAttribute('href', `itms-services://?action=download-manifest&url=${this.appVersionInfo.downloadUrl}/plist/${this.appBaseData.appName}`)
+          a.click()
+        } else {
+          const a = document.createElement('a')
+          a.setAttribute('href', this.downloadUrl)
+          a.click()
+        }
       }
     }
   }
@@ -97,47 +123,53 @@
   .preview-middlewrapper {
     margin-top: 0px;
     margin-left: 25%;
-    width: 25%;
-    display: flex;
-    flex-direction: column;
+    width: 50%;
+    height: 100%;
     text-align: center;
     position: absolute;
+    font-size: 0px;
+  }
+  .preview-middlewrapper .left {
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+    vertical-align: top;
+    text-align: left;
   }
   .preview-mobilewrapper {
-    margin-top: 170px;
-    width: 359px;
-    height: 561px;
-    left: 51%;
-    position: absolute;
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+    vertical-align: top;
+    position: relative;
+    text-align: center;
   }
 
   .preview-middlewrapper .appicon {
     width: 126px;
     height: 126px;
-    margin-top: 260px;
-    margin-left: 10%;
+    border-radius: 15px;
+    margin-top: 50%;
   }
-
   .preview-middlewrapper .title {
     color: #354052;
     font-weight: bold;
     font-size: 26px;
-    float: left;
-    text-align: left;
     height: 37px;
     line-height: 37px;
-    margin-left: 10%;
     margin-top: 33px;
   }
-  .preview-middlewrapper .desc {
+  .preview-middlewrapper .info {
+    display: flex;
+    flex-direction: row;
     color: #242A34;
     font-size: 14px;
-    text-align: left;
     line-height: 20px;
-    margin-left: 10%;
     margin-top: 12px;
-    width: 100px;
     opacity: 0.5;
+  }
+  .preview-middlewrapper .desc {
+    margin-right: 12px;
   }
   .preview-middlewrapper .date {
     color: #242A34;
@@ -145,34 +177,36 @@
     text-align: left;
     line-height: 20px;
     margin-top: 2px;
-    margin-left: 10%;
     opacity: 0.5;
   }
   .preview-middlewrapper .downloadBtn{
     background-color: #8393F5;
-    width: 184px;
+    width: 70%;
     height: 44px;
     color: white;
     font-size: 14px;
     margin-top: 16px;
-    margin-left: 10%;
     border-color: transparent;
-    /*float: left;*/
+  }
+  .downloadBtn i:before {
+    color: white;
   }
   .preview-mobilewrapper .mobieImg {
-    width: 359px;
-    height: 561px;
-    margin-left: 0px;
-    margin-top: 0px;
+    width: 470px;
+    height: 70%;
+    top: 0px;
+    left: 0px;
     position: absolute;
-    icon: url('../../assets/ic_apple.png');
+    background-size: cover;
+    margin-top: 25%;
   }
   .preview-mobilewrapper .qrcodeImg {
+    position: absolute;
     width: 160px;
     height: 160px;
-    margin-left: 26px;
-    margin-top: 86px;
-    position: absolute;
+    background-color: blue;
+    top: 25%;
+    left: 65px;
   }
 
   .preview-mobilewrapper .codetips {
@@ -180,11 +214,10 @@
     font-size: 14px;
     text-align: center;
     line-height: 20px;
-    float: left;
     height: 20px;
-    margin-left: 55px;
-    margin-top: 288px;
-    width: 140px;
+    left: 0px;
+    top: 45%;
+    width: 326px;
     position: absolute;
   }
   .preview-mobilewrapper .platform {
@@ -193,11 +226,10 @@
     font-size: 14px;
     text-align: center;
     line-height: 20px;
-    float: left;
     height: 20px;
-    margin-left: 55px;
-    margin-top: 312px;
-    width: 140px;
+    left: 0px;
+    top: 47%;
+    width: 326px;
     position: absolute;
   }
 

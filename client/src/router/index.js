@@ -10,19 +10,17 @@ import TeamMgr from '../components/team/teamMgr.vue'
 
 Vue.use(Router)
 
-
 export default new Router({
   // 去除#
   mode: 'history',
   routes: [
     {
-      path: '',
-      name: 'Main',
+      path: '/',
+      redirect: '/apps',
       component: Main,
       children: [
         {
           path: '/apps',
-          name: 'Apps',
           component: Apps
         },
         {

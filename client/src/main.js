@@ -18,6 +18,8 @@ Vue.prototype.axios = axios
 
 Vue.prototype.router = router
 
+Vue.prototype.bus = new Vue()
+
 Vue.use(ElementUI)
 
 Vue.use(VueLazyLoad, {

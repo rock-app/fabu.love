@@ -168,9 +168,7 @@
             }
             // 保存用户信息
             saveUserInfo(user)
-            // 更新token
-            this.axios.defaults.headers.Authorization = 'Bearer' + ' ' + response.data.token
-            this.$router.push('/apps')
+            this.$router.push('/')
           }, reject => {
             this.$message.error(reject)
           })
@@ -204,7 +202,6 @@
               this.onRegister()
             }, 500)
           }, reject => {
-            console.log(reject)
             this.$message.error(reject)
           })
       },

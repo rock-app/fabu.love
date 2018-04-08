@@ -185,7 +185,7 @@ module.exports = class AppRouter {
     static async deleteAppVersion(ctx,next){
         var user = ctx.state.user.data
         var { teamId,id,versionId } = ctx.validatedParams;  
-        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        var app = await appInTeamAndUserIsManager(id,teamId,user._id)
         var result = await Version.deleteOne({_id:versionId})
         ctx.body = responseWrapper(true,"版本已删除")
     }
@@ -202,7 +202,7 @@ module.exports = class AppRouter {
         var user = ctx.state.user.data;
         var body = ctx.body;
         var { teamId,id } = ctx.validatedParams;
-        var app = await appInTeamAndUserIsManager(id,)
+        var app = await appInTeamAndUserIsManager(id,teamId,user._id)
         if (body.versionId) {
             //更新版本策略
             await Version.findByIdAndUpdate(versionId, {
@@ -226,7 +226,7 @@ module.exports = class AppRouter {
         var body = ctx.request.body;
         var { teamId,id } = ctx.validatedParams;
 
-        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        var app = await appInTeamAndUserIsManager(id,teamId,user._id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
@@ -243,7 +243,7 @@ module.exports = class AppRouter {
         var user = ctx.state.user.data;
         var body = ctx.request.body;
         var { teamId,id, versionId} = ctx.validatedParams;
-        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        var app = await appInTeamAndUserIsManager(id,teamId,user._id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
@@ -261,7 +261,7 @@ module.exports = class AppRouter {
         var { body } = ctx.request
         var { teamId,id } = ctx.validatedParams;  
 
-        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        var app = await appInTeamAndUserIsManager(id,teamId,user._id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
@@ -289,7 +289,7 @@ module.exports = class AppRouter {
         var { body } = ctx.request
         var { teamId,id } = ctx.validatedParams;  
 
-        var app = await appInTeamAndUserIsManager(id,teamId,user.id)
+        var app = await appInTeamAndUserIsManager(id,teamId,user._id)
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
@@ -354,14 +354,10 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在")
         }
-        var version = await Version.findOne({
-            appId:app.id,
-            versionCode:app.lastVersionCode,
-            released:true
-        })
-        if (!version) {
+        if (!app.releaseVersionId || app.releaseVersionId===''){
             throw new Error("当前没有已发布的版本可供下载")
         }
+        var version = await Version.findById(app.releaseVersionId)
         ctx.body = responseWrapper({'app':app,'version':version})
     }
 
@@ -371,14 +367,16 @@ module.exports = class AppRouter {
 async function appInTeamAndUserIsManager(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
-             id:userId,
+             _id:userId,
              $or: [
                 { role: 'owner' },
                 { role: 'manager' }
             ]
         }
     },},"_id")
-
+    if (!team) {
+        throw new Error("应用不存在或您没有权限执行该操作")
+    }
     var app = await App.findOne({_id:appId,ownerId:team._id})
     if (!app) {
         throw new Error("应用不存在或您没有权限执行该操作")
@@ -390,7 +388,7 @@ async function appInTeamAndUserIsManager(appId,teamId,userId) {
 async function appAndUserInTeam(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{
-             id:userId
+             _id:userId
         }
     },},"_id")
     var app = await App.find({_id:appId,ownerId:team._id})

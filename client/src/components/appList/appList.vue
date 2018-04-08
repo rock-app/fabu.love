@@ -30,10 +30,6 @@
     >
     </collectionView>
 
-    <!--<div v-show="!busy" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">-->
-      <!--加载中-->
-    <!--</div>-->
-
     <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
   </div>
@@ -43,7 +39,7 @@
   import AppListNav from './appListNav.vue'
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
-  import {getTeamArr} from '../../mgr/userMgr'
+  import {getTeamArr, getUserTeam} from '../../mgr/userMgr'
   import CollectionView from '../base/collectionView.vue'
   import Bus from '../../common/js/bus'
 
@@ -57,8 +53,7 @@
         showUploadView: false,
         file: FileList,
         currentPage: 0,
-        teamArr: [],
-        busy: true
+        teamArr: []
       }
     },
     components: {
@@ -73,20 +68,14 @@
         } else {
           this.currentPage = 0
         }
-        AppResourceApi.getAppList(this.teamArr[0]._id, this.currentPage)
+        AppResourceApi.getAppList(getUserTeam()._id, this.currentPage)
           .then(response => {
             console.log(response)
             if (isfooter) {
               this.dataList = this.dataList.concat(response.data)
-              if (response.data.length === 0) {
-                this.busy = true
-              } else {
-                this.busy = false
-              }
             } else {
               this.dataList = []
               this.dataList = response.data
-              this.busy = false
             }
             this.originDataList = this.dataList
           }, reject => {
@@ -94,10 +83,6 @@
           })
       },
       loadMore() {
-        this.busy = true
-        setTimeout(() => {
-          this.loadAppList(true)
-        }, 800)
       },
       referenceUpload(e) {
         this.file = e.target.files

@@ -16,8 +16,11 @@ import {responseWrapper} from "../helper/util";
 import Fawn from "fawn";
 import mongoose from "mongoose";
 import validator from "../helper/validator";
-
+import Mail from "../helper/mail"
+import config from "../config"
 const tag = tags(['团队']);
+import { userInTeamIsManager,userInTeam } from "../helper/validator"
+
 
 var teamCreateSchema = {
     name: {
@@ -155,7 +158,7 @@ module.exports = class TeamRouter {
 
         var task = Fawn.Task();
         var result = await task
-            .update(Team,{id:teamId},{
+            .update(Team,{_id:teamId},{
                 $addToSet:{members:{ $each: teamList }}
             })
             .update(User, {email:{ $in : emailList }},{
@@ -170,6 +173,20 @@ module.exports = class TeamRouter {
             })
             .run({useMongoose: true});
 
+
+        // await Team.update({_id:teamId},{
+        //         $push:{members:{ $each: teamList }}
+        //     })
+        // await User.update({email:{ $in : emailList }},{
+        //         $push: {
+        //             teams: {
+        //                 _id: teamId,
+        //                 name: team.name,
+        //                 icon: team.icon,
+        //                 role: body.role
+        //             }
+        //         }
+        //     })
 
         for (var u of userList){
             var message = new Message();
@@ -186,8 +203,9 @@ module.exports = class TeamRouter {
             // }, 'jwt-secret')
             message.save();
         }
+        // Mail.send(emailList,"有用户邀请您加入爱发布",`${user.username}邀请您加入${team.name}"团队.如果您还没有注册爱发布，请点击${config.baseUrl}注册`)
         //TODO 发送邮件邀请
-        ctx = responseWrapper(true, "已发送邮件邀请该用户")
+        ctx.body = responseWrapper(true, "已发送邮件邀请该用户")
     }
 
     @request('delete', '/api/team/{id}/member/{userId}')
@@ -207,34 +225,19 @@ module.exports = class TeamRouter {
         var {id, userId} = ctx.validatedParams;
         var user = ctx.state.user.data;
         //如果传入的id和当前登录用户的id相等 表示是自己离开团队
-        var queryCondition;
+        var team
         if (userId === user._id) {
-            queryCondition = {$elemMatch: 
-                { username: user.username }
-            }
+            team = await userInTeam(user._id,id)
         }else{
-            queryCondition = {
-                $elemMatch: [
-                    {
-                        username: user.username,
-                        role: "owner"
-                    }, {
-                        username: user.username,
-                        role: "manager"
-                    }
-                ]
-            }
+            team = await userInTeamIsManager(user._id,id)
         }
-        var team = await Team.find({
-            _id: id,
-            members: queryCondition
-        })
+       
         if (!team) {
             throw new Error("团队不存在或该用户没有权限删除用户")
         }
         var task = Fawn.Task();
         var result = await task
-            .update(team,{$pull:{members:{_id:id}}})
+            .update(team,{$pull:{members:{_id:userId}}})
             .update(User, {
                 _id: user._id
             }, {
@@ -261,7 +264,7 @@ module.exports = class TeamRouter {
         var { teamId } = ctx.validatedParams;
         var user = ctx.state.user.data;
         //如果传入的id和当前登录用户的id相等 表示是自己离开团队
-        var team = await Team.find({
+        var team = await Team.findOne({
             _id: teamId,
         })
         if (!team) {

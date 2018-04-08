@@ -63,7 +63,7 @@
           width="120"
         >
           <template slot-scope="scope">
-            <p style="display: inline-block" v-html="getDownLoadCount(scope.row.downloadCount)"></p>/<span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row.strategy)"></span>
+            <p style="display: inline-block" v-html="getDownLoadCount(scope.row.downloadCount)"></p><span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row)"></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -211,11 +211,16 @@
           return 0
         }
       },
-      getAllowDownLoadCount(strategy) {
-        if (strategy && strategy.downloadCountLimit) {
-          return strategy.downloadCountLimit
+      getAllowDownLoadCount(item) {
+        // 灰度版本
+        if (this.appInfo.grayReleaseVersionId && this.appInfo.grayReleaseVersionId === item._id) {
+          if (this.appInfo.grayStrategy && this.appInfo.grayStrategy.downloadCountLimit) {
+            return `/${this.appInfo.grayStrategy.downloadCountLimit}`
+          } else {
+            return '/不限'
+          }
         } else {
-          return '不限'
+          return `下载次数${item.downloadCount}`
         }
       },
       cancel() {
@@ -232,7 +237,8 @@
         this.getAppVersionListData()
       },
       getIconClass(item) {
-        if (this.appInfo.releaseVersionId && this.appInfo.releaseVersionId === item._id) {
+        // 灰度版本
+        if (this.appInfo.grayReleaseVersionId && this.appInfo.grayReleaseVersionId === item._id) {
             return 'version-table-one-gray'
         } else {
           return 'version-table-one-lighting'

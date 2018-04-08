@@ -14,11 +14,11 @@
         <!--不可以用v-if，否则会因为控件加载时序问题导致，指定选中的item失效-->
         <div v-show="this.activeIndex !== '应用概述'">
           <el-menu-item index="应用列表" @click="clickSubItem">
-            <i class="el-icon-tickets"></i>
+            <i class="icon-ic_vision"></i>
             <span slot="title">应用列表</span>
           </el-menu-item>
           <el-menu-item index="团队管理" @click="clickSubItem">
-            <i class="el-icon-menu"></i>
+            <i class="icon-ic_addgp"></i>
             <span slot="title">团队管理</span>
           </el-menu-item>
         </div>
@@ -183,9 +183,17 @@
   .mainNav-wrapper .mainNav-el-menu .el-menu-item span {
     font-size: 18px;
   }
+  .mainNav-wrapper .mainNav-el-menu i {
+    font-size: 18px;
+    line-height: 55px;
+    margin-right: 3px;
+  }
   .mainNav-wrapper .mainNav-el-menu .is-active {
     color: white;
     background-color: $mainColor;
+  }
+  .mainNav-wrapper .mainNav-el-menu .is-active i:before {
+    color: white;
   }
   .mainNav-wrapper .mainNav-el-menu .is-active span {
     color: white;

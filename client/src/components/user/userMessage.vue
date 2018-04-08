@@ -98,13 +98,19 @@
         this.currentPage = val
       },
       getTimer(timer) {
+        console.log(5555)
+        console.log(timer)
+        console.log(typeof timer)
+        let dateTimer = new Date(timer)
+        console.log(typeof dateTimer)
+
         // 今天显示时分，昨天显示昨天时分，其余显示日期
-        if (this.isToday(timer)) {
-          return `${timer.getHours()}:${timer.getMinutes()}`
-        } else if (this.isYestday(timer)) {
-          return `昨天 ${timer.getHours()}:${timer.getMinutes()}`
+        if (this.isToday(dateTimer)) {
+          return `${dateTimer.getHours()}:${dateTimer.getMinutes()}`
+        } else if (this.isYestday(dateTimer)) {
+          return `昨天 ${dateTimer.getHours()}:${dateTimer.getMinutes()}`
         } else {
-          return `${timer.getFullYear()}-${timer.getMonth() + 1}-${timer.getDay()} ${timer.getHours()}:${timer.getMinutes()}`
+          return `${dateTimer.getFullYear()}-${dateTimer.getMonth() + 1}-${dateTimer.getDay()} ${dateTimer.getHours()}:${dateTimer.getMinutes()}`
         }
       },
       isToday(theDate) {
@@ -132,6 +138,7 @@
         UserApi.allRead().then((res) => {
           this.$message.success(res.message)
           this.loadData()
+          this.bus.$emit('allreadMessage')
         }, reject => {
 
         })

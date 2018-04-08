@@ -25,6 +25,11 @@
           <el-form-item label="更新下载地址">
             <input style="width: calc(100% - 40px)" v-model="downloadUrl" class="borderLine-input" type="text">
           </el-form-item>
+          <el-form-item label="更新方式">
+            <el-radio v-model="updateType" label="normal">普通更新</el-radio>
+            <el-radio v-model="updateType" label="silent">静默更新</el-radio>
+            <el-radio v-model="updateType" label="force">强制更新</el-radio>
+          </el-form-item>
           <el-form-item label="更新日志">
             <p class="textareacount">{{this.updataContent.length}}/100</p>
             <el-input
@@ -62,7 +67,8 @@
         show: false,
         updataContent: '',
         showinDownLoadPage: false,
-        downloadUrl: ''
+        downloadUrl: '',
+        updateType: ''
       }
     },
     created() {
@@ -70,7 +76,9 @@
         console.log(this.versionInfo)
         this.show = true
         this.downloadUrl = `${this.axios.defaults.baseURL}${this.appInfo.shortUrl}`
-        this.updataContent = this.versionInfo.changelog
+        if (this.versionInfo.changelog) {
+          this.updataContent = this.versionInfo.changelog
+        }
         this.showinDownLoadPage = this.versionInfo.showOnDownloadPage
       }, 200)
     },
@@ -85,7 +93,8 @@
         let body = {
           'fileDownloadUrl': this.downloadUrl,
           'showOnDownloadPage': this.showinDownLoadPage,
-          'changelog': this.updataContent
+          'changelog': this.updataContent,
+          'updateMode': this.updateType
         }
         AppResourceApi.updateNote(getUserTeam()._id, this.appInfo._id, this.versionInfo._id, body).then((res) => {
           console.log(res)
@@ -139,11 +148,14 @@
   }
   .editorVersion-content {
     float: right;
-    width: 33%;
+    width: 480px;
     height: 100%;
     margin-right: 0;
     background-color: white;
     box-shadow: 0 2px 6px rgba(120, 120, 120, 0.5);
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
   .editorVersion-content .top {
     padding-left: 41px;
@@ -170,7 +182,7 @@
   }
   .editorVersion-content .el-form {
     margin-top: 24px;
-    margin-left: 72px;
+    margin-left: 60px;
   }
   .editorVersion-content .el-form .el-form-item {
     margin-bottom: 5px;
@@ -191,6 +203,9 @@
   .editorVersion-content .el-form .el-form-item .textareacount {
     text-align: right;
     padding-right: 40px;
+  }
+  .editorVersion-content .el-form .el-form-item .el-radio {
+    margin-right: -10px;
   }
   .editorVersion-content .editorVersion-updatatextarea {
     width: calc(100% - 40px);

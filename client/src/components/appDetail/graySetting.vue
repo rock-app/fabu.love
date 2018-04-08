@@ -10,7 +10,7 @@
           <el-form-item label="选择版本号">
             <div class="chooseVersion" @click="showVersions">
               <p v-html="this.currentVersion.versionCode"></p>
-              <i class="icon-ic_ios"></i>
+              <i class="el-icon-arrow-down"></i>
             </div>
             <div class="versionlistwrapper" v-show="this.showVersionList">
               <ul class="list">
@@ -178,6 +178,8 @@
     background-color: white;
     box-shadow: 0 2px 6px rgba(120, 120, 120, 0.5);
     overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
   .graySetting-content .top {
     padding-left: 40px;

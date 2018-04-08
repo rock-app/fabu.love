@@ -45,6 +45,8 @@ var versionProfile = {
     'fileDownloadUrl':'string', //更新文件的下载地址
     'showOnDownloadPage':'boolean', //是否显示到下载页
     'changelog':'string', //修改日志
+    'updateMode':{type:'string'} //更新模式  force / silent / normal/ 强制或者静默或者普通升级
+
 }
 
 var appProfile = {

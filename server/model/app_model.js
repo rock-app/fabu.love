@@ -65,7 +65,12 @@ var appSchema = new Schema({
             enum: ['black', 'white']
         },
         ipList: [String],
-        downloadCountLimit: Number
+        downloadCountLimit: Number,
+        updateMode: {
+            type: String,
+            default: 'slient',
+            enum: ['slient', 'normal', 'force']
+        }
     }
 })
 

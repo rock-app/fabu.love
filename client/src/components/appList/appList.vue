@@ -132,10 +132,10 @@
       this.bus.$off('refreshList')
     },
     mounted() {
-      console.log('applist mounted...')
       this.currentTeam = getUserTeam()
       this.bus.$emit('applist')
       this.bus.$on('refreshList', () => {
+        this.currentTeam = getUserTeam()
         this.loadAppList()
       })
       this.$watch('queryText', () => {

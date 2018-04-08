@@ -75,7 +75,6 @@ export default {
       let emailList = this.invitedEmails.split(' ')
       let validedEmailList = []
       for (var email of emailList) {
-        alert(this.valideEmail(email))
         if (this.valideEmail(email)) {
           var changedEmail = email.replace(/[\r\n]/g, '')
           validedEmailList.push(changedEmail)
@@ -83,6 +82,8 @@ export default {
       }
       if (validedEmailList.length > 0) {
         this.request(validedEmailList)
+      } else {
+        this.$message.error('请输入正确的邮箱')
       }
       console.log(validedEmailList)
     },

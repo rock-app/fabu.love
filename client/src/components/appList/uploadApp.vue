@@ -62,8 +62,8 @@
             console.log(res)
             _this.$message(res)
             Message({
-              message: res.success ? '上传成功' : res.message,
-              type: res.success ? 'success' : 'error'
+              message: res.data.success ? '上传成功' : res.message,
+              type: res.data.success ? 'success' : 'error'
             })
             _this.$emit('uploadSuccess')
           })

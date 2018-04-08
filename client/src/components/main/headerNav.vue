@@ -89,6 +89,9 @@
         this.appName = appName
         this.$refs.arrow.style.transform = `rotate(-90deg)`
       })
+      this.bus.$on('allreadMessage', () => {
+        this.redDocHidden = true
+      })
 
       this.userInfo = getUserInfo()
       this.currentTeam = getUserTeam()
@@ -99,6 +102,8 @@
     },
     destroyed() {
       this.bus.$off('applist')
+      this.bus.$off('appdetail')
+      this.bus.$off('allreadMessage')
     },
     methods: {
       clickUserIcon() {
@@ -138,10 +143,10 @@
         document.querySelector('#app').click()
         // 更新当前团队
         saveUserTeam(item)
-        // 刷新app列表
-        this.bus.$emit('refreshList')
         // 更新team
         this.currentTeam = getUserTeam()
+        // 刷新app列表
+        this.bus.$emit('refreshList')
       },
       sure() {
         if (this.form.name.length === 0) {

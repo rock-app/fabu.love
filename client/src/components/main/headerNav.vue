@@ -3,17 +3,19 @@
     <div class="leftWrapper">
       <!--团队，切换团队-->
       <div class="team">
-        <el-popover ref="popover" placement="bottom" width="160" trigger="click" :disabled="!this.isTeam || teamArr.length === 0">
+        <el-popover ref="popover" placement="bottom" width="160" trigger="click" :disabled="!this.isAppList || teamArr.length === 0">
           <ul>
             <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
               {{item.name}}
             </li>
           </ul>
         </el-popover>
-        <el-button v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
+        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
+        <el-button class="flagBtn" @click="clickFlagBtn" v-show="!isAppList"></el-button>
+
       </div>
       <!--详情-->
-      <div class="detail" v-show="!isTeam">
+      <div class="detail" v-show="!isAppList">
         <p>{{this.appName}}</p>
       </div>
     </div>
@@ -66,7 +68,7 @@
         userHover: false,
         redDocHidden: true,
         currentTeam: {},
-        isTeam: true,
+        isAppList: true,
         appName: '',
         dialogFormVisible: false,
         form: {
@@ -78,11 +80,11 @@
     created() {
       this.$nextTick(() => {
         Bus.$on('applist', () => {
-          this.isTeam = true
+          this.isAppList = true
           this.$refs.arrow.style.transform = `rotate(0deg)`
         })
         Bus.$on('appdetail', (appName) => {
-          this.isTeam = false
+          this.isAppList = false
           this.appName = appName
           this.$refs.arrow.style.transform = `rotate(-90deg)`
         })
@@ -149,7 +151,7 @@
         this.dialogFormVisible = false
       },
       clickTeamBtn() {
-        if (this.isTeam) {
+        if (this.isAppList) {
           // 获取我的团队列表
           UserApi.getUserTeams().then((res) => {
             this.teamArr = res.data.teams
@@ -157,8 +159,10 @@
 
           })
         } else {
-          this.$router.push('/apps')
         }
+      },
+      clickFlagBtn() {
+        this.$router.push('/apps')
       }
     }
   }
@@ -172,6 +176,7 @@
     float: left;
     display: flex;
     flex-direction: row;
+    position: relative;
   }
   .leftWrapper-item {
     height: 44px;
@@ -179,21 +184,30 @@
     border-bottom: solid 1px #eee;
     box-sizing: border-box;
   }
-  .headernav-wrapper .leftWrapper .team .el-button {
+  .headernav-wrapper .leftWrapper .team .teamBtn {
     padding: 0px 10px;
     margin-top: 9px;
     color: $mainTitleColor;
     border-color: transparent;
     max-width: 300px;
   }
-  .headernav-wrapper .leftWrapper .team .el-button:hover {
+  .headernav-wrapper .leftWrapper .team .teamBtn:hover {
     background-color: transparent !important;
   }
-  .headernav-wrapper .leftWrapper .team .el-button span {
+  .headernav-wrapper .leftWrapper .team .teamBtn span {
     height: 50px;
     line-height: 50px;
     font-family: "PingFang SC";
     font-size: 20px;
+  }
+  .headernav-wrapper .leftWrapper .team .flagBtn {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    border-color: transparent;
+    background-color: transparent;
   }
   .headernav-wrapper .leftWrapper .detail p {
     height: 72px;

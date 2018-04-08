@@ -7,7 +7,7 @@
           <div class="appType-platform-wrapper">
             <div class="appType" v-show="this.appInfo.appLevel" v-html="getAppType()"></div>
             <div class="platform">
-              <i class="icon-ic_ios"></i><span v-html="`适用于${this.appInfo.platform}`"></span>
+              <i :class="this.appInfo.platform === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i><span v-html="`  适用于${this.appInfo.platform}`"></span>
             </div>
           </div>
           <div class="rightwrapper" style="z-index: 1">

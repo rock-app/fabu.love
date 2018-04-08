@@ -41,10 +41,6 @@ module.exports = class TeamRouter {
     static async createTeam(ctx, next) {
         var user = ctx.state.user.data;
         var {body} = ctx.request;
-        var team = await Team.findOne({name: body.name})
-        if (team) {
-            throw new Error("团队名称已被使用")
-        }
         team = new Team(body);
         team.creatorId = user._id;
         team.members = [

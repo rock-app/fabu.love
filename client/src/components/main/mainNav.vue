@@ -1,7 +1,7 @@
 <template>
   <div class="mainNav-wrapper">
     <div class="mainNav-logo">
-      <img src="../../assets/logo_s.png" alt="">
+      <img src="../../assets/logo_s.png" alt="" @click="clickLogo">
       <div class="line"></div>
     </div>
 
@@ -70,20 +70,26 @@
         activeIndex: '应用列表'
       }
     },
+    mounted() {
+
+    },
     created() {
       this.$nextTick(() => {
         Bus.$on('appdetail', () => {
           this.activeIndex = '应用概述'
         })
         Bus.$on('applist', () => {
+          console.log(6666)
+          console.log(this.$route)
+          if (this.$route.fullPath !== '/apps') {
+            this.$router.push('/apps')
+          }
           this.activeIndex = '应用列表'
-          this.$router.push('/apps')
         })
         if (this.$route.fullPath === '/members') {
           this.activeIndex = '团队管理'
         }
       })
-
     },
     methods: {
       clickSubItem(data) {
@@ -112,6 +118,9 @@
       },
       gotoApiDoc() {
 
+      },
+      clickLogo() {
+//        this.$router.push('/apps')
       }
     },
     watch: {

@@ -6,13 +6,14 @@
         <el-popover ref="popover" placement="bottom" width="160" trigger="click" :disabled="!this.isAppList || teamArr.length === 0">
           <ul>
             <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
-              {{item.name}}
+              <p>
+                {{item.name}}
+              </p>
             </li>
           </ul>
         </el-popover>
         <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
         <el-button class="flagBtn" @click="clickFlagBtn" v-show="!isAppList"></el-button>
-
       </div>
       <!--详情-->
       <div class="detail" v-show="!isAppList">
@@ -184,6 +185,16 @@
     border-bottom: solid 1px #eee;
     box-sizing: border-box;
   }
+  .leftWrapper-item:hover {
+    background-color: #f0f1fe;
+  }
+  .leftWrapper-item p {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+  .el-popover {
+    padding: 0px !important;
+  }
   .headernav-wrapper .leftWrapper .team .teamBtn {
     padding: 0px 10px;
     margin-top: 9px;
@@ -191,9 +202,9 @@
     border-color: transparent;
     max-width: 300px;
   }
-  .headernav-wrapper .leftWrapper .team .teamBtn:hover {
-    background-color: transparent !important;
-  }
+  /*.headernav-wrapper .leftWrapper .team .teamBtn:hover {*/
+    /*background-color: transparent;*/
+  /*}*/
   .headernav-wrapper .leftWrapper .team .teamBtn span {
     height: 50px;
     line-height: 50px;

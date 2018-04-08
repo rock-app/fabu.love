@@ -28,7 +28,6 @@
   import ChangePassword from './changePassword.vue'
   import PersonalInfo from './personalInfo.vue'
   import {getUserInfo} from '../../mgr/userMgr'
-  import Bus from '../../common/js/bus'
 
   export default {
     components: {
@@ -62,7 +61,7 @@
       cancel() {
         this.show = false
         setTimeout(() => {
-          Bus.$emit('hiddenUserInfo')
+          this.bus.$emit('hiddenUserInfo')
         }, 500)
       },
       clickcontent() {}

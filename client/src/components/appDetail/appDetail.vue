@@ -26,7 +26,6 @@
   import { getUserTeam } from '../../mgr/userMgr'
   import AppDetailHeader from './appDetailHeader.vue'
   import AppVersions from './appVersions.vue'
-  import Bus from '../../common/js/bus'
   import AppSetting from './appSetting.vue'
 
   export default {
@@ -42,15 +41,19 @@
       AppDetailHeader, AppVersions, AppSetting
     },
     computed: {},
+    destroyed() {
+      this.bus.$off('appSummary')
+      this.bus.$off('appSetting')
+    },
     created() {
       this.$nextTick(() => {
         this.userteam = getUserTeam()
         this.getAppDetailData()
       })
-      Bus.$on('appSummary', () => {
+      this.bus.$on('appSummary', () => {
         this.showAppSetting = false
       })
-      Bus.$on('appSetting', () => {
+      this.bus.$on('appSetting', () => {
         this.showAppSetting = true
       })
     },
@@ -63,7 +66,7 @@
           this.subTitleArr.push(this.appInfo.bundleId)
           this.subTitleArr.push(this.axios.defaults.baseURL + this.appInfo.shortUrl)
           this.subTitleArr.push(this.appInfo._id)
-          Bus.$emit('appdetail', res.data.appName)
+          this.bus.$emit('appdetail', res.data.appName)
         }, reject => {
           this.$message.error(reject)
         })

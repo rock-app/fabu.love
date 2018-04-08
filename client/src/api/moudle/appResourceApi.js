@@ -4,12 +4,9 @@
 import {getHttp, deleteHttp, postHttp} from '../basehttp'
 
 // 获取应用列表
-export function getAppList(teamId, page) {
-  let params = {
-    'page': page, 'size': 10
-  }
+export function getAppList(teamId) {
   let url = `api/apps/${teamId}`
-  return getHttp(url, params)
+  return getHttp(url)
 }
 
 // 获取应用详情

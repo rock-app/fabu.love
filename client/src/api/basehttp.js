@@ -67,10 +67,18 @@ export function configAxios() {
   vue.axios.defaults.baseURL = 'http://localhost:3008/'
   vue.axios.defaults.headers.common['Content-Type'] = 'application/json'
   vue.axios.default.timeout = 60000
-  let token = TokenMgr.get(vue.axios.defaults.baseURL)
-  if (token) {
-    vue.axios.defaults.headers.Authorization = 'Bearer' + ' ' + token
-  }
+
+  vue.axios.interceptors.request.use(
+    config => {
+      let token = TokenMgr.get(vue.axios.defaults.baseURL)
+      if (token) {
+        config.headers.Authorization = 'Bearer' + ' ' + token
+      }
+      return config
+    }, err => {
+      return Promise.reject(err)
+    })
+
   vue.axios.interceptors.response.use({}, error => {
     if (!error.response) {
       error.message = '请检查网络设置'

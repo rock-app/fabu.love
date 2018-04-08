@@ -7,7 +7,7 @@
 
     <div>
       <el-menu
-        :default-active="this.activeIndex"
+        :default-active="activeIndex"
         class="mainNav-el-menu"
         ref="elmenu"
       >
@@ -62,7 +62,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Bus from '../../common/js/bus'
 
   export default {
     data() {
@@ -71,25 +70,24 @@
       }
     },
     mounted() {
-
+      this.bus.$on('appdetail', () => {
+        this.activeIndex = '应用概述'
+      })
+      this.bus.$on('applist', () => {
+        if (this.$route.fullPath !== '/apps') {
+          this.$router.push('/apps')
+        }
+        this.activeIndex = '应用列表'
+      })
+      if (this.$route.fullPath === '/members') {
+        this.activeIndex = '团队管理'
+      }
     },
     created() {
-      this.$nextTick(() => {
-        Bus.$on('appdetail', () => {
-          this.activeIndex = '应用概述'
-        })
-        Bus.$on('applist', () => {
-          console.log(6666)
-          console.log(this.$route)
-          if (this.$route.fullPath !== '/apps') {
-            this.$router.push('/apps')
-          }
-          this.activeIndex = '应用列表'
-        })
-        if (this.$route.fullPath === '/members') {
-          this.activeIndex = '团队管理'
-        }
-      })
+    },
+    destroyed() {
+      this.bus.$off('applist')
+      this.bus.$off('appdetail')
     },
     methods: {
       clickSubItem(data) {
@@ -97,10 +95,10 @@
           this.$router.push('/apps')
         }
         if (data.index === '应用概述') {
-          Bus.$emit('appSummary')
+          this.bus.$emit('appSummary')
         }
         if (data.index === '应用设置') {
-          Bus.$emit('appSetting')
+          this.bus.$emit('appSetting')
         }
         if (data.index === '团队管理') {
           this.$router.push('/members')

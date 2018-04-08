@@ -2,12 +2,12 @@
   <div class="personalInfo-wrapper">
     <ul>
       <li class="emailWrapper">
-        <i class="icon-ic_ios"></i>
+        <i class="far fa-envelope"></i>
         <p class="emailTitle">邮箱</p>
         <span class="email">{{this.userInfo.email}}</span>
       </li>
       <li class="personalInfoItem" v-for="(item, index) in dataArr" :key="index">
-        <i class="icon-ic_ios"></i>
+        <i :class="getIcon(index)"></i>
         <p v-html="item.title"></p>
         <input v-model="item.subTitle" class="borderLine-input" type="text" :placeholder="item.placeHoder">
       </li>
@@ -52,6 +52,17 @@
 
         }, reject => {
         })
+      },
+      getIcon(index) {
+        if (index === 0) {
+          return 'fas fa-mobile-alt'
+        } else if (index === 1) {
+          return 'fab fa-qq'
+        } else if (index === 2) {
+          return 'fas fa-home'
+        } else {
+          return 'fas fa-user-md'
+        }
       },
       cancel() {
         this.$emit('cancel')
@@ -100,8 +111,13 @@
     margin-top: 24px;
     text-align: left;
   }
-  .personalInfoItem i {
-    line-height: 24px;
+  .emailWrapper i {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+  }
+  .emailWrapper i:before {
+    color: $mainColor;
   }
   .personalInfoItem {
     margin-top: 24px;
@@ -109,6 +125,15 @@
     flex-direction: row;
     height: 24px;
     line-height: 24px;
+  }
+  .personalInfoItem i {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+  }
+  .personalInfoItem i:before {
+    color: $mainColor;
   }
   .personalInfoItem p {
     font-size: 14px;

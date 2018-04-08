@@ -27,7 +27,6 @@
   import HeaderNav from './headerNav.vue'
   import FooterWrapper from './footerWrapper.vue'
   import UserInfo from '../user/userInfo.vue'
-  import Bus from '../../common/js/bus'
   import UserMessage from '../user/userMessage.vue'
 
   export default {
@@ -41,18 +40,24 @@
       MainNav, HeaderNav, FooterWrapper, UserInfo, UserMessage
     },
     created() {
-      Bus.$on('showUserInfo', () => {
+      this.bus.$on('showUserInfo', () => {
         this.showUserInfo = true
       })
-      Bus.$on('hiddenUserInfo', () => {
+      this.bus.$on('hiddenUserInfo', () => {
         this.showUserInfo = false
       })
-      Bus.$on('showUserMessage', () => {
+      this.bus.$on('showUserMessage', () => {
         this.showUserMessage = true
       })
-      Bus.$on('hiddenUserMessage', () => {
+      this.bus.$on('hiddenUserMessage', () => {
         this.showUserMessage = false
       })
+    },
+    destroyed() {
+      this.bus.$off('showUserInfo')
+      this.bus.$off('hiddenUserInfo')
+      this.bus.$off('showUserMessage')
+      this.bus.$off('hiddenUserMessage')
     },
     methods: {
     }

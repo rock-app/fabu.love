@@ -3,7 +3,8 @@
     <div class="leftWrapper">
       <!--团队，切换团队-->
       <div class="team">
-        <el-popover ref="popover" placement="bottom" width="160" trigger="click" :disabled="!this.isAppList || teamArr.length === 0">
+        <el-popover ref="popover" placement="bottom" width="160" trigger="click"
+                    :disabled="!this.isAppList || teamArr.length === 0">
           <ul>
             <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
               <p>
@@ -12,7 +13,8 @@
             </li>
           </ul>
         </el-popover>
-        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
+        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i
+          class="el-icon-arrow-down" ref="arrow"></i></el-button>
         <el-button class="flagBtn" @click="clickFlagBtn" v-show="!isAppList"></el-button>
       </div>
       <!--详情-->
@@ -57,8 +59,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {getUserInfo, removeUserInfo, getUserTeam, saveUserTeam} from '../../mgr/userMgr'
-  import Bus from '../../common/js/bus'
+  import { getUserInfo, removeUserInfo, getUserTeam, saveUserTeam } from '../../mgr/userMgr'
   import TokenMgr from '../../mgr/TokenMgr'
   import * as UserApi from '../../api/moudle/userApi'
 
@@ -78,23 +79,26 @@
         teamArr: []
       }
     },
-    created() {
-      this.$nextTick(() => {
-        Bus.$on('applist', () => {
-          this.isAppList = true
-          this.$refs.arrow.style.transform = `rotate(0deg)`
-        })
-        Bus.$on('appdetail', (appName) => {
-          this.isAppList = false
-          this.appName = appName
-          this.$refs.arrow.style.transform = `rotate(-90deg)`
-        })
-
-        this.userInfo = getUserInfo()
-        this.currentTeam = getUserTeam()
-        this.teamArr = this.userInfo.teamArr
-        this.loadMessage()
+    mounted() {
+      this.bus.$on('applist', () => {
+        this.isAppList = true
+        this.$refs.arrow.style.transform = `rotate(0deg)`
       })
+      this.bus.$on('appdetail', (appName) => {
+        this.isAppList = false
+        this.appName = appName
+        this.$refs.arrow.style.transform = `rotate(-90deg)`
+      })
+
+      this.userInfo = getUserInfo()
+      this.currentTeam = getUserTeam()
+      this.teamArr = this.userInfo.teamArr
+      this.loadMessage()
+    },
+    created() {
+    },
+    destroyed() {
+      this.bus.$off('applist')
     },
     methods: {
       clickUserIcon() {
@@ -108,15 +112,15 @@
       },
       clickUserInfoWrapper() {
         this.userHover = false
-        Bus.$emit('showUserInfo')
+        this.bus.$emit('showUserInfo')
       },
       loginout() {
         TokenMgr.clearTokens()
         removeUserInfo()
-        this.$router.push('/login')
+        this.$router.replace('/login')
       },
       clickMessage() {
-        Bus.$emit('showUserMessage')
+        this.bus.$emit('showUserMessage')
       },
       loadMessage() {
         UserApi.getMessageCount().then((res) => {
@@ -135,7 +139,7 @@
         // 更新当前团队
         saveUserTeam(item)
         // 刷新app列表
-        Bus.$emit('refreshList')
+        this.bus.$emit('refreshList')
         // 更新team
         this.currentTeam = getUserTeam()
       },
@@ -171,30 +175,37 @@
 
 <style lang="scss">
   @import "../../common/scss/base";
+
   .headernav-wrapper {
   }
+
   .headernav-wrapper .leftWrapper {
     float: left;
     display: flex;
     flex-direction: row;
     position: relative;
   }
+
   .leftWrapper-item {
     height: 44px;
     line-height: 44px;
     border-bottom: solid 1px #eee;
     box-sizing: border-box;
   }
+
   .leftWrapper-item:hover {
     background-color: #f0f1fe;
   }
+
   .leftWrapper-item p {
     margin-left: 12px;
     margin-right: 12px;
   }
+
   .el-popover {
     padding: 0px !important;
   }
+
   .headernav-wrapper .leftWrapper .team .teamBtn {
     padding: 0px 10px;
     margin-top: 9px;
@@ -202,8 +213,9 @@
     border-color: transparent;
     max-width: 300px;
   }
+
   /*.headernav-wrapper .leftWrapper .team .teamBtn:hover {*/
-    /*background-color: transparent;*/
+  /*background-color: transparent;*/
   /*}*/
   .headernav-wrapper .leftWrapper .team .teamBtn span {
     height: 50px;
@@ -211,6 +223,7 @@
     font-family: "PingFang SC";
     font-size: 20px;
   }
+
   .headernav-wrapper .leftWrapper .team .flagBtn {
     position: absolute;
     top: 0px;
@@ -220,6 +233,7 @@
     border-color: transparent;
     background-color: transparent;
   }
+
   .headernav-wrapper .leftWrapper .detail p {
     height: 72px;
     line-height: 72px;
@@ -227,6 +241,7 @@
     font-size: 20px;
     color: $mainTitleColor;
   }
+
   .headernav-wrapper .rightWrapper {
     float: right;
     height: 72px;
@@ -236,15 +251,18 @@
     position: relative;
     font-size: 0px;
   }
+
   .headernav-wrapper .rightWrapper .userwrapper {
     display: inline-block;
     height: 100%;
   }
+
   .headernav-wrapper .rightWrapper .userwrapper:hover {
     background-color: $paleGrey;
     border: solid 1px #eee;
     box-sizing: border-box;
   }
+
   .headernav-wrapper .rightWrapper .userInfoSubWrapper {
     position: absolute;
     left: 27px;
@@ -255,6 +273,7 @@
     border-right: solid 1px #eee;
     box-sizing: border-box;
   }
+
   .headernav-wrapper .rightWrapper .item {
     display: inline-block;
     vertical-align: middle;
@@ -262,9 +281,11 @@
     width: 15px;
     margin-right: 12px;
   }
+
   .headernav-wrapper .rightWrapper i {
     font-size: 18px;
   }
+
   .headernav-wrapper .rightWrapper p {
     display: inline-block;
     vertical-align: middle;
@@ -277,11 +298,13 @@
     margin-right: 48px;
     margin-left: 5px;
   }
+
   .headernav-wrapper .rightWrapper .userIcon {
     margin-left: 12px;
     vertical-align: middle;
     margin-top: 20px;
   }
+
   .headernav-wrapper .rightWrapper .userInfoSub {
     width: 100%;
     height: 44px;

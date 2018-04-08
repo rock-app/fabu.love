@@ -3,9 +3,11 @@
     <!--内容头部-->
     <div class="applist-header">
       <div style="position: relative">
-        <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
+        <div
+          style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
         <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传应用</el-button>
-        <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
+        <input ref="referenceUpload" accept=".ipa, .apk" @change="referenceUpload" type="file"
+               style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
       </div>
 
       <div class="applist-header-right">
@@ -30,20 +32,21 @@
     >
     </collectionView>
 
-    <uploadApp v-if="this.showUploadView" :teamId="this.teamArr[0]._id" :appFile="this.file" v-show="this.showUploadView" @closeUpload="closeUploadMethod" @uploadSuccess="uploadSuccessMethod"></uploadApp>
+    <uploadApp v-if="this.showUploadView" :teamId="this.currentTeam._id" :appFile="this.file"
+               v-show="this.showUploadView" @closeUpload="closeUploadMethod"
+               @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import AppListNav from './appListNav.vue'
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
-  import {getTeamArr, getUserTeam} from '../../mgr/userMgr'
+  import { getUserTeam } from '../../mgr/userMgr'
   import CollectionView from '../base/collectionView.vue'
-  import Bus from '../../common/js/bus'
 
   export default {
+    name: 'Apps',
     data() {
       return {
         currentPlatform: '',
@@ -53,30 +56,20 @@
         showUploadView: false,
         file: FileList,
         currentPage: 0,
-        teamArr: []
+        currentTeam: {}
       }
     },
     components: {
-      AppListNav, UploadApp, CollectionView
+      UploadApp, CollectionView
     },
-    computed: {
-    },
+    computed: {},
     methods: {
-      loadAppList(isfooter) {
-        if (isfooter) {
-          this.currentPage = this.currentPage + 1
-        } else {
-          this.currentPage = 0
-        }
-        AppResourceApi.getAppList(getUserTeam()._id, this.currentPage)
+      loadAppList() {
+        AppResourceApi.getAppList(this.currentTeam._id)
           .then(response => {
             console.log(response)
-            if (isfooter) {
-              this.dataList = this.dataList.concat(response.data)
-            } else {
-              this.dataList = []
-              this.dataList = response.data
-            }
+            this.dataList = []
+            this.dataList = response.data
             this.originDataList = this.dataList
           }, reject => {
             this.$message.error(reject)
@@ -113,7 +106,7 @@
           name: 'AppDetail',
           params: {appId: item._id}
         })
-        Bus.$emit('appdetail')
+        this.bus.$emit('appdetail')
       },
       appItemHovered() {
       },
@@ -126,7 +119,7 @@
       delectApp(item) {
         this.$confirm('确认删除？')
           .then(_ => {
-            AppResourceApi.delectApp(this.teamArr[0]._id, item._id).then((res) => {
+            AppResourceApi.delectApp(this.currentTeam._id, item._id).then((res) => {
               this.loadAppList()
             }, reject => {
               this.$message.error(reject)
@@ -135,34 +128,38 @@
           .catch(_ => {})
       }
     },
-    created () {
-      this.$nextTick(() => {
-        Bus.$emit('applist')
-        Bus.$on('refreshList', () => {
-          this.loadAppList(false)
-        })
-        this.$watch('queryText', () => {
-          let newArr = []
-          this.dataList.forEach((item) => {
-            if (item.appName.search(this.queryText) !== -1) {
-              newArr.push(item)
-            }
-          })
-          this.dataList = newArr
-
-          if (this.queryText.length === 0) {
-            this.dataList = this.originDataList
+    destroyed() {
+      this.bus.$off('refreshList')
+    },
+    mounted() {
+      console.log('applist mounted...')
+      this.currentTeam = getUserTeam()
+      this.bus.$emit('applist')
+      this.bus.$on('refreshList', () => {
+        this.loadAppList()
+      })
+      this.$watch('queryText', () => {
+        let newArr = []
+        this.dataList.forEach((item) => {
+          if (item.appName.search(this.queryText) !== -1) {
+            newArr.push(item)
           }
         })
-        this.teamArr = getTeamArr()
-        if (this.teamArr) {
-          this.loadAppList(false)
+        this.dataList = newArr
+
+        if (this.queryText.length === 0) {
+          this.dataList = this.originDataList
         }
+      })
+
+      this.loadAppList()
+    },
+    created () {
+      this.$nextTick(() => {
       })
     },
     watch: {
       currentPlatform(val) {
-        console.log(val)
         this.dataList = this.originDataList
         let newArr = []
         this.dataList.forEach((item) => {
@@ -183,20 +180,25 @@
     padding-left: 20px;
     padding-right: 20px;
   }
+
   .applist-header {
     height: 75px;
     padding-top: 25px;
   }
+
   .applist-header .uploadWrapper {
     width: 144px;
     float: left;
   }
+
   .applist-header .uploadWrapper i {
     margin-right: 15px;
   }
+
   .applist-header-right {
     float: right;
   }
+
   .applist-header .search-wrapper {
     width: 312px;
     height: 48px;
@@ -205,31 +207,37 @@
     position: relative;
     display: inline-block;
   }
+
   .el-icon-search {
     position: absolute;
     left: 15px;
     top: 17px;
     color: $mainColor;
   }
+
   .applist-header-search {
     position: absolute;
     left: 45px;
     top: 0px;
     width: 235px;
     height: 50px;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     outline: 0;
     color: $mainColor;
   }
+
   .applist-header-search::-webkit-input-placeholder {
     color: $mainColor;
   }
+
   .applist-header-search:-moz-placeholder {
     color: $mainColor;
   }
+
   .applist-header-search:-ms-input-placeholder {
     color: $mainColor;
   }
+
   .applist-header .platform-wrapper {
     display: inline-block;
     width: 144px;
@@ -240,6 +248,7 @@
     border: solid 1px $mainColor;
     margin-right: 22px;
   }
+
   .applist-header .platform-wrapper .platform-ios {
     display: inline-block;
     width: 72px;
@@ -248,17 +257,20 @@
     border-right: solid 1px $mainColor;
     box-sizing: border-box;
   }
+
   .applist-header .platform-wrapper .platform-android {
     display: inline-block;
     width: 72px;
     height: 100%;
     text-align: center;
   }
+
   .platformImg {
     width: 25px;
     height: 25px;
     margin-top: 11px;
   }
+
   .platformActive {
     background-color: #ddd;
   }

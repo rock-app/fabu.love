@@ -136,27 +136,29 @@
       }
     },
     created () {
-      Bus.$emit('applist')
-      Bus.$on('refreshList', () => {
-        this.loadAppList(false)
-      })
-      this.$watch('queryText', () => {
-        let newArr = []
-        this.dataList.forEach((item) => {
-          if (item.appName.search(this.queryText) !== -1) {
-            newArr.push(item)
+      this.$nextTick(() => {
+        Bus.$emit('applist')
+        Bus.$on('refreshList', () => {
+          this.loadAppList(false)
+        })
+        this.$watch('queryText', () => {
+          let newArr = []
+          this.dataList.forEach((item) => {
+            if (item.appName.search(this.queryText) !== -1) {
+              newArr.push(item)
+            }
+          })
+          this.dataList = newArr
+
+          if (this.queryText.length === 0) {
+            this.dataList = this.originDataList
           }
         })
-        this.dataList = newArr
-
-        if (this.queryText.length === 0) {
-          this.dataList = this.originDataList
+        this.teamArr = getTeamArr()
+        if (this.teamArr) {
+          this.loadAppList(false)
         }
       })
-      this.teamArr = getTeamArr()
-      if (this.teamArr) {
-        this.loadAppList(false)
-      }
     },
     watch: {
       currentPlatform(val) {

@@ -23,8 +23,7 @@
     "vue-qr": "^1.2.8",
     "vue-router": "^3.0.1",
     "vux": "^2.8.0",
-    "vux-loader": "^1.2.1",
-    "vue-qr":"^1.2.8"
+    "vux-loader": "^1.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

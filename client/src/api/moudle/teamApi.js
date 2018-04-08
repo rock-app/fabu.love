@@ -1,7 +1,8 @@
-import {postHttp} from '../basehttp'
+import {getHttp, deleteHttp, postHttp} from '../basehttp'
 
 export function getTeamMembers(teamId, emails) {
-  
+  let url = `api/team/${teamId}/members`
+  return getHttp(url)
 }
 
 export function inviteMembers(teamId, emails) {
@@ -13,6 +14,7 @@ export function inviteMembers(teamId, emails) {
   return postHttp(url, param)
 }
 
-export function deleteMembers() {
-
+export function deleteMembers(teamId, userId) {
+  let url = `api/team/${teamId}/member/${userId}`
+  return deleteHttp(url)
 }

@@ -2,7 +2,7 @@
   <div class="teamItem ripple" @click="selected">
     <div>
       <div class="teamItem-circle" :class="color">{{lastName}}</div>
-      <label class="teamItem-name">{{value.name}}</label>
+      <label class="teamItem-name">{{value.username}}</label>
     </div>
     <div>{{value.email}}</div>
     <div class="teamItem-owner">{{ownerString}}</div>
@@ -32,12 +32,12 @@ export default {
   },
   computed: {
     lastName () {
-      let length = this.value.name.length
-      return this.value.name.substring(length - 1)
+      let length = this.value.username.length
+      return this.value.username.substring(length - 1)
     },
     ownerString () {
-      switch (this.value.owner) {
-        case 'creator':
+      switch (this.value.role) {
+        case 'owner':
           return '创建者'
         case 'manager':
           return '管理者'

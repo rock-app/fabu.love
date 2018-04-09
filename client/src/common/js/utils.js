@@ -1,27 +1,15 @@
-/**
- * Created by darren on 2018/3/15.
- */
-// var fs = require('node-fs')
-// var extract = require('ipa-extract-info')
-//
-// // 解析ipa
-// export function parseIpa(filename) {
-//   return new Promise((resolve, reject) => {
-//     console.log(fs)
-//     var fd = fs.openSync(filename, 'r')
-//     extract(fd, (err, info, raw) => {
-//       if (err) {
-//         reject(err)
-//       }
-//       var data = info[0]
-//       var appInfo = {}
-//       appInfo.platform = 'ios'
-//       appInfo.bundleId = data.CFBundleIdentifier
-//       appInfo.bundleName = data.CFBundleName
-//       appInfo.appName = data.CFBundleDisplayName
-//       appInfo.versionStr = data.CFBundleShortVersionString
-//       appInfo.versionCode = data.CFBundleVersion
-//       resolve(appInfo)
-//     })
-//   })
-// }
+class Utils {
+  // 验证邮箱
+  valideEmail(email) {
+    var re = /\S+@\S+\.\S+/
+    return re.test(email)
+  }
+  // 验证手机
+  validePhone(phone) {
+    var re = /^1[0-9]{10}$/
+    return re.test(phone)
+  }
+}
+
+const instance = new Utils()
+export default instance

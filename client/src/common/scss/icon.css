@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?e768dq');
-  src:  url('../fonts/icomoon.eot?e768dq#iefix') format('embedded-opentype'),
-  url('../fonts/icomoon.ttf?e768dq') format('truetype'),
-  url('../fonts/icomoon.woff?e768dq') format('woff'),
-  url('../fonts/icomoon.svg?e768dq#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?yarndu');
+  src:  url('../fonts/icomoon.eot?yarndu#iefix') format('embedded-opentype'),
+  url('../fonts/icomoon.ttf?yarndu') format('truetype'),
+  url('../fonts/icomoon.woff?yarndu') format('woff'),
+  url('../fonts/icomoon.svg?yarndu#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -48,90 +48,117 @@
   content: "\e905";
   color: #fff;
 }
-.icon-ic_delete:before {
+.icon-ic_appdes:before {
   content: "\e906";
-  color: #aaa;
+  color: #9b9b9b;
+}
+.icon-ic_appsetting-copy:before {
+  content: "\e907";
+  color: #9b9b9b;
+}
+.icon-ic_company_s:before {
+  content: "\e908";
+  color: #9b9b9b;
+}
+.icon-ic_delete:before {
+  content: "\e909";
+  color: #d5dfed;
 }
 .icon-ic_downdrop:before {
-  content: "\e907";
+  content: "\e90a";
 }
 .icon-ic_download_s:before {
-  content: "\e908";
+  content: "\e90b";
   color: #fff;
 }
 .icon-ic_download:before {
-  content: "\e909";
-  color: #aaa;
-}
-.icon-ic_edit:before {
-  content: "\e90a";
-  color: #aaa;
-}
-.icon-ic_email:before {
-  content: "\e90b";
-  color: #6477f2;
-}
-.icon-ic_github_s:before {
   content: "\e90c";
   color: #d5dfed;
 }
-.icon-ic_github:before {
+.icon-ic_edit:before {
   content: "\e90d";
+  color: #d5dfed;
+}
+.icon-ic_email_s:before {
+  content: "\e90e";
+  color: #9b9b9b;
+}
+.icon-ic_email:before {
+  content: "\e90f";
+  color: #6477f2;
+}
+.icon-ic_github_s:before {
+  content: "\e910";
+  color: #d5dfed;
+}
+.icon-ic_github:before {
+  content: "\e911";
   color: #fff;
 }
 .icon-ic_greyfb:before {
-  content: "\e90e";
+  content: "\e912";
   color: #6376f2;
 }
 .icon-ic_help_s:before {
-  content: "\e90f";
+  content: "\e913";
   color: #d5dfed;
 }
 .icon-ic_help:before {
-  content: "\e910";
+  content: "\e914";
   color: #fff;
 }
 .icon-ic_info:before {
-  content: "\e911";
+  content: "\e915";
   color: #d5dfed;
 }
 .icon-ic_ios:before {
-  content: "\e912";
+  content: "\e916";
   color: #6477f2;
 }
 .icon-ic_mnggp-copy:before {
-  content: "\e913";
+  content: "\e917";
   color: #f5a623;
 }
 .icon-ic_mnggp:before {
-  content: "\e914";
+  content: "\e918";
   color: #e697e0;
 }
 .icon-ic_name:before {
-  content: "\e915";
-  color: #6477f2;
-}
-.icon-ic_notice:before {
-  content: "\e916";
-  color: #9b9b9b;
-}
-.icon-ic_overview:before {
-  content: "\e917";
-  color: #aaa;
-}
-.icon-ic_pswd:before {
-  content: "\e918";
-  color: #6477f2;
-}
-.icon-ic_search:before {
   content: "\e919";
   color: #6477f2;
 }
+.icon-ic_notice:before {
+  content: "\e91a";
+  color: #9b9b9b;
+}
+.icon-ic_overview:before {
+  content: "\e91b";
+  color: #d5dfed;
+}
+.icon-ic_phone_s:before {
+  content: "\e91c";
+  color: #9b9b9b;
+}
+.icon-ic_position_s:before {
+  content: "\e91d";
+  color: #9b9b9b;
+}
+.icon-ic_pswd:before {
+  content: "\e91e";
+  color: #6477f2;
+}
+.icon-ic_qq:before {
+  content: "\e91f";
+  color: #9b9b9b;
+}
+.icon-ic_search:before {
+  content: "\e920";
+  color: #6477f2;
+}
 .icon-ic_upload:before {
-  content: "\e92d";
+  content: "\e921";
   color: #fff;
 }
 .icon-ic_vision:before {
-  content: "\e92e";
-  color: #6477F2;
+  content: "\e922";
 }

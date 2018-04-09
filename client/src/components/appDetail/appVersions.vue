@@ -63,7 +63,7 @@
           width="120"
         >
           <template slot-scope="scope">
-            <p style="display: inline-block" v-html="getDownLoadCount(scope.row.downloadCount)"></p><span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row)"></span>
+            <span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row)"></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -108,7 +108,7 @@
       :appInfo="this.appInfo"
       @updateSuccess="updateSuccess"
     ></editorVersion>
-    <graySetting v-if="this.showGraySetting" @cancel="cancelGraySetting" :versionList="this.dataArr" :appInfo="this.appInfo"></graySetting>
+    <graySetting v-if="this.showGraySetting" @cancel="cancelGraySetting" @graySettingSuccess="graySettingSuccess" :versionList="this.dataArr" :appInfo="this.appInfo"></graySetting>
   </div>
 </template>
 
@@ -215,9 +215,9 @@
         // 灰度版本
         if (this.appInfo.grayReleaseVersionId && this.appInfo.grayReleaseVersionId === item._id) {
           if (this.appInfo.grayStrategy && this.appInfo.grayStrategy.downloadCountLimit) {
-            return `/${this.appInfo.grayStrategy.downloadCountLimit}`
+            return `${item.downloadCount}/${this.appInfo.grayStrategy.downloadCountLimit}`
           } else {
-            return '/不限'
+            return `${item.downloadCount}/不限`
           }
         } else {
           return `下载次数${item.downloadCount}`
@@ -233,6 +233,11 @@
         this.showGraySetting = false
       },
       updateSuccess() {
+        this.$emit('updateAppInfoSuccess')
+        this.getAppVersionListData()
+      },
+      // 灰度版本设置成功
+      graySettingSuccess() {
         this.$emit('updateAppInfoSuccess')
         this.getAppVersionListData()
       },
@@ -324,6 +329,13 @@
     border-radius: 12px;
     margin-right: 6px;
     padding: 0;
+    background-color: transparent;
+  }
+  .appversion-elButton:hover {
+    border-color: $mainColor;
+  }
+  .appversion-elButton:hover i:before {
+    color: $mainColor;
   }
   .appversion-elButton i {
     width: 24px;

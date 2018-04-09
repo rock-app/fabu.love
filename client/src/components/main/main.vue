@@ -83,4 +83,7 @@
   .main-contentWrapper {
     padding: 0 24px;
   }
+  .main-container .side-menu {
+    width: 192px;
+  }
 </style>

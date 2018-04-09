@@ -142,14 +142,15 @@
     text-align: center;
   }
   .mainNav-logo img {
-    width: 96px;
-    height: 30px;
+    width: 98px;
+    height: 18px;
     margin-top: 20px;
+    background-size: 98px 18px;
   }
   .mainNav-logo .line {
     width: 96px;
     height: 6px;
-    margin: 15px auto 0px auto;
+    margin: 12px auto 0px auto;
     background-color: $mainColor;
   }
   .mainNav-footer {
@@ -186,7 +187,8 @@
   .mainNav-wrapper .mainNav-el-menu i {
     font-size: 18px;
     line-height: 55px;
-    margin-right: 3px;
+    margin-right: 10px;
+    margin-left: 20px;
   }
   .mainNav-wrapper .mainNav-el-menu i:before {
     color: $mainColor;
@@ -200,6 +202,12 @@
   }
   .mainNav-wrapper .mainNav-el-menu .is-active span {
     color: white;
+  }
+  .mainNav-footer .mainNav-footer-list i {
+    margin-left: 20px;
+    line-height: 55px;
+    font-size: 18px;
+    margin-right: 10px;
   }
   .mainNav-footer .mainNav-footer-list .is-active {
     background-color: transparent;

@@ -8,7 +8,7 @@
         </div>
         <el-form label-position="left" label-width="100px">
           <el-form-item label="选择版本号">
-            <div class="chooseVersion" @click="showVersions">
+            <div class="chooseVersion" @click.stop="showVersions">
               <p v-html="this.currentVersion.versionCode"></p>
               <i class="el-icon-arrow-down"></i>
             </div>
@@ -39,7 +39,7 @@
               <ul class="ipweapper">
                 <li class="ipitem" v-for="(item, index) in this.ipList" :key="index">
                   <p v-html="item"></p>
-                  <i class="icon-ic_ios" @click="removeIp(index)"></i>
+                  <i class="el-icon-close" @click="removeIp(index)"></i>
                 </li>
               </ul>
               <div class="footwrapper">
@@ -123,13 +123,13 @@
         AppResourceApi.grayVersion(getUserTeam()._id, this.appInfo._id, body).then((res) => {
           console.log(res)
           this.$message.success(res.message)
-          this.cancel()
+          this.$emit('graySettingSuccess')
         }, reject => {
 
         })
       },
       clickcontent() {
-
+        this.showVersionList = false
       },
       showVersions() {
         this.showVersionList = !this.showVersionList

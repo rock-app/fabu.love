@@ -1,6 +1,10 @@
 <template>
   <div class="teamMgr">
-    <div class="teamMgr-header">{{teamName}}</div>
+    <div class="teamMgr-header">
+      <label v-show="!editing">{{teamName}}</label>
+      <input v-show="editing" v-focus="editing" type="text" v-model="teamName"/>
+      <img class="teamMgr-edit" :src="picture" @click="editAction">
+    </div>
     <div class="teamMgr-content">
       <div class="teamMgr-group-header">
         <div><label>团队人数 {{members.length}}</label><img src="../../assets/add_user.png" @click="addClick"/></div>
@@ -41,6 +45,8 @@ import Item from './teamItem'
 import InviteMember from '../appDetail/inviteMember'
 import * as TeamApi from '../../api/moudle/teamApi'
 import * as useMgr from '../../mgr/userMgr'
+import selectPicture from '../../assets/select.png'
+import editPicture from '../../assets/edit.png'
 export default {
   data() {
     return {
@@ -51,7 +57,8 @@ export default {
       isManager: false,
       currentIndex: -1,
       message: '',
-      invitedEmails: ''
+      invitedEmails: '',
+      editing: false
     }
   },
   mounted () {
@@ -65,8 +72,17 @@ export default {
     this.bus.$off('refreshList')
   },
   computed: {
+    picture () {
+      return this.editing ? selectPicture : editPicture
+    }
   },
   methods: {
+    focus () {
+      this.$refs.input.select() 
+    },
+    editAction () {
+      this.editing = !this.editing
+    },
     addClick () {
       this.isShowInvite = true
     },
@@ -89,8 +105,12 @@ export default {
     },
     itemSelected (index) {
       this.currentIndex = index
-      this.stateUpdate()
-      this.dialogVisible = true
+      let teamId = useMgr.getUserTeam()._id
+      let userId = this.members[this.currentIndex]._id
+      if (teamId !== userId) {
+        this.stateUpdate()
+        this.dialogVisible = true
+      }
     },
     deleteMember () {
       this.dialogVisible = false
@@ -155,6 +175,15 @@ export default {
   components: {
     Item,
     InviteMember
+  },
+  directives: {
+    focus: {
+      update (el, {value}) {
+        if (value) {
+          el.focus()
+        }
+      }
+    }
   }
 }
 </script>
@@ -173,6 +202,14 @@ export default {
       line-height: 120px;
       width: 100%;
       border-bottom: 1px solid #F4F7FD;
+      .teamMgr-edit {
+        width: 22px;
+        height: 22px;
+        margin-left: 10px;
+      }
+      input {
+        background-color: inherit;
+      }
     }
     .teamMgr-content {
       width: 66%;

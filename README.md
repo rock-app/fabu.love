@@ -4,6 +4,8 @@
 1. 启动mongodb服务
 sudo mongod
 2. 运行项目
+
+npm install -g pm2 babel-cli
 npm install
 node .
 ```

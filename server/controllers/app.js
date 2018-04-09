@@ -46,7 +46,6 @@ var versionProfile = {
     'showOnDownloadPage':'boolean', //是否显示到下载页
     'changelog':'string', //修改日志
     'updateMode':{type:'string'} //更新模式  force / silent / normal/ 强制或者静默或者普通升级
-
 }
 
 var appProfile = {
@@ -360,6 +359,9 @@ module.exports = class AppRouter {
             throw new Error("当前没有已发布的版本可供下载")
         }
         var version = await Version.findById(app.releaseVersionId)
+        if (!version){
+            throw new Error("当前没有已发布的版本可供下载")
+        }
         ctx.body = responseWrapper({'app':app,'version':version})
     }
 

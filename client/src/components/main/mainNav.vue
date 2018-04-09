@@ -149,7 +149,7 @@
   }
   .mainNav-logo .line {
     width: 96px;
-    height: 6px;
+    height: 4px;
     margin: 12px auto 0px auto;
     background-color: $mainColor;
   }

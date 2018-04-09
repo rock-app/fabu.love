@@ -127,13 +127,14 @@ async function parseAppAndInsertToDB(file,user,team) {
       await version.save()
       return {'app':app,'version':version}
     }
-    var version = Version.findOne({appId: app.id})
+    var version = await Version.findOne({appId: app.id, versionCode:info.versionCode})
     if (!version) {
-      version = new Version(
-        {appId: app.id, bundleId: app.bundleId, 
-        versionCode: info.versionCode, versionName: info.version, 
-        downloadUrl: info.downloadUrl,icon:info.icon})
-      version.save()
+      info.uploader = user.username;
+      info.uploaderId = user._id;
+      info.size = fs.statSync(fileRealPath).size
+      var version = Version(info)
+      version.appId = app._id;
+      await version.save()
       return {'app':app,'version':version}
     } else {
       let err = Error()

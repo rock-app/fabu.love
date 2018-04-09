@@ -220,7 +220,7 @@
             return `${item.downloadCount}/不限`
           }
         } else {
-          return `下载次数${item.downloadCount}`
+          return `${item.downloadCount}`
         }
       },
       cancel() {
@@ -245,7 +245,7 @@
         // 灰度版本
         if (this.appInfo.grayReleaseVersionId && this.appInfo.grayReleaseVersionId === item._id) {
             return 'version-table-one-gray'
-        } else {
+        } else if (this.appInfo.releaseVersionId && this.appInfo.releaseVersionId === item._id) {
           return 'version-table-one-lighting'
         }
       }
@@ -346,7 +346,6 @@
     color: #aaa;
   }
   .appVersion-wrapper .version-table {
-    margin-bottom: 12px;
   }
   .version-table-one-gray {
     display: inline-block;
@@ -373,6 +372,7 @@
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
+    margin-top: 12px;
   }
   .appversion-footerwrapper .totalwrapper {
     width: 50%;

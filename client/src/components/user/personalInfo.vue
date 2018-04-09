@@ -20,6 +20,7 @@
 
 <script type="text/ecmascript-6">
   import * as UserApi from '../../api/moudle/userApi'
+  import utils from '../../common/js/utils'
 
   export default {
     props: {
@@ -45,11 +46,18 @@
     methods: {
       loadData() {
         UserApi.getUserInfo().then((res) => {
-          this.dataArr[0].subTitle = res.data.mobile
-          this.dataArr[1].subTitle = res.data.qq
-          this.dataArr[2].subTitle = res.data.company
-          this.dataArr[3].subTitle = res.data.career
-
+          if (res.data.mobile) {
+            this.dataArr[0].subTitle = res.data.mobile
+          }
+          if (res.data.qq) {
+            this.dataArr[1].subTitle = res.data.qq
+          }
+          if (res.data.company) {
+            this.dataArr[2].subTitle = res.data.company
+          }
+          if (res.data.career) {
+            this.dataArr[3].subTitle = res.data.career
+          }
         }, reject => {
         })
       },
@@ -68,6 +76,12 @@
         this.$emit('cancel')
       },
       sure() {
+        if (this.dataArr[0].subTitle && this.dataArr[0].subTitle.length > 0) {
+          if (!utils.validePhone(this.dataArr[0].subTitle)) {
+            this.$message.error('手机号码格式错误')
+            return
+          }
+        }
         let body = {
           'mobile': this.dataArr[0].subTitle,
           'qq': this.dataArr[1].subTitle,

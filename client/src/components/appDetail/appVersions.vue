@@ -319,7 +319,7 @@
     width: 24px;
     height: 24px;
     font-size: 12px;
-    border: solid 1px #D5DFED;
+    border: solid 1px #aaa;
     color: #D5DFED;
     border-radius: 12px;
     margin-right: 6px;

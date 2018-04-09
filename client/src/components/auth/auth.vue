@@ -90,6 +90,7 @@
   import * as LoginApi from '../../api/moudle/loginApi'
   import TokenMgr from '../../mgr/TokenMgr'
   import {saveUserInfo} from '../../mgr/userMgr'
+  import utils from '../../common/js/utils'
 
   export default {
     data() {
@@ -180,6 +181,10 @@
         }
         if (this.email.length === 0) {
           this.$message.error('邮箱不能为空')
+          return
+        }
+        if (!utils.valideEmail(this.email)) {
+          this.$message.error('邮箱格式错误')
           return
         }
         if (this.password.length === 0) {

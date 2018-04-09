@@ -50,7 +50,7 @@
 }
 .icon-ic_delete:before {
   content: "\e906";
-  color: #d5dfed;
+  color: #aaa;
 }
 .icon-ic_downdrop:before {
   content: "\e907";
@@ -61,11 +61,11 @@
 }
 .icon-ic_download:before {
   content: "\e909";
-  color: #d5dfed;
+  color: #aaa;
 }
 .icon-ic_edit:before {
   content: "\e90a";
-  color: #d5dfed;
+  color: #aaa;
 }
 .icon-ic_email:before {
   content: "\e90b";
@@ -117,7 +117,7 @@
 }
 .icon-ic_overview:before {
   content: "\e917";
-  color: #d5dfed;
+  color: #aaa;
 }
 .icon-ic_pswd:before {
   content: "\e918";

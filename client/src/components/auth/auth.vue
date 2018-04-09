@@ -61,9 +61,11 @@
             prefix-icon="el-icon-time">
           </el-input>
 
-          <button @click="onSubmit"
+          <el-button @click="onSubmit"
                   v-bind:class="[showType==='login' ? 'user-login-form-btn' : 'user-register-form-btn']"
-                  type="submit">{{ showType==='login' ? '立即登录' : '立即注册'}}</button>
+                  type="submit"
+                     :loading="showLoading"
+          >{{ showType==='login' ? '立即登录' : '立即注册'}}</el-button>
 
           <div class="user-login-form-label" v-if="showType==='login'">
             <p>没有账号？<span @click="onRegister">立即注册</span></p>
@@ -100,7 +102,8 @@
         isLogin: false,
         errorInfo: '',
         showType: 'login',
-        email: ''
+        email: '',
+        showLoading: false
       }
     },
     created() {
@@ -156,9 +159,11 @@
           'username': this.username,
           'password': this.password
         }
+        this.showLoading = true
         LoginApi.login(body)
           .then(response => {
             console.log(response)
+            this.showLoading = false
             // 存储token
             TokenMgr.add(this.axios.baseURL, response.data.token)
             let user = {
@@ -172,6 +177,7 @@
             this.$router.push('/')
           }, reject => {
             this.$message.error(reject)
+            this.showLoading = false
           })
       },
       regist() {

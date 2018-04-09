@@ -188,6 +188,9 @@
     line-height: 55px;
     margin-right: 3px;
   }
+  .mainNav-wrapper .mainNav-el-menu i:before {
+    color: $mainColor;
+  }
   .mainNav-wrapper .mainNav-el-menu .is-active {
     color: white;
     background-color: $mainColor;

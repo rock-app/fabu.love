@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import ElementUI from 'element-ui'
+import {Button, Dialog, Menu, Input, Switch, Popover, Form, Upload, Progress, Badge, Container, Header, Aside, Main, Footer, Loading, Message, MenuItem, Table, TableColumn, FormItem, Pagination, Radio, MessageBox} from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
 import axios from 'axios'
@@ -20,7 +20,31 @@ Vue.prototype.router = router
 
 Vue.prototype.bus = new Vue()
 
-Vue.use(ElementUI)
+Vue.use(Radio)
+Vue.use(FormItem)
+Vue.use(Pagination)
+Vue.use(Button)
+Vue.use(Dialog)
+Vue.use(Menu)
+Vue.use(Input)
+Vue.use(Switch)
+Vue.use(Popover)
+Vue.use(Form)
+Vue.use(Upload)
+Vue.use(Progress)
+Vue.use(Badge)
+Vue.use(Container)
+Vue.use(Header)
+Vue.use(Aside)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Main)
+Vue.use(Footer)
+Vue.use(MenuItem)
+
+Vue.prototype.$loading = Loading.service
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message
 
 Vue.use(VueLazyLoad, {
   loading: require('./assets/logo.png')

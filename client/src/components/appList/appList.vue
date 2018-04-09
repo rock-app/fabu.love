@@ -2,7 +2,7 @@
   <div class="applist-wrapper">
     <!--内容头部-->
     <div class="applist-header">
-      <div style="position: relative">
+      <div class="left" style="position: relative">
         <div
           style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
         <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传应用</el-button>
@@ -274,5 +274,9 @@
   .platformActive {
     background-color: #ddd;
   }
-
+  @media screen and (max-width: 863px) {
+    .applist-header .left {
+      display: none;
+    }
+  }
 </style>

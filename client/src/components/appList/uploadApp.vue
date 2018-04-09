@@ -59,10 +59,8 @@
 
         axios.post(`api/apps/${_this.teamId}/upload`, data, config)
           .then(function (res) {
-            console.log(res)
-            _this.$message(res)
             Message({
-              message: res.data.success ? '上传成功' : res.message,
+              message: res.data.success ? '上传成功' : res.data.message,
               type: res.data.success ? 'success' : 'error'
             })
             _this.$emit('uploadSuccess')

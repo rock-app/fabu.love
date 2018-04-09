@@ -11,7 +11,7 @@ export function getHttp (url, params) {
       .then(response => {
         if (response.data.success === false) {
           Message.error(response.data.message)
-          return
+          reject(response.data.message)
         }
         setTimeout(() => {
           resolve(response.data)
@@ -31,7 +31,7 @@ export function deleteHttp (url) {
         setTimeout(() => {
           if (response.data.success === false) {
             Message.error(response.data.message)
-            return
+            reject(response.data.message)
           }
           resolve(response.data)
         }, 300)
@@ -53,7 +53,7 @@ export function postHttp (url, body, params) {
       setTimeout(() => {
         if (response.data.success === false) {
           Message.error(response.data.message)
-          return
+          reject(response.data.message)
         }
         resolve(response.data)
       }, 300)

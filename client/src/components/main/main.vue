@@ -9,9 +9,11 @@
           <headerNav></headerNav>
         </el-header>
         <el-main class="main-contentWrapper">
-          <router-view/>
-          <footerWrapper></footerWrapper>
+          <router-view></router-view>
         </el-main>
+        <!--<el-footer style="background-color: transparent">-->
+          <!--<footerWrapper class="footerWrapper"></footerWrapper>-->
+        <!--</el-footer>-->
       </el-container>
     </el-container>
 
@@ -83,7 +85,20 @@
   .main-contentWrapper {
     padding: 0 24px;
   }
+  .main-contentWrapper:after {
+    display: inline-block;
+    content: '版权所有 © 2005-2017 上海海鼎信息工程股份有限公司，并保留所有权利。';
+    font-size: 14px;
+    color: $subTitleColor;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+  }
   .main-container .side-menu {
     width: 192px;
+  }
+  .footerWrapper {
+    margin-bottom: 40px;
   }
 </style>

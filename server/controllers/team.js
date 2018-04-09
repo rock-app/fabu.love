@@ -269,5 +269,29 @@ module.exports = class TeamRouter {
         ctx.body = responseWrapper(team)
     }
 
+    @request('post', '/api/team/{teamId}/profile')
+    @summary('更新团队名称')
+    @tag
+    @body({
+        name: {
+            type: 'string',
+            required: true
+        }
+    })
+    static async updateTeamProfile(ctx, next) {
+        var { teamId } = ctx.validatedParams;
+        var user = ctx.state.user.data;
+        var body = ctx.request.body
+        var team = await Team.findOne({
+            _id: teamId,
+        },"-members")
+        if (!team) {
+            throw new Error("团队不存在")
+        }
+        await Team.updateOne({
+            _id: teamId,
+        },{name:body.name})
+        ctx.body = responseWrapper(true,"团队名称已修改")
+    }
     
 }

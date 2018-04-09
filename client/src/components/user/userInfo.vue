@@ -5,7 +5,7 @@
       <div v-show="this.show" class="userInfo-wrapper-body" @click.stop="clickcontent">
         <div class="userWrapper">
           <div class="imgwrapper">
-            <img src="../../assets/backgroundImage.png" alt="">
+            <img src="../../assets/ic_touxiang.png" alt="">
           </div>
           <p class="nowrap">{{this.userInfo.userName}}</p>
         </div>
@@ -109,7 +109,6 @@
     border-radius: 36px;
     margin-left: 48px;
     display: inline-block;
-    background-color: $mainColor;
     vertical-align: middle;
   }
   .userWrapper .imgwrapper img {

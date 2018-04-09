@@ -182,7 +182,7 @@
     height: 36px;
     margin-top: 36px;
     float: right;
-    border-color: #eee;
+    border-color: #ccc;
     position: relative;
     overflow: hidden;
   }

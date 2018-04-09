@@ -176,6 +176,8 @@
     background-color: white;
     box-shadow: 0 2px 6px rgba(120, 120, 120, 0.5);
     overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
   .userMessage-wrapper-body .top {
     width: 100%;

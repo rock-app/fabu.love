@@ -25,11 +25,11 @@
 
         <div v-show="this.activeIndex === '应用概述'">
           <el-menu-item index="应用概述" @click="clickSubItem">
-            <i class="el-icon-menu"></i>
+            <i class="icon-ic_appdes"></i>
             <span slot="title">应用概述</span>
           </el-menu-item>
           <el-menu-item index="应用设置" @click="clickSubItem">
-            <i class="el-icon-menu"></i>
+            <i class="icon-ic_appsetting-copy"></i>
             <span slot="title">应用设置</span>
           </el-menu-item>
         </div>
@@ -187,6 +187,9 @@
     font-size: 18px;
     line-height: 55px;
     margin-right: 3px;
+  }
+  .mainNav-wrapper .mainNav-el-menu i:before {
+    color: $mainColor;
   }
   .mainNav-wrapper .mainNav-el-menu .is-active {
     color: white;

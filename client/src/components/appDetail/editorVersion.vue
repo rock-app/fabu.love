@@ -79,6 +79,7 @@
         if (this.versionInfo.changelog) {
           this.updataContent = this.versionInfo.changelog
         }
+        this.updateType = this.versionInfo.updateMode
         this.showinDownLoadPage = this.versionInfo.showOnDownloadPage
       }, 200)
     },

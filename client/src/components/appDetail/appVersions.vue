@@ -330,6 +330,9 @@
     height: 24px;
     line-height: 24px;
   }
+  .appversion-elButton i:before {
+    color: #aaa;
+  }
   .appVersion-wrapper .version-table {
     margin-bottom: 12px;
   }

@@ -186,6 +186,9 @@
     position: relative;
     overflow: hidden;
   }
+  .collectionView-wrapper-ul .itemWrapper button i:before {
+    color: #aaa;
+  }
   .collectionView-wrapper-ul .itemWrapper button span {
     position: absolute;
     top: 0px;

@@ -72,7 +72,7 @@
           return '企业版'
         } else if (this.appInfo.appLevel === 'develop') {
           return '内测版'
-        } else if (this.appInfo.appLevel === 'AppStore') {
+        } else if (this.appInfo.appLevel === 'appstore') {
           return 'AppStore版'
         } else {
           return ''

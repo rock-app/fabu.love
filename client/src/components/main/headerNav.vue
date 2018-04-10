@@ -35,9 +35,6 @@
         <li class="userInfoSub" @click="clickUserInfoWrapper">
           <span>个人设置</span>
         </li>
-        <li class="userInfoSub" @click="dialogFormVisible = true">
-          <span>创建团队</span>
-        </li>
         <li class="userInfoSub" @click="loginout">
           <span>退出</span>
         </li>
@@ -183,7 +180,6 @@
 
   .headernav-wrapper {
   }
-
   .headernav-wrapper .leftWrapper {
     float: left;
     display: flex;
@@ -213,15 +209,11 @@
 
   .headernav-wrapper .leftWrapper .team .teamBtn {
     padding: 0px 10px;
-    margin-top: 9px;
+    margin-top: 11px;
     color: $mainTitleColor;
     border-color: transparent;
     max-width: 300px;
   }
-
-  /*.headernav-wrapper .leftWrapper .team .teamBtn:hover {*/
-  /*background-color: transparent;*/
-  /*}*/
   .headernav-wrapper .leftWrapper .team .teamBtn span {
     height: 50px;
     line-height: 50px;

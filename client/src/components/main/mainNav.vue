@@ -58,6 +58,8 @@
         </el-menu-item>
       </el-menu>
     </div>
+
+    <div class="rightLine"></div>
   </div>
 </template>
 
@@ -140,7 +142,8 @@
     width: 100%;
     height: 72px;
     text-align: center;
-    border-bottom: solid 2px $paleGrey;
+    border-bottom: solid 1px #D5DFED;
+    box-sizing: border-box;
   }
   .mainNav-logo img {
     width: 126px;
@@ -214,5 +217,13 @@
   }
   .mainNav-footer .mainNav-footer-list .is-active span {
     color: $subTitleColor;
+  }
+  .rightLine {
+    position: absolute;
+    width: 1px;
+    top: 72px;
+    right: 0px;
+    height: calc(100% - 72px);
+    background-color: #D5DFED;
   }
 </style>

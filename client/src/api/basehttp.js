@@ -64,7 +64,7 @@ export function postHttp (url, body, params) {
 }
 
 export function configAxios() {
-  vue.axios.defaults.baseURL = 'http://172.17.11.47:3008/'
+  vue.axios.defaults.baseURL = 'http://localhost:3008/'
   vue.axios.defaults.headers.common['Content-Type'] = 'application/json'
   vue.axios.default.timeout = 60000
 

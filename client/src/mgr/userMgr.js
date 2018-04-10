@@ -38,7 +38,7 @@ export function getTeamArr() {
 
 // 更新team数组
 export function updateTeamArr(teamArr) {
-  let user = this.getUserInfo()
+  let user = StorageMgr.getItem(USERINFO_KEY)
   user.teamArr = teamArr
   // 存储新的用户信息
   StorageMgr.setItem(USERINFO_KEY, user)

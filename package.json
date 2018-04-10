@@ -1,0 +1,19 @@
+{
+  "name": "fabu.love",
+  "version": "1.0.0",
+  "description": "fabu.love app distribution platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.app.hd123.cn:10080/applib/app-publisher.git"
+  },
+  "author": "zakiso",
+  "license": "ISC",
+
+  "dependencies": {
+    "commander" : "^2.15.1"
+  }
+}

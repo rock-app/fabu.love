@@ -90,14 +90,14 @@
           <i class="icon-ic_download_s"></i>
         </div>
         <p>总下载次数</p>
-        <div class="downloadCount">1221212</div>
+        <div class="downloadCount"></div>
       </div>
       <div class="todaywrapper">
         <div class="downloadwrapper">
           <i class="icon-ic_download_s"></i>
         </div>
         <p>今日下载次数</p>
-        <div class="downloadCount">1221212</div>
+        <div class="downloadCount"></div>
       </div>
     </div>
 
@@ -147,6 +147,13 @@
         this.userteam = getUserTeam()
         this.getAppVersionListData()
       })
+
+      this.bus.$on('uploadSuccess', () => {
+        this.getAppVersionListData()
+      })
+    },
+    destroyed() {
+      this.bus.$off('uploadSuccess')
     },
     methods: {
       getAppVersionListData() {
@@ -191,7 +198,6 @@
       // 发布应用
       releaseApp(item) {
         AppResourceApi.releaseApp(this.userteam._id, this.appInfo._id, item._id, item.versionCode, true).then((res) => {
-          console.log(res)
           this.$message.success(res.message)
         }, reject => {
 

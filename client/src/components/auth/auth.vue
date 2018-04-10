@@ -201,8 +201,10 @@
           'password': this.password,
           'email': this.email
         }
+        this.showLoading = true
         LoginApi.register(body)
           .then(response => {
+            this.showLoading = false
             console.log(response)
             this.$message({
               message: '恭喜你，注册成功',
@@ -212,7 +214,7 @@
               this.onRegister()
             }, 500)
           }, reject => {
-            this.$message.error(reject)
+            this.showLoading = false
           })
       },
       requestPassword() {

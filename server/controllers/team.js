@@ -90,10 +90,24 @@ module.exports = class TeamRouter {
         if (!team) {
             throw new Error("该团队不存在或者您没有权限解散该团队")
         }
+
+        var membersId = []
         if (team.members.length > 0) {
-            throw new Error("请先删除所有成员再解散团队")
+            for (m in team.members){
+                membersId.push(team.members.id)
+            }
         }
-        await Team.deleteOne(team)
+        
+        if (membersId.length > 0) {
+            await User.update({_id:{$in:membersId}},{
+                $pull:{
+                    teams:{_id: team.id}
+                }
+            })
+        }
+
+        await Team.deleteOne({_id:team._id})
+
         ctx.body = responseWrapper(true, "团队已解散")
     }
 

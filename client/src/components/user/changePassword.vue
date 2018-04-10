@@ -3,15 +3,15 @@
     <ul class="itemwrapper">
       <li>
         <p>当前密码</p>
-        <input v-model="currentpwd" @keyup.enter="sure" class="borderLine-input" type="password">
+        <input v-model="currentpwd" placeholder="输入当前的密码" @keyup.enter="sure" class="borderLine-input" type="password">
       </li>
       <li>
         <p>新密码</p>
-        <input v-model="newpwd" @keyup.enter="sure" class="borderLine-input" type="password">
+        <input v-model="newpwd" placeholder="输入修改后的新密码" @keyup.enter="sure" class="borderLine-input" type="password">
       </li>
       <li>
         <p>确认密码</p>
-        <input v-model="renewpwd" @keyup.enter="sure" class="borderLine-input" type="password">
+        <input v-model="renewpwd" placeholder="确认新密码" @keyup.enter="sure" class="borderLine-input" type="password">
       </li>
     </ul>
 

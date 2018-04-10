@@ -1,67 +1,80 @@
 <template>
   <div class="teamMgr">
     <div class="teamMgr-header">
-      <label v-show="!editing">{{teamName}}</label>
-      <!-- <input v-show="editing" v-focus="editing" type="text" v-model="teamName"/> -->
-      <img v-show="isOwner" class="teamMgr-edit" :src="picture" @click="editAction">
+      <label>{{teamName}}</label>
+      <img v-show="isOwner" class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="showMenu"/>
+      <context-menu class="ctx-menu" ref="ctxMenu">
+        <li class="ctx-item" @click="editAction">编辑团队名称</li>
+        <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
+      </context-menu>
     </div>
-    <div class="teamMgr-content">
-      <div class="teamMgr-group-header">
-        <div><label>团队人数 {{members.length}}</label><img src="../../assets/add_user.png" @click="addClick"/></div>
-        <label>成员权限</label>
-      </div>
+    <div class="teamMgr-collection">
+      <div class="teamMgr-content">
+        <div class="teamMgr-group-header">
+        </div>
       <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected"></item>
+        <div class="teamMgr-group-footer">
+          <div> 共 {{members.length}} 名成员 </div>
+        </div>
+      </div>
     </div>
-   <!-- <invite-member v-show="isShowInvite" @invited="invited"></invite-member> -->
-   <el-dialog title="邀请成员"
-   :visible.sync="isShowInvite"
-   width=50%
-   center>
-    <el-input placeholder="多个邮箱使用空格分开"
-    :rows="10"
-    type="textarea"
-    v-model="invitedEmails">
-    </el-input>
-    <span slot="footer" class="dialog-footer">
-          <el-button @click="isShowInvite=false">取 消</el-button>
-          <el-button type="primary" @click="sendInvite">确 定</el-button>
-    </span>
-  </el-dialog>
-  <el-dialog title="修改团队名称"
-   :visible.sync="editing"
-   width=50%
-   center>
-    <el-input placeholder="请输入新的团队名称"
-    type="text"
-    v-focus="editing"
-    :focus="editing"
-    v-model="teamName">
-    </el-input>
-    <span slot="footer" class="dialog-footer">
-          <el-button @click="editing=false">取 消</el-button>
-          <el-button type="primary" @click="modifyTeamName">确 定</el-button>
-    </span>
-  </el-dialog>
-  <el-dialog
-    title="提示"
-    :visible.sync="dialogVisible"
-    width="30%">
-    <span>{{message}}</span>
-    <span slot="footer" v-if="isManager" class="dialog-footer">
-      <el-button @click="dialogVisible=false">取 消</el-button>
-      <el-button type="primary" @click="deleteMember">确 定</el-button>
-    </span>
-  </el-dialog>
+    <el-dialog title="邀请成员"
+    :visible.sync="isShowInvite"
+    width=50%
+    center>
+      <el-input placeholder="多个邮箱使用空格分开"
+      :rows="10"
+      type="textarea"
+      v-model="invitedEmails">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="isShowInvite=false">取 消</el-button>
+            <el-button type="primary" @click="sendInvite">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="修改团队名称"
+    :visible.sync="editing"
+    width=50%
+    center>
+      <el-input placeholder="请输入新的团队名称"
+      type="text"
+      v-focus="editing"
+      :focus="editing"
+      v-model="teamName">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="editing=false">取 消</el-button>
+            <el-button type="primary" @click="modifyTeamName">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <span>{{message}}</span>
+      <span slot="footer" v-if="isManager" class="dialog-footer">
+        <el-button @click="dialogVisible=false">取 消</el-button>
+        <el-button type="primary" @click="deleteMember">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="提示"
+      :visible.sync="dissolveShow"
+      width="30%">
+      <span>确定要解散该团队吗？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dissolveShow=false">取 消</el-button>
+        <el-button type="primary" @click="dissolveTeam">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
-
+  
 <script>
 import Item from './teamItem'
-import InviteMember from '../appDetail/inviteMember'
 import * as TeamApi from '../../api/moudle/teamApi'
 import * as useMgr from '../../mgr/userMgr'
-import selectPicture from '../../assets/select.png'
-import editPicture from '../../assets/edit.png'
+import contextMenu from 'vue-context-menu'
 export default {
   data() {
     return {
@@ -74,7 +87,8 @@ export default {
       message: '',
       invitedEmails: '',
       editing: false,
-      isOwner: false
+      isOwner: false,
+      dissolveShow: false
     }
   },
   mounted () {
@@ -89,17 +103,21 @@ export default {
     this.bus.$off('refreshList')
   },
   computed: {
-    picture () {
-      return this.editing ? selectPicture : editPicture
-    }
   },
   methods: {
+    showMenu() {
+      this.$refs.ctxMenu.open()
+    },
     editAction () {
       this.editing = !this.editing
       if (!this.editing) {
         // 提交修改
         this.modifyTeamName()
       }
+      // this.showMenu = true
+    },
+    dissolve () {
+      this.dissolveShow = true
     },
     modifyTeamName () {
       let teamId = useMgr.getUserTeam()._id
@@ -110,6 +128,16 @@ export default {
         })
       })
       this.editing = false
+    },
+    dissolveTeam () {
+      let teamId = useMgr.getUserTeam()._id
+      TeamApi.dissolveTeam(teamId).then(resp => {
+        this.$message({
+          type: resp.success ? 'success' : 'error',
+          message: resp.message
+        })
+      })
+      this.dissolveShow = false
     },
     addClick () {
       this.isShowInvite = true
@@ -206,7 +234,7 @@ export default {
   },
   components: {
     Item,
-    InviteMember
+    contextMenu
   },
   directives: {
     focus: {
@@ -221,33 +249,61 @@ export default {
 </script>
 
 <style lang="scss">
+  .ctx-menu-container {
+    box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
+  }
+
   .teamMgr {
-    margin-top: 24px;
-    // background-color: white;
+    position: relative;
     height: 100%;
     .teamMgr-header {
-      // background-color:#F4F7FD;
-      font-size: 40px;
+      font-size: 24px;
       text-align: center;
       margin: 0px;
       height: 120px;
       line-height: 120px;
-      width: 100%;
       border-bottom: 1px solid #F4F7FD;
       .teamMgr-edit {
-        width: 22px;
-        height: 22px;
-        margin-left: 10px;
+        margin-left: 24px;
+        height: 18px;
+        width: 4px;
+        margin-top: -4px;
       }
-      input {
-        background-color: inherit;
+      
+      .ctx-menu {
+        list-style: none;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 0px solid rgba(0, 0, 0, .15);
+        border-radius: .25rem;
+        -moz-box-shadow:0 0 5px #D5DFED; 
+        -webkit-box-shadow:0 0 5px #D5DFED; box-shadow:0 0 5px #D5DFED;
+        .ctx-menu-container {
+          box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
+        }
       }
+      .ctx-item {
+        height: 44px;
+        line-height: 44px;
+      }
+      .menu-item {
+        color: #FF001F;
+      }
+    }
+    .teamMgr-collection {
+      margin: 0rem 2rem;
+      background-color: white;
+      height: 100%;
+      border-radius: 20px 20px 0px 0px;
     }
     .teamMgr-content {
       width: 66%;
       margin: auto;
+      background-color: white;
+      
       .teamMgr-group-header {
-        height: 100px;
+        height: 72px;
         line-height: 100px;
         display: flex;
         justify-content: space-between;
@@ -265,6 +321,22 @@ export default {
         }
         & > label:last-child {
           margin-right: 24px;
+        }
+      }
+
+      .teamMgr-group-footer {
+        height: 72px;
+        border-bottom: 1px dashed #D5DFED;
+        text-align: center;
+        display: flex;
+        div {
+          background-color: white;
+          color: #D5DFED;
+          padding-top: 62px;
+          padding-left: 10px;
+          padding-right: 10px;
+          margin: auto;
+          line-height: 20px;
         }
       }
     }

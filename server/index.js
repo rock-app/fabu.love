@@ -22,8 +22,7 @@ app.use(serve(config.fileDir))
 app.use(serve(__dirname + '/dist'));
 app.use(function(ctx,next){
   if (ctx.request.path.indexOf("/api") != 0) {
-      ctx.response.type = 'html';
-      ctx.response.body = fs.createReadStream('./dist/index.html');
+    ctx.redirect("/")
   }else{
     return next()
   }

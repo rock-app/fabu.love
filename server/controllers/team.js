@@ -18,9 +18,11 @@ import mongoose from "mongoose";
 import validator from "../helper/validator";
 import Mail from "../helper/mail"
 import config from "../config"
-const tag = tags(['团队']);
 import { userInTeamIsManager,userInTeam } from "../helper/validator"
+import _ from 'lodash';
 
+
+const tag = tags(['团队']);
 
 var teamCreateSchema = {
     name: {
@@ -132,7 +134,7 @@ module.exports = class TeamRouter {
                     { role: 'manager' }
                 ]
             }
-        },},"_id name")
+        },},"_id name members")
 
         if (!team) {
             throw new Error("团队不存在,或者您没有权限邀请用户加入")
@@ -144,12 +146,21 @@ module.exports = class TeamRouter {
 
         var teamList = []
         for (var u of userList){
-            teamList.push({
-                _id:u.id,
-                username:u.username,
-                email:u.email,
-                role:body.role
-            })
+            if (!(_.find(team.members,function(o){
+                return o.email == u.email
+            }))){
+                teamList.push({
+                    _id:u.id,
+                    username:u.username,
+                    email:u.email,
+                    role:body.role
+                })
+            }
+        }
+
+        if (teamList.length <= 0) {
+            ctx.body = responseWrapper(true, "用户已加入该团队")
+            return
         }
 
         var task = Fawn.Task();
@@ -278,7 +289,14 @@ module.exports = class TeamRouter {
             required: true
         }
     })
+    @path({
+        teamId: {
+            type: 'string',
+            required: true
+        }
+    })
     static async updateTeamProfile(ctx, next) {
+        console.log(ctx)
         var { teamId } = ctx.validatedParams;
         var user = ctx.state.user.data;
         var body = ctx.request.body

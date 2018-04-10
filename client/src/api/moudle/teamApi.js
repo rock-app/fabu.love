@@ -18,3 +18,11 @@ export function deleteMembers(teamId, userId) {
   let url = `api/team/${teamId}/member/${userId}`
   return deleteHttp(url)
 }
+
+export function updateTeamName(teamId, name) {
+  let url = `api/team/${teamId}/profile`
+  let param = {
+    'name': name
+  }
+  return postHttp(url, param)
+}

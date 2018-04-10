@@ -2,8 +2,8 @@
   <div class="teamMgr">
     <div class="teamMgr-header">
       <label v-show="!editing">{{teamName}}</label>
-      <input v-show="editing" v-focus="editing" type="text" v-model="teamName"/>
-      <img class="teamMgr-edit" :src="picture" @click="editAction">
+      <!-- <input v-show="editing" v-focus="editing" type="text" v-model="teamName"/> -->
+      <img v-show="isOwner" class="teamMgr-edit" :src="picture" @click="editAction">
     </div>
     <div class="teamMgr-content">
       <div class="teamMgr-group-header">
@@ -25,6 +25,21 @@
     <span slot="footer" class="dialog-footer">
           <el-button @click="isShowInvite=false">取 消</el-button>
           <el-button type="primary" @click="sendInvite">确 定</el-button>
+    </span>
+  </el-dialog>
+  <el-dialog title="修改团队名称"
+   :visible.sync="editing"
+   width=50%
+   center>
+    <el-input placeholder="请输入新的团队名称"
+    type="text"
+    v-focus="editing"
+    :focus="editing"
+    v-model="teamName">
+    </el-input>
+    <span slot="footer" class="dialog-footer">
+          <el-button @click="editing=false">取 消</el-button>
+          <el-button type="primary" @click="modifyTeamName">确 定</el-button>
     </span>
   </el-dialog>
   <el-dialog
@@ -58,13 +73,15 @@ export default {
       currentIndex: -1,
       message: '',
       invitedEmails: '',
-      editing: false
+      editing: false,
+      isOwner: false
     }
   },
   mounted () {
     this.requestMembers()
-
+    this.isOwner = useMgr.getUserId() === useMgr.getUserTeam()._id
     this.bus.$on('refreshList', () => {
+      this.isOwner = useMgr.getUserId() === useMgr.getUserTeam()._id
       this.requestMembers()
     })
   },
@@ -77,11 +94,22 @@ export default {
     }
   },
   methods: {
-    focus () {
-      this.$refs.input.select() 
-    },
     editAction () {
       this.editing = !this.editing
+      if (!this.editing) {
+        // 提交修改
+        this.modifyTeamName()
+      }
+    },
+    modifyTeamName () {
+      let teamId = useMgr.getUserTeam()._id
+      TeamApi.updateTeamName(teamId, this.teamName).then(resp => {
+        this.$message({
+          type: resp.success ? 'success' : 'error',
+          message: resp.message
+        })
+      })
+      this.editing = false
     },
     addClick () {
       this.isShowInvite = true
@@ -105,9 +133,12 @@ export default {
     },
     itemSelected (index) {
       this.currentIndex = index
-      let teamId = useMgr.getUserTeam()._id
+      let cuurentId = useMgr.getUserId()
       let userId = this.members[this.currentIndex]._id
-      if (teamId !== userId) {
+      let owner = this.members.filter(member => {
+          return member._id === useMgr.getUserId()
+        })[0].role
+      if (cuurentId !== userId || owner !== 'owner') {
         this.stateUpdate()
         this.dialogVisible = true
       }
@@ -132,6 +163,7 @@ export default {
           return member._id === useMgr.getUserId()
         })[0].role
         let name = this.members[this.currentIndex].username
+        let isSelf = useMgr.getUserId() === this.members[this.currentIndex]._id
         switch (owner) {
           case 'owner':
             this.message = '确定要移除' + name + '吗?'
@@ -142,8 +174,8 @@ export default {
             this.isManager = true
             break
           default:
-            this.message = '围观群众权限无法使用该功能，可联系项目创建者修改权限哦'
-            this.isManager = false
+            this.message = isSelf ? '确定要离开该团队吗?' : '围观群众权限无法使用该功能，可联系项目创建者修改权限哦'
+            this.isManager = isSelf
             break
         }
       }

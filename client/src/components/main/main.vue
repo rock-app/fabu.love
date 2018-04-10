@@ -77,6 +77,7 @@
   .main .main-header {
     background-color: white;
     height: 72px !important;
+    border-bottom: solid 1px #D5DFED;
   }
   .main .main-contentWrapper {
     padding: 0 24px;

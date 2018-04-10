@@ -63,13 +63,13 @@
       },
       getIcon(index) {
         if (index === 0) {
-          return 'fas fa-mobile-alt'
+          return 'icon-ic_phone_s'
         } else if (index === 1) {
-          return 'fab fa-qq'
+          return 'icon-ic_qq'
         } else if (index === 2) {
-          return 'fas fa-home'
+          return 'icon-ic_company_s'
         } else {
-          return 'fas fa-user-md'
+          return 'icon-ic_position_s'
         }
       },
       cancel() {

@@ -2,7 +2,9 @@
   <div>
     <!--头部-->
     <appDetailHeader
-      :appInfo="this.appInfo">
+      :appInfo="this.appInfo"
+      v-show="this.appInfo"
+    >
     </appDetailHeader>
 
     <appVersions
@@ -33,7 +35,7 @@
       return {
         subTitleArr: ['', '', ''],
         userteam: {},
-        appInfo: {},
+        appInfo: null,
         showAppSetting: false
       }
     },

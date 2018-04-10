@@ -1,12 +1,20 @@
 <template>
   <div class="teamMgr">
-    <div class="teamMgr-header">{{teamName}}</div>
-    <div class="teamMgr-content">
+    <div class="teamMgr-header">
+      <label>{{teamName}}</label>
+      <img class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="editAction"/>
+    </div>
+    <div class="teamMgr-collection">
+      <div class="teamMgr-content">
       <div class="teamMgr-group-header">
-        <div><label>团队人数 {{members.length}}</label><img src="../../assets/add_user.png" @click="addClick"/></div>
-        <label>成员权限</label>
+        <!-- <div><label>团队人数 {{members.length}}</label><img src="../../assets/ic_addmmb.png" @click="addClick"/></div> -->
+        <!-- <label>成员权限</label> -->
       </div>
       <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected"></item>
+      <div class="teamMgr-group-footer">
+        <div> 共 {{members.length}} 名成员 </div>
+      </div>
+    </div>
     </div>
    <!-- <invite-member v-show="isShowInvite" @invited="invited"></invite-member> -->
    <el-dialog title="邀请成员"
@@ -162,23 +170,40 @@ export default {
 <style lang="scss">
   .teamMgr {
     margin-top: 24px;
-    // background-color: white;
     height: 100%;
     .teamMgr-header {
       // background-color:#F4F7FD;
-      font-size: 40px;
+      font-size: 24px;
       text-align: center;
       margin: 0px;
       height: 120px;
       line-height: 120px;
-      width: 100%;
+      // width: 100%;
       border-bottom: 1px solid #F4F7FD;
+      // display: flex;
+      // align-items: center;
+      // justify-content: center;
+      
+      .teamMgr-edit {
+        margin-left: 24px;
+        height: 18px;
+        width: 4px;
+        margin-top: -4px;
+      }
+    }
+    .teamMgr-collection {
+      margin: 0rem 2rem;
+      background-color: white;
+      height: 100%;
+      border-radius: 10px 10px 0px 0px;
     }
     .teamMgr-content {
       width: 66%;
       margin: auto;
+      background-color: white;
+      
       .teamMgr-group-header {
-        height: 100px;
+        height: 72px;
         line-height: 100px;
         display: flex;
         justify-content: space-between;
@@ -196,6 +221,22 @@ export default {
         }
         & > label:last-child {
           margin-right: 24px;
+        }
+      }
+
+      .teamMgr-group-footer {
+        height: 72px;
+        border-bottom: 1px dashed #D5DFED;
+        text-align: center;
+        display: flex;
+        div {
+          background-color: white;
+          color: #D5DFED;
+          padding-top: 62px;
+          padding-left: 10px;
+          padding-right: 10px;
+          margin: auto;
+          line-height: 20px;
         }
       }
     }

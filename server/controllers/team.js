@@ -74,7 +74,7 @@ module.exports = class TeamRouter {
         ctx.body = responseWrapper(team)
     }
 
-    @request('post', '/api/team/dissolve/{id}')
+    @request('delete', '/api/team/dissolve/{id}')
     @summary('解散一个团队')
     @tag
     @path({

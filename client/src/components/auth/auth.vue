@@ -249,7 +249,7 @@
     display: flex;
     display: -webkit-flex;
     background-image: url("../../assets/bg.png");
-    background-size: 100% 100%;
+    background-size:100% 100%;
     font-family: PingFangSC;
     overflow: hidden;
   }
@@ -260,7 +260,7 @@
     background: $mainColor;
     opacity: 0.9;
     display: flex;
-    max-width: 500px;
+    max-width: 600px;
     min-width: 200px;
     display: -webkit-flex;
     flex-direction: column;

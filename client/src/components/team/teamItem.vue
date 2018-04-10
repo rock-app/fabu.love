@@ -3,13 +3,23 @@
     <div>
       <div class="teamItem-circle" :class="color">{{lastName}}</div>
       <label class="teamItem-name">{{value.username}}</label>
+      <div class="teamItem-email">| {{value.email}}</div>
     </div>
-    <div>{{value.email}}</div>
-    <div class="teamItem-owner">{{ownerString}}</div>
+    <div class="teamItem-owner">
+      <label>{{ownerString}}</label>
+      <img v-show="isRole" src="../../assets/ic_moreqx.png"/>
+    </div>
+    <context-menu class="ctx-menu" ref="ctxMenu">
+        <li class="ctx-item" @click="editAction">编辑团队名称</li>
+        <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
+      </context-menu>
   </div>
 </template>
 
 <script>
+import * as useMgr from '../../mgr/userMgr'
+import contextMenu from 'vue-context-menu'
+
 export default {
   props: {
     value: Object,
@@ -17,17 +27,22 @@ export default {
   },
   data () {
     return {
-      color: 'header-background-red'
+      color: 'header-background-red',
+      isRole: false
     }
   },
-  mounted () {
+  created () {
     let randomNumber = Math.floor(Math.random() * Math.floor(4))
+    this.isRole = (useMgr.getUserId() === useMgr.getUserTeam()._id) && this.value.role !== 'owner'
     this.color = ['header-background-red', 'header-background-green', 
     'header-background-orange', 'header-background-purple'][randomNumber]
   },
   methods: {
     selected () {
       this.$emit('select', this.index)
+    },
+    roleAction () {
+      this.$refs.ctxMenu.open()
     }
   },
   computed: {
@@ -45,6 +60,9 @@ export default {
           return '围观群众'
       }
     }
+  },
+  components: {
+    contextMenu
   }
 }
 </script>
@@ -73,10 +91,18 @@ export default {
       margin-left: 24px;
     }
     .teamItem-name {
-        margin-left: 10px;
+      margin-left: 1rem;
+      color: #354052;
+      font-size: 1rem;
     }
     .teamItem-owner {
       margin-right: 24px;
+    }
+    .teamItem-email {
+      display: inline-block;
+      margin-left: 1rem;
+      color: #AABAD2;
+      font-size: 1rem;
     }
   }
   .teamItem:hover {

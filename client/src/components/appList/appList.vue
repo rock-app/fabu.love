@@ -13,10 +13,10 @@
       <div class="applist-header-right">
         <div class="platform-wrapper">
           <div class="platform-ios" :class="getActiveClass('ios')" @click="clickIosPlatform">
-            <img class="platformImg" src="../../assets/ic_ios.png" alt="">
+            <span class="platformImg icon-ic_ios"></span>
           </div>
           <div class="platform-android" :class="getActiveClass('android')" @click="clickAndroidPlatform">
-            <img class="platformImg" src="../../assets/ic_android.png" alt="">
+            <span class="platformImg icon-ic_andr"></span>
           </div>
         </div>
         <div class="search-wrapper">
@@ -256,8 +256,8 @@
     text-align: center;
     border-right: solid 1px $mainColor;
     box-sizing: border-box;
+    vertical-align: top;
   }
-
   .applist-header .platform-wrapper .platform-android {
     display: inline-block;
     width: 72px;
@@ -266,9 +266,8 @@
   }
 
   .platformImg {
-    width: 25px;
-    height: 25px;
-    margin-top: 11px;
+    line-height: 48px;
+    font-size: 26px;
   }
 
   .platformActive {

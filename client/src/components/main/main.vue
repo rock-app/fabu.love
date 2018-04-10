@@ -10,7 +10,7 @@
         </el-header>
         <el-main class="main-contentWrapper">
           <router-view/>
-          <footerWrapper></footerWrapper>
+          <!-- <footerWrapper></footerWrapper> -->
         </el-main>
       </el-container>
     </el-container>
@@ -81,6 +81,11 @@
     height: 72px !important;
   }
   .main-contentWrapper {
-    padding: 0 24px;
+    width: 100%;
+    height: 100%;
+    // padding: 0 24px;
+  }
+  .main-container .side-menu {
+    width: 192px;
   }
 </style>

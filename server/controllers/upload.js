@@ -201,7 +201,7 @@ function parseIpa(filename) {
 
   ///解析ipa icon
 async function extractIpaIcon(filename,guid,team) {
-  var tmpOut = (tempDir + '/{0}.png'.format(guid)).replace(/[\r\n]/g,"")
+  var tmpOut = tempDir + '/{0}.png'.format(guid)
   var zip = new AdmZip(filename)
   var ipaEntries = zip.getEntries()
   var found = false
@@ -216,7 +216,7 @@ async function extractIpaIcon(filename,guid,team) {
       await writeFile(tmpOut, buffer)
       var upperDirectory = path.resolve(__dirname, '..')
         //写入成功判断icon是否是被苹果破坏过的图片
-      var {stderr,stdout} = await exec(path.join(upperDirectory, 'pngdefry', 'pngfy -s _tmp ' + tmpOut));
+      var {stderr,stdout} = await exec((path.join(upperDirectory, 'pngdefry', 'pngfy -s _tmp ',tmpOut)).replace(/[\r\n]/g,""));
       if (stderr) {
         throw stderr;
       }

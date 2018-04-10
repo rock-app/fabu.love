@@ -3,7 +3,7 @@
 <template>
     <div class="previewapp-wrapper">
       <!--中间-->
-      <div class="preview-middlewrapper">
+      <div class="preview-middlewrapper" v-if="this.appBaseData">
         <div class="left">
           <img class="appicon" :src="getIconUrl()" alt="">
           <p class="title">{{this.appBaseData.appName}}</p>
@@ -38,10 +38,10 @@
       return {
         versionArr: [['1.3.4', '2017-03-12'], ['1.3.3', '2017-03-11'], ['1.3.2', '2017-03-10'], ['1.3.1', '2017-03-9']],
         appVersionInfo: {},
-        appBaseData: {},
+        appBaseData: null,
         downloadUrl: '',
         platformStr: '',
-        showQRCode: true
+        showQRCode: false
       }
     },
     computed: {
@@ -204,7 +204,6 @@
     position: absolute;
     width: 160px;
     height: 160px;
-    background-color: blue;
     top: 25%;
     left: 65px;
   }

@@ -22,12 +22,19 @@
           </div>
         </div>
       </div>
+
+      <uploadApp v-if="this.showUploadView"
+                 :teamId="this.team._id"
+                 :appFile="this.file"
+                 @closeUpload="closeUploadMethod"
+                 @uploadSuccess="uploadSuccessMethod"></uploadApp>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import {getUserTeam} from '../../mgr/userMgr'
+  import UploadApp from '../appList/uploadApp.vue'
 
   export default {
     props: {
@@ -37,8 +44,13 @@
     },
     data() {
       return {
-        team: {}
+        team: {},
+        showUploadView: false,
+        file: FileList
       }
+    },
+    components: {
+      UploadApp
     },
     created() {
       this.team = getUserTeam()
@@ -66,8 +78,12 @@
           return ''
         }
       },
-      referenceUpload() {
-
+      referenceUpload(e) {
+        this.file = e.target.files
+        console.log(this.file)
+        if (e.target.files.length > 0) {
+          this.showUploadView = true
+        }
       },
       delectApp(item) {
         this.$confirm('确认删除？')
@@ -80,6 +96,17 @@
             })
           })
           .catch(_ => {})
+      },
+      closeUploadMethod() {
+        this.showUploadView = false
+        // 置空，input file 如果第二次选择的文件跟上一次是同一个文件，则不会触发onchange事件，需要将value置空
+        this.$refs.referenceUpload.value = ''
+      },
+      uploadSuccessMethod() {
+        this.$refs.referenceUpload.value = ''
+        this.showUploadView = false
+        // 上传成功
+        this.bus.$emit('uploadSuccess')
       }
     }
   }

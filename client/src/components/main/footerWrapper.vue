@@ -20,12 +20,11 @@
     width: 100%;
     height: 24px;
     text-align: center;
-    padding-top: 80px;
+    background-color: transparent;
   }
   .footerwrapper-title {
     font-size: 14px;
     color: #9B9B9B;
-    margin-bottom: 40px;
     line-height: 24px;
   }
 

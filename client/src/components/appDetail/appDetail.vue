@@ -3,7 +3,7 @@
     <!--头部-->
     <appDetailHeader
       :appInfo="this.appInfo"
-      v-show="this.appInfo"
+      v-show="this.appInfo._id"
     >
     </appDetailHeader>
 
@@ -35,7 +35,7 @@
       return {
         subTitleArr: ['', '', ''],
         userteam: {},
-        appInfo: null,
+        appInfo: {},
         showAppSetting: false
       }
     },

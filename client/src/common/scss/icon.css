@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?yarndu');
-  src:  url('../fonts/icomoon.eot?yarndu#iefix') format('embedded-opentype'),
-  url('../fonts/icomoon.ttf?yarndu') format('truetype'),
-  url('../fonts/icomoon.woff?yarndu') format('woff'),
-  url('../fonts/icomoon.svg?yarndu#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?bl3y9e');
+  src:  url('../fonts/icomoon.eot?bl3y9e#iefix') format('embedded-opentype'),
+  url('../fonts/icomoon.ttf?bl3y9e') format('truetype'),
+  url('../fonts/icomoon.woff?bl3y9e') format('woff'),
+  url('../fonts/icomoon.svg?bl3y9e#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,6 +24,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-ic_applist:before {
+  content: "\e918";
+  color: #6477f2;
+}
 .icon-ic_about_s:before {
   content: "\e900";
   color: #d5dfed;
@@ -118,10 +122,6 @@
 .icon-ic_mnggp-copy:before {
   content: "\e917";
   color: #f5a623;
-}
-.icon-ic_mnggp:before {
-  content: "\e918";
-  color: #e697e0;
 }
 .icon-ic_name:before {
   content: "\e919";

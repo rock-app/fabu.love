@@ -201,7 +201,7 @@ function parseIpa(filename) {
 
   ///解析ipa icon
 async function extractIpaIcon(filename,guid,team) {
-  var tmpOut = tempDir + '/{0}.png'.format(guid)
+  var tmpOut = (tempDir + '/{0}.png'.format(guid)).replace(/[\r\n]/g,"")
   var zip = new AdmZip(filename)
   var ipaEntries = zip.getEntries()
   var found = false

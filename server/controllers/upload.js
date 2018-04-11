@@ -19,7 +19,7 @@ var mime = require('mime')
 var path = require('path')
 var os = require('os')
 var uuidV4 = require('uuid/v4')
-var apkParser3 = require('apk-parser3')
+var apkParser3 = require('../library/apkparser/apkparser')
 var Team = require('../model/team')
 var AdmZip = require('adm-zip')
 var mkdirp = require('mkdirp')
@@ -214,9 +214,18 @@ async function extractIpaIcon(filename,guid,team) {
       }
       //把文件写入到tmp文件夹
       await writeFile(tmpOut, buffer)
-      var upperDirectory = path.resolve(__dirname, '..')
+      var pnfdefryDir = path.join(__dirname, '..','library/pngdefry')
         //写入成功判断icon是否是被苹果破坏过的图片
-      var {stderr,stdout} = await exec((path.join(upperDirectory, 'pngdefry', 'pngfy -s _tmp ',tmpOut)).replace(/[\r\n]/g,""));
+      var exeName = '';
+      if (os.type() === 'Darwin') {
+          exeName = 'pngdefry-osx';
+      } else if (os.type() === 'Linux') {
+          exeName = 'pngdefry-linux';
+      } else {
+          throw new Error('Unknown OS!');
+      }
+
+      var {stderr,stdout} = await exec(path.join(pnfdefryDir, exeName, 'pngfy -s _tmp ',tmpOut));
       if (stderr) {
         throw stderr;
       }

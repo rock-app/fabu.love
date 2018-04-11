@@ -337,13 +337,39 @@ module.exports = class TeamRouter {
         var { teamId } = ctx.validatedParams;
         var user = ctx.state.user.data;
         var body = ctx.request.body
-        var team = validator.userInTeamIsManager(user._id,teamId)
+
+        var team = await Team.findOne({_id:teamId,members:{
+            $elemMatch:{
+                 _id:user._id,
+                 $or: [
+                    { role: 'owner' },
+                    { role: 'manager' }
+                ]
+            }
+          },},"_id members")
+
         if (!team) {
             throw new Error("团队不存在或者您没有权限修改该信息")
         }
         await Team.updateOne({
             _id: teamId,
         },{name:body.name})
+
+        var membersId = []
+        if (team.members.length > 0) {
+            for (var m of team.members){
+                membersId.push(m._id)
+            }
+        }
+        
+        if (membersId.length > 0) {
+            await User.update({_id:{$in:membersId},'teams._id':teamId},{
+                $set:{
+                    'teams.$.name':body.name
+                }
+            })
+        }
+
         ctx.body = responseWrapper(true,"团队名称已修改")
     }
     

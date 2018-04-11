@@ -1,5 +1,10 @@
 <template>
   <div class="teamMgr">
+    <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;right: 72px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
+    <el-button class="uploadWrapper button-style-main" @click="createTeam">
+      <img style="{width: 12; height: 12px;}" src="../../assets/ic_add@2x.png"> 
+      <label> 新建团队</label>
+    </el-button>
     <div class="teamMgr-header">
       <label>{{teamName}}</label>
       <img v-show="isOwner" class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="showMenu"/>
@@ -11,9 +16,10 @@
     <div class="teamMgr-collection">
       <div class="teamMgr-content">
         <div class="teamMgr-group-header">
-          <img class="img-invite" src="../../assets/ic_addmmb.png" @click="addClick"/>
+          <img src="../../assets/ic_addmmb.png" @click="addClick"/>
         </div>
-      <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected"></item>
+      <item v-for="(member, index) in members" :key="index" :index="index" 
+      v-model="members[index]" @select="itemSelected" @roleUpdate="requestMembers"></item>
         <div class="teamMgr-group-footer">
           <div> 共 {{members.length}} 名成员 </div>
         </div>
@@ -68,12 +74,24 @@
         <el-button type="primary" @click="dissolveTeam">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="创建团队" :visible.sync="createTeamVisible">
+      <el-form :model="form">
+        <el-form-item label="团队名称">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="createTeamVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sure">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
   
 <script>
 import Item from './teamItem'
 import * as TeamApi from '../../api/moudle/teamApi'
+import * as UserApi from '../../api/moudle/userApi'
 import * as useMgr from '../../mgr/userMgr'
 import contextMenu from 'vue-context-menu'
 export default {
@@ -89,14 +107,16 @@ export default {
       invitedEmails: '',
       editing: false,
       isOwner: false,
-      dissolveShow: false
+      dissolveShow: false,
+      createTeamVisible: false,
+      form: {name: ''}
     }
   },
   mounted () {
     this.requestMembers()
-    this.isOwner = useMgr.getUserId() === useMgr.getUserTeam()._id
+    this.isOwner = useMgr.getUserTeam().role 
     this.bus.$on('refreshList', () => {
-      this.isOwner = useMgr.getUserId() === useMgr.getUserTeam()._id
+      
       this.requestMembers()
     })
   },
@@ -106,6 +126,21 @@ export default {
   computed: {
   },
   methods: {
+    sure () {
+      this.createTeamVisible = false
+      UserApi.createdTeam(this.form.name).then((resp) => {
+        this.$message({
+          type: resp.success ? 'success' : 'error',
+          message: resp.message
+        })
+        if (resp.success) {
+          this.bus.$emit('createTeam')
+        }
+      })
+    },
+    createTeam () {
+      this.createTeamVisible = true
+    },
     showMenu() {
       this.$refs.ctxMenu.open()
     },
@@ -245,14 +280,37 @@ export default {
         }
       }
     }
+  },
+  watch: {
+    members () {
+      this.isOwner = this.members.filter(member => {
+          return member._id === useMgr.getUserId()
+        })[0].role === 'owner'
+    }
   }
 }
 </script>
 
 <style lang="scss">
+  @import "../../common/scss/base";
+
   .teamMgr {
+    margin-top: 24px;
     position: relative;
     height: 100%;
+    .uploadWrapper {
+      width: 144px;
+      height: 48px;
+      float: right;
+      margin-right: 72px;
+    }
+    .uploadWrapper img {
+      margin-right: 15px;
+    }
+    .uploadWrapper:hover {
+      background-color: $mainColor;
+      color: white;
+    }
     .teamMgr-header {
       font-size: 24px;
       text-align: center;
@@ -308,9 +366,11 @@ export default {
         & > img {
           margin-top: -72px;
           margin-right: 24px;
-          height: 48px;
           width: 48px;
+          height: 48px;
           z-index: 400px;
+          border-radius: 24px;
+          box-shadow: 0px 2px 12px #cccccc;
         }
       }
 

@@ -43,7 +43,7 @@ module.exports = class TeamRouter {
     static async createTeam(ctx, next) {
         var user = ctx.state.user.data;
         var {body} = ctx.request;
-        team = new Team(body);
+        var team = new Team(body);
         team.creatorId = user._id;
         team.members = [
             {
@@ -71,7 +71,7 @@ module.exports = class TeamRouter {
             })
             .run({useMongoose: true});
 
-        ctx.body = responseWrapper(team)
+        ctx.body = responseWrapper(true, "团队创建成功", team)
     }
 
     @request('delete', '/api/team/dissolve/{id}')
@@ -94,14 +94,14 @@ module.exports = class TeamRouter {
         var membersId = []
         if (team.members.length > 0) {
             for (var m of team.members){
-                membersId.push(m.id)
+                membersId.push(m._id)
             }
         }
         
         if (membersId.length > 0) {
             await User.update({_id:{$in:membersId}},{
                 $pull:{
-                    teams:{_id: team.id}
+                    teams:{_id: team._id}
                 }
             })
         }
@@ -130,7 +130,7 @@ module.exports = class TeamRouter {
             throw new Error("没有权限修改该用户角色")
         }
 
-        if (role != 'manager' && role != 'guest') {
+        if (body.role != 'manager' && body.role != 'guest') {
             throw new Error("请传入正确的角色参数")
         }
         await User.updateOne({_id:body.memberId,'teams._id':teamId},{
@@ -139,7 +139,7 @@ module.exports = class TeamRouter {
             }
         })
 
-        await Team.updateOne({_id:teamId,'members._id':memberId},{
+        await Team.updateOne({_id:teamId,'members._id':body.memberId},{
             $set:{
                 'members.$.role':body.role
             }

@@ -31,3 +31,12 @@ export function dissolveTeam(teamId) {
   let url = `api/team/dissolve/${teamId}`
   return deleteHttp(url)
 }
+
+export function modifyRole(teamId, memberId, role) {
+  let url = `api/team/${teamId}/role`
+  let param = {
+    'memberId': memberId,
+    'role': role
+  }
+  return postHttp(url, param)
+}

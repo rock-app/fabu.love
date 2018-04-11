@@ -1,7 +1,11 @@
 <template>
   <div class="uploadApp-wrapper">
-    <el-progress ref="progress" :stroke-width="30" class="uploadProgress" :percentage="progress" status="exception"></el-progress>
-    <button class="uploadCancelBtn" @click="cancelUpload">取消上传</button>
+    <!--<el-progress ref="progress" :stroke-width="30" class="uploadProgress" :percentage="progress" status="exception"></el-progress>-->
+    <!--<button class="uploadCancelBtn" @click="cancelUpload">取消上传</button>-->
+    <div class="uploadContent">
+      <img src="../../assets/loadding.gif">
+      <div style="font-size: 20px;margin-top: 30px;color: #6477F2" v-html="`正在上传中...${progress}%`"></div>
+    </div>
   </div>
 </template>
 
@@ -38,7 +42,6 @@
       },
       beginLoad() {
         const _this = this
-
         // 取消上传使用
         let cancelToken = axios.CancelToken
         _this.source = cancelToken.source()
@@ -48,7 +51,7 @@
         var config = {
           onUploadProgress: function(progressEvent) {
             var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            _this.$nextTick(() => {
+              _this.$nextTick(() => {
               _this.progress = percentCompleted
             })
           },
@@ -58,19 +61,20 @@
         axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
 
         axios.post(`api/apps/${_this.teamId}/upload`, data, config)
-          .then(function (res) {
+          .then((res) => {
+          console.log(res)
             Message({
               message: res.data.success ? '上传成功' : res.data.message,
               type: res.data.success ? 'success' : 'error'
             })
-            _this.$emit('uploadSuccess')
+            this.$emit('uploadSuccess')
           })
           .catch(function(err) {
             if (axios.isCancel(err)) {
               console.log('Request canceled', err.message)
               return
             }
-            Message.error(err.response.data.message)
+            Message.error('上传失败')
           })
       }
     }
@@ -86,27 +90,22 @@
     left: 0px;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 1000;
+    text-align: center;
   }
-  .uploadProgress {
+  .uploadApp-wrapper .uploadContent {
     position: absolute;
-    left: 10%;
-    right: 10%;
-    top: 50%;
-  }
-  .uploadApp-wrapper .uploadProgress .el-progress-bar__inner {
-    background-color: $warmRed;
-  }
-  .uploadCancelBtn {
-    position: absolute;
+    width: 240px;
+    height: 240px;
+    background-color: white;
+    box-shadow: 0px 0px 6px 0px rgba(224,231,239,1);
+    border-radius: 20px;
+    top: calc(50% - 120px);
     left: 50%;
-    margin-left: -40px;
-    top: 60%;
-    width: 80px;
-    height: 50px;
-    color: white;
-    background-color: $warmRed;
-    border-color: transparent;
-    font-size: 15px;
+    margin-left: -120px;
+  }
+  .uploadApp-wrapper .uploadContent img {
+    margin-top: 95px;
   }
 </style>

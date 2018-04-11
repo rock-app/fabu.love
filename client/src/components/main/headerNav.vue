@@ -3,8 +3,13 @@
     <div class="leftWrapper">
       <!--团队，切换团队-->
       <div class="team">
-        <el-popover ref="popover" placement="bottom" width="160" trigger="click"
-                    :disabled="!this.isAppList || teamArr.length === 0">
+        <el-popover
+          ref="popover"
+          placement="bottom-start"
+          width="220"
+          trigger="click"
+          :disabled="!this.isAppList || teamArr.length === 0"
+          :visible-arrow="false">
           <ul>
             <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
               <p>
@@ -35,9 +40,6 @@
         <li class="userInfoSub" @click="clickUserInfoWrapper">
           <span>个人设置</span>
         </li>
-        <li class="userInfoSub" @click="dialogFormVisible = true">
-          <span>创建团队</span>
-        </li>
         <li class="userInfoSub" @click="loginout">
           <span>退出</span>
         </li>
@@ -59,7 +61,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { getUserInfo, removeUserInfo, getUserTeam, saveUserTeam } from '../../mgr/userMgr'
+  import { getUserInfo, removeUserInfo, getUserTeam, saveUserTeam, updateTeamArr } from '../../mgr/userMgr'
   import TokenMgr from '../../mgr/TokenMgr'
   import * as UserApi from '../../api/moudle/userApi'
 
@@ -99,6 +101,14 @@
       this.loadMessage()
     },
     created() {
+      // 获取我的团队列表
+      UserApi.getUserTeams().then((res) => {
+        this.teamArr = res.data.teams
+        // 存最新的teamarr
+        updateTeamArr(this.teamArr)
+      }, reject => {
+
+      })
     },
     destroyed() {
       this.bus.$off('applist')
@@ -162,12 +172,6 @@
       },
       clickTeamBtn() {
         if (this.isAppList) {
-          // 获取我的团队列表
-          UserApi.getUserTeams().then((res) => {
-            this.teamArr = res.data.teams
-          }, reject => {
-
-          })
         } else {
         }
       },
@@ -183,7 +187,6 @@
 
   .headernav-wrapper {
   }
-
   .headernav-wrapper .leftWrapper {
     float: left;
     display: flex;
@@ -194,7 +197,7 @@
   .leftWrapper-item {
     height: 44px;
     line-height: 44px;
-    border-bottom: solid 1px #eee;
+    //border-bottom: solid 1px #eee;
     box-sizing: border-box;
   }
 
@@ -213,15 +216,11 @@
 
   .headernav-wrapper .leftWrapper .team .teamBtn {
     padding: 0px 10px;
-    margin-top: 9px;
+    margin-top: 11px;
     color: $mainTitleColor;
     border-color: transparent;
     max-width: 300px;
   }
-
-  /*.headernav-wrapper .leftWrapper .team .teamBtn:hover {*/
-  /*background-color: transparent;*/
-  /*}*/
   .headernav-wrapper .leftWrapper .team .teamBtn span {
     height: 50px;
     line-height: 50px;

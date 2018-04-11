@@ -1,16 +1,15 @@
 <template>
-  <div>
+  <div class="main">
     <el-container class="main-container">
-      <div class="side-menu" width="192px">
+      <el-aside class="side-menu" width="192px">
         <mainNav></mainNav>
-      </div>
+      </el-aside>
       <el-container>
         <el-header class="main-header">
           <headerNav></headerNav>
         </el-header>
         <el-main class="main-contentWrapper">
-          <router-view/>
-          <footerWrapper></footerWrapper>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -67,23 +66,33 @@
 <style lang="scss">
   @import "../../common/scss/base";
 
-  .main-container {
+  .main .main-container {
     position: absolute;
     width: 100%;
     height: 100%;
   }
-  .main-container .side-menu {
+  .main .main-container .side-menu {
     background-color: white;
-    border-right: solid 1px #e6e6e6;
   }
-  .main-header {
+  .main .main-header {
     background-color: white;
     height: 72px !important;
+    border-bottom: solid 1px #D5DFED;
+    min-width: 722px;
   }
-  .main-contentWrapper {
+
+  .main .main-contentWrapper {
     padding: 0 24px;
+    min-width: 722px;
   }
-  .main-container .side-menu {
-    width: 192px;
+  .main .main-contentWrapper:after {
+    display: inline-block;
+    /*content: '版权所有 © 2005-2017 上海海鼎信息工程股份有限公司，并保留所有权利。';*/
+    font-size: 14px;
+    color: $subTitleColor;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
   }
 </style>

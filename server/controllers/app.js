@@ -9,6 +9,7 @@ import {
     description
 } from '../swagger';
 
+import config from '../config'
 import { APIError } from "../helper/rest";
 import { responseWrapper } from "../helper/util";
 
@@ -365,8 +366,37 @@ module.exports = class AppRouter {
         ctx.body = responseWrapper({'app':app,'version':version})
     }
 
-}
+    @request('get','/api/plist/{appid}/{versionId}')
+    @summary("获取应用的plist文件")
+    @tag
+    @path({appid:{type:'string',require:true}})
+    static async getAppByShort(ctx,next){
+        var { appid,versionId } = ctx.validatedParams
+        var app = await App.findOne({_id:appid})
+        var version = await Version.findOne({_id:versionId})
 
+        if (!app) {
+            throw new Error("应用不存在")
+        }
+        if (!version){
+            throw new Error("版本不存在")
+        }
+       
+        var content = await readFile(path.join(__dirname, "..",'templates') + '/template.plist')
+        var template = content.toString();
+        var rendered = mustache.render(template, {
+            basePath: config.baseUrl,
+            appName: app.appName,
+            bundleID: app.bundleId,
+            versionStr:version.versionStr,
+            downloadUrl: path.join(config.baseUrl ,version.downloadUrl),
+        });
+        ctx.set('Content-Type', 'text/plain; charset=utf-8');
+        ctx.set('Access-Control-Allow-Origin','*');
+        ctx.body = rendered
+    }
+
+}
 
 async function appInTeamAndUserIsManager(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{

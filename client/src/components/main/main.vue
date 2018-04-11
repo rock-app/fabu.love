@@ -84,6 +84,7 @@
   .main .main-contentWrapper {
     padding: 0 24px;
     min-width: 722px;
+    padding-bottom: 60px;
   }
   .main .main-contentWrapper:after {
     display: inline-block;

@@ -78,9 +78,12 @@
     background-color: white;
     height: 72px !important;
     border-bottom: solid 1px #D5DFED;
+    min-width: 722px;
   }
+
   .main .main-contentWrapper {
     padding: 0 24px;
+    min-width: 722px;
   }
   .main .main-contentWrapper:after {
     display: inline-block;

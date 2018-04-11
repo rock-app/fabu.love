@@ -14,11 +14,11 @@
         <!--不可以用v-if，否则会因为控件加载时序问题导致，指定选中的item失效-->
         <div v-show="this.activeIndex !== '应用概述'">
           <el-menu-item index="应用列表" @click="clickSubItem">
-            <i class="icon-ic_vision"></i>
+            <i class="icon-ic_applist"></i>
             <span slot="title">应用列表</span>
           </el-menu-item>
           <el-menu-item index="团队管理" @click="clickSubItem">
-            <i class="icon-ic_addgp"></i>
+            <i class="icon-ic_mnggp-copy"></i>
             <span slot="title">团队管理</span>
           </el-menu-item>
         </div>
@@ -58,6 +58,8 @@
         </el-menu-item>
       </el-menu>
     </div>
+
+    <div class="rightLine"></div>
   </div>
 </template>
 
@@ -140,17 +142,19 @@
     width: 100%;
     height: 72px;
     text-align: center;
+    border-bottom: solid 1px #D5DFED;
+    box-sizing: border-box;
   }
   .mainNav-logo img {
-    width: 98px;
-    height: 18px;
-    margin-top: 20px;
-    background-size: 98px 18px;
+    width: 126px;
+    height: 25px;
+    margin-top: 22px;
+    background-size: 126px 25px;
   }
   .mainNav-logo .line {
     width: 96px;
-    height: 6px;
-    margin: 12px auto 0px auto;
+    height: 5px;
+    margin: 17px auto 0px auto;
     background-color: $mainColor;
   }
   .mainNav-footer {
@@ -191,7 +195,6 @@
     margin-left: 20px;
   }
   .mainNav-wrapper .mainNav-el-menu i:before {
-    color: $mainColor;
   }
   .mainNav-wrapper .mainNav-el-menu .is-active {
     color: white;
@@ -214,5 +217,13 @@
   }
   .mainNav-footer .mainNav-footer-list .is-active span {
     color: $subTitleColor;
+  }
+  .rightLine {
+    position: absolute;
+    width: 1px;
+    top: 72px;
+    right: 0px;
+    height: calc(100% - 72px);
+    background-color: #D5DFED;
   }
 </style>

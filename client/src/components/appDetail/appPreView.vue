@@ -18,7 +18,7 @@
         <!--手机视图-->
         <div class="preview-mobilewrapper" v-show="this.showQRCode">
           <img class="mobieImg" src='../../assets/ic_mobilphone.png'>
-          <vue-qr class="qrcodeImg" :text="downloadUrl" height="140" width="140" :margin="20"></vue-qr>
+          <vue-qr class="qrcodeImg" :text="downloadUrl" :margin="20"></vue-qr>
           <p class="codetips">请扫描二维码下载APP</p>
           <p class="platform">适用于{{this.platformStr}}系统</p>
         </div>
@@ -60,6 +60,8 @@
       console.log(this.$route.params)
       this.getAppInfo(this.$route.params.id)
 
+      console.log(this.appVersionInfo)
+      console.log(this.appBaseData)
       // 判断是否是手机设备
       if (this.isIos || this.isAndroid) {
         this.showQRCode = false
@@ -125,10 +127,23 @@
     margin-left: 25%;
     width: 50%;
     height: 100%;
+    max-width: 800px;
     text-align: center;
     position: absolute;
     font-size: 0px;
   }
+
+  .preview-middlewrapper-mobile {
+    margin-top: 0px;
+    margin-left: 25%;
+    width: 50%;
+    height: 100%;
+    max-width: 800px;
+    text-align: center;
+    position: absolute;
+    font-size: 0px;
+  }
+
   .preview-middlewrapper .left {
     display: inline-block;
     width: 50%;
@@ -145,11 +160,20 @@
     text-align: center;
   }
 
+  .preview-mobilewrapper > img {
+    margin-top: 120px;
+    width: 300px;
+    /*min-width: 300px;*/
+    position: absolute;
+    left: 0px;
+    height: auto;
+  }
+
   .preview-middlewrapper .appicon {
     width: 126px;
     height: 126px;
     border-radius: 15px;
-    margin-top: 50%;
+    margin-top: 160px;
   }
   .preview-middlewrapper .title {
     color: #354052;
@@ -191,21 +215,21 @@
   .downloadBtn i:before {
     color: white;
   }
-  .preview-mobilewrapper .mobieImg {
-    width: 470px;
-    height: 70%;
-    top: 0px;
-    left: 0px;
+  /*.preview-mobilewrapper .mobieImg {*/
+    /*width: 470px;*/
+    /*height: 70%;*/
+    /*top: 0px;*/
+    /*left: 0px;*/
+    /*position: absolute;*/
+    /*background-size: cover;*/
+    /*margin-top: 25%;*/
+  /*}*/
+  .preview-mobilewrapper .qrcodeImg img{
     position: absolute;
-    background-size: cover;
-    margin-top: 25%;
-  }
-  .preview-mobilewrapper .qrcodeImg {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    top: 25%;
-    left: 65px;
+    width: 150px;
+    height: auto;
+    left: 32px;
+    margin-top: 200px;
   }
 
   .preview-mobilewrapper .codetips {
@@ -214,9 +238,8 @@
     text-align: center;
     line-height: 20px;
     height: 20px;
-    left: 0px;
-    top: 45%;
-    width: 326px;
+    left: 35px;
+    top: 380px;
     position: absolute;
   }
   .preview-mobilewrapper .platform {
@@ -226,9 +249,8 @@
     text-align: center;
     line-height: 20px;
     height: 20px;
-    left: 0px;
-    top: 47%;
-    width: 326px;
+    left: 60px;
+    top: 400px;
     position: absolute;
   }
 

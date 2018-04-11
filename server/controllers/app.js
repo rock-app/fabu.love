@@ -398,7 +398,6 @@ module.exports = class AppRouter {
 
 }
 
-
 async function appInTeamAndUserIsManager(appId,teamId,userId) {
     var team = await Team.findOne({_id:teamId,members:{
         $elemMatch:{

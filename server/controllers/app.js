@@ -8,10 +8,12 @@ import {
     query,
     description
 } from '../swagger';
-
+import fs from 'fs';
 import config from '../config'
 import { APIError } from "../helper/rest";
 import { responseWrapper } from "../helper/util";
+import fpath from 'path';
+import mustache from 'mustache';
 
 const App = require('../model/app_model')
 const Version = require('../model/version')
@@ -369,7 +371,7 @@ module.exports = class AppRouter {
     @request('get','/api/plist/{appid}/{versionId}')
     @summary("获取应用的plist文件")
     @tag
-    @path({appid:{type:'string',require:true}})
+    @path({appid:{type:'string',require:true},versionId:{type:'string',require:true}})
     static async getAppByShort(ctx,next){
         var { appid,versionId } = ctx.validatedParams
         var app = await App.findOne({_id:appid})
@@ -381,19 +383,21 @@ module.exports = class AppRouter {
         if (!version){
             throw new Error("版本不存在")
         }
-       
-        var content = await readFile(path.join(__dirname, "..",'templates') + '/template.plist')
-        var template = content.toString();
-        var rendered = mustache.render(template, {
-            basePath: config.baseUrl,
-            appName: app.appName,
-            bundleID: app.bundleId,
-            versionStr:version.versionStr,
-            downloadUrl: path.join(config.baseUrl ,version.downloadUrl),
-        });
-        ctx.set('Content-Type', 'text/plain; charset=utf-8');
-        ctx.set('Access-Control-Allow-Origin','*');
-        ctx.body = rendered
+
+        var result = fs.readFileSync(fpath.join(__dirname, "..",'templates') + '/template.plist') 
+
+            var template = result.toString();
+            var rendered = mustache.render(template, {
+                basePath: config.baseUrl,
+                appName: app.appName,
+                bundleID: app.bundleId,
+                versionStr:version.versionStr,
+                downloadUrl: fpath.join(config.baseUrl ,version.downloadUrl),
+            });
+            ctx.set('Content-Type', 'text/plain; charset=utf-8');
+            ctx.set('Access-Control-Allow-Origin','*');
+            ctx.body = rendered
+
     }
 
 }

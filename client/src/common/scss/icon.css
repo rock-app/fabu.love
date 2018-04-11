@@ -123,6 +123,10 @@
   content: "\e917";
   color: #f5a623;
 }
+.icon-ic_mnggp:before {
+  content: "\e923";
+  color: #e697e0;
+}
 .icon-ic_name:before {
   content: "\e919";
   color: #6477f2;
@@ -161,8 +165,4 @@
 }
 .icon-ic_vision:before {
   content: "\e922";
-}
-.icon-ic_add:before {
-  content: "\ea0a";
-  color: #fff;
 }

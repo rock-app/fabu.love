@@ -87,18 +87,12 @@
       })
       // 创建团队
       this.bus.$on('createTeam', () => {
-        // 获取我的团队列表
-        UserApi.getUserTeams().then((res) => {
-          this.teamArr = res.data.teams
-          // 存最新的teamarr
-          updateTeamArr(this.teamArr)
-        }, reject => {
-
-        })
+        this.updataTeam()
       })
       // 修改团队名称
-      this.bus.$on('createTeam', () => {
+      this.bus.$on('teamNameUpdate', () => {
         // 更新团队名称
+        this.updataTeam()
       })
 
       this.userInfo = getUserInfo()
@@ -107,13 +101,7 @@
       this.loadMessage()
     },
     created() {
-      // 获取我的团队列表
-      UserApi.getUserTeams().then((res) => {
-        this.teamArr = res.data.teams
-        // 存最新的teamarr
-        updateTeamArr(this.teamArr)
-      }, reject => {
-      })
+      this.updataTeam()
     },
     destroyed() {
       this.bus.$off('applist')
@@ -122,6 +110,17 @@
       this.bus.$off('createTeam')
     },
     methods: {
+      updataTeam() {
+        // 获取我的团队列表
+        UserApi.getUserTeams().then((res) => {
+          this.teamArr = res.data.teams
+          // 存最新的teamarr
+          updateTeamArr(this.teamArr)
+          this.teamArr = this.userInfo.teamArr
+          this.currentTeam = getUserTeam()
+        }, reject => {
+        })
+      },
       clickUserIcon() {
         this.userHover = true
       },

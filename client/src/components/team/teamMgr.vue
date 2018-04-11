@@ -355,6 +355,7 @@ export default {
     }
     .teamMgr-collection {
       margin: 0rem 2rem;
+      min-height: 300px;
       background-color: white;
       height: 100%;
       border-radius: 20px 20px 0px 0px;

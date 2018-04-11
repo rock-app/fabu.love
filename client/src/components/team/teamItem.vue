@@ -10,8 +10,8 @@
       <img v-show="isRole" :class="[rotate ? 'fa fa-arrow-down position-origin' : 'fa fa-arrow-down position-rotate']" src="../../assets/ic_moreqx.png"/>
     </div>
     <context-menu class="ctx-menu" ref="ctxMenu">
-        <li class="ctx-item" @click="setRoleToManager">管理员</li>
-        <li class="ctx-item" @click="setRoleToGuest">队员</li>
+        <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToManager">管理员</li>
+        <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToGuest">围观群众</li>
         <li class="ctx-item menu-item" @click="selected">移除该队员</li>
     </context-menu>
   </div>
@@ -19,6 +19,7 @@
 
 <script>
 import * as useMgr from '../../mgr/userMgr'
+import * as TeamApi from '../../api/moudle/teamApi'
 import contextMenu from 'vue-context-menu'
 
 export default {
@@ -30,35 +31,56 @@ export default {
     return {
       color: 'header-background-red',
       isRole: false,
-      rotate: false
+      rotate: false,
+      isSelf: false,
+      isManager: false
     }
   },
   created () {
-    let randomNumber = Math.floor(Math.random() * Math.floor(4))
-    this.isRole = (useMgr.getUserId() === useMgr.getUserTeam()._id) && this.value.role !== 'owner'
-    this.color = ['header-background-red', 'header-background-green', 
-    'header-background-orange', 'header-background-purple'][randomNumber]
+    this.valueChanged()
+    // this.itemStyle = isSelf ? 'disable' : ''
   },
   methods: {
     selected () {
       this.$emit('select', this.index)
     },
     roleAction () {
-      this.rotate = !this.rotate
-      this.$refs.ctxMenu.open()
-      alert(this.rotate)
+      if (this.isRole) {
+        this.rotate = !this.rotate
+        this.$refs.ctxMenu.open()
+      }
     },
     setRoleToManager () {
-
+      this.roleModify('manager')
     },
     setRoleToGuest () {
-
+      this.roleModify('guest')
     },
-    roleModify () {
-
+    roleModify (value) {
+      let teamId = useMgr.getUserTeam()._id
+      let memberId = this.value._id
+      let role = value
+      TeamApi.modifyRole(teamId, memberId, role).then(resp => {
+        this.$message({
+          message: resp.message,
+          type: resp.success ? 'success' : 'error'
+        })
+        this.$emit('roleUpdate')
+      })
     },
     close() {
       this.rotate = !this.rotate
+    },
+    valueChanged () {
+      // alert('changed')
+      let randomNumber = Math.floor(Math.random() * Math.floor(4))
+      this.isSelf = useMgr.getUserId() === this.value._id
+      // alert(this.isSelf ? '是自己' : '不是自己')
+      this.isManager = useMgr.getUserTeam().role !== 'guest'
+      // alert(this.isManager ? '是管理者' : '不是管理者')
+      this.isRole = (this.isManager || this.isSelf) && this.value.role !== 'owner'
+      this.color = ['header-background-red', 'header-background-green', 
+      'header-background-orange', 'header-background-purple'][randomNumber]
     }
   },
   computed: {
@@ -75,6 +97,14 @@ export default {
         default:
           return '围观群众'
       }
+    },
+    lastItem () {
+      return this.isSelf ? '离开该团队' : '移除该队员'
+    }
+  },
+  watch: {
+    value () {
+      this.valueChanged()
     }
   },
   components: {

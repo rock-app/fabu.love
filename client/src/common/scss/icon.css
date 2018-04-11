@@ -162,3 +162,7 @@
 .icon-ic_vision:before {
   content: "\e922";
 }
+.icon-ic_add:before {
+  content: "\ea0a";
+  color: #fff;
+}

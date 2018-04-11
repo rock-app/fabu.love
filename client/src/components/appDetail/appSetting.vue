@@ -89,14 +89,17 @@
     color: $subTitleColor;
     margin-right: 20px;
   }
-  .appsetting-wrapper .content .el-form .el-form-item input {
+  .appsetting-wrapper .content .el-form .el-form-item .el-input__inner {
     border-right-width: 0px;
     border-left-width: 0px;
     border-top-width: 0px;
     border-radius: 0px;
     font-size: 14px;
     outline: 0;
+    padding: 0px;
+    padding-left: 5px;
     height: 24px !important;
+    line-height: 24px;
   }
   .appsetting-wrapper .content .el-form .el-form-item .shorturl {
     width: 150px;

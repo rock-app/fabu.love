@@ -85,6 +85,16 @@
       this.bus.$on('allreadMessage', () => {
         this.redDocHidden = true
       })
+      this.bus.$on('createTeam', () => {
+        // 获取我的团队列表
+        UserApi.getUserTeams().then((res) => {
+          this.teamArr = res.data.teams
+          // 存最新的teamarr
+          updateTeamArr(this.teamArr)
+        }, reject => {
+
+        })
+      })
 
       this.userInfo = getUserInfo()
       this.currentTeam = getUserTeam()
@@ -92,19 +102,13 @@
       this.loadMessage()
     },
     created() {
-      // 获取我的团队列表
-      UserApi.getUserTeams().then((res) => {
-        this.teamArr = res.data.teams
-        // 存最新的teamarr
-        updateTeamArr(this.teamArr)
-      }, reject => {
 
-      })
     },
     destroyed() {
       this.bus.$off('applist')
       this.bus.$off('appdetail')
       this.bus.$off('allreadMessage')
+      this.bus.$off('createTeam')
     },
     methods: {
       clickUserIcon() {

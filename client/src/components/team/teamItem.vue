@@ -7,12 +7,12 @@
     </div>
     <div class="teamItem-owner" @click.stop="roleAction">
       <label>{{ownerString}}</label>
-      <img v-show="isRole" :class="[rotate ? 'fa fa-arrow-down position-origin' : 'fa fa-arrow-down position-rotate']" src="../../assets/ic_moreqx.png"/>
+      <img v-show="isRole" class="teamItem-owner-img" :style="iconStyle" src="../../assets/ic_moreqx.png"/>
     </div>
-    <context-menu class="ctx-menu" ref="ctxMenu">
+    <context-menu class="ctx-menu" @ctx-cancel="onCtxClose" @ctx-close="onCtxClose" ref="ctxMenu">
         <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToManager">管理员</li>
         <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToGuest">围观群众</li>
-        <li class="ctx-item menu-item" @click="selected">移除该队员</li>
+        <li class="ctx-item menu-item" @click="selected">{{lastItem}}</li>
     </context-menu>
   </div>
 </template>
@@ -33,7 +33,9 @@ export default {
       isRole: false,
       rotate: false,
       isSelf: false,
-      isManager: false
+      isManager: false,
+      showMenu: false,
+      align: 'left'
     }
   },
   created () {
@@ -43,18 +45,22 @@ export default {
   methods: {
     selected () {
       this.$emit('select', this.index)
+      this.showMenu = false
     },
     roleAction () {
       if (this.isRole) {
         this.rotate = !this.rotate
         this.$refs.ctxMenu.open()
+        this.showMenu = true
       }
     },
     setRoleToManager () {
       this.roleModify('manager')
+      this.showMenu = false
     },
     setRoleToGuest () {
       this.roleModify('guest')
+      this.showMenu = false
     },
     roleModify (value) {
       let teamId = useMgr.getUserTeam()._id
@@ -68,8 +74,8 @@ export default {
         this.$emit('roleUpdate')
       })
     },
-    close() {
-      this.rotate = !this.rotate
+    onCtxClose() {
+      this.showMenu = false
     },
     valueChanged () {
       // alert('changed')
@@ -100,6 +106,9 @@ export default {
     },
     lastItem () {
       return this.isSelf ? '离开该团队' : '移除该队员'
+    },
+    iconStyle () {
+      return this.showMenu ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}
     }
   },
   watch: {
@@ -143,6 +152,9 @@ export default {
     }
     .teamItem-owner {
       margin-right: 24px;
+      & > img {
+        display: inline-block;
+      }
     }
     .teamItem-email {
       display: inline-block;
@@ -173,13 +185,8 @@ export default {
     color: #FF001F;
   }
       
-  .postion-origin {
-    transition: all 1s;
-  }
-
-  .postion-rotate {
-    transform: rotate(-180deg);
-    transition: all 1s;
+  .teamItem-owner-img {
+    transition: all 300ms ease-out;
   }
 
   .header-background-red {

@@ -90,14 +90,14 @@
           <i class="icon-ic_download_s"></i>
         </div>
         <p>总下载次数</p>
-        <div class="downloadCount">1221212</div>
+        <div class="downloadCount"></div>
       </div>
       <div class="todaywrapper">
         <div class="downloadwrapper">
           <i class="icon-ic_download_s"></i>
         </div>
         <p>今日下载次数</p>
-        <div class="downloadCount">1221212</div>
+        <div class="downloadCount"></div>
       </div>
     </div>
 
@@ -147,6 +147,13 @@
         this.userteam = getUserTeam()
         this.getAppVersionListData()
       })
+
+      this.bus.$on('uploadSuccess', () => {
+        this.getAppVersionListData()
+      })
+    },
+    destroyed() {
+      this.bus.$off('uploadSuccess')
     },
     methods: {
       getAppVersionListData() {
@@ -191,7 +198,6 @@
       // 发布应用
       releaseApp(item) {
         AppResourceApi.releaseApp(this.userteam._id, this.appInfo._id, item._id, item.versionCode, true).then((res) => {
-          console.log(res)
           this.$message.success(res.message)
         }, reject => {
 
@@ -220,7 +226,7 @@
             return `${item.downloadCount}/不限`
           }
         } else {
-          return `下载次数${item.downloadCount}`
+          return `${item.downloadCount}`
         }
       },
       cancel() {
@@ -245,7 +251,7 @@
         // 灰度版本
         if (this.appInfo.grayReleaseVersionId && this.appInfo.grayReleaseVersionId === item._id) {
             return 'version-table-one-gray'
-        } else {
+        } else if (this.appInfo.releaseVersionId && this.appInfo.releaseVersionId === item._id) {
           return 'version-table-one-lighting'
         }
       }
@@ -346,7 +352,6 @@
     color: #aaa;
   }
   .appVersion-wrapper .version-table {
-    margin-bottom: 12px;
   }
   .version-table-one-gray {
     display: inline-block;
@@ -373,6 +378,7 @@
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
+    margin-top: 12px;
   }
   .appversion-footerwrapper .totalwrapper {
     width: 50%;

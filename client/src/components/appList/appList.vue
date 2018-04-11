@@ -33,7 +33,7 @@
     </collectionView>
 
     <uploadApp v-if="this.showUploadView" :teamId="this.currentTeam._id" :appFile="this.file"
-               v-show="this.showUploadView" @closeUpload="closeUploadMethod"
+               @closeUpload="closeUploadMethod"
                @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
   </div>
@@ -85,9 +85,11 @@
       },
       closeUploadMethod() {
         this.showUploadView = false
+        this.$refs.referenceUpload.value = ''
       },
       uploadSuccessMethod() {
         this.showUploadView = false
+        this.$refs.referenceUpload.value = ''
         this.loadAppList()
       },
       clickIosPlatform() {
@@ -179,26 +181,22 @@
   .applist-wrapper {
     padding-left: 20px;
     padding-right: 20px;
+    min-width: 660px;
   }
-
   .applist-header {
     height: 75px;
     padding-top: 25px;
   }
-
   .applist-header .uploadWrapper {
     width: 144px;
     float: left;
   }
-
   .applist-header .uploadWrapper i {
     margin-right: 15px;
   }
-
   .applist-header-right {
     float: right;
   }
-
   .applist-header .search-wrapper {
     width: 312px;
     height: 48px;
@@ -207,7 +205,6 @@
     position: relative;
     display: inline-block;
   }
-
   .el-icon-search {
     position: absolute;
     left: 15px;
@@ -264,18 +261,13 @@
     height: 100%;
     text-align: center;
   }
-
   .platformImg {
     line-height: 48px;
     font-size: 26px;
   }
 
   .platformActive {
-    background-color: #ddd;
+    background-color: #e0e4fc;
   }
-  @media screen and (max-width: 863px) {
-    .applist-header .left {
-      display: none;
-    }
-  }
+
 </style>

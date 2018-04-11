@@ -19,7 +19,7 @@ var mime = require('mime')
 var path = require('path')
 var os = require('os')
 var uuidV4 = require('uuid/v4')
-var apkParser3 = require('apk-parser3')
+var apkParser3 = require('../library/apkparser/apkparser')
 var Team = require('../model/team')
 var AdmZip = require('adm-zip')
 var mkdirp = require('mkdirp')
@@ -127,13 +127,14 @@ async function parseAppAndInsertToDB(file,user,team) {
       await version.save()
       return {'app':app,'version':version}
     }
-    var version = Version.findOne({appId: app.id})
+    var version = await Version.findOne({appId: app.id, versionCode:info.versionCode})
     if (!version) {
-      version = new Version(
-        {appId: app.id, bundleId: app.bundleId, 
-        versionCode: info.versionCode, versionName: info.version, 
-        downloadUrl: info.downloadUrl,icon:info.icon})
-      version.save()
+      info.uploader = user.username;
+      info.uploaderId = user._id;
+      info.size = fs.statSync(fileRealPath).size
+      var version = Version(info)
+      version.appId = app._id;
+      await version.save()
       return {'app':app,'version':version}
     } else {
       let err = Error()
@@ -213,9 +214,18 @@ async function extractIpaIcon(filename,guid,team) {
       }
       //把文件写入到tmp文件夹
       await writeFile(tmpOut, buffer)
-      var upperDirectory = path.resolve(__dirname, '..')
+      var pnfdefryDir = path.join(__dirname, '..','library/pngdefry')
         //写入成功判断icon是否是被苹果破坏过的图片
-      var {stderr,stdout} = await exec(path.join(upperDirectory, 'pngdefry', 'pngfy -s _tmp ' + tmpOut));
+      var exeName = '';
+      if (os.type() === 'Darwin') {
+          exeName = 'pngfy-osx';
+      } else if (os.type() === 'Linux') {
+          exeName = 'pngfy-linux';
+      } else {
+          throw new Error('Unknown OS!');
+      }
+
+      var {stderr,stdout} = await exec(path.join(pnfdefryDir, exeName + ' -s _tmp ',tmpOut));
       if (stderr) {
         throw stderr;
       }

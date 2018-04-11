@@ -7,19 +7,19 @@
       <div class="user-name">爱发布 fabu.love</div>
 
       <div class="user-item" style="margin-top: 24.87vh">
-        <img src="../../assets/ic_api1.png"/>
+        <span class="icon-ic_api_s"></span>
         <p>API文档</p>
       </div>
       <div class="user-item">
-        <img src="../../assets/ic_help1.png"/>
+        <span class="icon-ic_help_s"></span>
         <p>Help</p>
       </div>
       <div class="user-item">
-        <img src="../../assets/ic_github1.png"/>
+        <span class="icon-ic_github_s"></span>
         <p>Github</p>
       </div>
       <div class="user-item">
-        <img src="../../assets/ic_about1.png"/>
+        <span class="icon-ic_about_s"></span>
         <p>About</p>
       </div>
     </div>
@@ -41,7 +41,7 @@
             class="user-login-form-input"
             v-model="username"
             placeholder="请输入用户名"
-            prefix-icon="el-icon-edit">
+            prefix-icon="icon-ic_name">
           </el-input>
 
           <el-input
@@ -50,7 +50,7 @@
             placeholder="请输入邮箱"
             v-model="email"
             type="email"
-            prefix-icon="el-icon-time">
+            prefix-icon="icon-ic_email">
           </el-input>
 
           <el-input
@@ -58,7 +58,7 @@
             placeholder="请输入密码"
             v-model="password"
             type="password"
-            prefix-icon="el-icon-time">
+            prefix-icon="icon-ic_pswd">
           </el-input>
 
           <el-button @click="onSubmit"
@@ -176,7 +176,6 @@
             saveUserInfo(user)
             this.$router.push('/')
           }, reject => {
-            this.$message.error(reject)
             this.showLoading = false
           })
       },
@@ -202,8 +201,10 @@
           'password': this.password,
           'email': this.email
         }
+        this.showLoading = true
         LoginApi.register(body)
           .then(response => {
+            this.showLoading = false
             console.log(response)
             this.$message({
               message: '恭喜你，注册成功',
@@ -213,7 +214,7 @@
               this.onRegister()
             }, 500)
           }, reject => {
-            this.$message.error(reject)
+            this.showLoading = false
           })
       },
       requestPassword() {
@@ -367,6 +368,21 @@
     height: 48px;
     border: 1px #6477F2 solid;
   }
+
+
+  .user .el-input__prefix{
+    padding-left: 18px;
+  }
+
+  .user .el-input__prefix i{
+    line-height: 48px;
+  }
+
+  .user .el-input--prefix .el-input__inner {
+    padding-left: 50px;
+    line-height: 48px;
+  }
+
 
   .user-register-form-btn,.user-login-form-btn, .user-login-form-btn:hover {
     width: 312px;

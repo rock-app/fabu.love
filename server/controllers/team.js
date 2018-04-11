@@ -111,6 +111,43 @@ module.exports = class TeamRouter {
         ctx.body = responseWrapper(true, "团队已解散")
     }
 
+    @request('post', '/api/team/{teamId}/role')
+    @summary('修改用户角色')
+    @tag
+    @path({
+        teamId: {
+            type: 'string',
+            required: true
+        }
+    })
+    @body({memberId:{type:'string',required:true},role:{type:'string',required:true,description:"传入manager或者guest"}})
+    static async changeMemberRole(ctx, next) {
+        var { teamId } = ctx.validatedParams;
+        var user = ctx.state.user.data;
+        var body = ctx.request.body
+        var team = validator.userInTeamIsManager(user._id,teamId)
+        if (!team) {
+            throw new Error("没有权限修改该用户角色")
+        }
+
+        if (role != 'manager' && role != 'guest') {
+            throw new Error("请传入正确的角色参数")
+        }
+        await User.updateOne({_id:body.memberId,'teams._id':teamId},{
+            $set:{
+                'teams.$.role':body.role
+            }
+        })
+
+        await Team.updateOne({_id:teamId,'members._id':memberId},{
+            $set:{
+                'members.$.role':body.role
+            }
+        })
+
+        ctx.body = responseWrapper(true, "用户角色已更新")
+    }
+
     @request('post', '/api/team/{teamId}/invite')
     @summary('邀请某成员加入团队')
     @tag
@@ -195,20 +232,6 @@ module.exports = class TeamRouter {
             .run({useMongoose: true});
 
 
-        // await Team.update({_id:teamId},{
-        //         $push:{members:{ $each: teamList }}
-        //     })
-        // await User.update({email:{ $in : emailList }},{
-        //         $push: {
-        //             teams: {
-        //                 _id: teamId,
-        //                 name: team.name,
-        //                 icon: team.icon,
-        //                 role: body.role
-        //             }
-        //         }
-        //     })
-
         for (var u of userList){
             var message = new Message();
             message.category = "INVITE";
@@ -224,7 +247,7 @@ module.exports = class TeamRouter {
             // }, 'jwt-secret')
             message.save();
         }
-        // Mail.send(emailList,"有用户邀请您加入爱发布",`${user.username}邀请您加入${team.name}"团队.如果您还没有注册爱发布，请点击${config.baseUrl}注册`)
+        Mail.send(emailList,"有用户邀请您加入爱发布",`${user.username}邀请您加入${team.name}"团队.如果您还没有注册爱发布，请点击${config.baseUrl}注册`)
         //TODO 发送邮件邀请
         ctx.body = responseWrapper(true, "已发送邮件邀请该用户")
     }
@@ -314,11 +337,9 @@ module.exports = class TeamRouter {
         var { teamId } = ctx.validatedParams;
         var user = ctx.state.user.data;
         var body = ctx.request.body
-        var team = await Team.findOne({
-            _id: teamId,
-        },"-members")
+        var team = validator.userInTeamIsManager(user._id,teamId)
         if (!team) {
-            throw new Error("团队不存在")
+            throw new Error("团队不存在或者您没有权限修改该信息")
         }
         await Team.updateOne({
             _id: teamId,

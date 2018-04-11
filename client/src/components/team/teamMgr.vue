@@ -318,8 +318,10 @@ export default {
       height: 120px;
       line-height: 120px;
       border-bottom: 1px solid #F4F7FD;
+      margin-left: 24px;
       .teamMgr-edit {
-        margin-left: 24px;
+        padding-left: 24px;
+        padding-right: 24px;
         height: 18px;
         width: 4px;
         margin-top: -4px;
@@ -347,6 +349,7 @@ export default {
     }
     .teamMgr-collection {
       margin: 0rem 2rem;
+      min-height: 300px;
       background-color: white;
       height: 100%;
       border-radius: 20px 20px 0px 0px;

@@ -7,6 +7,9 @@
           ref="popover"
           placement="bottom-start"
           width="220"
+          left="200"
+          @show="popovershow"
+          @hide="popoverhide"
           trigger="click"
           :disabled="!this.isAppList || teamArr.length === 0"
           :visible-arrow="false">
@@ -45,18 +48,6 @@
         </li>
       </ul>
     </div>
-
-    <el-dialog title="创建团队" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="团队名称">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="sure">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -158,18 +149,6 @@
         // 刷新app列表
         this.bus.$emit('refreshList')
       },
-      sure() {
-        if (this.form.name.length === 0) {
-          this.$message.error('请输入团队名称')
-          return
-        }
-        UserApi.createdTeam(this.form.name).then((res) => {
-          this.$message.success('创建成功')
-        }, reject => {
-
-        })
-        this.dialogFormVisible = false
-      },
       clickTeamBtn() {
         if (this.isAppList) {
         } else {
@@ -177,6 +156,12 @@
       },
       clickFlagBtn() {
         this.$router.push('/apps')
+      },
+      popovershow() {
+        this.$refs.arrow.style.transform = `rotate(-180deg)`
+      },
+      popoverhide() {
+        this.$refs.arrow.style.transform = `rotate(0deg)`
       }
     }
   }
@@ -187,6 +172,10 @@
 
   .headernav-wrapper {
   }
+  .el-popover {
+    top: 60px !important;
+    left: 200px !important;
+  }
   .headernav-wrapper .leftWrapper {
     float: left;
     display: flex;
@@ -195,8 +184,8 @@
   }
 
   .leftWrapper-item {
-    height: 44px;
-    line-height: 44px;
+    height: 48px;
+    line-height: 48px;
     //border-bottom: solid 1px #eee;
     box-sizing: border-box;
   }

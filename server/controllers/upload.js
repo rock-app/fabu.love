@@ -218,14 +218,14 @@ async function extractIpaIcon(filename,guid,team) {
         //写入成功判断icon是否是被苹果破坏过的图片
       var exeName = '';
       if (os.type() === 'Darwin') {
-          exeName = 'pngdefry-osx';
+          exeName = 'pngfy-osx';
       } else if (os.type() === 'Linux') {
-          exeName = 'pngdefry-linux';
+          exeName = 'pngfy-linux';
       } else {
           throw new Error('Unknown OS!');
       }
 
-      var {stderr,stdout} = await exec(path.join(pnfdefryDir, exeName, 'pngfy -s _tmp ',tmpOut));
+      var {stderr,stdout} = await exec(path.join(pnfdefryDir, exeName + ' -s _tmp ',tmpOut));
       if (stderr) {
         throw stderr;
       }

@@ -157,11 +157,17 @@ export default {
     },
     modifyTeamName () {
       let teamId = useMgr.getUserTeam()._id
-      TeamApi.updateTeamName(teamId, this.teamName).then(resp => {
+      let name = this.teamName
+      TeamApi.updateTeamName(teamId, name).then(resp => {
         this.$message({
           type: resp.success ? 'success' : 'error',
           message: resp.message
         })
+        if (resp.success) {
+          let team = useMgr.getUserTeam()
+          team.name = name
+          this.bus.$emit('teamNameUpdate')
+        }
       })
       this.editing = false
     },
@@ -318,7 +324,7 @@ export default {
       height: 120px;
       line-height: 120px;
       border-bottom: 1px solid #F4F7FD;
-      margin-left: 24px;
+      margin-left: 216px;
       .teamMgr-edit {
         padding-left: 24px;
         padding-right: 24px;

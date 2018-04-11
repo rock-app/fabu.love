@@ -1,18 +1,19 @@
 <template>
-  <div class="teamItem ripple" @click="selected">
+  <div class="teamItem ripple">
     <div>
       <div class="teamItem-circle" :class="color">{{lastName}}</div>
       <label class="teamItem-name">{{value.username}}</label>
       <div class="teamItem-email">| {{value.email}}</div>
     </div>
-    <div class="teamItem-owner">
+    <div class="teamItem-owner" @click.stop="roleAction">
       <label>{{ownerString}}</label>
-      <img v-show="isRole" src="../../assets/ic_moreqx.png"/>
+      <img v-show="isRole" :class="[rotate ? 'fa fa-arrow-down position-origin' : 'fa fa-arrow-down position-rotate']" src="../../assets/ic_moreqx.png"/>
     </div>
     <context-menu class="ctx-menu" ref="ctxMenu">
-        <li class="ctx-item" @click="editAction">编辑团队名称</li>
-        <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
-      </context-menu>
+        <li class="ctx-item" @click="setRoleToManager">管理员</li>
+        <li class="ctx-item" @click="setRoleToGuest">队员</li>
+        <li class="ctx-item menu-item" @click="selected">移除该队员</li>
+    </context-menu>
   </div>
 </template>
 
@@ -28,7 +29,8 @@ export default {
   data () {
     return {
       color: 'header-background-red',
-      isRole: false
+      isRole: false,
+      rotate: false
     }
   },
   created () {
@@ -42,7 +44,21 @@ export default {
       this.$emit('select', this.index)
     },
     roleAction () {
+      this.rotate = !this.rotate
       this.$refs.ctxMenu.open()
+      alert(this.rotate)
+    },
+    setRoleToManager () {
+
+    },
+    setRoleToGuest () {
+
+    },
+    roleModify () {
+
+    },
+    close() {
+      this.rotate = !this.rotate
     }
   },
   computed: {
@@ -105,38 +121,35 @@ export default {
       font-size: 1rem;
     }
   }
-  .teamItem:hover {
-    background-color: #F4F7FD;
+
+  .ctx-menu {
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 0px solid rgba(0, 0, 0, .15);
+    border-radius: .25rem;
+    -moz-box-shadow:0 0 5px #D5DFED; 
+    -webkit-box-shadow:0 0 5px #D5DFED; box-shadow:0 0 5px #D5DFED;
+    .ctx-menu-container {
+      box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
+    }
   }
-  .ripple {
-    position: relative;
-    //隐藏溢出的径向渐变背景
-    overflow: hidden;
+  .ctx-item {
+    height: 44px;
+    line-height: 44px;
+  }
+  .menu-item {
+    color: #FF001F;
+  }
+      
+  .postion-origin {
+    transition: all 1s;
   }
 
-  .ripple:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    //设置径向渐变
-    background-image: radial-gradient(circle, #666 10%, transparent 10.01%);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    transform: scale(10, 10);
-    opacity: 0;
-    transition: transform .3s, opacity .5s;
-  }
-
-  .ripple:active:after {
-    transform: scale(0, 0);
-    opacity: .3;
-    //设置初始状态
-    transition: 0s;
+  .postion-rotate {
+    transform: rotate(-180deg);
+    transition: all 1s;
   }
 
   .header-background-red {

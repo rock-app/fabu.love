@@ -11,6 +11,7 @@
     <div class="teamMgr-collection">
       <div class="teamMgr-content">
         <div class="teamMgr-group-header">
+          <img class="img-invite" src="../../assets/ic_addmmb.png" @click="addClick"/>
         </div>
       <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected"></item>
         <div class="teamMgr-group-footer">
@@ -249,10 +250,6 @@ export default {
 </script>
 
 <style lang="scss">
-  .ctx-menu-container {
-    box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
-  }
-
   .teamMgr {
     position: relative;
     height: 100%;
@@ -269,7 +266,6 @@ export default {
         width: 4px;
         margin-top: -4px;
       }
-      
       .ctx-menu {
         list-style: none;
         background-color: #fff;
@@ -306,21 +302,15 @@ export default {
         height: 72px;
         line-height: 100px;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         margin-left: 24px;
-        & > div:first-child  {
-          height: 22px;
-          display: flex;
-          align-items: center;
-          img {
-            width: 22px;
-            height: 22px;
-            margin-left: 10px;
-          }
-        }
-        & > label:last-child {
+        & > img {
+          margin-top: -72px;
           margin-right: 24px;
+          height: 48px;
+          width: 48px;
+          z-index: 400px;
         }
       }
 

@@ -30,7 +30,6 @@
         "mongoose": "5.0.4",
         "koa-jwt": "^3.3.0",
         "jsonwebtoken": "^7.4.1",
-        "apk-parser3": "^0.1.7",
         "adm-zip": "^0.4.7",
         "koa-body": "^2.5.0",
         "lodash": "^4.17.4",

@@ -1,15 +1,27 @@
 <template>
-  <div class="teamItem ripple" @click="selected">
+  <div class="teamItem ripple">
     <div>
       <div class="teamItem-circle" :class="color">{{lastName}}</div>
       <label class="teamItem-name">{{value.username}}</label>
+      <div class="teamItem-email">| {{value.email}}</div>
     </div>
-    <div>{{value.email}}</div>
-    <div class="teamItem-owner">{{ownerString}}</div>
+    <div class="teamItem-owner" @click.stop="roleAction">
+      <label>{{ownerString}}</label>
+      <img v-show="isRole" :class="[rotate ? 'fa fa-arrow-down position-origin' : 'fa fa-arrow-down position-rotate']" src="../../assets/ic_moreqx.png"/>
+    </div>
+    <context-menu class="ctx-menu" ref="ctxMenu">
+        <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToManager">管理员</li>
+        <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToGuest">围观群众</li>
+        <li class="ctx-item menu-item" @click="selected">移除该队员</li>
+    </context-menu>
   </div>
 </template>
 
 <script>
+import * as useMgr from '../../mgr/userMgr'
+import * as TeamApi from '../../api/moudle/teamApi'
+import contextMenu from 'vue-context-menu'
+
 export default {
   props: {
     value: Object,
@@ -17,17 +29,58 @@ export default {
   },
   data () {
     return {
-      color: 'header-background-red'
+      color: 'header-background-red',
+      isRole: false,
+      rotate: false,
+      isSelf: false,
+      isManager: false
     }
   },
-  mounted () {
-    let randomNumber = Math.floor(Math.random() * Math.floor(4))
-    this.color = ['header-background-red', 'header-background-green', 
-    'header-background-orange', 'header-background-purple'][randomNumber]
+  created () {
+    this.valueChanged()
+    // this.itemStyle = isSelf ? 'disable' : ''
   },
   methods: {
     selected () {
       this.$emit('select', this.index)
+    },
+    roleAction () {
+      if (this.isRole) {
+        this.rotate = !this.rotate
+        this.$refs.ctxMenu.open()
+      }
+    },
+    setRoleToManager () {
+      this.roleModify('manager')
+    },
+    setRoleToGuest () {
+      this.roleModify('guest')
+    },
+    roleModify (value) {
+      let teamId = useMgr.getUserTeam()._id
+      let memberId = this.value._id
+      let role = value
+      TeamApi.modifyRole(teamId, memberId, role).then(resp => {
+        this.$message({
+          message: resp.message,
+          type: resp.success ? 'success' : 'error'
+        })
+        this.$emit('roleUpdate')
+      })
+    },
+    close() {
+      this.rotate = !this.rotate
+    },
+    valueChanged () {
+      // alert('changed')
+      let randomNumber = Math.floor(Math.random() * Math.floor(4))
+      this.isSelf = useMgr.getUserId() === this.value._id
+      // alert(this.isSelf ? '是自己' : '不是自己')
+      this.isManager = useMgr.getUserTeam().role !== 'guest'
+      // alert(this.isManager ? '是管理者' : '不是管理者')
+      this.isRole = (this.isManager || this.isSelf) && this.value.role !== 'owner'
+      this.color = ['header-background-red', 'header-background-green', 
+      'header-background-orange', 'header-background-purple'][randomNumber]
     }
   },
   computed: {
@@ -44,7 +97,18 @@ export default {
         default:
           return '围观群众'
       }
+    },
+    lastItem () {
+      return this.isSelf ? '离开该团队' : '移除该队员'
     }
+  },
+  watch: {
+    value () {
+      this.valueChanged()
+    }
+  },
+  components: {
+    contextMenu
   }
 }
 </script>
@@ -73,44 +137,49 @@ export default {
       margin-left: 24px;
     }
     .teamItem-name {
-        margin-left: 10px;
+      margin-left: 1rem;
+      color: #354052;
+      font-size: 1rem;
     }
     .teamItem-owner {
       margin-right: 24px;
     }
-  }
-  .teamItem:hover {
-    background-color: #F4F7FD;
-  }
-  .ripple {
-    position: relative;
-    //隐藏溢出的径向渐变背景
-    overflow: hidden;
+    .teamItem-email {
+      display: inline-block;
+      margin-left: 1rem;
+      color: #AABAD2;
+      font-size: 1rem;
+    }
   }
 
-  .ripple:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    //设置径向渐变
-    background-image: radial-gradient(circle, #666 10%, transparent 10.01%);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    transform: scale(10, 10);
-    opacity: 0;
-    transition: transform .3s, opacity .5s;
+  .ctx-menu {
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 0px solid rgba(0, 0, 0, .15);
+    border-radius: .25rem;
+    -moz-box-shadow:0 0 5px #D5DFED; 
+    -webkit-box-shadow:0 0 5px #D5DFED; box-shadow:0 0 5px #D5DFED;
+    .ctx-menu-container {
+      box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
+    }
+  }
+  .ctx-item {
+    height: 44px;
+    line-height: 44px;
+  }
+  .menu-item {
+    color: #FF001F;
+  }
+      
+  .postion-origin {
+    transition: all 1s;
   }
 
-  .ripple:active:after {
-    transform: scale(0, 0);
-    opacity: .3;
-    //设置初始状态
-    transition: 0s;
+  .postion-rotate {
+    transform: rotate(-180deg);
+    transition: all 1s;
   }
 
   .header-background-red {

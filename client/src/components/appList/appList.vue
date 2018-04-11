@@ -244,6 +244,7 @@
     font-size: 0px;
     border: solid 1px $mainColor;
     margin-right: 22px;
+    vertical-align: top;
   }
 
   .applist-header .platform-wrapper .platform-ios {

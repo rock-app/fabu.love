@@ -90,7 +90,9 @@
         this.updataTeam()
       })
       // 修改团队名称
-      this.bus.$on('teamNameUpdate', () => {
+      this.bus.$on('teamNameUpdate', (item) => {
+        // 更新当前团队
+        saveUserTeam(item)
         // 更新团队名称
         this.updataTeam()
       })
@@ -116,6 +118,7 @@
           this.teamArr = res.data.teams
           // 存最新的teamarr
           updateTeamArr(this.teamArr)
+          this.userInfo = getUserInfo()
           this.teamArr = this.userInfo.teamArr
           this.currentTeam = getUserTeam()
         }, reject => {

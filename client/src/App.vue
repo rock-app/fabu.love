@@ -29,7 +29,7 @@
     }
   }
 </script>
-
+<!-- 引入组件库 -->
 <style lang="scss">
   @import "common/scss/reset";
   @import "common/scss/element";

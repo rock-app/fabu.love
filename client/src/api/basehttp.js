@@ -66,8 +66,6 @@ export function postHttp (url, body, params) {
 
 export function configAxios() {
 
-  
-
   // vue.axios.defaults.baseURL = 'http://119.29.62.204:9090/'
   vue.axios.defaults.baseURL = 'http://localhost:3008/'
 

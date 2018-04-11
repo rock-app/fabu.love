@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import {Button, Dialog, Menu, Input, Switch, Popover, Form, Upload, Progress, Badge, Container, Header, Aside, Main, Footer, Loading, Message, MenuItem, Table, TableColumn, FormItem, Pagination, Radio, MessageBox} from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+
 import router from './router'
 import axios from 'axios'
 import {configAxios} from './api/basehttp'
@@ -14,10 +14,9 @@ import infiniteScroll from 'vue-infinite-scroll'
 Vue.use(infiniteScroll)
 
 Vue.config.productionTip = false
+
 Vue.prototype.axios = axios
-
 Vue.prototype.router = router
-
 Vue.prototype.bus = new Vue()
 
 Vue.use(Radio)

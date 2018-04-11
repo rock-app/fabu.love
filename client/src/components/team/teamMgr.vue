@@ -318,8 +318,10 @@ export default {
       height: 120px;
       line-height: 120px;
       border-bottom: 1px solid #F4F7FD;
+      margin-left: 24px;
       .teamMgr-edit {
-        margin-left: 24px;
+        padding-left: 24px;
+        padding-right: 24px;
         height: 18px;
         width: 4px;
         margin-top: -4px;

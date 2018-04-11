@@ -29,5 +29,5 @@ export function updateTeamName(teamId, name) {
 
 export function dissolveTeam(teamId) {
   let url = `api/team/dissolve/${teamId}`
-  return postHttp(url)
+  return deleteHttp(url)
 }

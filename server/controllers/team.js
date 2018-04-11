@@ -93,8 +93,8 @@ module.exports = class TeamRouter {
 
         var membersId = []
         if (team.members.length > 0) {
-            for (m in team.members){
-                membersId.push(team.members.id)
+            for (var m of team.members){
+                membersId.push(m.id)
             }
         }
         

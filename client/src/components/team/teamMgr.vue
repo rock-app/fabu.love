@@ -2,7 +2,7 @@
   <div class="teamMgr">
     <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;right: 72px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
     <el-button class="uploadWrapper button-style-main" @click="createTeam">
-      <img style="{width: 12; height: 12px;}" src="../../assets/ic_add@2x.png"> 
+      <img style="{width: 12; height: 12px;}" src="../../assets/ic_add@2x.png">
       <label> 新建团队</label>
     </el-button>
     <div class="teamMgr-header">
@@ -18,7 +18,7 @@
         <div class="teamMgr-group-header">
           <img src="../../assets/ic_addmmb.png" @click="addClick"/>
         </div>
-      <item v-for="(member, index) in members" :key="index" :index="index" 
+      <item v-for="(member, index) in members" :key="index" :index="index"
       v-model="members[index]" @select="itemSelected" @roleUpdate="requestMembers"></item>
         <div class="teamMgr-group-footer">
           <div> 共 {{members.length}} 名成员 </div>
@@ -87,7 +87,7 @@
     </el-dialog>
   </div>
 </template>
-  
+
 <script>
 import Item from './teamItem'
 import * as TeamApi from '../../api/moudle/teamApi'
@@ -114,9 +114,9 @@ export default {
   },
   mounted () {
     this.requestMembers()
-    this.isOwner = useMgr.getUserTeam().role 
+    this.isOwner = useMgr.getUserTeam().role
     this.bus.$on('refreshList', () => {
-      
+
       this.requestMembers()
     })
   },
@@ -157,11 +157,17 @@ export default {
     },
     modifyTeamName () {
       let teamId = useMgr.getUserTeam()._id
-      TeamApi.updateTeamName(teamId, this.teamName).then(resp => {
+      let name = this.teamName
+      TeamApi.updateTeamName(teamId, name).then(resp => {
         this.$message({
           type: resp.success ? 'success' : 'error',
           message: resp.message
         })
+        if (resp.success) {
+          let team = useMgr.getUserTeam()
+          team.name = name
+          this.bus.$emit('teamNameUpdate', team)
+        }
       })
       this.editing = false
     },
@@ -318,7 +324,7 @@ export default {
       height: 120px;
       line-height: 120px;
       border-bottom: 1px solid #F4F7FD;
-      margin-left: 24px;
+      margin-left: 216px;
       .teamMgr-edit {
         padding-left: 24px;
         padding-right: 24px;
@@ -333,7 +339,7 @@ export default {
         background-clip: padding-box;
         border: 0px solid rgba(0, 0, 0, .15);
         border-radius: .25rem;
-        -moz-box-shadow:0 0 5px #D5DFED; 
+        -moz-box-shadow:0 0 5px #D5DFED;
         -webkit-box-shadow:0 0 5px #D5DFED; box-shadow:0 0 5px #D5DFED;
         .ctx-menu-container {
           box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
@@ -358,7 +364,7 @@ export default {
       width: 66%;
       margin: auto;
       background-color: white;
-      
+
       .teamMgr-group-header {
         height: 72px;
         line-height: 100px;

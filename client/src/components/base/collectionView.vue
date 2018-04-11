@@ -211,4 +211,14 @@
   .collectionView-wrapper-ul .itemWrapper .preview {
     margin-right: 24px;
   }
+  /*@media screen and (max-width: 840px) {*/
+    /*.collectionView-wrapper .itemWrapper {*/
+      /*width: 220px;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 760px) {*/
+    /*.collectionView-wrapper .itemWrapper {*/
+      /*width: 240px;*/
+    /*}*/
+  /*}*/
 </style>

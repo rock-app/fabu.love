@@ -181,7 +181,6 @@
   .applist-wrapper {
     padding-left: 20px;
     padding-right: 20px;
-    min-width: 600px;
   }
   .applist-header {
     height: 75px;
@@ -265,13 +264,7 @@
     line-height: 48px;
     font-size: 26px;
   }
-
   .platformActive {
     background-color: #e0e4fc;
-  }
-  @media screen and (max-width: 863px) {
-    .applist-header .left {
-      display: none;
-    }
   }
 </style>

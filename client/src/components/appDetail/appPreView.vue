@@ -127,7 +127,7 @@
       clickDownLoadBtn() {
         if (this.isIos) {
           const a = document.createElement('a')
-          a.setAttribute('href', `itms-services://?action=download-manifest&url=${this.appVersionInfo.downloadUrl}/plist/${this.appBaseData.appName}`)
+          a.setAttribute('href', `itms-services://?action=download-manifest&url=${this.axios.defaults.baseURL}/api/plist/${this.appBaseData._id}/${this.versionInfo._id}`)
           a.click()
         } else {
           const a = document.createElement('a')

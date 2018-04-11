@@ -54,3 +54,15 @@ export function getUserTeam() {
   return StorageMgr.getItem(CURRENT_USERTRAM_KEY)
 }
 
+// 更新团队名称
+export function updateCurrentTeamName(item) {
+  let user = StorageMgr.getItem(USERINFO_KEY)
+  user.teamArr.forEach((team) => {
+    if (team._id === item._id) {
+      team.name = item.name
+    }
+  })
+  // 存储
+  StorageMgr.setItem(USERINFO_KEY, user)
+}
+

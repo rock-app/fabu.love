@@ -41,6 +41,7 @@ Vue.use(Main)
 Vue.use(Footer)
 Vue.use(MenuItem)
 
+Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message

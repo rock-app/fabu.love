@@ -89,14 +89,14 @@
         <div class="downloadwrapper">
           <i class="icon-ic_download_s"></i>
         </div>
-        <p>总下载次数</p>
+        <p>总下载次数  {{this.appInfo.totalDownloadCount}}</p>
         <div class="downloadCount"></div>
       </div>
       <div class="todaywrapper">
         <div class="downloadwrapper">
           <i class="icon-ic_download_s"></i>
         </div>
-        <p>今日下载次数</p>
+        <p v-html="getTodayCount()"></p>
         <div class="downloadCount"></div>
       </div>
     </div>
@@ -164,10 +164,14 @@
 
         })
       },
+      // 下载应用
       clickDownLoad(item) {
         const a = document.createElement('a')
         a.setAttribute('href', `${this.axios.defaults.baseURL}${item.downloadUrl}`)
         a.click()
+        AppResourceApi.downloadedCount(this.appInfo._id, item._id).then(() => {
+        }, reject => {
+        })
       },
       clickEditor(item) {
         this.showEditorVersion = true
@@ -257,6 +261,13 @@
             return 'version-table-one-gray'
         } else if (this.appInfo.releaseVersionId && this.appInfo.releaseVersionId === item._id) {
           return 'version-table-one-lighting'
+        }
+      },
+      getTodayCount() {
+        if (new Date(this.appInfo.todayDownloadCount.date).toDateString() === new Date().toDateString()) {
+          return `今日下载次数  ${this.appInfo.todayDownloadCount.count}`
+        } else {
+          return '今日下载次数  0'
         }
       }
     }

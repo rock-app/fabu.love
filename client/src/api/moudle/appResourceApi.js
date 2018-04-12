@@ -74,3 +74,9 @@ export function updateNote(teamId, id, versionId, body) {
   let url = `api/apps/${teamId}/${id}/${versionId}/profile`
   return postHttp(url, body)
 }
+
+// 统计下载次数
+export function downloadedCount(appId, versionId) {
+  let url = `api/count/${appId}/${versionId}`
+  return getHttp(url)
+}

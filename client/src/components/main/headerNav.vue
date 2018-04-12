@@ -85,6 +85,10 @@
       this.bus.$on('allreadMessage', () => {
         this.redDocHidden = true
       })
+      // 解散团队
+      this.bus.$on('dissolveTeam', (team) => {
+        this.updataTeam()
+      })
       // 创建团队
       this.bus.$on('createTeam', () => {
         this.updataTeam()
@@ -110,14 +114,20 @@
       this.bus.$off('appdetail')
       this.bus.$off('allreadMessage')
       this.bus.$off('createTeam')
+      this.bus.$off('dissolveTeam')
     },
     methods: {
-      updataTeam() {
+      // dissolve是否是解散团队
+      updataTeam(dissolve = false) {
         // 获取我的团队列表
         UserApi.getUserTeams().then((res) => {
           this.teamArr = res.data.teams
           // 存最新的teamarr
           updateTeamArr(this.teamArr)
+          if (dissolve) {
+            saveUserTeam(this.teamArr[0])
+          } else {
+          }
           this.userInfo = getUserInfo()
           this.teamArr = this.userInfo.teamArr
           this.currentTeam = getUserTeam()

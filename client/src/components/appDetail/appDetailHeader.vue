@@ -13,7 +13,12 @@
           <div class="rightwrapper" style="z-index: 1">
 
             <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传新版本</el-button>
-            <input ref="referenceUpload" accept=".ipa, .apk"  @change="referenceUpload" type="file" style="position: absolute;top: 36px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer">
+            <input
+              title="上传应用"
+              ref="referenceUpload"
+              accept=".ipa, .apk"
+              @change="referenceUpload"
+              type="file" style="position: absolute;top: 36px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer">
             <button class="preview button-style-border" @click="clickPreviewBtn">预览</button>
             <button class="delete button-style-border" @click="delectApp">删除</button>
 

@@ -6,8 +6,14 @@
         <div
           style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
         <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传应用</el-button>
-        <input ref="referenceUpload" accept=".ipa, .apk" @change="referenceUpload" type="file"
-               style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
+        <input
+          alt=""
+          title="上传应用"
+          ref="referenceUpload"
+          accept=".ipa, .apk"
+          @change="referenceUpload"
+          type="file"
+          style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
       </div>
 
       <div class="applist-header-right">

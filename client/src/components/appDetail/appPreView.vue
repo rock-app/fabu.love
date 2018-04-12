@@ -116,8 +116,8 @@
           } else {
             this.installWithPwd = false
           }
-
-          }, reject => {
+          
+        }, reject => {
 
         })
       },
@@ -127,7 +127,7 @@
       clickDownLoadBtn() {
         if (this.isIos) {
           const a = document.createElement('a')
-          a.setAttribute('href', `itms-services://?action=download-manifest&url=${this.axios.defaults.baseURL}/api/plist/${this.appBaseData._id}/${this.versionInfo._id}`)
+          a.setAttribute('href', `itms-services://?action=download-manifest&url=${this.axios.defaults.baseURL}/api/plist/${this.appBaseData._id}/${this.appVersionInfo._id}`)
           a.click()
         } else {
           const a = document.createElement('a')

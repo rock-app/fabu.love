@@ -50,7 +50,6 @@ var appSchema = new Schema({
     appLevel: String,
     ownerId: String,
     changelog: String,
-    totalDownloadCount: Number,
     updateMode: {
         type: String,
         default: 'slient',
@@ -59,6 +58,11 @@ var appSchema = new Schema({
     releaseVersionCode: String,     //当前对外发布的code号
     releaseVersionId:String,        //当前对外发布的最新版本号
     grayReleaseVersionId:String,
+    totalDownloadCount:{ type:Number,default:0 },
+    todayDownloadCount:{
+        date:{ type:Date, default:Date.now },
+        count:{ type:Number, default:0 }
+    },
     grayStrategy: {
         ipType: {
             type: String,

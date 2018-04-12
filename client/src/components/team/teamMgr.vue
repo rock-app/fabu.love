@@ -27,7 +27,7 @@
     </div>
     <el-dialog title="邀请成员"
     :visible.sync="isShowInvite"
-    width="50%"
+    width="30%"
     center>
       <el-input placeholder="多个邮箱使用空格分开"
       :rows="10"
@@ -41,7 +41,7 @@
     </el-dialog>
     <el-dialog title="修改团队名称"
     :visible.sync="editing"
-    width="50%"
+    width="30%"
     center>
       <el-input placeholder="请输入新的团队名称"
       type="text"
@@ -179,6 +179,12 @@ export default {
           type: resp.success ? 'success' : 'error',
           message: resp.message
         })
+        if (resp.success) {
+          this.members = []
+          this.teamName = ''
+          let team = useMgr.getUserTeam()
+          this.bus.$emit('dissolveTeam', team)
+        }
       })
       this.dissolveShow = false
     },
@@ -222,9 +228,11 @@ export default {
         TeamApi.deleteMembers(teamId, userId).then(resp => {
           this.$message({
             message: resp.message,
-            type: 'success'
+            type: resp.success ? 'success' : 'error'
           })
-          this.requestMembers()
+          if (resp.success) {
+            this.requestMembers()
+          }
         })
       }
     },

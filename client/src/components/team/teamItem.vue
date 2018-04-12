@@ -1,5 +1,5 @@
 <template>
-  <div class="teamItem ripple">
+  <div class="teamItem">
     <div>
       <div class="teamItem-circle" :class="color">{{lastName}}</div>
       <label class="teamItem-name">{{value.username}}</label>

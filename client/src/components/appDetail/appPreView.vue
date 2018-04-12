@@ -116,7 +116,7 @@
           } else {
             this.installWithPwd = false
           }
-          
+
         }, reject => {
 
         })

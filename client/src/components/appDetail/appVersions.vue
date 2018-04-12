@@ -199,6 +199,10 @@
       releaseApp(item) {
         AppResourceApi.releaseApp(this.userteam._id, this.appInfo._id, item._id, item.versionCode, true).then((res) => {
           this.$message.success(res.message)
+
+          this.appInfo.releaseVersionId = item._id
+
+          this.getAppVersionListData()
         }, reject => {
 
         })

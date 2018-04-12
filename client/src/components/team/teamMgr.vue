@@ -27,7 +27,7 @@
     </div>
     <el-dialog title="邀请成员"
     :visible.sync="isShowInvite"
-    width=50%
+    width="50%"
     center>
       <el-input placeholder="多个邮箱使用空格分开"
       :rows="10"
@@ -41,13 +41,13 @@
     </el-dialog>
     <el-dialog title="修改团队名称"
     :visible.sync="editing"
-    width=50%
+    width="50%"
     center>
       <el-input placeholder="请输入新的团队名称"
       type="text"
       v-focus="editing"
       :focus="editing"
-      v-model="teamName">
+      v-model="editName">
       </el-input>
       <span slot="footer" class="dialog-footer">
             <el-button @click="editing=false">取 消</el-button>
@@ -98,6 +98,7 @@ export default {
   data() {
     return {
       teamName: '',
+      editName: '',
       members: [],
       isShowInvite: false,
       dialogVisible: false,
@@ -116,7 +117,6 @@ export default {
     this.requestMembers()
     this.isOwner = useMgr.getUserTeam().role
     this.bus.$on('refreshList', () => {
-
       this.requestMembers()
     })
   },
@@ -146,18 +146,18 @@ export default {
     },
     editAction () {
       this.editing = !this.editing
-      if (!this.editing) {
-        // 提交修改
-        this.modifyTeamName()
-      }
-      // this.showMenu = true
+      this.editName = this.teamName
+      // if (!this.editing) {
+      //   // 提交修改
+      //   this.modifyTeamName()
+      // }
     },
     dissolve () {
       this.dissolveShow = true
     },
     modifyTeamName () {
       let teamId = useMgr.getUserTeam()._id
-      let name = this.teamName
+      let name = this.editName
       TeamApi.updateTeamName(teamId, name).then(resp => {
         this.$message({
           type: resp.success ? 'success' : 'error',
@@ -166,6 +166,7 @@ export default {
         if (resp.success) {
           let team = useMgr.getUserTeam()
           team.name = name
+          this.teamName = name
           this.bus.$emit('teamNameUpdate', team)
         }
       })
@@ -292,6 +293,9 @@ export default {
       this.isOwner = this.members.filter(member => {
           return member._id === useMgr.getUserId()
         })[0].role === 'owner'
+    },
+    teamName () {
+      this.editName = this.teamName
     }
   }
 }

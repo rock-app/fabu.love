@@ -372,7 +372,7 @@ module.exports = class AppRouter {
     @summary("获取应用的plist文件")
     @tag
     @path({appid:{type:'string',require:true},versionId:{type:'string',require:true}})
-    static async getAppByShort(ctx,next){
+    static async getAppPlist(ctx,next){
         var { appid,versionId } = ctx.validatedParams
         var app = await App.findOne({_id:appid})
         var version = await Version.findOne({_id:versionId})
@@ -384,21 +384,65 @@ module.exports = class AppRouter {
             throw new Error("版本不存在")
         }
 
+        var url = fpath.join(config.baseUrl , version.downloadUrl)
+
         var result = fs.readFileSync(fpath.join(__dirname, "..",'templates') + '/template.plist') 
 
             var template = result.toString();
             var rendered = mustache.render(template, {
-                basePath: config.baseUrl,
                 appName: app.appName,
                 bundleID: app.bundleId,
                 versionStr:version.versionStr,
-                downloadUrl: fpath.join(config.baseUrl ,version.downloadUrl),
+                downloadUrl: url,
             });
             ctx.set('Content-Type', 'text/plain; charset=utf-8');
             ctx.set('Access-Control-Allow-Origin','*');
             ctx.body = rendered
 
     }
+
+    @request('get','/api/count/{appid}/{versionId}')
+    @summary("增加一次下载次数")
+    @tag
+    @path({appid:{type:'string',require:true},versionId:{type:'string',require:true}})
+    static async addDownloadCount(ctx,next){
+        var { appid,versionId } = ctx.validatedParams
+        var app = await App.findOne({_id:appid},"totalDownloadCount todayDownloadCount")
+        var version = await Version.findOne({_id:versionId},"downloadCount ")
+
+        if (!app) {
+            throw new Error("应用不存在")
+        }
+        if (!version){
+            throw new Error("版本不存在")
+        }
+
+        var todayCount = 1;
+        var nowDate = new Date()
+        if (app.todayDownloadCount.date.toDateString() == nowDate.toDateString()) {
+            todayCount = app.todayDownloadCount + 1
+        }
+        var appTotalCount = 1;
+        if (app.totalDownloadCount) {
+            appTotalCount = app.totalDownloadCount + 1
+        }
+        await App.updateOne({_id:appid},{
+            totalDownloadCount:appTotalCount,
+            todayDownloadCount:{
+                count:app.totalDownloadCount + 1,
+                date:nowDate
+            }
+        })
+        var versionCount = 1;
+        if (version.downloadCount) {
+            versionCount = version.downloadCount + 1
+        }
+        await Version.updateOne({_id:versionId},{
+            downloadCount:versionCount
+        })
+        ctx.body = responseWrapper(true,'下载次数已更新')
+    }
+
 
 }
 

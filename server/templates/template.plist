@@ -11,19 +11,19 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-          <string>{{ basePath }}/{{ downloadUrl }}</string>
+          <string>{{{ downloadUrl }}}</string>
 				</dict>
 			</array>
 			<key>metadata</key>
 			<dict>
 				<key>bundle-identifier</key>
-				<string>{{ bundleID }}</string>
+				<string>{{{ bundleID }}}</string>
 				<key>bundle-version</key>
-				<string>{{ versionStr }}</string>
+				<string>{{{ versionStr }}}</string>
 				<key>kind</key>
 				<string>software</string>
 				<key>title</key>
-				<string>{{ appName }}</string>
+				<string>{{{ appName }}}</string>
 			</dict>
 		</dict>
 	</array>

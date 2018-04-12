@@ -137,7 +137,7 @@
         }).catch((e) => {
           this.$message({
             type: 'info',
-            message:e
+            message: e
           })
         })
       },

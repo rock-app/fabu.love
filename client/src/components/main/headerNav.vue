@@ -21,7 +21,7 @@
             </li>
           </ul>
         </el-popover>
-        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i
+        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn" v-html="this.currentTeam ? this.currentTeam.name:''">  <i
           class="el-icon-arrow-down" ref="arrow"></i></el-button>
         <el-button class="flagBtn" @click="clickFlagBtn" v-show="!isAppList"></el-button>
       </div>
@@ -87,7 +87,7 @@
       })
       // 解散团队
       this.bus.$on('dissolveTeam', (team) => {
-        this.updataTeam()
+        this.updataTeam(true)
       })
       // 创建团队
       this.bus.$on('createTeam', () => {
@@ -121,11 +121,16 @@
       updataTeam(dissolve = false) {
         // 获取我的团队列表
         UserApi.getUserTeams().then((res) => {
+          if (res.data.teams.length === 0) {
+            this.$message.error('您当前没有加入任何团队')
+            return
+          }
           this.teamArr = res.data.teams
           // 存最新的teamarr
           updateTeamArr(this.teamArr)
           if (dissolve) {
             saveUserTeam(this.teamArr[0])
+            this.bus.$emit('refreshList')
           } else {
           }
           this.userInfo = getUserInfo()

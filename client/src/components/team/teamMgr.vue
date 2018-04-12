@@ -298,9 +298,12 @@ export default {
   },
   watch: {
     members () {
-      this.isOwner = this.members.filter(member => {
-          return member._id === useMgr.getUserId()
-        })[0].role === 'owner'
+      let itemArr = this.members.filter(member => {
+        return member._id === useMgr.getUserId()
+      })
+      if (itemArr && itemArr.length > 0) {
+        this.isOwner = itemArr[0].role === 'owner'
+      }
     },
     teamName () {
       this.editName = this.teamName

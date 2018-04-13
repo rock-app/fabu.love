@@ -21,8 +21,8 @@
             </li>
           </ul>
         </el-popover>
-        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn" v-html="this.currentTeam ? this.currentTeam.name:''">  <i
-          class="el-icon-arrow-down" ref="arrow"></i></el-button>
+        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
+
         <el-button class="flagBtn" @click="clickFlagBtn" v-show="!isAppList"></el-button>
       </div>
       <!--详情-->
@@ -241,12 +241,14 @@
     color: $mainTitleColor;
     border-color: transparent;
     max-width: 300px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+    font-family: "PingFang SC";
   }
   .headernav-wrapper .leftWrapper .team .teamBtn span {
     height: 50px;
     line-height: 50px;
-    font-family: "PingFang SC";
-    font-size: 20px;
   }
 
   .headernav-wrapper .leftWrapper .team .flagBtn {

@@ -105,8 +105,8 @@
     methods: {
       // 设置初始值
       setupData() {
-        this.updateType = this.currentVersion.updateMode
-        if (this.currentVersion.downloadCount === 0) {
+        this.updateType = this.appInfo.grayStrategy.updateMode || ''
+        if (!this.appInfo.grayStrategy.downloadCountLimit || this.appInfo.grayStrategy.downloadCountLimit === 0) {
           this.downloadCount = '不限制'
         } else {
           this.downloadCount = '限'

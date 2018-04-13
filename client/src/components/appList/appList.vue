@@ -73,9 +73,8 @@
       loadAppList() {
         AppResourceApi.getAppList(this.currentTeam._id)
           .then(response => {
-            console.log(response)
             this.dataList = []
-            this.dataList = response.data
+            this.dataList = response.data.reverse()
             this.originDataList = this.dataList
           }, reject => {
             this.$message.error(reject)

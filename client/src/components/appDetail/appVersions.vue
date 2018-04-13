@@ -212,6 +212,8 @@
         })
       },
       getCreatTime(date) {
+        console.log(666666)
+        console.log(date)
         let releaseDate = new Date(date)
         return `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
       },
@@ -264,7 +266,7 @@
         }
       },
       getTodayCount() {
-        if (new Date(this.appInfo.todayDownloadCount.date).toDateString() === new Date().toDateString()) {
+        if (this.appInfo.todayDownloadCount && new Date(this.appInfo.todayDownloadCount.date).toDateString() === new Date().toDateString()) {
           return `今日下载次数  ${this.appInfo.todayDownloadCount.count}`
         } else {
           return '今日下载次数  0'

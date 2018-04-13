@@ -98,12 +98,7 @@
         this.currentPage = val
       },
       getTimer(timer) {
-        console.log(5555)
-        console.log(timer)
-        console.log(typeof timer)
         let dateTimer = new Date(timer)
-        console.log(typeof dateTimer)
-
         // 今天显示时分，昨天显示昨天时分，其余显示日期
         if (this.isToday(dateTimer)) {
           return `${dateTimer.getHours()}:${dateTimer.getMinutes()}`

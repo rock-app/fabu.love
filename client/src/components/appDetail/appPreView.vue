@@ -53,7 +53,7 @@
     },
     data() {
       return {
-        versionArr: [['1.3.4', '2017-03-12'], ['1.3.3', '2017-03-11'], ['1.3.2', '2017-03-10'], ['1.3.1', '2017-03-9']],
+        versionArr: [],
         appVersionInfo: {},
         appBaseData: null,
         downloadUrl: '',
@@ -134,6 +134,12 @@
           a.setAttribute('href', this.downloadUrl)
           a.click()
         }
+
+        AppResourceApi.downloadedCount(this.appBaseData._id, this.appVersionInfo._id).then(() => {
+
+        }, reject => {
+
+        })
       },
       getContentClass() {
         // 判断是否是手机设备

@@ -287,7 +287,7 @@ module.exports = class TeamRouter {
         var result = await task
             .update(team,{$pull:{members:{_id:userId}}})
             .update(User, {
-                _id: user._id
+                _id: userId
             }, {
                 $pull: {
                     teams: {

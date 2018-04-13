@@ -24,7 +24,7 @@
             <el-radio v-model="updateType" label="force">强制更新</el-radio>
           </el-form-item>
           <el-form-item label="下载次数限制">
-            <el-radio v-model="downloadCount" label="0">不限制</el-radio>
+            <el-radio v-model="downloadCount" label="不限制">不限制</el-radio>
             <el-radio v-model="downloadCount" label="限">限</el-radio>
             <input v-model="downloadNuber" type="text" style="width: 72px;border-bottom: solid 1px #eee;text-align: center">
             <p style="display: inline-block;color: #354052">次</p>
@@ -73,7 +73,7 @@
     data() {
       return {
         show: false,
-        updateType: '普通更新',
+        updateType: '',
         downloadCount: '',
         downloadNuber: '',
         iplimit: '',
@@ -87,10 +87,40 @@
     created() {
       setTimeout(() => {
         this.show = true
-        this.currentVersion = this.versionList[0]
+
+        let ind = 0
+        this.versionList.forEach((item, index) => {
+          if (this.appInfo.grayReleaseVersionId && this.appInfo.grayReleaseVersionId === item._id) {
+            ind = index
+          }
+        })
+        this.currentVersion = this.versionList[ind]
+        console.log(this.currentVersion)
+        console.log(this.appInfo)
+
+        this.setupData()
+
       }, 200)
     },
     methods: {
+      // 设置初始值
+      setupData() {
+        this.updateType = this.currentVersion.updateMode
+        if (this.currentVersion.downloadCount === 0) {
+          this.downloadCount = '不限制'
+        } else {
+          this.downloadCount = '限'
+          this.downloadNuber = this.currentVersion.downloadCount
+        }
+        this.iplimit = this.appInfo.grayStrategy.ipType
+        let tempArr = []
+        if (this.appInfo.grayStrategy.ipList.length > 0) {
+          this.appInfo.grayStrategy.ipList.forEach((item) => {
+            tempArr.push(item)
+          })
+        }
+        this.ipList = tempArr
+      },
       cancel() {
         this.show = false
         setTimeout(() => {
@@ -144,6 +174,7 @@
       chooseVersion(item) {
         this.currentVersion = item
         this.showVersionList = false
+        this.setupData()
       }
     }
   }

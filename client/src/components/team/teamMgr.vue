@@ -7,7 +7,7 @@
     </el-button>
     <div class="teamMgr-header">
       <label>{{teamName}}</label>
-      <img v-show="isOwner" class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="showMenu"/>
+      <img v-show="isOwner" class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="showMenu" />
       <context-menu class="ctx-menu" ref="ctxMenu">
         <li class="ctx-item" @click="editAction">编辑团队名称</li>
         <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
@@ -16,63 +16,44 @@
     <div class="teamMgr-collection">
       <div class="teamMgr-content">
         <div class="teamMgr-group-header">
-          <img src="../../assets/ic_addmmb.png" @click="addClick"/>
+          <img src="../../assets/ic_addmmb.png" @click="addClick" />
         </div>
-      <item v-for="(member, index) in members" :key="index" :index="index"
-      v-model="members[index]" @select="itemSelected" @roleUpdate="requestMembers"></item>
+        <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected" @roleUpdate="requestMembers"></item>
         <div class="teamMgr-group-footer">
           <div> 共 {{members.length}} 名成员 </div>
         </div>
+        <div class="teamMgr-group-bottom"></div>
       </div>
     </div>
-    <el-dialog title="邀请成员"
-    :visible.sync="isShowInvite"
-    width="30%"
-    center>
-      <el-input placeholder="多个邮箱使用空格分开"
-      :rows="10"
-      type="textarea"
-      v-model="invitedEmails">
+    <el-dialog title="邀请成员" :visible.sync="isShowInvite" width="30%" center>
+      <el-input placeholder="多个邮箱使用空格分开" :rows="10" type="textarea" v-model="invitedEmails">
       </el-input>
       <span slot="footer" class="dialog-footer">
-            <el-button @click="isShowInvite=false">取 消</el-button>
-            <el-button type="primary" @click="sendInvite">确 定</el-button>
-      </span>
+              <el-button @click="isShowInvite=false">取 消</el-button>
+              <el-button type="primary" @click="sendInvite">确 定</el-button>
+        </span>
     </el-dialog>
-    <el-dialog title="修改团队名称"
-    :visible.sync="editing"
-    width="30%"
-    center>
-      <el-input placeholder="请输入新的团队名称"
-      type="text"
-      v-focus="editing"
-      :focus="editing"
-      v-model="editName">
+    <el-dialog title="修改团队名称" :visible.sync="editing" width="30%" center>
+      <el-input placeholder="请输入新的团队名称" type="text" v-focus="editing" :focus="editing" v-model="editName">
       </el-input>
       <span slot="footer" class="dialog-footer">
-            <el-button @click="editing=false">取 消</el-button>
-            <el-button type="primary" @click="modifyTeamName">确 定</el-button>
-      </span>
+              <el-button @click="editing=false">取 消</el-button>
+              <el-button type="primary" @click="modifyTeamName">确 定</el-button>
+        </span>
     </el-dialog>
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <span>{{message}}</span>
       <span slot="footer" v-if="isManager" class="dialog-footer">
-        <el-button @click="dialogVisible=false">取 消</el-button>
-        <el-button type="primary" @click="deleteMember">确 定</el-button>
-      </span>
+          <el-button @click="dialogVisible=false">取 消</el-button>
+          <el-button type="primary" @click="deleteMember">确 定</el-button>
+        </span>
     </el-dialog>
-    <el-dialog
-      title="提示"
-      :visible.sync="dissolveShow"
-      width="30%">
+    <el-dialog title="提示" :visible.sync="dissolveShow" width="30%">
       <span>确定要解散该团队吗？</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dissolveShow=false">取 消</el-button>
-        <el-button type="primary" @click="dissolveTeam">确 定</el-button>
-      </span>
+          <el-button @click="dissolveShow=false">取 消</el-button>
+          <el-button type="primary" @click="dissolveTeam">确 定</el-button>
+        </span>
     </el-dialog>
     <el-dialog title="创建团队" :visible.sync="createTeamVisible">
       <el-form :model="form">
@@ -110,10 +91,12 @@ export default {
       isOwner: false,
       dissolveShow: false,
       createTeamVisible: false,
-      form: {name: ''}
+      form: {
+        name: ''
+      }
     }
   },
-  mounted () {
+  mounted() {
     this.requestMembers()
     this.isOwner = useMgr.getUserTeam().role
     this.bus.$on('refreshList', () => {
@@ -123,12 +106,11 @@ export default {
   destroyed() {
     this.bus.$off('refreshList')
   },
-  computed: {
-  },
+  computed: {},
   methods: {
-    sure () {
+    sure() {
       this.createTeamVisible = false
-      UserApi.createdTeam(this.form.name).then((resp) => {
+      UserApi.createdTeam(this.form.name).then(resp => {
         this.$message({
           type: resp.success ? 'success' : 'error',
           message: resp.message
@@ -138,13 +120,13 @@ export default {
         }
       })
     },
-    createTeam () {
+    createTeam() {
       this.createTeamVisible = true
     },
     showMenu() {
       this.$refs.ctxMenu.open()
     },
-    editAction () {
+    editAction() {
       this.editing = !this.editing
       this.editName = this.teamName
       // if (!this.editing) {
@@ -152,10 +134,10 @@ export default {
       //   this.modifyTeamName()
       // }
     },
-    dissolve () {
+    dissolve() {
       this.dissolveShow = true
     },
-    modifyTeamName () {
+    modifyTeamName() {
       let teamId = useMgr.getUserTeam()._id
       let name = this.editName
       TeamApi.updateTeamName(teamId, name).then(resp => {
@@ -172,7 +154,7 @@ export default {
       })
       this.editing = false
     },
-    dissolveTeam () {
+    dissolveTeam() {
       let teamId = useMgr.getUserTeam()._id
       TeamApi.dissolveTeam(teamId).then(resp => {
         this.$message({
@@ -188,10 +170,10 @@ export default {
       })
       this.dissolveShow = false
     },
-    addClick () {
+    addClick() {
       this.isShowInvite = true
     },
-    sendInvite () {
+    sendInvite() {
       this.isShowInvite = false
       let emailList = this.invitedEmails.split(' ')
       let validedEmailList = []
@@ -208,19 +190,19 @@ export default {
       }
       console.log(validedEmailList)
     },
-    itemSelected (index) {
+    itemSelected(index) {
       this.currentIndex = index
       let cuurentId = useMgr.getUserId()
       let userId = this.members[this.currentIndex]._id
       let owner = this.members.filter(member => {
-          return member._id === useMgr.getUserId()
-        })[0].role
+        return member._id === useMgr.getUserId()
+      })[0].role
       if (cuurentId !== userId || owner !== 'owner') {
         this.stateUpdate()
         this.dialogVisible = true
       }
     },
-    deleteMember () {
+    deleteMember() {
       this.dialogVisible = false
       if (this.currentIndex >= 0) {
         let teamId = useMgr.getUserTeam()._id
@@ -236,7 +218,7 @@ export default {
         })
       }
     },
-    stateUpdate () {
+    stateUpdate() {
       if (this.currentIndex >= 0) {
         let owner = this.members.filter(member => {
           return member._id === useMgr.getUserId()
@@ -253,13 +235,15 @@ export default {
             this.isManager = true
             break
           default:
-            this.message = isSelf ? '确定要离开该团队吗?' : '围观群众权限无法使用该功能，可联系项目创建者修改权限哦'
+            this.message = isSelf
+              ? '确定要离开该团队吗?'
+              : '围观群众权限无法使用该功能，可联系项目创建者修改权限哦'
             this.isManager = isSelf
             break
         }
       }
     },
-    request (emailList) {
+    request(emailList) {
       let teamId = useMgr.getUserTeam()._id
       TeamApi.inviteMembers(teamId, emailList).then(resp => {
         if (resp.success) {
@@ -271,7 +255,7 @@ export default {
         }
       })
     },
-    requestMembers () {
+    requestMembers() {
       let teamId = useMgr.getUserTeam()._id
       TeamApi.getTeamMembers(teamId).then(resp => {
         this.teamName = resp.data.name
@@ -289,7 +273,7 @@ export default {
   },
   directives: {
     focus: {
-      update (el, {value}) {
+      update(el, { value }) {
         if (value) {
           el.focus()
         }
@@ -297,7 +281,7 @@ export default {
     }
   },
   watch: {
-    members () {
+    members() {
       let itemArr = this.members.filter(member => {
         return member._id === useMgr.getUserId()
       })
@@ -305,7 +289,7 @@ export default {
         this.isOwner = itemArr[0].role === 'owner'
       }
     },
-    teamName () {
+    teamName() {
       this.editName = this.teamName
     }
   }
@@ -313,106 +297,106 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
-
-  .teamMgr {
-    margin-top: 24px;
-    position: relative;
-    height: 100%;
-    .uploadWrapper {
-      width: 144px;
-      height: 48px;
-      float: right;
-      margin-right: 72px;
+@import '../../common/scss/base';
+.teamMgr {
+  margin-top: 24px;
+  position: relative;
+  .uploadWrapper {
+    width: 144px;
+    height: 48px;
+    float: right;
+    margin-right: 72px;
+  }
+  .uploadWrapper img {
+    margin-right: 15px;
+  }
+  .uploadWrapper:hover {
+    background-color: $mainColor;
+    color: white;
+  }
+  .teamMgr-header {
+    font-size: 24px;
+    text-align: center;
+    margin: 0px;
+    height: 120px;
+    line-height: 120px;
+    border-bottom: 1px solid #f4f7fd;
+    margin-left: 216px;
+    .teamMgr-edit {
+      padding-left: 24px;
+      padding-right: 24px;
+      height: 18px;
+      width: 4px;
+      margin-top: -4px;
     }
-    .uploadWrapper img {
-      margin-right: 15px;
-    }
-    .uploadWrapper:hover {
-      background-color: $mainColor;
-      color: white;
-    }
-    .teamMgr-header {
-      font-size: 24px;
-      text-align: center;
-      margin: 0px;
-      height: 120px;
-      line-height: 120px;
-      border-bottom: 1px solid #F4F7FD;
-      margin-left: 216px;
-      .teamMgr-edit {
-        padding-left: 24px;
-        padding-right: 24px;
-        height: 18px;
-        width: 4px;
-        margin-top: -4px;
-      }
-      .ctx-menu {
-        list-style: none;
-        background-color: #fff;
-        -webkit-background-clip: padding-box;
-        background-clip: padding-box;
-        border: 0px solid rgba(0, 0, 0, .15);
-        border-radius: .25rem;
-        -moz-box-shadow:0 0 5px #D5DFED;
-        -webkit-box-shadow:0 0 5px #D5DFED; box-shadow:0 0 5px #D5DFED;
-        .ctx-menu-container {
-          box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
-        }
-      }
-      .ctx-item {
-        height: 44px;
-        line-height: 44px;
-      }
-      .menu-item {
-        color: #FF001F;
+    .ctx-menu {
+      list-style: none;
+      background-color: #fff;
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      border: 0 solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.25rem;
+      -moz-box-shadow: 0 0 5px #d5dfed;
+      -webkit-box-shadow: 0 0 5px #d5dfed;
+      box-shadow: 0 0 5px #d5dfed;
+      .ctx-menu-container {
+        box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
       }
     }
-    .teamMgr-collection {
-      margin: 0rem 2rem;
-      min-height: 300px;
-      background-color: white;
-      height: 100%;
-      border-radius: 20px 20px 0px 0px;
+    .ctx-item {
+      height: 44px;
+      line-height: 44px;
     }
-    .teamMgr-content {
-      width: 66%;
-      margin: auto;
-      background-color: white;
-
-      .teamMgr-group-header {
-        height: 72px;
-        line-height: 100px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        margin-left: 24px;
-        & > img {
-          margin-top: -72px;
-          margin-right: 24px;
-          width: 48px;
-          height: 48px;
-          z-index: 400px;
-          border-radius: 24px;
-          box-shadow: 0px 2px 12px #cccccc;
-        }
-      }
-
-      .teamMgr-group-footer {
-        height: 72px;
-        border-bottom: 1px dashed #D5DFED;
-        text-align: center;
-        display: flex;
-        div {
-          background-color: white;
-          color: #D5DFED;
-          padding-top: 62px;
-          padding-left: 10px;
-          padding-right: 10px;
-          margin: auto;
-          line-height: 20px;
-        }
-      }
+    .menu-item {
+      color: #ff001f;
     }
   }
+  .teamMgr-collection {
+    margin: 0rem 2rem;
+    // min-height: 300px;
+    background-color: white;
+    height: 100%;
+    border-radius: 20px 20px 0px 0px;
+  }
+  .teamMgr-content {
+    width: 66%;
+    margin: auto;
+    background-color: white;
+    .teamMgr-group-header {
+      height: 72px;
+      line-height: 100px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-left: 24px;
+      & > img {
+        margin-top: -72px;
+        margin-right: 24px;
+        width: 48px;
+        height: 48px;
+        z-index: 400px;
+        border-radius: 24px;
+        box-shadow: 0px 2px 12px #cccccc;
+      }
+    }
+    .teamMgr-group-footer {
+      height: 72px;
+      border-bottom: 1px dashed #d5dfed;
+      text-align: center;
+      display: flex;
+      div {
+        background-color: white;
+        color: #d5dfed;
+        padding-top: 62px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: auto;
+        line-height: 20px;
+      }
+    }
+    .teamMgr-group-bottom {
+      height: 72px;
+    }
+  }
+}
 </style>

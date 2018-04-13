@@ -91,6 +91,10 @@ module.exports = class TeamRouter {
             throw new Error("该团队不存在或者您没有权限解散该团队")
         }
 
+        if (team._id == user._id) {
+            throw new Error("用户默认团队无法解散")
+        }
+
         var membersId = []
         if (team.members.length > 0) {
             for (var m of team.members){

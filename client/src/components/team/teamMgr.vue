@@ -20,7 +20,7 @@
         </div>
         <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected" @roleUpdate="requestMembers"></item>
         <div class="teamMgr-group-footer">
-          <div> 共 {{members.length}} 名成员 </div>
+          <div> 共 {{members.length}} 名成员</div>
         </div>
         <div class="teamMgr-group-bottom"></div>
       </div>
@@ -340,6 +340,8 @@ export default {
       -webkit-box-shadow: 0 0 5px #d5dfed;
       box-shadow: 0 0 5px #d5dfed;
       .ctx-menu-container {
+        -moz-box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
+        -webkit-box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
         box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
       }
     }

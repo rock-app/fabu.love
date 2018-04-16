@@ -22,7 +22,9 @@ app.use(serve(config.fileDir))
 app.use(serve(__dirname + '/dist'));
 app.use(function(ctx,next){
   if (ctx.request.path.indexOf("/api") != 0) {
-    ctx.redirect("/")
+    // ctx.redirect("/")
+    ctx.response.type = 'html';
+    ctx.response.body =  fs.readFileSync('./dist/index.html', 'utf8');
   }else{
     return next()
   }

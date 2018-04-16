@@ -37,10 +37,11 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="versionStr"
-          width="60"
           label="版本"
         >
+          <template slot-scope="scope">
+            <p v-html="getVersion(scope.row)"></p>
+          </template>
         </el-table-column>
         <el-table-column
           label="更新时间"
@@ -89,7 +90,7 @@
         <div class="downloadwrapper">
           <i class="icon-ic_download_s"></i>
         </div>
-        <p>总下载次数  {{this.appInfo.totalDownloadCount}}</p>
+        <p>总下载次数  {{this.appInfo.totalDownloadCount || 0}}</p>
         <div class="downloadCount"></div>
       </div>
       <div class="todaywrapper">
@@ -167,10 +168,26 @@
       // 下载应用
       clickDownLoad(item) {
         const a = document.createElement('a')
-        a.setAttribute('href', `${this.axios.defaults.baseURL}${item.downloadUrl}`)
+        let url = `${this.axios.defaults.baseURL}${item.downloadUrl}`
+        a.setAttribute('href', url)
         a.click()
-        AppResourceApi.downloadedCount(this.appInfo._id, item._id).then(() => {
-        }, reject => {
+        fetch(url).then(response => {
+          var reader = response.body.getReader()
+          var headers = response.headers
+          var totalLength = headers.get('Content-Length')
+          var bytesReceived = 0
+          reader.read().then(function processResult(result) {
+            if (result.done) {
+              console.log('下载完成')
+              AppResourceApi.downloadedCount(this.appInfo._id, item._id).then(() => {
+              }, reject => {
+              })
+              return
+            }
+            bytesReceived += result.value.length
+            console.log(`progress: ${bytesReceived / totalLength * 100}%`)
+            return reader.read().then(processResult)
+          })
         })
       },
       clickEditor(item) {
@@ -212,7 +229,6 @@
         })
       },
       getCreatTime(date) {
-        console.log(666666)
         console.log(date)
         let releaseDate = new Date(date)
         return `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
@@ -271,6 +287,9 @@
         } else {
           return '今日下载次数  0'
         }
+      },
+      getVersion(item) {
+        return `${item.versionStr}(${item.versionCode})`
       }
     }
   }

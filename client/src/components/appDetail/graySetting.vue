@@ -9,12 +9,12 @@
         <el-form label-position="left" label-width="100px">
           <el-form-item label="选择版本号">
             <div class="chooseVersion" @click.stop="showVersions">
-              <p v-html="this.currentVersion.versionCode"></p>
+              <p class="nowrap" v-html="getCodeStr()"></p>
               <i class="el-icon-arrow-down"></i>
             </div>
             <div class="versionlistwrapper" v-show="this.showVersionList">
               <ul class="list">
-                <li class="item" v-for="(item, index) in versionList" :key="index" @click="chooseVersion(item)">{{item.versionCode}}</li>
+                <li class="item" v-for="(item, index) in versionList" :key="index" @click="chooseVersion(item)" v-html="getCodeStr()"></li>
               </ul>
             </div>
           </el-form-item>
@@ -175,6 +175,9 @@
         this.currentVersion = item
         this.showVersionList = false
         this.setupData()
+      },
+      getCodeStr() {
+        return `${this.currentVersion.versionStr}(${this.currentVersion.versionCode})`
       }
     }
   }
@@ -228,7 +231,7 @@
     margin-left: 48px;
   }
   .graySetting-content .chooseVersion {
-    width: 168px;
+    width: 180px;
     height: 24px;
     font-size: 12px;
     color: $subTitleColor;
@@ -250,7 +253,7 @@
   .graySetting-content .versionlistwrapper {
     position: absolute;
     z-index: 200;
-    width: 168px;
+    width: 180px;
     background-color: rgba(255,255,255,0.9);
     max-height: 200px;
     padding-left: 10px;

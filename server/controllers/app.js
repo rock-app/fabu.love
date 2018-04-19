@@ -315,21 +315,23 @@ module.exports = class AppRouter {
         ctx.body = responseWrapper(true,body.release ? "版本已发布" : "版本已关闭")
     }
 
-    @request('get','/api/app/checkupdate/{appId}/{currentVersionCode}')
+    @request('get','/api/app/checkupdate/{teamID}/{bundleID}/{currentVersionCode}')
     @summary("检查版本更新")
     @tag
     @path({
-        appId: String,
-        currentVersionCode: String
+        bundleID: String,
+        currentVersionCode: String,
+        teamID: String
     })
     static async checkUpdate(ctx,next){
-        var user = ctx.state.user.data;
-        var { appId,currentVersionCode } = ctx.validatedParams;
-        var app = await App.findById(id);
+        // var user = ctx.state.user.data;
+        var { teamID, bundleID, currentVersionCode } = ctx.validatedParams;
+        var app = await App.findOne({bundleId: bundleID, ownerId: teamID})
+        // var app = await App.findById(id);
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-        var lastVersionCode = app.lastVersionCode
+        var lastVersionCode = app.versionCode
         if (currentVersionCode < lastVersionCode) {
             //1.拿出最新的version
             var version = Version.findOne({versionCode: lastVersionCode})
@@ -339,7 +341,7 @@ module.exports = class AppRouter {
                 ctx.body = responseWrapper(false, "暂无可用的更新版本")
             } else {
                 ctx.body = responseWrapper({
-                    App: app,
+                    app: app,
                     version: version
                 })
             }

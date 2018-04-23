@@ -319,32 +319,31 @@ module.exports = class AppRouter {
     @summary("检查版本更新")
     @tag
     @path({
+        teamID: String,
         bundleID: String,
-        currentVersionCode: String,
-        teamID: String
+        currentVersionCode: String
     })
     static async checkUpdate(ctx,next){
-        // var user = ctx.state.user.data;
         var { teamID, bundleID, currentVersionCode } = ctx.validatedParams;
         var app = await App.findOne({bundleId: bundleID, ownerId: teamID})
-        // var app = await App.findById(id);
         if (!app) {
             throw new Error("应用不存在或您没有权限执行该操作")
         }
-        var lastVersionCode = app.versionCode
+        var lastVersionCode = app.currentVersion
         if (currentVersionCode < lastVersionCode) {
             //1.拿出最新的version
-            var version = Version.findOne({versionCode: lastVersionCode})
+            var version = await Version.findOne({versionCode: lastVersionCode})
             //2.判断最新version的策略(下载次数, )
 
-            if (version.downloadCount >= version.strategy.downloadCountLimit) {
-                ctx.body = responseWrapper(false, "暂无可用的更新版本")
-            } else {
-                ctx.body = responseWrapper({
-                    app: app,
-                    version: version
-                })
-            }
+            // if (version.downloadCount >= version.strategy.downloadCountLimit) {
+            //     ctx.body = responseWrapper(false, "暂无可用的更新版本")
+            // } else {
+            
+            ctx.body = responseWrapper({
+                app: app,
+                version: version
+            })
+            // }
         } else {
             ctx.body = responseWrapper(false, "您已经是最新版本了")
         }

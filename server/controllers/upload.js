@@ -117,7 +117,7 @@ async function parseAppAndInsertToDB(file,user,team) {
       info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
       app = new App(info)
       app.ownerId = team._id;
-      app.lastVersionCode = info.versionCode
+      app.currentVersion = info.versionCode
       await app.save()
       info.uploader = user.username;
       info.uploaderId = user._id;

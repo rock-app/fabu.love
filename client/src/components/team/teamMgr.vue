@@ -6,12 +6,20 @@
       <label> 新建团队</label>
     </el-button>
     <div class="teamMgr-header">
-      <label>{{teamName}}</label>
-      <img v-show="isOwner" class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="showMenu" />
-      <context-menu class="ctx-menu" ref="ctxMenu">
-        <li class="ctx-item" @click="editAction">编辑团队名称</li>
-        <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
-      </context-menu>
+      <div>
+        <div>
+          <label>{{teamName}}</label>
+          <img v-show="isOwner" class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="showMenu" />
+          <context-menu class="ctx-menu" ref="ctxMenu">
+            <li class="ctx-item" @click="editAction">编辑团队名称</li>
+            <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
+          </context-menu>
+        </div>
+        <div>
+          <label class="teamMgr-teamId">ID: {{teamId}}</label>
+        </div>
+      </div>
+      
     </div>
     <div class="teamMgr-collection">
       <div class="teamMgr-content">
@@ -79,6 +87,7 @@ export default {
   data() {
     return {
       teamName: '',
+      teamId: '',
       editName: '',
       members: [],
       isShowInvite: false,
@@ -259,6 +268,7 @@ export default {
       let teamId = useMgr.getUserTeam()._id
       TeamApi.getTeamMembers(teamId).then(resp => {
         this.teamName = resp.data.name
+        this.teamId = resp.data._id
         this.members = resp.data.members
       })
     },
@@ -301,6 +311,7 @@ export default {
 .teamMgr {
   margin-top: 24px;
   position: relative;
+  user-select: text;
   .uploadWrapper {
     width: 144px;
     height: 48px;
@@ -319,9 +330,18 @@ export default {
     text-align: center;
     margin: 0px;
     height: 120px;
-    line-height: 120px;
+    // line-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     border-bottom: 1px solid #f4f7fd;
-    margin-left: 216px;
+    padding-left: 216px;
+    // background-color: #ff001f;
+    .teamMgr-teamId {
+      padding-top: 4px;
+      font-size: 14px;
+    }
     .teamMgr-edit {
       padding-left: 24px;
       padding-right: 24px;
@@ -353,6 +373,12 @@ export default {
       color: #ff001f;
     }
   }
+
+  .teamMgr-teamId {
+    display: block;
+    color: #aabad2;
+  }
+
   .teamMgr-collection {
     margin: 0rem 2rem;
     // min-height: 300px;

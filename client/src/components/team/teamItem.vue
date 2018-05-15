@@ -27,7 +27,7 @@ export default {
     value: Object,
     index: Number
   },
-  data () {
+  data() {
     return {
       color: 'header-background-red',
       isRole: false,
@@ -38,31 +38,31 @@ export default {
       align: 'left'
     }
   },
-  created () {
+  created() {
     this.valueChanged()
     // this.itemStyle = isSelf ? 'disable' : ''
   },
   methods: {
-    selected () {
+    selected() {
       this.$emit('select', this.index)
       this.showMenu = false
     },
-    roleAction () {
+    roleAction() {
       if (this.isRole) {
         this.rotate = !this.rotate
         this.$refs.ctxMenu.open()
         this.showMenu = true
       }
     },
-    setRoleToManager () {
+    setRoleToManager() {
       this.roleModify('manager')
       this.showMenu = false
     },
-    setRoleToGuest () {
+    setRoleToGuest() {
       this.roleModify('guest')
       this.showMenu = false
     },
-    roleModify (value) {
+    roleModify(value) {
       let teamId = useMgr.getUserTeam()._id
       let memberId = this.value._id
       let role = value
@@ -77,42 +77,49 @@ export default {
     onCtxClose() {
       this.showMenu = false
     },
-    valueChanged () {
+    valueChanged() {
       // alert('changed')
       let randomNumber = Math.floor(Math.random() * Math.floor(4))
       this.isSelf = useMgr.getUserId() === this.value._id
       // alert(this.isSelf ? '是自己' : '不是自己')
       this.isManager = useMgr.getUserTeam().role !== 'guest'
       // alert(this.isManager ? '是管理者' : '不是管理者')
-      this.isRole = (this.isManager || this.isSelf) && this.value.role !== 'owner'
-      this.color = ['header-background-red', 'header-background-green', 
-      'header-background-orange', 'header-background-purple'][randomNumber]
+      this.isRole =
+        (this.isManager || this.isSelf) && this.value.role !== 'owner'
+      this.color = [
+        'header-background-red',
+        'header-background-green',
+        'header-background-orange',
+        'header-background-purple'
+      ][randomNumber]
     }
   },
   computed: {
-    lastName () {
+    lastName() {
       let length = this.value.username.length
       return this.value.username.substring(length - 1)
     },
-    ownerString () {
+    ownerString() {
       switch (this.value.role) {
         case 'owner':
           return '创建者'
         case 'manager':
-          return '管理者'
+          return '管理员'
         default:
           return '围观群众'
       }
     },
-    lastItem () {
+    lastItem() {
       return this.isSelf ? '离开该团队' : '移除该队员'
     },
-    iconStyle () {
-      return this.showMenu ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}
+    iconStyle() {
+      return this.showMenu
+        ? { transform: 'rotate(180deg)' }
+        : { transform: 'rotate(0deg)' }
     }
   },
   watch: {
-    value () {
+    value() {
       this.valueChanged()
     }
   },
@@ -125,43 +132,42 @@ export default {
 <style lang="scss">
 @import '../../common/scss/base.scss';
 
-  .teamItem {
-    position: relative;
-    height: 66px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(10, 10, 10, 0.1);
-    .teamItem-circle {
-      height: 44px;
-      width: 44px;
-      line-height: 44px;
-      border-radius: 22px;
+.teamItem {
+  position: relative;
+  height: 66px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+  .teamItem-circle {
+    height: 44px;
+    width: 44px;
+    line-height: 44px;
+    border-radius: 22px;
+    display: inline-block;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    margin-left: 24px;
+  }
+  .teamItem-name {
+    margin-left: 1rem;
+    color: #354052;
+    font-size: 1rem;
+  }
+  .teamItem-owner {
+    margin-right: 24px;
+    & > img {
       display: inline-block;
-      text-align: center;
-      color: white;
-      font-size: 20px;
-      margin-left: 24px;
     }
-    .teamItem-name {
-      margin-left: 1rem;
-      color: #354052;
-      font-size: 1rem;
-    }
-    .teamItem-owner {
-      margin-right: 24px;
-      & > img {
-        display: inline-block;
-      }
-    }
-    .teamItem-email {
-      display: inline-block;
-      margin-left: 1rem;
-      color: #AABAD2;
-      font-size: 1rem;
-    }
+  }
+  .teamItem-email {
+    display: inline-block;
+    margin-left: 1rem;
+    color: #aabad2;
+    font-size: 1rem;
   }
 
   .ctx-menu {
@@ -169,12 +175,15 @@ export default {
     background-color: #fff;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-    border: 0px solid rgba(0, 0, 0, .15);
-    border-radius: .25rem;
-    -moz-box-shadow:0 0 5px #D5DFED; 
-    -webkit-box-shadow:0 0 5px #D5DFED; box-shadow:0 0 5px #D5DFED;
+    border: 0px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    -moz-box-shadow: 0 0 5px #d5dfed;
+    -webkit-box-shadow: 0 0 5px #d5dfed;
+    box-shadow: 0 0 5px #d5dfed;
     .ctx-menu-container {
-      box-shadow: 0 5px 11px 0 #D5DFED, 0 4px 15px 0 #D5DFED;
+      -moz-box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
+      -webkit-box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
+      box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
     }
   }
   .ctx-item {
@@ -182,24 +191,25 @@ export default {
     line-height: 44px;
   }
   .menu-item {
-    color: #FF001F;
+    color: #ff001f;
   }
-      
-  .teamItem-owner-img {
-    transition: all 300ms ease-out;
-  }
+}
 
-  .header-background-red {
-    background-color: rgb(226, 81, 65);
-  }
-  .header-background-green {
-    background-color: rgb(103, 171, 91);
-  }
-  .header-background-orange {
-    background-color: rgb(242,115, 56);
-  }
-  .header-background-purple {
-    background-color: rgb(143, 56, 170);
-  }
+.teamItem-owner-img {
+  transition: all 300ms ease-out;
+}
+
+.header-background-red {
+  background-color: rgb(226, 81, 65);
+}
+.header-background-green {
+  background-color: rgb(103, 171, 91);
+}
+.header-background-orange {
+  background-color: rgb(242, 115, 56);
+}
+.header-background-purple {
+  background-color: rgb(143, 56, 170);
+}
 </style>
 

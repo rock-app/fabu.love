@@ -19,7 +19,10 @@
         let user = getUserInfo()
         if (user) {
         } else {
-          this.$router.push('/login')
+          if (this.$route.name === 'AppPreView') {
+          } else {
+            this.$router.push('/login')
+          }
         }
       })
     },

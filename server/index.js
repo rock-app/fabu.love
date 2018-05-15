@@ -22,14 +22,16 @@ app.use(serve(config.fileDir))
 app.use(serve(__dirname + '/dist'));
 app.use(function(ctx,next){
   if (ctx.request.path.indexOf("/api") != 0) {
-    ctx.redirect("/")
+    // ctx.redirect("/")
+    ctx.response.type = 'html';
+    ctx.response.body =  fs.readFileSync('./dist/index.html', 'utf8');
   }else{
     return next()
   }
 })
 app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
   path: ['/api/user/register', '/api/user/login', '/api/user/resetPassword'
-  ,'/api/swagger', '/api/swagger.json',/\/api\/plist\/.+/,/\/api\/count\/.+/]
+  ,'/api/swagger', '/api/swagger.json',/\/api\/plist\/.+/,/\/api\/count\/.+/,/\/api\/app\/.+/]
 }))
 app.use(rest.restify())
 app.use(router.routes())

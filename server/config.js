@@ -1,8 +1,12 @@
 
+var fs = require("fs")
+
+
+var baseConfig = JSON.parse(fs.readFileSync('../config.json','utf8'))
 
 const common = {
-    baseUrl: 'http://127.0.0.1:3008',
-    port: 3008,
+    baseUrl: baseConfig.baseUrl,
+    port: baseConfig.port,
     apiPrefix:'api',
     fileDir:__dirname + '/uploaded' //上传文件的存放目录
 };

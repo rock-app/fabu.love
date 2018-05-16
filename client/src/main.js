@@ -50,6 +50,7 @@ Vue.use(VueLazyLoad, {
   loading: require('./assets/logo.png')
 })
 
+
 // 配置接口信息
 configAxios()
 

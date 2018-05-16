@@ -3,7 +3,6 @@ import TokenMgr from '../mgr/TokenMgr'
 import { Message } from 'element-ui'
 import {removeUserInfo} from '../mgr/userMgr'
 
-
 let vue = new Vue()
 
 export function getHttp (url, params) {
@@ -66,9 +65,7 @@ export function postHttp (url, body, params) {
 
 export function configAxios() {
 
-  // vue.axios.defaults.baseURL = 'http://119.29.62.204:9090/'
-  vue.axios.defaults.baseURL = 'http://localhost:3008/'
-
+  vue.axios.defaults.baseURL = process.env.baseURL
   vue.axios.defaults.headers.common['Content-Type'] = 'application/json'
   vue.axios.default.timeout = 60000
 

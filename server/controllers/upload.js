@@ -26,9 +26,11 @@ var mkdirp = require('mkdirp')
 var ipaMataData = require('ipa-metadata')
 
 var {writeFile,readFile,responseWrapper,exec} = require('../helper/util')
-var tempDir = path.resolve(__dirname, '../temp')
+var tempDir = path.join(config.fileDir, 'temp')
 
 createFolderIfNeeded(tempDir)
+
+var uploadPrefix = "upload";
 
 function createFolderIfNeeded(path) {
   if (!fs.existsSync(path)) {
@@ -106,14 +108,14 @@ async function parseAppAndInsertToDB(file,user,team) {
     createFolderIfNeeded(path.join(config.fileDir, fileRelatePath))
     var fileRealPath = path.join(config.fileDir,fileRelatePath, fileName + path.extname(filePath))
     await fs.renameSync(filePath,fileRealPath)
-    info.downloadUrl = path.join(fileRelatePath , fileName + path.extname(filePath))
+    info.downloadUrl = path.join(uploadPrefix,fileRelatePath , fileName + path.extname(filePath))
 
     var app = await App.findOne(
         {'platform': info['platform'], 'bundleId': info['bundleId'],'ownerId':team._id})
     if (!app) {
       info.creator = user.username;
       info.creatorId = user._id;
-      info.icon = icon.fileName;
+      info.icon = path.join(uploadPrefix,icon.fileName);
       info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
       app = new App(info)
       app.ownerId = team._id;

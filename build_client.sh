@@ -1,6 +1,7 @@
 #bash
 
 cd client/
-npm install
+npm run build
 cd ../server
-npm install
+rm -rf ./dist
+cp -rf ../client/dist .

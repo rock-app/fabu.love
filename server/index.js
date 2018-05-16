@@ -18,7 +18,7 @@ const app = new Koa()
 // 解决跨域问题
 app.use(cors())
 app.use(bodyParser())
-app.use(serve(config.fileDir))
+app.use(serve(path.resolve(config.fileDir,'..')))
 app.use(serve(__dirname + '/dist'));
 app.use(function(ctx,next){
   if (ctx.request.path.indexOf("/api") != 0) {

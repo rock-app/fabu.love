@@ -4,35 +4,31 @@ var program = require('commander');
 var fs = require('fs');
 var exec = require('child_process').execSync;
 
-var defaultUrl = "http://localhost:8383";
-var defaultPort = "8383"
-
 program
   .version('0.0.1')
 
 program
     .command('config')
     .description('set app config like baseUrl or port')
-    .option("-u, --url [url]", "server runing base url")
-    .option("-p, --port [port]", "server runing port")
-    .option("-d, --directory [dir]","file upload directory")
+    .option("--url [url]", "server runing base url")
+    .option("--port [port]", "server runing port")
+    .option("--dir [dir]","file upload directory")
+    .option("--dbuser, [dbuser]","mongodb user")
+    .option("--dbpass, [dbpass]","mongodb password")
     .action(function(options){
-    var url = options.url || defaultUrl;
-    var port = options.port || defaultPort;
-    var dir = options.dir
-    console.log('setup host with port %s and %s', port, url, dir);
-    writeConfig(url,port,dir)
+    writeConfig(options)
 });
 
 program
     .command('init')
     .description('install all dependence')
-    .option("-u, --url [url]", "server runing base url")
-    .option("-p, --port [port]", "server runing port")
+    .option("--url [url]", "server runing base url")
+    .option("--port [port]", "server runing port")
+    .option("--dir [dir]","file upload directory")
+    .option("--dbuser, [dbuser]","mongodb user")
+    .option("--dbpass, [dbpass]","mongodb password")
     .action(function(options){
-    var url = options.url;
-    var port = options.port;
-    writeConfig(url,port)
+    writeConfig(options)
     exec("sh install.sh",(error, stdout, stderr) => {
         console.log(`${stdout}`);
         console.log(`${stderr}`);
@@ -44,14 +40,13 @@ program
 
 program
     .command('build')
-    .description('rebuild client source and copy it to server static directory')
-    .option("-u, --url [url]", "server runing base url")
-    .option("-p, --port [port]", "server runing port")
+    .option("--url [url]", "server runing base url")
+    .option("--port [port]", "server runing port")
+    .option("--dir [dir]","file upload directory")
+    .option("--dbuser, [dbuser]","mongodb user")
+    .option("--dbpass, [dbpass]","mongodb password")
     .action(function(options){
-    var url = options.url || defaultUrl;
-    var port = options.port || defaultPort;
-    console.log('setup host with port %s and %s', port, url);
-    writeConfig(url,port)
+    writeConfig(options)
     exec("sh build_client.sh",(error, stdout, stderr) => {
         console.log(`${stdout}`);
         console.log(`${stderr}`);
@@ -82,42 +77,31 @@ program.command('start')
     }
 )
 
+program.command('stop')
+    .description('stop services')
+    .action(function(options) {
+        console.log(exec("pm2 stop fabu").toString())
+    }
+)
+
 program.parse(process.argv);
 
 
-function writeConfig(url,port,dir) {
-    var content = {}
-    if (url) {
-        content['baseURL'] = url
-    }
-    if (port) {
-        content['port'] = port
-    }
-    if (dir) {
-        content['uploadDir'] = dir
-    }
-    var {size} = fs.statSync("config.json")
-    if (size == undefined) {
-        fs.writeFileSync("config.json",JSON.stringify(content))
-        return
-    }else{
-        var baseConfig = {};
-        try {
-            baseConfig = JSON.parse(fs.readFileSync('config.json'), 'utf8')
-        } catch (error) {
-            console.log(console.error());
-        }
+function writeConfig(options) {
+    var configKey = ['url','port','dir','dbuser','dbpass']
+    var baseConfig = {}
+    try {
+        baseConfig = JSON.parse(fs.readFileSync('config.json'), 'utf8')
         fs.unlinkSync('config.json')
-        if (url) {
-            baseConfig['baseURL'] = url
-        }
-        if (port) {
-            baseConfig['port'] = port
-        }
-        if (dir) {
-            baseConfig['uploadDir'] = dir
-        }
-        baseConfig['port'] = content.port
-        fs.writeFileSync("config.json",JSON.stringify(baseConfig))
+    } catch (error) {
+        // console.log(error);
     }
+    var cache = [];
+    configKey.forEach(key => {
+        if (options[key]) {
+            baseConfig[key] = options[key]
+        }
+    });
+    fs.writeFileSync("config.json",JSON.stringify(baseConfig))
+    console.log(`current config ${JSON.stringify(baseConfig)}`)
 }

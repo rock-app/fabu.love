@@ -2,7 +2,10 @@
 
 * 安装MongoDB
 * 安装Nodejs
-* 安装pm2
+* 安装pm2、babel-node
+```java
+npm install -g pm2 babel-cli
+```
 
 1.clone下载代码
 

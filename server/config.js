@@ -12,4 +12,11 @@ const common = {
     fileDir:path.join((baseConfig.uploadDir ||  path.join(__dirname,"..")), '/upload') //上传文件的存放目录
 };
 
+if (baseConfig.dbUser) {
+    common['dbUser'] = baseConfig.dbUser
+}
+if (baseConfig.dbPassword) {
+    common['dbPassword'] = baseConfig.dbPassword
+}
+
 export default common;

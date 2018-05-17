@@ -19,23 +19,31 @@ const app = new Koa()
 // 解决跨域问题
 app.use(cors())
 app.use(bodyParser())
-app.use(serve(path.resolve(config.fileDir,'..')))
-app.use(serve(__dirname + '/dist'));
-app.use(mount('/wiki',serve(path.join(__dirname,'..','wiki/_book'))))
+app.use(serve(path.resolve(config.fileDir, '..')))
+app.use(serve(path.join(__dirname, '..', 'client/dist')));
 
-
-app.use(function(ctx,next){
+app.use(function (ctx, next) {
   if (ctx.request.path.indexOf("/api") != 0) {
-    // ctx.redirect("/")
     ctx.response.type = 'html';
     ctx.response.body = fs.readFileSync('./dist/index.html', 'utf8');
-  }else{
+  } else {
     return next()
   }
 })
-app.use(koajwt({secret: 'jwt-secret', debug: true}).unless({
-  path: ['/api/user/register', '/api/user/login', '/api/user/resetPassword'
-  ,'/api/swagger', '/api/swagger.json',/\/api\/plist\/.+/,/\/api\/count\/.+/,/\/api\/app\/.+/]
+app.use(koajwt({
+  secret: config.secret || "d8AC195A-c3A1-9D8D-DAEc-B0C4C28F6F2a",
+  debug: true
+}).unless({
+  path: [
+    '/api/user/register',
+    '/api/user/login',
+    '/api/user/resetPassword',
+    '/api/swagger',
+    '/api/swagger.json',
+    /\/api\/plist\/.+/,
+    /\/api\/count\/.+/,
+    /\/api\/app\/.+/
+  ]
 }))
 app.use(rest.restify())
 app.use(router.routes())

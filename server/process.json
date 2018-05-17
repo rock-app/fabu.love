@@ -1,10 +1,11 @@
 {
-	"apps": [{
-		"name": "fabu",
-		"script": "index.js",
-    "watch": true,
-    "exec_interpreter" : "babel-node",
-		"log_date_format": "YYYY - MM - DD HH: mm Z"
-	}]
+  "apps": [
+    {
+      "name": "fabu",
+      "script": "index.js",
+      "watch": true,
+      "exec_interpreter": "babel-node",
+      "log_date_format": "YYYY - MM - DD HH: mm Z"
+    }
+  ]
 }
-

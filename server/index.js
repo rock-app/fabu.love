@@ -12,6 +12,7 @@ const koajwt = require('koa-jwt')
 const path = require('path')
 const fs = require('fs')
 const send = require('koa-send');
+const mount = require('koa-mount')
 
 const app = new Koa()
 
@@ -20,11 +21,14 @@ app.use(cors())
 app.use(bodyParser())
 app.use(serve(path.resolve(config.fileDir,'..')))
 app.use(serve(__dirname + '/dist'));
+app.use(mount('/wiki',serve(path.join(__dirname,'..','wiki/_book'))))
+
+
 app.use(function(ctx,next){
   if (ctx.request.path.indexOf("/api") != 0) {
     // ctx.redirect("/")
     ctx.response.type = 'html';
-    ctx.response.body =  fs.readFileSync('./dist/index.html', 'utf8');
+    ctx.response.body = fs.readFileSync('./dist/index.html', 'utf8');
   }else{
     return next()
   }

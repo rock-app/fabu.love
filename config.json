@@ -1,1 +1,4 @@
-{"baseURL":"http://localhost:8383","port":"8383"}
+{
+  "baseURL":"http://172.17.11.59:8080",
+  "port":"8080"
+}

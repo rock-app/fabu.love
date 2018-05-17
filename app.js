@@ -30,9 +30,8 @@ program
     .option("-u, --url [url]", "server runing base url")
     .option("-p, --port [port]", "server runing port")
     .action(function(options){
-    var url = options.url || defaultUrl;
-    var port = options.port || defaultPort;
-    console.log('setup host with port %s and %s', port, url);
+    var url = options.url;
+    var port = options.port;
     writeConfig(url,port)
     exec("sh install.sh",(error, stdout, stderr) => {
         console.log(`${stdout}`);
@@ -87,7 +86,13 @@ program.parse(process.argv);
 
 
 function writeConfig(url,port,dir) {
-    var content = {'baseURL':url,'port':port}
+    var content = {}
+    if (url) {
+        content['baseURL'] = url
+    }
+    if (port) {
+        content['port'] = port
+    }
     if (dir) {
         content['uploadDir'] = dir
     }
@@ -96,14 +101,22 @@ function writeConfig(url,port,dir) {
         fs.writeFileSync("config.json",JSON.stringify(content))
         return
     }else{
-        var baseConfig;
+        var baseConfig = {};
         try {
             baseConfig = JSON.parse(fs.readFileSync('config.json'), 'utf8')
         } catch (error) {
-            baseConfig = {}
+            console.log(console.error());
         }
         fs.unlinkSync('config.json')
-        baseConfig['baseURL'] = content.baseURL
+        if (url) {
+            baseConfig['baseURL'] = url
+        }
+        if (port) {
+            baseConfig['port'] = port
+        }
+        if (dir) {
+            baseConfig['uploadDir'] = dir
+        }
         baseConfig['port'] = content.port
         fs.writeFileSync("config.json",JSON.stringify(baseConfig))
     }

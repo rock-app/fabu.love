@@ -15,11 +15,13 @@ program
     .description('set app config like baseUrl or port')
     .option("-u, --url [url]", "server runing base url")
     .option("-p, --port [port]", "server runing port")
+    .option("-d, --directory [dir]","file upload directory")
     .action(function(options){
     var url = options.url || defaultUrl;
     var port = options.port || defaultPort;
-    console.log('setup host with port %s and %s', port, url);
-    writeConfig(url,port)
+    var dir = options.dir
+    console.log('setup host with port %s and %s', port, url, dir);
+    writeConfig(url,port,dir)
 });
 
 program
@@ -68,30 +70,27 @@ program.command('start')
     .action(function(options) {
         if (options.install) {
             console.log("start install - START -")
-            console.log(exec("sh install.sh",))
+            console.log(exec("sh install.sh").toString())
             console.log("install complete - END -")
         }
         if (options.build) {
             console.log("start build - START -")
-            console.log(exec("sh build_client.sh"))
+            console.log(exec("sh build_client.sh").toString())
             console.log("build complete - END -")
         }        
 
-        exec("cd server && pm2 start process.json",(error, stdout, stderr) => {
-            console.log(`${stdout}`);
-            console.log(`${stderr}`);
-            if (error !== null) {
-                console.log(`exec error: ${error}`);
-            }
-        })        
+        console.log(exec("cd server && pm2 start process.json").toString())
     }
 )
 
 program.parse(process.argv);
 
 
-function writeConfig(url,port) {
+function writeConfig(url,port,dir) {
     var content = {'baseURL':url,'port':port}
+    if (dir) {
+        content['uploadDir'] = dir
+    }
     var {size} = fs.statSync("config.json")
     if (size == undefined) {
         fs.writeFileSync("config.json",JSON.stringify(content))

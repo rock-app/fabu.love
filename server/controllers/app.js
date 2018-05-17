@@ -388,7 +388,6 @@ module.exports = class AppRouter {
         var url = fpath.join(config.baseUrl , version.downloadUrl)
 
         var result = fs.readFileSync(fpath.join(__dirname, "..",'templates') + '/template.plist') 
-
             var template = result.toString();
             var rendered = mustache.render(template, {
                 appName: app.appName,
@@ -399,7 +398,6 @@ module.exports = class AppRouter {
             ctx.set('Content-Type', 'text/plain; charset=utf-8');
             ctx.set('Access-Control-Allow-Origin','*');
             ctx.body = rendered
-
     }
 
     @request('get','/api/count/{appid}/{versionId}')

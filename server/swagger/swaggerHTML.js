@@ -4,10 +4,11 @@ const swaggerHTML = apiPath => `
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+
   <title>Swagger UI</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
-  <link href="http://cdn.bootcss.com/swagger-ui/3.0.19/swagger-ui.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/swagger-ui/3.0.19/swagger-ui.css" rel="stylesheet">
 
   <style>
     html
@@ -67,8 +68,8 @@ const swaggerHTML = apiPath => `
   
   <div id="swagger-ui"></div>
   
-  <script src="http://cdn.bootcss.com/swagger-ui/3.0.19/swagger-ui-bundle.js"></script>
-  <script src="http://cdn.bootcss.com/swagger-ui/3.0.19/swagger-ui-standalone-preset.js"></script>
+  <script src="https://cdn.bootcss.com/swagger-ui/3.0.19/swagger-ui-bundle.js"></script>
+  <script src="https://cdn.bootcss.com/swagger-ui/3.0.19/swagger-ui-standalone-preset.js"></script>
   <script>
   window.onload = function() {
     // Build a system

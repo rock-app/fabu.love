@@ -30,10 +30,7 @@ app.use(function (ctx, next) {
     return next()
   }
 })
-app.use(koajwt({
-  secret: config.secret || "d8AC195A-c3A1-9D8D-DAEc-B0C4C28F6F2a",
-  debug: true
-}).unless({
+app.use(koajwt({secret: config.secret, debug: true}).unless({
   path: [
     '/api/user/register',
     '/api/user/login',

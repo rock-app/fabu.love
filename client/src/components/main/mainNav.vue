@@ -115,7 +115,7 @@
             .replace('http://', '')
             .replace('www.', '')
 
-          let href = `wiki.${domain}api/swagger`
+          let href = `http://wiki.${domain}`
           window.open(href, '_blank')
         }
         if (data.index === 'GitHub') {

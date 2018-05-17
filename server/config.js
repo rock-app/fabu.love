@@ -11,11 +11,11 @@ const common = {
     secret: baseConfig.secret || "d8AC195A-c3A1-9D8D-DAEc-B0C4C28F6F2a"
 };
 
-if (baseConfig.dbUser) {
-    common['dbUser'] = baseConfig.dbUser
+if (baseConfig.dbuser) {
+    common['dbUser'] = baseConfig.dbuser
 }
-if (baseConfig.dbPassword) {
-    common['dbPassword'] = baseConfig.dbPassword
+if (baseConfig.dbpass) {
+    common['dbPassword'] = baseConfig.dbpass
 }
 
 export default common;

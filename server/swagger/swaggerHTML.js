@@ -4,7 +4,7 @@ const swaggerHTML = apiPath => `
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http - equiv = "Content-Security-Policy" content = "upgrade-insecure-requests" >
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <title>Swagger UI</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
   <link href="http://cdn.bootcss.com/swagger-ui/3.0.19/swagger-ui.css" rel="stylesheet">

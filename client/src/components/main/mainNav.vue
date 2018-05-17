@@ -110,8 +110,19 @@
           window.open(href, '_blank')
         }
         if (data.index === 'Help') {
+          var domain = this.axios.defaults.baseURL
+            .replace('https://', '')
+            .replace('http://', '')
+            .replace('www.', '')
+
+          let href = `wiki.${domain}api/swagger`
+          window.open(href, '_blank')
         }
         if (data.index === 'GitHub') {
+          if (data.index === 'GitHub') {
+            let herf = 'https://github.com/HeadingMobile'
+            window.open(herf, '_blank')
+          }
         }
         if (data.index === 'About') {
         }

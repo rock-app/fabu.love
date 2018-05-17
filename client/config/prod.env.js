@@ -7,5 +7,5 @@ var baseConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'co
 
 module.exports = {
   NODE_ENV: '"production"',
-  baseURL: "'" + baseConfig.baseURL + "'"
+  baseURL: "'" + baseConfig.url + "'"
 }

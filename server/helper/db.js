@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Fawn = require("fawn");
-const config = require("../config")
-
+import config from '../config';
 
 var dbUrl = 'mongodb://localhost:27017/app-publisher';
 if (config.dbUser) {
@@ -16,9 +15,11 @@ mongoose.connect(dbUrl, (err) => {
     }
 })
 
-mongoose.connection.on('disconnected', function () {    
-    console.log('Mongoose connection disconnected')  
-})
+mongoose
+    .connection
+    .on('disconnected', function () {
+        console.log('Mongoose connection disconnected')
+    })
 Fawn.init(mongoose);
 
 module.exports = mongoose

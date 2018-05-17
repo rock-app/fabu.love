@@ -1,6 +1,6 @@
 #bash
 
 cd client/
-npm install
+cnpm install
 cd ../server
-npm install
+cnpm install

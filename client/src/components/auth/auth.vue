@@ -269,7 +269,7 @@
     position: absolute;
     display: flex;
     display: -webkit-flex;
-    background-image: url("../../assets/bg.png");
+    background-image: url("../../assets/bg-samll.png");
     background-size: 100% 100%;
     font-family: PingFangSC;
     overflow: hidden;

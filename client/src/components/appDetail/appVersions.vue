@@ -176,10 +176,12 @@
           var headers = response.headers
           var totalLength = headers.get('Content-Length')
           var bytesReceived = 0
+          var _this = this
           reader.read().then(function processResult(result) {
             if (result.done) {
               console.log('下载完成')
-              AppResourceApi.downloadedCount(this.appInfo._id, item._id).then(() => {
+              console.log(_this.appInfo)
+              AppResourceApi.downloadedCount(_this.appInfo._id, item._id).then(() => {
               }, reject => {
               })
               return

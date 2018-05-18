@@ -180,7 +180,6 @@
           reader.read().then(function processResult(result) {
             if (result.done) {
               console.log('下载完成')
-              console.log(_this.appInfo)
               AppResourceApi.downloadedCount(_this.appInfo._id, item._id).then(() => {
               }, reject => {
               })

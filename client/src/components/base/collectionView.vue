@@ -169,6 +169,7 @@
     text-align: right;
     padding-right: 10px;
     width: 40%;
+    height: 25px;
   }
   .appItem-info-appInfo {
     font-size: 10px;

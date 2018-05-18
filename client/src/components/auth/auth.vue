@@ -4,7 +4,7 @@
 
       <div class="user-logo"></div>
       <div class="user-divier"></div>
-      <div class="user-name">爱发布 fabu.love</div>
+      <div class="user-name">爱发布</div>
 
       <div class="user-item" style="margin-top: 24.87vh" @click="clickSubItem('api')">
         <span class="icon-ic_api_s"></span>
@@ -299,10 +299,12 @@
   }
 
   .user-logo {
-    width: 160px;
+    width: 210px;
     height: 50px;
     margin-top: 17.6vh;
-    background-image: url("../../assets/logo.png");
+    background-size: 210px 40px;
+    background-repeat: no-repeat;
+    background-image: url("../../assets/logo_w.png");
   }
 
   .user-divier {

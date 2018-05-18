@@ -82,9 +82,12 @@
             this.originDataList = this.dataList
             if (this.dataList.length === 0) {
                 this.showEmpty = true
+            } else {
+              this.showEmpty = false
             }
           }, reject => {
             this.$message.error(reject)
+            this.showEmpty = true
           })
       },
       loadMore() {

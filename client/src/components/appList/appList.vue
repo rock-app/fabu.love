@@ -108,10 +108,18 @@
         this.loadAppList()
       },
       clickIosPlatform() {
-        this.currentPlatform = 'ios'
+          if (this.currentPlatform === 'ios') {
+            this.currentPlatform = ''
+          } else {
+            this.currentPlatform = 'ios'
+          }
       },
       clickAndroidPlatform() {
-        this.currentPlatform = 'android'
+        if (this.currentPlatform === 'android') {
+          this.currentPlatform = ''
+        } else {
+          this.currentPlatform = 'android'
+        }
       },
       getActiveClass(flag) {
         if (flag === this.currentPlatform) {
@@ -178,6 +186,9 @@
     watch: {
       currentPlatform(val) {
         this.dataList = this.originDataList
+        if (val === '') {
+          return
+        }
         let newArr = []
         this.dataList.forEach((item) => {
           if (item.platform === val) {

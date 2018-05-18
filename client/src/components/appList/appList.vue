@@ -42,7 +42,7 @@
                @closeUpload="closeUploadMethod"
                @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
-    <emptyView v-if="this.dataList.length === 0"></emptyView>
+    <emptyView v-if="this.showEmpty"></emptyView>
 
   </div>
 </template>
@@ -65,7 +65,8 @@
         showUploadView: false,
         file: FileList,
         currentPage: 0,
-        currentTeam: {}
+        currentTeam: {},
+        showEmpty: false
       }
     },
     components: {
@@ -79,6 +80,9 @@
             this.dataList = []
             this.dataList = response.data.reverse()
             this.originDataList = this.dataList
+            if (this.dataList.length === 0) {
+                this.showEmpty = true
+            }
           }, reject => {
             this.$message.error(reject)
           })

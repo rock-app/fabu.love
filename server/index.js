@@ -25,7 +25,7 @@ app.use(serve(path.join(__dirname, '..', 'client/dist')));
 app.use(function (ctx, next) {
   if (ctx.request.path.indexOf("/api") != 0) {
     ctx.response.type = 'html';
-    ctx.response.body = fs.readFileSync('./dist/index.html', 'utf8');
+    ctx.response.body = fs.readFileSync(path.join(__dirname, '..', 'client/dist/index.html'), 'utf8');
   } else {
     return next()
   }

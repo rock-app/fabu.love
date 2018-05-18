@@ -58,8 +58,7 @@
       this.bus.$off('showUserMessage')
       this.bus.$off('hiddenUserMessage')
     },
-    methods: {
-    }
+    methods: {}
   }
 </script>
 
@@ -71,9 +70,11 @@
     width: 100%;
     height: 100%;
   }
+
   .main .main-container .side-menu {
     background-color: white;
   }
+
   .main .main-header {
     background-color: white;
     height: 72px !important;
@@ -86,6 +87,7 @@
     min-width: 722px;
     padding-bottom: 60px;
   }
+
   .main .main-contentWrapper:after {
     display: inline-block;
     /*content: '版权所有 © 2005-2017 上海海鼎信息工程股份有限公司，并保留所有权利。';*/

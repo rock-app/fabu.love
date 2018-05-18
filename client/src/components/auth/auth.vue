@@ -6,19 +6,19 @@
       <div class="user-divier"></div>
       <div class="user-name">爱发布 fabu.love</div>
 
-      <div class="user-item" style="margin-top: 24.87vh">
+      <div class="user-item" style="margin-top: 24.87vh" @click="clickSubItem('api')">
         <span class="icon-ic_api_s"></span>
         <p>API文档</p>
       </div>
-      <div class="user-item">
+      <div class="user-item" @click="clickSubItem('help')">
         <span class="icon-ic_help_s"></span>
         <p>Help</p>
       </div>
-      <div class="user-item">
+      <div class="user-item" @click="clickSubItem('github')">
         <span class="icon-ic_github_s"></span>
         <p>Github</p>
       </div>
-      <div class="user-item">
+      <div class="user-item" @click="clickSubItem('about')">
         <span class="icon-ic_about_s"></span>
         <p>About</p>
       </div>
@@ -62,10 +62,11 @@
           </el-input>
 
           <el-button @click="onSubmit"
-                  v-bind:class="[showType==='login' ? 'user-login-form-btn' : 'user-register-form-btn']"
-                  type="submit"
+                     v-bind:class="[showType==='login' ? 'user-login-form-btn' : 'user-register-form-btn']"
+                     type="submit"
                      :loading="showLoading"
-          >{{ showType==='login' ? '立即登录' : '立即注册'}}</el-button>
+          >{{ showType==='login' ? '立即登录' : '立即注册'}}
+          </el-button>
 
           <div class="user-login-form-label" v-if="showType==='login'">
             <p>没有账号？<span @click="onRegister">立即注册</span></p>
@@ -131,7 +132,7 @@
           cancelButtonText: '取消',
           inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
           inputErrorMessage: '邮箱格式不正确'
-        }).then(({ value }) => {
+        }).then(({value}) => {
           this.email = value
           this.requestPassword()
         }).catch((e) => {
@@ -218,7 +219,7 @@
           this.$message.error('邮箱不能为空')
           return
         }
-        LoginApi.resetPassword({ email: this.email })
+        LoginApi.resetPassword({email: this.email})
           .then(response => {
             console.log(response)
             this.$message({
@@ -229,6 +230,29 @@
             console.log(reject)
             this.$message.error(reject)
           })
+      },
+      clickSubItem(data) {
+
+        if (data === 'api') {
+          let href = `${this.axios.defaults.baseURL}api/swagger`
+          window.open(href, '_blank')
+        }
+        if (data === 'help') {
+          var domain = this.axios.defaults.baseURL
+            .replace('https://', '')
+            .replace('http://', '')
+            .replace('www.', '')
+
+          let href = `http://wiki.${domain}`
+          console.log(href)
+          window.open(href, '_blank')
+        }
+        if (data === 'github') {
+          let herf = 'https://github.com/HeadingMobile'
+          window.open(herf, '_blank')
+        }
+        if (data.index === 'About') {
+        }
       }
 
     }
@@ -246,7 +270,7 @@
     display: flex;
     display: -webkit-flex;
     background-image: url("../../assets/bg.png");
-    background-size:100% 100%;
+    background-size: 100% 100%;
     font-family: PingFangSC;
     overflow: hidden;
   }
@@ -301,6 +325,9 @@
     align-items: center;
     margin-top: 24px;
   }
+  .user-item :hover{
+    cursor: pointer;
+  }
 
   .user-item img {
     width: 24px;
@@ -342,16 +369,16 @@
     color: rgba(155, 155, 155, 1);
   }
 
-  .user-login-form,.user-register-form {
+  .user-login-form, .user-register-form {
     width: 100%;
     text-align: center;
   }
 
-  .user-login-form .user-login-form-input{
+  .user-login-form .user-login-form-input {
     margin-top: 48px;
   }
 
-  .user-register-form .user-login-form-input{
+  .user-register-form .user-login-form-input {
     margin-top: 24px;
   }
 
@@ -366,12 +393,11 @@
     border: 1px #6477F2 solid;
   }
 
-
-  .user .el-input__prefix{
+  .user .el-input__prefix {
     padding-left: 18px;
   }
 
-  .user .el-input__prefix i{
+  .user .el-input__prefix i {
     line-height: 48px;
   }
 
@@ -380,8 +406,7 @@
     line-height: 48px;
   }
 
-
-  .user-register-form-btn,.user-login-form-btn, .user-login-form-btn:hover {
+  .user-register-form-btn, .user-login-form-btn, .user-login-form-btn:hover {
     width: 312px;
     height: 48px;
     border-radius: 24px;
@@ -392,11 +417,11 @@
     cursor: pointer;
   }
 
-  .user-login-form-btn{
+  .user-login-form-btn {
     margin-top: 48px;
   }
 
-  .user-register-form-btn{
+  .user-register-form-btn {
     margin-top: 24px;
   }
 

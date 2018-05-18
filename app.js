@@ -49,13 +49,7 @@ program
     .option("--secret, [secret]", "app session secret")
     .action(function (options) {
         writeConfig(options)
-        exec("sh build_client.sh", (error, stdout, stderr) => {
-            console.log(`${stdout}`);
-            console.log(`${stderr}`);
-            if (error !== null) {
-                console.log(`exec error: ${error}`);
-            }
-        })
+        console.log(exec("cd client && npm run build").toString())
     });
 
 program

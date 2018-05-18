@@ -244,6 +244,7 @@
             .replace('www.', '')
 
           let href = `http://wiki.${domain}`
+          console.log(href)
           window.open(href, '_blank')
         }
         if (data === 'github') {

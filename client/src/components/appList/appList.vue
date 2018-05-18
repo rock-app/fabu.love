@@ -42,6 +42,8 @@
                @closeUpload="closeUploadMethod"
                @uploadSuccess="uploadSuccessMethod"></uploadApp>
 
+    <emptyView v-if="this.dataList.length === 0"></emptyView>
+
   </div>
 </template>
 
@@ -50,6 +52,7 @@
   import UploadApp from './uploadApp.vue'
   import { getUserTeam } from '../../mgr/userMgr'
   import CollectionView from '../base/collectionView.vue'
+  import EmptyView from './emptyView.vue'
 
   export default {
     name: 'Apps',
@@ -66,7 +69,7 @@
       }
     },
     components: {
-      UploadApp, CollectionView
+      UploadApp, CollectionView, EmptyView
     },
     computed: {},
     methods: {

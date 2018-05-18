@@ -11,14 +11,11 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "apk-parser3": "^0.1.7",
     "axios": "^0.17.1",
     "element-ui": "^2.1.0",
-    "fs": "^0.0.1-security",
     "ipa-extract-info": "^1.2.3",
     "less-loader": "^4.1.0",
     "vue": "^2.5.2",
-    "vue-infinite-scroll": "^2.0.2",
     "vue-lazyload": "^1.1.4",
     "vue-qr": "^1.2.8",
     "vue-router": "^3.0.1",

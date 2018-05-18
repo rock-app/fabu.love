@@ -48,8 +48,6 @@
     font-size: 0px;
   }
   .empeyapp-wrapper .empty-wrapper img {
-    width: 426px;
-    height: 280px;
     background-size: auto;
   }
   .empeyapp-wrapper .empty-wrapper p {

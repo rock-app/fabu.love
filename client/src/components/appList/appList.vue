@@ -187,6 +187,11 @@
       currentPlatform(val) {
         this.dataList = this.originDataList
         if (val === '') {
+          if (this.dataList.length === 0) {
+            this.showEmpty = true
+          } else {
+            this.showEmpty = false
+          }
           return
         }
         let newArr = []
@@ -196,6 +201,11 @@
           }
         })
         this.dataList = newArr
+        if (this.dataList.length === 0) {
+          this.showEmpty = true
+        } else {
+          this.showEmpty = false
+        }
       }
     }
   }

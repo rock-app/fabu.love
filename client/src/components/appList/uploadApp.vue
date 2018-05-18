@@ -70,6 +70,7 @@
             this.$emit('uploadSuccess')
           })
           .catch(function(err) {
+            this.$emit('closeUpload')
             if (axios.isCancel(err)) {
               console.log('Request canceled', err.message)
               return

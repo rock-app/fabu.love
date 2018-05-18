@@ -23,9 +23,9 @@
               </td>
             </tr>
             <tr>
-              <td class="appItem-info-title">最新版本:</td>
+              <td class="appItem-info-title">当前版本:</td>
               <td>
-                <div class="appItem-info-appInfo nowrap" v-html="item.lastVersionCode"></div>
+                <div class="appItem-info-appInfo nowrap" v-html="item.currentVersion"></div>
               </td>
             </tr>
         </table>

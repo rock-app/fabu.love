@@ -315,6 +315,7 @@
   }
 
   .user-login-panel {
+    overflow: hidden;
     height: 528px;
     width: 408px;
     background-color: white;
@@ -401,6 +402,7 @@
 
   .user-login-form-label {
     margin-top: 48px;
+    cursor: pointer;
   }
 
   .user-login-form-bottom {

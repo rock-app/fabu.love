@@ -18,7 +18,6 @@
     "vue-lazyload": "^1.1.4",
     "vue-qr": "^1.2.8",
     "vue-router": "^3.0.1",
-    "vux-loader": "^1.2.1",
     "vue-context-menu": "^2.0.6"
   },
   "devDependencies": {

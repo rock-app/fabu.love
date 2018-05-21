@@ -27,6 +27,7 @@ var ipaMataData = require('ipa-metadata')
 
 var {writeFile,readFile,responseWrapper,exec} = require('../helper/util')
 var tempDir = path.join(config.fileDir, 'temp')
+var uploadDir = path.join(config.fileDir, 'upload')
 
 createFolderIfNeeded(tempDir)
 
@@ -105,8 +106,8 @@ async function parseAppAndInsertToDB(file,user,team) {
 
     //移动文件到对应目录
     var fileRelatePath = path.join(team.id,info.platform)
-    createFolderIfNeeded(path.join(config.fileDir, fileRelatePath))
-    var fileRealPath = path.join(config.fileDir,fileRelatePath, fileName + path.extname(filePath))
+    createFolderIfNeeded(path.join(uploadDir, fileRelatePath))
+    var fileRealPath = path.join(uploadDir,fileRelatePath, fileName + path.extname(filePath))
     await fs.renameSync(filePath,fileRealPath)
     info.downloadUrl = path.join(uploadPrefix,fileRelatePath , fileName + path.extname(filePath))
 
@@ -234,13 +235,13 @@ async function extractIpaIcon(filename,guid,team) {
       //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
       var iconRelatePath = path.join(team.id,"/icon")
       var iconSuffix =  "/" + guid + "_i.png"
-      createFolderIfNeeded(path.join(config.fileDir,iconRelatePath))
+      createFolderIfNeeded(path.join(uploadDir,iconRelatePath))
       if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
         await fs.renameSync(tmpOut, path.join(iconRelatePath,iconSuffix))
         return {'success': true,'fileName': iconRelatePath + iconSuffix}
       }
       await fs.unlinkSync(tmpOut)
-      fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid) ,path.join(config.fileDir, iconRelatePath,iconSuffix))
+      fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid) ,path.join(uploadDir, iconRelatePath,iconSuffix))
       return {'success': true,'fileName':iconRelatePath + iconSuffix}
     }
   }
@@ -283,10 +284,10 @@ function extractApkIcon(filepath, guid,team) {
       }
 
       iconPath = iconPath.replace(/'/g, '')
-      var dir = path.join(config.fileDir,team.id,"icon")
+      var dir = path.join(uploadDir,team.id,"icon")
       var realPath = path.join(team.id ,"icon" ,'/{0}_a.png'.format(guid))
       createFolderIfNeeded(dir)
-      var tempOut = path.join(config.fileDir,realPath)
+      var tempOut = path.join(uploadDir,realPath)
       var zip = new AdmZip(filepath)
       var apkEntries = zip.getEntries()
       var found = false

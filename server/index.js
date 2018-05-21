@@ -16,7 +16,6 @@ const mount = require('koa-mount')
 
 const app = new Koa()
 
-// 解决跨域问题
 app.use(cors())
 app.use(bodyParser())
 app.use(serve(path.resolve(config.fileDir, '..')))

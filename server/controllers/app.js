@@ -394,8 +394,10 @@ module.exports = class AppRouter {
                 bundleID: app.bundleId,
                 versionStr:version.versionStr,
                 downloadUrl: url,
+                fileSize:version.size,
+                iconUrl : `${config.baseUrl}/${app.icon}`
             });
-            ctx.set('Content-Type', 'text/plain; charset=utf-8');
+            ctx.set('Content-Type', 'text/xml; charset=utf-8');
             ctx.set('Access-Control-Allow-Origin','*');
             ctx.body = rendered
     }

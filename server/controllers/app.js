@@ -385,7 +385,7 @@ module.exports = class AppRouter {
             throw new Error("版本不存在")
         }
 
-        var url = fpath.join(config.baseUrl , version.downloadUrl)
+        var url = `${config.baseUrl}/${version.downloadUrl}`
 
         var result = fs.readFileSync(fpath.join(__dirname, "..",'templates') + '/template.plist') 
             var template = result.toString();

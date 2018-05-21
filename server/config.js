@@ -4,7 +4,7 @@ var path = require("path")
 var baseConfig = JSON.parse(fs.readFileSync('../config.json', 'utf8'))
 
 const common = {
-    baseUrl: baseConfig.baseUrl,
+    baseUrl: baseConfig.url,
     port: baseConfig.port,
     apiPrefix: 'api',
     fileDir: path.join((baseConfig.dir || path.join(__dirname, "..", "..")), '/upload'), //上传文件的存放目录

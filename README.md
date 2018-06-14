@@ -15,18 +15,10 @@ demo地址: https://fabu.love
 
 后端使用 nodejs + koa
 
-
-
-运行截图:
-
-![5657AAD0-7A7F-4CB5-9341-98679AD57C1D](/Volumes/UserData/ProjectSource/NodeProject/AppFabu/screenshots/5657AAD0-7A7F-4CB5-9341-98679AD57C1D.png)
-
-![05A6652A-8C99-40C5-B98B-6056DD932FCB](/Volumes/UserData/ProjectSource/NodeProject/AppFabu/screenshots/05A6652A-8C99-40C5-B98B-6056DD932FCB.png)
-
-![143CBD50-D020-4F01-A9F3-F5F070110F18](/Volumes/UserData/ProjectSource/NodeProject/AppFabu/screenshots/143CBD50-D020-4F01-A9F3-F5F070110F18.png)
-
-![A7347718-F313-4A70-8314-7C83E275E652](/Volumes/UserData/ProjectSource/NodeProject/AppFabu/screenshots/A7347718-F313-4A70-8314-7C83E275E652.png)
-
+截图 | 截图  
+- | :-: |
+![5657AAD0-7A7F-4CB5-9341-98679AD57C1D](./screenshots/5657AAD0-7A7F-4CB5-9341-98679AD57C1D.png)  | ![05A6652A-8C99-40C5-B98B-6056DD932FCB](./screenshots/05A6652A-8C99-40C5-B98B-6056DD932FCB.png)|  
+![143CBD50-D020-4F01-A9F3-F5F070110F18](./screenshots/143CBD50-D020-4F01-A9F3-F5F070110F18.png)  | ![A7347718-F313-4A70-8314-7C83E275E652](./screenshots/A7347718-F313-4A70-8314-7C83E275E652.png) | 
 
 
 #### 安装前准备
@@ -51,24 +43,24 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 2.安装依赖
 
-```
-//进入项目根目录
+```bash
+#进入项目根目录
 
-cnpm install  //安装依赖
+cnpm install  #安装依赖
 ```
 
 3.修改运行配置
 
 //修改根目录config.json的配置文件
 
-```json
+```bash
 {
-    "url":"http://127.0.0.1:9898", //前端请求的地址,本地运行需要带上端口号,
-    "port":"9898", //后端程序运行的端口
-    "secret":"XXXX-XXXX", //加密字符串
-    "dir":"/Volumes/UserData/ProjectSource/NodeProject/upload" //静态文件上传目录
-    "dbuser":"xxx",//数据库用户名 如果mongodb有设置认证信息需要配置dbuser和dbpass
-    "dbpass":"xxx",//数据库密码
+    "url":"http://127.0.0.1:9898", #前端请求的地址,本地运行需要带上端口号,
+    "port":"9898", #后端程序运行的端口
+    "secret":"XXXX-XXXX", #加密字符串
+    "dir":"/Volumes/UserData/ProjectSource/NodeProject/upload", #静态文件上传目录
+    "dbuser":"xxx",#数据库用户名 如果mongodb有设置认证信息需要配置dbuser和dbpass
+    "dbpass":"xxx",#数据库密码
 }
 ```
 

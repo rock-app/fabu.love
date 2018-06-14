@@ -90,7 +90,6 @@
 
   .main .main-contentWrapper:after {
     display: inline-block;
-    /*content: '版权所有 © 2005-2017 上海海鼎信息工程股份有限公司，并保留所有权利。';*/
     font-size: 14px;
     color: $subTitleColor;
     width: 100%;

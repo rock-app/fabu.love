@@ -1,6 +1,6 @@
 <template>
     <div class="footer-wrapper">
-      <p class="footerwrapper-title">版权所有 © 2005-2017 上海海鼎信息工程股份有限公司，并保留所有权利。</p>
+      <p class="footerwrapper-title"></p>
     </div>
 </template>
 

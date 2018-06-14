@@ -78,12 +78,8 @@
             <p @click="onForget">忘记密码</p>
           </div>
         </div>
-
       </div>
 
-      <div class="user-footer-label">
-        <p>版权所有©2018上海海鼎信息工程股份有限公司.保留所有权利.</p>
-      </div>
     </div>
   </div>
 </template>

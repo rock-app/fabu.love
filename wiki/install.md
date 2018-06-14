@@ -23,7 +23,7 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```bash
 //进入项目根目录
 
-npm install  //安装依赖
+cnpm install  //安装依赖
 
 //配置前端接口请求的baseUrl和后端运行的端口号
 node app config -u https://fabu.love -p 9898

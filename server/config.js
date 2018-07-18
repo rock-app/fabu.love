@@ -1,7 +1,13 @@
 var fs = require("fs")
 var path = require("path")
 
-var baseConfig = JSON.parse(fs.readFileSync('../config.json', 'utf8'))
+var baseConfig = {}
+
+try {
+    baseConfig = JSON.parse(fs.readFileSync('../config.json', 'utf8'))
+} catch (error) {
+    console.log("使用环境变量或者默认配置...")
+}
 
 
 const common = {

@@ -1,4 +1,5 @@
 FROM node:9.11.2-alpine
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
 WORKDIR /server
 

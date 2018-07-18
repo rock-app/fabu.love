@@ -1,10 +1,11 @@
 FROM harbor.qianfan123.com/base/nginx:1.15.1-node-9.11.2-alpine
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-WORKDIR /server
 
 # 增加server
 RUN npm install -g pm2 babel-cli \
     && npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+WORKDIR /opt/server
 ADD server /opt/server
 ADD config.json /
 RUN cnpm install

@@ -11,7 +11,7 @@ RUN cnpm install
 
 # 增加nginx前端页面
 ADD client/dist /opt/web
-ADD docker/web/app-publisher.conf /etc/nginx/conf.d/default.conf
+ADD docker/app-publisher.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 9898 80 443
 

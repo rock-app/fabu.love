@@ -1,0 +1,19 @@
+FROM harbor.qianfan123.com/base/nginx:1.15.1-node-9.11.2-alpine
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+WORKDIR /server
+
+# 增加server
+RUN npm install -g pm2 babel-cli \
+    && npm install -g cnpm --registry=https://registry.npm.taobao.org
+ADD server /opt/server
+ADD config.json /
+RUN cnpm install
+
+# 增加nginx前端页面
+ADD client/dist /opt/web
+ADD docker/web/app-publisher.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 9898 80 443
+
+ENTRYPOINT ["pm2-docker", "start", "process.json"]
+CMD ["nginx", "-g", "daemon off;"]

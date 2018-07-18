@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const Fawn = require("fawn");
 import config from '../config';
 
-var dbUrl = 'mongodb://localhost:27017/app-publisher';
+var dbUrl = `mongodb://${config.dbHost}:${config.dbPort}/${config.dbName}`;
 if (config.dbUser) {
-    dbUrl = `mongodb://${config.dbUser}:${config.dbPassword}@localhost:27017/app-publisher`;
+    dbUrl = `mongodb://${config.dbUser}:${config.dbPassword}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 }
 
 mongoose.connect(dbUrl, (err) => {

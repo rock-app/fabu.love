@@ -25,7 +25,6 @@ export function getHttp (url, params) {
 
 export function deleteHttp (url) {
   return new Promise((resolve, reject) => {
-    configAxios()
     vue.axios.delete(url)
       .then(response => {
         setTimeout(() => {
@@ -63,9 +62,15 @@ export function postHttp (url, body, params) {
   })
 }
 
-export function configAxios() {
+export function configAxios(url) {
 
-  var baseUrl = process.env.baseURL
+  console.log(url)
+  var baseUrl = url
+  
+  if (process.env.baseUrl) {
+    baseUrl = process.env.baseURL
+  }
+
   if (!baseUrl.endsWith('/')) {
     baseUrl += '/'
   }

@@ -52,7 +52,7 @@ Vue.use(VueLazyLoad, {
 
 
 // 配置接口信息
-configAxios()
+configAxios(window.location.origin)
 
 /* eslint-disable no-new */
 new Vue({

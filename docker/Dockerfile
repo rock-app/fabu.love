@@ -4,6 +4,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 # 安装依赖库
 RUN npm install -g pm2 babel-cli \
     && npm install -g cnpm --registry=https://registry.npm.taobao.org
+# 设置目录
+RUN mkdir -p /opt/data /opt/server /opt/web /opt/logs
 
 # 增加启动脚本
 ADD docker/docker-entrypoint.sh /opt/server/

@@ -7,7 +7,7 @@ RUN npm install -g pm2 babel-cli \
 
 # 增加启动脚本
 ADD docker/docker-entrypoint.sh /opt/server/
-RUN chmod + x /opt/server/docker-entrypoint.sh
+RUN chmod +x /opt/server/docker-entrypoint.sh
 
 # 增加server
 WORKDIR /opt/server

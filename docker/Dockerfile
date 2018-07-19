@@ -1,10 +1,16 @@
 FROM harbor.qianfan123.com/base/nginx:1.15.1-node-9.11.2-alpine
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-WORKDIR /server
 
-# 增加server
+# 安装依赖库
 RUN npm install -g pm2 babel-cli \
     && npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+# 增加启动脚本
+ADD docker/docker-entrypoint.sh /opt/server/
+RUN chmod + x /opt/server/docker-entrypoint.sh
+
+# 增加server
+WORKDIR /opt/server
 ADD server /opt/server
 ADD config.json /
 RUN cnpm install
@@ -15,5 +21,5 @@ ADD docker/app-publisher.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 9898 80 443
 
-ENTRYPOINT ["pm2-docker", "start", "process.json"]
+ENTRYPOINT ["/opt/server/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

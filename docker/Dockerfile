@@ -24,4 +24,4 @@ ADD docker/app-publisher.conf /etc/nginx/conf.d/default.conf
 EXPOSE 9898 80 443
 
 ENTRYPOINT ["/opt/server/docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]

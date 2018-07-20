@@ -17,7 +17,7 @@ const common = {
     fileDir: process.env.FABU_UPLOAD_DIR || path.join((baseConfig.dir || path.join(__dirname, "..", ".."))), //上传文件的存放目录
     secret: process.env.FABU_SECRET || baseConfig.secret || "secretsecret",
     dbUser: process.env.FABU_DBUSER || baseConfig.dbuser || undefined,
-    dbpass: process.env.FABU_DBPWD || baseConfig.dbpass || undefined,
+    dbPass: process.env.FABU_DBPWD || baseConfig.dbpass || undefined,
     dbName: process.env.FABU_DB_NAME || baseConfig.dbname || "fabulove",
     dbHost: process.env.FABU_DB_HOST || baseConfig.dbhost || "localhost",
     dbPort: process.env.FABU_DB_PORT || baseConfig.dbport || "27017"

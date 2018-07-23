@@ -1,6 +1,9 @@
 FROM harbor.qianfan123.com/base/nginx:1.15.1-node-9.11.2-alpine
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
+# ADD tools
+RUN apk add --no-cache --update-cache bash curl ca-certificates font-sun-misc
+
 # BASE
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8

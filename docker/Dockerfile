@@ -6,6 +6,9 @@ RUN npm install -g pm2 babel-cli \
 # 设置目录
 RUN mkdir -p /opt/data /opt/server /opt/web /opt/logs /var/cache/nginx/client_temp
 
+# 增加库
+RUN apk add --no-cache openssl
+
 # 增加启动脚本
 ADD docker/docker-entrypoint.sh /opt/server/
 RUN chmod +x /opt/server/docker-entrypoint.sh

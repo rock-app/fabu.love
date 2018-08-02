@@ -62,14 +62,11 @@ export function postHttp (url, body, params) {
   })
 }
 
-export function configAxios(url) {
+export function configAxios() {
 
-  console.log(url)
-  var baseUrl = url
-  
-  if (process.env.baseUrl) {
-    baseUrl = process.env.baseURL
-  }
+  console.log(window.location.origin)  
+
+  var baseUrl = process.env.SERVER_HOST || window.location.origin
 
   if (!baseUrl.endsWith('/')) {
     baseUrl += '/'

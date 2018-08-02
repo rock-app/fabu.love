@@ -18,7 +18,7 @@ const app = new Koa()
 
 app.use(cors())
 app.use(bodyParser())
-app.use(serve(path.resolve(config.fileDir, '..')))
+app.use(serve(path.resolve(config.fileDir)))
 app.use(serve(path.join(__dirname, '..', 'client/dist')));
 
 app.use(function (ctx, next) {

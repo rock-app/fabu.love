@@ -66,7 +66,7 @@ export function configAxios(url) {
 
   console.log(url)
   var baseUrl = url
-  
+
   if (process.env.baseUrl) {
     baseUrl = process.env.baseURL
   }

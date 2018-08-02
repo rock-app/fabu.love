@@ -15,12 +15,12 @@
       }
     },
     created() {
+        console.log(window.location.pathname)
       this.$nextTick(() => {
         let user = getUserInfo()
         if (user) {
         } else {
-          if (this.$route.name === 'AppPreView') {
-          } else {
+          if (window.location.pathname === '/login') {
             this.$router.push('/login')
           }
         }

@@ -65,7 +65,6 @@ export function postHttp (url, body, params) {
 export function configAxios() {
 
   console.log(window.location.origin)  
-
   var baseUrl = process.env.SERVER_HOST || window.location.origin
 
   if (!baseUrl.endsWith('/')) {

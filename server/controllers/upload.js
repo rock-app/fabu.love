@@ -255,8 +255,11 @@ function parseApk(filename) {
   return new Promise((resolve, reject) => {
     apkParser3(filename, (err, data) => {
       var apkPackage = parseText(data.package)
+     console.log(data)
+     console.log("----------------")
+	console.log(data['application-label'])
       var info = {
-        'appName': data['application-label'].replace(/'/g, ''),
+        'appName': (data['application-label-zh-CN'] || data['application-label-es-US']).replace(/'/g, ''),
         'versionCode': Number(apkPackage.versionCode),
         'bundleId' : apkPackage.name,
         'versionStr': apkPackage.versionName,

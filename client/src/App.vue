@@ -20,7 +20,7 @@
         let user = getUserInfo()
         if (user) {
         } else {
-          if (window.location.pathname === '/login') {
+          if (window.location.pathname === '/login' || window.location.pathname === '/') {
             this.$router.push('/login')
           }
         }

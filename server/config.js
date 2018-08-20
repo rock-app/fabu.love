@@ -1,6 +1,7 @@
 var fs = require("fs")
 var path = require("path")
 
+
 const common = {
     baseUrl: process.env.FABU_BASE_URL || "https://127.0.0.1:9898", //baseUrl应用请求的url地址,比如https://fabu.love
     port: process.env.FABU_PORT || "9898", //server运行的端口
@@ -17,14 +18,24 @@ const common = {
     emailUser: process.env.FABU_EMAIL_USER || "", 
     emailPass: process.env.FABU_EMAIL_PASS || "",
 
-    allowRegister: process.env.FABU_ALLOW_REGISTER || true, //是否允许用户注册,为否则后端注册接口不可用
+    allowRegister: boolConfig(process.env.FABU_ALLOW_REGISTER || "true"), //是否允许用户注册,为否则后端注册接口不可用
 
-    openLdap: process.env.FABU_ALLOW_LDAP || false, //是否开启ldap 默认是false 如果公司没有ldap服务可以不用理会
+    openLdap: boolConfig(process.env.FABU_ALLOW_LDAP || "false"), //是否开启ldap 默认是false 如果公司没有ldap服务可以不用理会
     ldapServer: process.env.FABU_LDAP_URL || "",  //ldap server url
     ldapUserDn: process.env.FABU_LDAP_USERDN || "", //ldap管理员dn 也就是管理员用户名
     ldapBindCredentials: process.env.FABU_LDAP_CREDENTIALS || "", //ldap管理员密码
-    ldapBase: process.env.FABU_LDAP_BASE || "" //ldap base
+    ldapBase: process.env.FABU_LDAP_BASE || "" ,//ldap base
 
+   
 };
+
+function boolConfig(str) {
+    if (str == 'true'){
+        return true
+    }else{
+        return false
+    }
+}
+
 
 export default common;

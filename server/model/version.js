@@ -22,6 +22,7 @@ var versionSchema = new Schema({
     downloadUrl: String,
     downloadCount:{ type:Number, default:0 },
     fileDownloadUrl:String, //源文件下载地址
+    installUrl:String, //应用包安装地址
     showOnDownloadPage:{type:Boolean,default:false},
     appLevel:String,
     changelog:String,

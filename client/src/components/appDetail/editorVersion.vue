@@ -92,7 +92,7 @@
       },
       sure() {
         let body = {
-          'fileDownloadUrl': this.downloadUrl,
+          'installUrl': this.installUrl,
           'showOnDownloadPage': this.showinDownLoadPage,
           'changelog': this.updataContent,
           'updateMode': this.updateType

@@ -45,7 +45,7 @@ var grayRelease = {
 }
 
 var versionProfile = {
-    'fileDownloadUrl':'string', //更新文件的下载地址
+    'installUrl':'string', //更新文件的安装地址
     'showOnDownloadPage':'boolean', //是否显示到下载页
     'changelog':'string', //修改日志
     'updateMode':{type:'string'} //更新模式  force / silent / normal/ 强制或者静默或者普通升级
@@ -75,7 +75,7 @@ module.exports = class AppRouter {
         var { teamId } = ctx.validatedParams;        
 
         var result = await App.find(
-                {'ownerId':teamId}
+                {'ownerId':teamId || user.id}
             )
             // .limit(size).skip(page * size)
         ctx.body = responseWrapper(result)

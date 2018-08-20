@@ -38,10 +38,11 @@
         "uuid": "^3.2.1",
         "mime": "^2.2.0",
         "fawn": "^2.1.5",
-        "bcrypt": "1.0.3",
+        "bcrypt": "^3.0.0",
         "nodemailer": "^4.6.3",
         "ipa-metadata": "^1.4.0",
-        "mustache": "^2.3.0"
+        "mustache": "^2.3.0",
+        "ldapjs": "^1.0.2"
     },
     "devDependencies": {
         "babel-cli": "^6.24.1",

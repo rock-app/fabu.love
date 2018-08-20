@@ -127,6 +127,11 @@ async function parseAppAndInsertToDB(file,user,team) {
       info.size = fs.statSync(fileRealPath).size
       var version = Version(info)
       version.appId = app._id;
+      if (app.platform == 'ios') {
+        version.installUrl = mapInstallUrl(app.id,version.id)
+      }else{
+        version.installUrl = info.downloadUrl
+      }
       await version.save()
       return {'app':app,'version':version}
     }
@@ -137,6 +142,11 @@ async function parseAppAndInsertToDB(file,user,team) {
       info.size = fs.statSync(fileRealPath).size
       var version = Version(info)
       version.appId = app._id;
+      if (app.platform == 'ios') {
+        version.installUrl = mapInstallUrl(app.id,version.id)
+      }else{
+        version.installUrl = `${config.baseUrl}/${info.downloadUrl}`
+      }
       await version.save()
       return {'app':app,'version':version}
     } else {
@@ -148,16 +158,8 @@ async function parseAppAndInsertToDB(file,user,team) {
   }
 
 ///映射可安装的app下载地址
-function mapIconAndUrl(result) {
-  return result.map(item => {
-    item.icon = '{0}/icon/{1}.png'.format(baseURL, item.guid)
-    if (item.platform === 'ios') {
-      item.url = "itms-services://?action=download-manifest&url={0}/plist/{1}".format(basePath, item.guid);
-    } else if (item.platform === 'android') {
-      item.url = "{0}/apk/{1}.apk".format(basePath, item.guid);
-    }
-    return item;
-  })
+function mapInstallUrl(appId,versionId) {
+    return `itms-services://?action=download-manifest&url=${config.baseUrl}/api/plist/${appId}/${versionId}`
 }
 
 ///移动相关信息到指定目录
@@ -259,7 +261,8 @@ function parseApk(filename) {
      console.log("----------------")
 	console.log(data['application-label'])
       var info = {
-        'appName': (data['application-label-zh-CN'] || data['application-label-es-US']).replace(/'/g, ''),
+        'appName': (data['application-label'] || data['application-label-zh-CN'] || data['application-label-es-US'] || 
+                    data['application-label-zh_CN'] || data['application-label-es_US']).replace(/'/g, ''),
         'versionCode': Number(apkPackage.versionCode),
         'bundleId' : apkPackage.name,
         'versionStr': apkPackage.versionName,

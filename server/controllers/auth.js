@@ -1,13 +1,14 @@
 'use strict';
 
-import {request, summary, tags, body, description} from '../swagger';
-import {User, userSchema} from "../model/user";
+import { request, summary, tags, body, description } from '../swagger';
+import { User, userSchema } from "../model/user";
 import Team from "../model/team"
-import {responseWrapper} from "../helper/util";
+import { responseWrapper } from "../helper/util";
 import bcrypt from "bcrypt"
 import Fawn from "fawn"
 import Mail from '../helper/mail'
 import config from '../config'
+import Ldap from '../helper/ldap'
 
 const jwt = require('jsonwebtoken');
 
@@ -46,8 +47,44 @@ module.exports = class AuthRouter {
     @tag
     @body(loginSchema)
     static async login(ctx, next) {
-        const {body} = ctx.request
-        const user = await User.findOne({username: body.username});
+        const { body } = ctx.request
+        console.log(body)
+            // 判断是否开放 ldap，如果开放ldap, 
+            // 根据ldap的用户信息生成新用户
+        if (config.openLdap) {
+            // let auth = await Ldap.auth(body.username, body.password)
+            var ldapUser = await Ldap.auth(body.username, body.password).catch((error) => {
+                console.log(error)
+            })
+            let user = await User.findOne({ username: body.username });
+            if (ldapUser && ((!user) || user.username !== ldapUser.name)) {
+                console.log('user' + ldapUser)
+                var password = await bcrypt.hash(body.password, 10)
+                var newUser = new User({ username: ldapUser.name, password: password, email: ldapUser.mail });
+                var team = new Team();
+                team._id = newUser._id;
+                team.name = "我的团队";
+                team.creatorId = newUser._id;
+                team.members = [{
+                    _id: newUser._id,
+                    username: newUser.username,
+                    email: newUser.email,
+                    role: "owner"
+                }]
+                newUser.teams = [{
+                    _id: team._id,
+                    name: team.name,
+                    role: "owner"
+                }]
+                var task = Fawn.Task();
+                var result = await task
+                    .save(team)
+                    .save(newUser)
+                    .run({ useMongoose: true });
+            }
+        }
+
+        const user = await User.findOne({ username: body.username });
         if (user) {
             let valide = await bcrypt.compare(body.password, user.password)
             if (!valide) {
@@ -72,9 +109,12 @@ module.exports = class AuthRouter {
     @body(registerSchema)
     @tag
     static async register(ctx, next) {
-        var {body} = ctx.request;
+        var { body } = ctx.request;
+        if (!config.allowRegister) {
+            throw new Error("不允许注册用户.");
+        }
         body.password = await bcrypt.hash(body.password, 10) // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
-        let user = await User.find({username: body.username});
+        let user = await User.find({ username: body.username });
         if (!user.length) {
             var newUser = new User(body);
 
@@ -82,26 +122,22 @@ module.exports = class AuthRouter {
             team._id = newUser._id;
             team.name = "我的团队";
             team.creatorId = newUser._id;
-            team.members = [
-                {
-                    _id: newUser._id,
-                    username: newUser.username,
-                    email: newUser.email,
-                    role: "owner"
-                }
-            ]
-            newUser.teams = [
-                {
-                    _id: team._id,
-                    name: team.name,
-                    role: "owner"
-                }
-            ]
+            team.members = [{
+                _id: newUser._id,
+                username: newUser.username,
+                email: newUser.email,
+                role: "owner"
+            }]
+            newUser.teams = [{
+                _id: team._id,
+                name: team.name,
+                role: "owner"
+            }]
             var task = Fawn.Task();
             var result = await task
                 .save(team)
                 .save(newUser)
-                .run({useMongoose: true});
+                .run({ useMongoose: true });
 
             ctx.body = responseWrapper(newUser)
         } else {
@@ -134,7 +170,7 @@ module.exports = class AuthRouter {
             throw new Error("密码错误");
         }
         body.password = await bcrypt.hash(body.newpwd, 10); // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
-        await User.findByIdAndUpdate(user._id, {password: body.password})
+        await User.findByIdAndUpdate(user._id, { password: body.password })
         ctx.body = responseWrapper(true, "密码修改成功")
     }
 
@@ -224,7 +260,7 @@ module.exports = class AuthRouter {
             .toString(36)
             .substring(2, 5);
         var hashPassword = await bcrypt.hash(newPassword, 10); // 10是 hash加密的级别, 默认是10，数字越大加密级别越高
-        await User.findByIdAndUpdate(user._id, {password: hashPassword})
+        await User.findByIdAndUpdate(user._id, { password: hashPassword })
         Mail.send(['dzq1993@qq.com'], "爱发布密码重置邮件", `您的密码已重置${newPassword}`)
         ctx.body = responseWrapper("密码已重置,并通过邮件发送到您的邮箱")
     }

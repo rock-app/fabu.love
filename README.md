@@ -15,7 +15,7 @@ demo地址: https://fabu.love
 
 后端使用 nodejs + koa
 
-![Artboard](/Volumes/UserData/ProjectSource/NodeProject/AppFabu/screenshots/Artboard.png)
+![Artboard](./screenshots/Artboard.png)
 
 #### 项目结构
 

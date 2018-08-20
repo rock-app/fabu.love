@@ -64,12 +64,13 @@ export function postHttp (url, body, params) {
 
 export function configAxios() {
 
-  console.log(window.location.origin)  
+  console.log(window.location.origin)
   var baseUrl = process.env.SERVER_HOST || window.location.origin
 
   if (!baseUrl.endsWith('/')) {
     baseUrl += '/'
   }
+
   vue.axios.defaults.baseURL = baseUrl
   vue.axios.defaults.headers.common['Content-Type'] = 'application/json'
   vue.axios.default.timeout = 60000

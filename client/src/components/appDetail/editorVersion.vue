@@ -22,7 +22,7 @@
           <el-form-item label="下载次数">
             <p class="versiondownload" style="display: inline-block" v-html="getDownLoadCount(this.versionInfo.downloadCount)"></p>/<span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(this.versionInfo.strategy)"></span>
           </el-form-item>
-          <el-form-item label="更新下载地址">
+          <el-form-item label="更新安装地址">
             <input style="width: calc(100% - 40px)" v-model="downloadUrl" class="borderLine-input" type="text">
           </el-form-item>
           <el-form-item label="更新方式">
@@ -75,7 +75,7 @@
       setTimeout(() => {
         console.log(this.versionInfo)
         this.show = true
-        this.downloadUrl = `${this.axios.defaults.baseURL}${this.appInfo.shortUrl}`
+        this.downloadUrl = this.versionInfo.installUrl
         if (this.versionInfo.changelog) {
           this.updataContent = this.versionInfo.changelog
         }

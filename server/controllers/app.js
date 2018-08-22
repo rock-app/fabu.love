@@ -334,17 +334,18 @@ module.exports = class AppRouter {
         ctx.body = responseWrapper(true, body.release ? "版本已发布" : "版本已关闭")
     }
 
-    @request('get', '/api/app/checkupdate/{teamID}/{bundleID}/{currentVersionCode}')
+    @request('get', '/api/app/checkupdate/{teamID}/{platform}/{bundleID}/{currentVersionCode}')
     @summary("检查版本更新")
     @tag
     @path({
         teamID: String,
         bundleID: String,
-        currentVersionCode: String
+        currentVersionCode: String,
+        platform: String
     })
     static async checkUpdate(ctx, next) {
-            var { teamID, bundleID, currentVersionCode } = ctx.validatedParams;
-            var app = await App.findOne({ bundleId: bundleID, ownerId: teamID })
+            var { teamID, bundleID, currentVersionCode, platform } = ctx.validatedParams;
+            var app = await App.findOne({ bundleId: bundleID, ownerId: teamID, platform: platform })
             if (!app) {
                 throw new Error("应用不存在或您没有权限执行该操作")
             }

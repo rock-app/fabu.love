@@ -16,7 +16,6 @@ RUN chmod +x /opt/server/docker-entrypoint.sh
 # 增加server
 WORKDIR /opt/server
 ADD server /opt/server
-ADD config.json /
 RUN cnpm install
 
 # 增加nginx前端页面

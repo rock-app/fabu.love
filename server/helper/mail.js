@@ -13,7 +13,8 @@ module.exports = class Mail {
     static async send(emails, subject, content) {
         const email = (emails instanceof Array) ? emails.reduce((pv, cv) => { return pv + "," + cv }) : emails
         let transporter = nodemailer.createTransport({
-            service: config.emailService,
+            host: config.emailService,
+            port: config.emailPort,
             auth: {
                 user: config.emailUser,
                 pass: config.emailPass

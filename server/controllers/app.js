@@ -11,7 +11,7 @@ import {
 import fs from 'fs';
 import config from '../config'
 import { APIError } from "../helper/rest";
-import { responseWrapper } from "../helper/util";
+import { getIp, responseWrapper } from "../helper/util";
 import fpath from 'path';
 import mustache from 'mustache';
 import _ from 'lodash'
@@ -360,10 +360,13 @@ module.exports = class AppRouter {
             var normalVersion = await Version.findOne({ _id: app.releaseVersionId })
 
             var version = normalVersion
-            if (app.grayReleaseVersionId && lastestGrayVersion.versionCode > version.versionCode) {
+            var lastestGrayVersionCode = lastestGrayVersion.versionCode || 0
+            var normalVersionCode = version.versionCode || 0
+            if (app.grayReleaseVersionId && lastestGrayVersionCode > normalVersionCode) {
                 var ipType = app.grayStrategy.ipType
                 var ipList = app.grayStrategy.ipList
-                var clientIp = ctx.request.ip.match(/\d+.\d+.\d+.\d+/)[0]
+                var clientIp = await getIp(ctx.request)
+                console.log(clientIp)
                 if (ipType == 'white' && _.includes(ipList, clientIp)) { //如果是white 则允许获得灰度版本
                     if (!app.grayStrategy.downloadCountLimit || app.grayStrategy.downloadCountLimit > lastestGrayVersion.downloadCount) {
                         version = lastestGrayVersion
@@ -405,10 +408,12 @@ module.exports = class AppRouter {
             // var version = await Version.findOne({ appId: app._id })
         var normalVersion = await Version.findOne({ _id: app.releaseVersionId })
         var version = normalVersion
-        if (app.grayReleaseVersionId && lastestGrayVersion.versionCode > version.versionCode) {
+        var lastestGrayVersionCode = lastestGrayVersion.versionCode || 0
+        var normalVersionCode = version.versionCode || 0
+        if (app.grayReleaseVersionId && lastestGrayVersionCode > normalVersionCode) {
             var ipType = app.grayStrategy.ipType
             var ipList = app.grayStrategy.ipList
-            var clientIp = ctx.request.ip.match(/\d+.\d+.\d+.\d+/)[0]
+            var clientIp = await getIp(ctx.request)
             if (ipType == 'white' && _.includes(ipList, clientIp)) { //如果是white 则允许获得灰度版本
                 if (!app.grayStrategy.downloadCountLimit || app.grayStrategy.downloadCountLimit > lastestGrayVersion.downloadCount) {
                     version = lastestGrayVersion

@@ -360,8 +360,16 @@ module.exports = class AppRouter {
             var normalVersion = await Version.findOne({ _id: app.releaseVersionId })
 
             var version = normalVersion
-            var lastestGrayVersionCode = lastestGrayVersion.versionCode || 0
-            var normalVersionCode = version.versionCode || 0
+
+            var lastestGrayVersionCode = 0
+            var normalVersionCode = 0
+            if (version && version.versionCode) {
+                normalVersionCode = version.versionCode
+            }
+            if (lastestGrayVersion && lastestGrayVersion.versionCode) {
+                lastestGrayVersionCode = lastestGrayVersion.versionCode
+            }
+
             if (app.grayReleaseVersionId && lastestGrayVersionCode > normalVersionCode) {
                 var ipType = app.grayStrategy.ipType
                 var ipList = app.grayStrategy.ipList
@@ -408,8 +416,14 @@ module.exports = class AppRouter {
             // var version = await Version.findOne({ appId: app._id })
         var normalVersion = await Version.findOne({ _id: app.releaseVersionId })
         var version = normalVersion
-        var lastestGrayVersionCode = lastestGrayVersion.versionCode || 0
-        var normalVersionCode = version.versionCode || 0
+        var lastestGrayVersionCode = 0
+        var normalVersionCode = 0
+        if (version && version.versionCode) {
+            normalVersionCode = version.versionCode
+        }
+        if (lastestGrayVersion && lastestGrayVersion.versionCode) {
+            lastestGrayVersionCode = lastestGrayVersion.versionCode
+        }
         if (app.grayReleaseVersionId && lastestGrayVersionCode > normalVersionCode) {
             var ipType = app.grayStrategy.ipType
             var ipList = app.grayStrategy.ipList

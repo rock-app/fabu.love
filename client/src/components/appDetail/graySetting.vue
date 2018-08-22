@@ -14,7 +14,7 @@
             </div>
             <div class="versionlistwrapper" v-show="this.showVersionList">
               <ul class="list">
-                <li class="item" v-for="(item, index) in versionList" :key="index" @click="chooseVersion(item)" v-html="getCodeStr()"></li>
+                <li class="item" v-for="(item, index) in versionList" :key="index" @click="chooseVersion(item)" v-html="getListCodeStr(item)"></li>
               </ul>
             </div>
           </el-form-item>
@@ -178,6 +178,9 @@
       },
       getCodeStr() {
         return `${this.currentVersion.versionStr}(${this.currentVersion.versionCode})`
+      },
+      getListCodeStr(item) {
+        return `${item.versionStr}(${item.versionCode})`
       }
     }
   }

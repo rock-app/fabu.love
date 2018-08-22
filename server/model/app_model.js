@@ -36,7 +36,7 @@ var appSchema = new Schema({
         type: String,
         unique: true
     },
-    autoPublish: {  //是否自动发布
+    autoPublish: { //是否自动发布
         type: String,
         default: false
     },
@@ -55,18 +55,19 @@ var appSchema = new Schema({
         default: 'slient',
         enum: ['slient', 'normal', 'force']
     },
-    releaseVersionCode: String,     //当前对外发布的code号
-    releaseVersionId:String,        //当前对外发布的最新版本号
-    grayReleaseVersionId:String,
-    totalDownloadCount:{ type:Number,default:0 },
-    todayDownloadCount:{
-        date:{ type:Date, default:Date.now },
-        count:{ type:Number, default:0 }
+    releaseVersionCode: String, //当前对外发布的code号
+    releaseVersionId: String, //当前对外发布的最新版本号
+    grayReleaseVersionId: String,
+    totalDownloadCount: { type: Number, default: 0 },
+    todayDownloadCount: {
+        date: { type: Date, default: Date.now },
+        count: { type: Number, default: 0 }
     },
     grayStrategy: {
         ipType: {
             type: String,
-            enum: ['black', 'white']
+            enum: ['black', 'white'],
+            default: 'black'
         },
         ipList: [String],
         downloadCountLimit: Number,

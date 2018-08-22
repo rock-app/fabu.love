@@ -200,13 +200,13 @@ module.exports = class AppRouter {
         var app = await appInTeamAndUserIsManager(id, teamId, user._id)
         var result = await Version.deleteOne({ _id: versionId })
         if (versionId == app.releaseVersionId) {
-            await App.updateOne({ _id: appId }, {
+            await App.updateOne({ _id: app._id }, {
                 releaseVersionId: null
             })
         }
 
         if (versionId == app.grayReleaseVersionId) {
-            await App.updateOne({ _id: appId }, {
+            await App.updateOne({ _id: app._id }, {
                 grayReleaseVersionId: null,
                 grayStrategy: null
             })

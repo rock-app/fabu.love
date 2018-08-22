@@ -363,9 +363,10 @@ module.exports = class AppRouter {
             if (app.grayReleaseVersionId && lastestGrayVersion.versionCode > version.versionCode) {
                 var ipType = app.grayStrategy.ipType
                 var ipList = app.grayStrategy.ipList
-                if (ipType == 'white' && _.includes(ipList, ctx.request.ip)) { //如果是white 则允许获得灰度版本
-                    if (app.grayStrategy.downloadCountLimit > lastestGrayVersion.downloadCount) {
-                        version = lastestVersion
+                var clientIp = ctx.request.ip.match(/\d+.\d+.\d+.\d+/)[0]
+                if (ipType == 'white' && _.includes(ipList, clientIp)) { //如果是white 则允许获得灰度版本
+                    if (!app.grayStrategy.downloadCountLimit || app.grayStrategy.downloadCountLimit > lastestGrayVersion.downloadCount) {
+                        version = lastestGrayVersion
                     }
                 }
             }
@@ -407,9 +408,10 @@ module.exports = class AppRouter {
         if (app.grayReleaseVersionId && lastestGrayVersion.versionCode > version.versionCode) {
             var ipType = app.grayStrategy.ipType
             var ipList = app.grayStrategy.ipList
-            if (ipType == 'white' && _.includes(ipList, ctx.request.ip)) { //如果是white 则允许获得灰度版本
+            var clientIp = ctx.request.ip.match(/\d+.\d+.\d+.\d+/)[0]
+            if (ipType == 'white' && _.includes(ipList, clientIp)) { //如果是white 则允许获得灰度版本
                 if (!app.grayStrategy.downloadCountLimit || app.grayStrategy.downloadCountLimit > lastestGrayVersion.downloadCount) {
-                    version = lastestVersion
+                    version = lastestGrayVersion
                 }
             }
         }

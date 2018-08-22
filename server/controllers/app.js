@@ -382,7 +382,7 @@ module.exports = class AppRouter {
                 }
             }
 
-            if (version.versionCode <= currentVersionCode) {
+            if (!version || version.versionCode <= currentVersionCode) {
                 ctx.body = responseWrapper(false, "您已经是最新版本了")
             } else {
                 ctx.body = responseWrapper({
@@ -404,13 +404,13 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在")
         }
-        if (!app.releaseVersionId || app.releaseVersionId === '') {
-            throw new Error("当前没有已发布的版本可供下载")
-        }
-        var version = await Version.findById(app.releaseVersionId)
-        if (!version) {
-            throw new Error("当前没有已发布的版本可供下载")
-        }
+        // if (!app.releaseVersionId || app.releaseVersionId === '') {
+        //     throw new Error("当前没有已发布的版本可供下载")
+        // }
+        // var version = await Version.findById(app.releaseVersionId)
+        // if (!version) {
+        //     throw new Error("当前没有已发布的版本可供下载")
+        // }
 
         var lastestGrayVersion = await Version.findOne({ _id: app.grayReleaseVersionId })
             // var version = await Version.findOne({ appId: app._id })
@@ -435,8 +435,8 @@ module.exports = class AppRouter {
             }
         }
 
-        if (version.versionCode <= currentVersionCode) {
-            ctx.body = responseWrapper(false, "您已经是最新版本了")
+        if (!version || version.versionCode <= currentVersionCode) {
+            ctx.body = responseWrapper(false, "当前没有可用版本可供下载")
         } else {
             ctx.body = responseWrapper({
                 app: app,

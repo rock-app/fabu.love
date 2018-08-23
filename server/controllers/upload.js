@@ -259,8 +259,21 @@ function parseApk(filename) {
             console.log(data)
             console.log("----------------")
             console.log(data['application-label'])
+            var label = undefined
+            data['launchable-activity']
+                .split(' ')
+                .filter(s => s.length != 0)
+                .map(element => { return element.split('=') })
+                .forEach(element => {
+                    if (element[0] == 'label') {
+                        label = element[1]
+                    }
+                })
+            if (label) {
+                label = label.replace(/'/g, '')
+            }
             var appName = (data['application-label'] || data['application-label-zh-CN'] || data['application-label-es-US'] ||
-                data['application-label-zh_CN'] || data['application-label-es_US'] || data['launchable-activity'] || 'unknown')
+                data['application-label-zh_CN'] || data['application-label-es_US'] || label || 'unknown')
             var info = {
                 'appName': appName.replace(/'/g, ''),
                 'versionCode': Number(apkPackage.versionCode),

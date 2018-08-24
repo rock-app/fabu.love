@@ -436,7 +436,7 @@ module.exports = class AppRouter {
             }
         }
 
-        if (!version || version.versionCode <= currentVersionCode) {
+        if (!version) {
             ctx.body = responseWrapper(false, "当前没有可用版本可供下载")
         } else {
             ctx.body = responseWrapper({

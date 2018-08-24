@@ -334,17 +334,18 @@ module.exports = class AppRouter {
         ctx.body = responseWrapper(true, body.release ? "版本已发布" : "版本已关闭")
     }
 
-    @request('get', '/api/app/checkupdate/{teamID}/{bundleID}/{currentVersionCode}')
+    @request('get', '/api/app/checkupdate/{teamID}/{platform}/{bundleID}/{currentVersionCode}')
     @summary("检查版本更新")
     @tag
     @path({
         teamID: String,
         bundleID: String,
-        currentVersionCode: String
+        currentVersionCode: String,
+        platform: String
     })
     static async checkUpdate(ctx, next) {
-            var { teamID, bundleID, currentVersionCode } = ctx.validatedParams;
-            var app = await App.findOne({ bundleId: bundleID, ownerId: teamID })
+            var { teamID, bundleID, currentVersionCode, platform } = ctx.validatedParams;
+            var app = await App.findOne({ bundleId: bundleID, ownerId: teamID, platform: platform })
             if (!app) {
                 throw new Error("应用不存在或您没有权限执行该操作")
             }
@@ -360,8 +361,16 @@ module.exports = class AppRouter {
             var normalVersion = await Version.findOne({ _id: app.releaseVersionId })
 
             var version = normalVersion
-            var lastestGrayVersionCode = lastestGrayVersion.versionCode || 0
-            var normalVersionCode = version.versionCode || 0
+
+            var lastestGrayVersionCode = 0
+            var normalVersionCode = 0
+            if (version && version.versionCode) {
+                normalVersionCode = version.versionCode
+            }
+            if (lastestGrayVersion && lastestGrayVersion.versionCode) {
+                lastestGrayVersionCode = lastestGrayVersion.versionCode
+            }
+
             if (app.grayReleaseVersionId && lastestGrayVersionCode > normalVersionCode) {
                 var ipType = app.grayStrategy.ipType
                 var ipList = app.grayStrategy.ipList
@@ -374,7 +383,7 @@ module.exports = class AppRouter {
                 }
             }
 
-            if (version.versionCode <= currentVersionCode) {
+            if (!version || version.versionCode <= currentVersionCode) {
                 ctx.body = responseWrapper(false, "您已经是最新版本了")
             } else {
                 ctx.body = responseWrapper({
@@ -396,20 +405,26 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在")
         }
-        if (!app.releaseVersionId || app.releaseVersionId === '') {
-            throw new Error("当前没有已发布的版本可供下载")
-        }
-        var version = await Version.findById(app.releaseVersionId)
-        if (!version) {
-            throw new Error("当前没有已发布的版本可供下载")
-        }
+        // if (!app.releaseVersionId || app.releaseVersionId === '') {
+        //     throw new Error("当前没有已发布的版本可供下载")
+        // }
+        // var version = await Version.findById(app.releaseVersionId)
+        // if (!version) {
+        //     throw new Error("当前没有已发布的版本可供下载")
+        // }
 
         var lastestGrayVersion = await Version.findOne({ _id: app.grayReleaseVersionId })
             // var version = await Version.findOne({ appId: app._id })
         var normalVersion = await Version.findOne({ _id: app.releaseVersionId })
         var version = normalVersion
-        var lastestGrayVersionCode = lastestGrayVersion.versionCode || 0
-        var normalVersionCode = version.versionCode || 0
+        var lastestGrayVersionCode = 0
+        var normalVersionCode = 0
+        if (version && version.versionCode) {
+            normalVersionCode = version.versionCode
+        }
+        if (lastestGrayVersion && lastestGrayVersion.versionCode) {
+            lastestGrayVersionCode = lastestGrayVersion.versionCode
+        }
         if (app.grayReleaseVersionId && lastestGrayVersionCode > normalVersionCode) {
             var ipType = app.grayStrategy.ipType
             var ipList = app.grayStrategy.ipList
@@ -421,8 +436,8 @@ module.exports = class AppRouter {
             }
         }
 
-        if (version.versionCode <= currentVersionCode) {
-            ctx.body = responseWrapper(false, "您已经是最新版本了")
+        if (!version) {
+            ctx.body = responseWrapper(false, "当前没有可用版本可供下载")
         } else {
             ctx.body = responseWrapper({
                 app: app,

@@ -3,7 +3,7 @@
     <ul class="collectionView-wrapper-ul">
       <li v-for="(item, index) in this.dataArr" :key="index" class="itemWrapper">
         <span :class="item.platform === 'ios' ? 'appItem-platform-ios':'appItem-platform-android'" class="appItem-platform"></span>
-        <img class="appItem-icon" v-if="item.icon" v-lazy="getIcon(item)" alt="" @click="gotoAppDetail(item)">
+        <img class="appItem-icon" v-if="item.icon" :src="getIcon(item)" @click="gotoAppDetail(item)">
 
         <div class="appItem-info">
           <div class="appItem-info-namewrapper">
@@ -72,7 +72,9 @@
         this.$emit('gotoAppDetail', item)
       },
       getIcon(item) {
-        return `${this.axios.defaults.baseURL}${item.icon}`
+          console.log(6666)
+          console.log(`${this.axios.defaults.baseURL}${item.icon}`)
+          return `${this.axios.defaults.baseURL}${item.icon}`
       },
       getShortUrl(item) {
         return `${this.axios.defaults.baseURL}${item.shortUrl}`

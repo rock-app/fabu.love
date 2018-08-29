@@ -21,7 +21,6 @@ var os = require('os')
 var uuidV4 = require('uuid/v4')
 var apkParser3 = require('../library/apkparser/apkparser')
 var Team = require('../model/team')
-var AdmZip = require('adm-zip')
 var unzip = require('unzipper')
 var etl = require('etl')
 var mkdirp = require('mkdirp')
@@ -208,49 +207,92 @@ function parseIpa(filename) {
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
     var tmpOut = tempDir + '/{0}.png'.format(guid)
-    var zip = new AdmZip(filename)
-    var ipaEntries = zip.getEntries()
-    var found = false
-    for (let ipaEntry of ipaEntries) {
-        if (ipaEntry.entryName.indexOf('AppIcon60x60@2x.png') != -1) {
-            found = true
-            var buffer = new Buffer(ipaEntry.getData())
-            if (buffer.length < 0) {
-                return
-            }
-            //把文件写入到tmp文件夹
-            await writeFile(tmpOut, buffer)
-            var pnfdefryDir = path.join(__dirname, '..', 'library/pngdefry')
-                //写入成功判断icon是否是被苹果破坏过的图片
-            var exeName = '';
-            if (os.type() === 'Darwin') {
-                exeName = 'pngfy-osx';
-            } else if (os.type() === 'Linux') {
-                exeName = 'pngfy-linux';
-            } else {
-                throw new Error('Unknown OS!');
-            }
+        // var zip = new AdmZip(filename)
+        // var ipaEntries = zip.getEntries()
+        // unzip.Parse({path: filename}).promise().then()
 
-            var { stderr, stdout } = await exec(path.join(pnfdefryDir, exeName + ' -s _tmp ', tmpOut));
-            if (stderr) {
-                throw stderr;
+    var found = false
+    var buffer = fs.readFileSync(filename)
+    var data = await unzip.Open.buffer(buffer)
+
+    var promise = new Promise((resolve, reject) => {
+        data.files.forEach(file => {
+            if (file.path.indexOf('AppIcon60x60@2x.png') != -1) {
+                found = true
+                file.stream()
+                    .pipe(fs.createWriteStream(tmpOut))
+                    .on('error', reject)
+                    .on('finish', resolve)
             }
-            //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
-            var iconRelatePath = path.join(team.id, "/icon")
-            var iconSuffix = "/" + guid + "_i.png"
-            createFolderIfNeeded(path.join(uploadDir, iconRelatePath))
-            if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
-                await fs.renameSync(tmpOut, path.join(iconRelatePath, iconSuffix))
-                return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
-            }
-            await fs.unlinkSync(tmpOut)
-            fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid), path.join(uploadDir, iconRelatePath, iconSuffix))
-            return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
-        }
+        })
+    })
+
+    var value = await promise
+
+    var pnfdefryDir = path.join(__dirname, '..', 'library/pngdefry')
+        //写入成功判断icon是否是被苹果破坏过的图片
+    var exeName = '';
+    if (os.type() === 'Darwin') {
+        exeName = 'pngfy-osx';
+    } else if (os.type() === 'Linux') {
+        exeName = 'pngfy-linux';
+    } else {
+        throw new Error('Unknown OS!');
     }
+
+    var { stderr, stdout } = await exec(path.join(pnfdefryDir, exeName + ' -s _tmp ', tmpOut));
+    if (stderr) {
+        throw stderr;
+    }
+    //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
+    var iconRelatePath = path.join(team.id, "/icon")
+    var iconSuffix = "/" + guid + "_i.png"
+    createFolderIfNeeded(path.join(uploadDir, iconRelatePath))
+    if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
+        await fs.renameSync(tmpOut, path.join(iconRelatePath, iconSuffix))
+        return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
+    }
+    await fs.unlinkSync(tmpOut)
+    fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid), path.join(uploadDir, iconRelatePath, iconSuffix))
+    return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
+
     if (!found) {
         throw (new Error('can not find icon'))
     }
+
+    // console.log(data.files)
+
+    // fs.createReadStream(filename)
+    //     .pipe(unzip.Parse())
+    //     .pipe(etl.map(entry => {
+    //         if (entry.path.indexOf('AppIcon60x60@2x.png') != -1) {
+    //             found = true
+    //                 // var buffer = new Buffer(ipaEntry.getData())
+    //                 // if (buffer.length < 0) {
+    //                 //     return
+    //                 // }
+    //                 //把文件写入到tmp文件夹
+    //                 // await writeFile(tmpOut, buffer)
+    //             entry.pipe(etl.toFile(tmpOut))
+
+
+    //             // var { stderr, stdout } = await ;
+    //             // if (stderr) {
+    //             //     throw stderr;
+    //             // }
+    //             //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
+
+    //         } else {
+    //             entry.autodrain()
+    //         }
+    //     }))
+    // for (let ipaEntry of ipaEntries) {
+
+    // }
+    // if (!found) {
+    //     throw (new Error('can not find icon'))
+    // }
+
 }
 
 ///解析apk

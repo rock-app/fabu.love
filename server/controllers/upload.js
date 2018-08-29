@@ -22,6 +22,8 @@ var uuidV4 = require('uuid/v4')
 var apkParser3 = require('../library/apkparser/apkparser')
 var Team = require('../model/team')
 var AdmZip = require('adm-zip')
+var unzip = require('unzipper')
+var etl = require('etl')
 var mkdirp = require('mkdirp')
 var ipaMataData = require('ipa-metadata')
 
@@ -307,26 +309,20 @@ function extractApkIcon(filepath, guid, team) {
             var realPath = path.join(team.id, "icon", '/{0}_a.png'.format(guid))
             createFolderIfNeeded(dir)
             var tempOut = path.join(uploadDir, realPath)
-            var zip = new AdmZip(filepath)
-            var apkEntries = zip.getEntries()
-            var found = false
-            apkEntries.forEach(apkEntry => {
-                if (apkEntry.entryName.indexOf(iconPath) != -1) {
-                    var buffer = new Buffer(apkEntry.getData())
-                    if (buffer.length) {
-                        found = true
-                        fs.writeFile(tempOut, buffer, err => {
-                            if (err) {
-                                reject(err)
-                            }
-                            resolve({ 'success': true, fileName: realPath })
-                        })
+
+
+            fs.createReadStream(filepath)
+                .pipe(unzip.Parse())
+                .pipe(etl.map(entry => {
+                    if (entry.path.indexOf(iconPath) != -1) {
+                        console.log(entry.path)
+                        entry.pipe(etl.toFile(tempOut))
+                        resolve({ 'success': true, fileName: realPath })
+                    } else {
+                        entry.autodrain()
                     }
-                }
-            })
-            if (!found) {
-                reject('can not find icon')
-            }
+                }))
+
         })
     })
 }

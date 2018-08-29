@@ -31,7 +31,8 @@
         "mongoose": "5.0.4",
         "koa-jwt": "^3.3.0",
         "jsonwebtoken": "^7.4.1",
-        "adm-zip": "^0.4.7",
+        "adm-zip": "^0.4.11",
+        "unzipper": "^0.9.3",
         "koa-body": "^2.5.0",
         "lodash": "^4.17.4",
         "pm2": "^2.9.3",
@@ -42,7 +43,8 @@
         "nodemailer": "^4.6.3",
         "ipa-metadata": "^1.4.0",
         "mustache": "^2.3.0",
-        "ldapjs": "^1.0.2"
+        "ldapjs": "^1.0.2",
+        "etl": "^0.5.13"
     },
     "devDependencies": {
         "babel-cli": "^6.24.1",

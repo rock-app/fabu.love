@@ -11,22 +11,23 @@ import {
     path as rpath
 } from '../swagger';
 import config from '../config';
+var Team = require('../model/team')
 const Version = require('../model/version')
 const App = require('../model/app_model')
 var multer = require('koa-multer');
 var fs = require('fs')
-var mime = require('mime')
 var path = require('path')
 var os = require('os')
+var mime = require('mime')
 var uuidV4 = require('uuid/v4')
 var apkParser3 = require('../library/apkparser/apkparser')
-var Team = require('../model/team')
 var unzip = require('unzipper')
 var etl = require('etl')
 var mkdirp = require('mkdirp')
 var ipaMataData = require('ipa-metadata')
 
 var { writeFile, readFile, responseWrapper, exec } = require('../helper/util')
+
 var tempDir = path.join(config.fileDir, 'temp')
 var uploadDir = path.join(config.fileDir, 'upload')
 
@@ -71,6 +72,17 @@ module.exports = class UploadRouter {
             throw new Error("没有找到该团队")
         }
         var result = await parseAppAndInsertToDB(file, ctx.state.user.data, team);
+        await Version.updateOne({ _id: result.version._id }, {
+            released: result.app.autoPublish
+        })
+        if (result.app.autoPublish) {
+            await App.updateOne({ _id: result.app._id }, {
+                releaseVersionId: result.version._id,
+                releaseVersionCode: result.version.versionCode
+            })
+        }
+        console.log(result.app.autoPublish)
+        console.log(result.version.released)
         ctx.body = responseWrapper(result);
     }
 
@@ -207,14 +219,9 @@ function parseIpa(filename) {
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
     var tmpOut = tempDir + '/{0}.png'.format(guid)
-        // var zip = new AdmZip(filename)
-        // var ipaEntries = zip.getEntries()
-        // unzip.Parse({path: filename}).promise().then()
-
     var found = false
     var buffer = fs.readFileSync(filename)
     var data = await unzip.Open.buffer(buffer)
-
     var promise = new Promise((resolve, reject) => {
         data.files.forEach(file => {
             if (file.path.indexOf('AppIcon60x60@2x.png') != -1) {
@@ -259,39 +266,6 @@ async function extractIpaIcon(filename, guid, team) {
     if (!found) {
         throw (new Error('can not find icon'))
     }
-
-    // console.log(data.files)
-
-    // fs.createReadStream(filename)
-    //     .pipe(unzip.Parse())
-    //     .pipe(etl.map(entry => {
-    //         if (entry.path.indexOf('AppIcon60x60@2x.png') != -1) {
-    //             found = true
-    //                 // var buffer = new Buffer(ipaEntry.getData())
-    //                 // if (buffer.length < 0) {
-    //                 //     return
-    //                 // }
-    //                 //把文件写入到tmp文件夹
-    //                 // await writeFile(tmpOut, buffer)
-    //             entry.pipe(etl.toFile(tmpOut))
-
-
-    //             // var { stderr, stdout } = await ;
-    //             // if (stderr) {
-    //             //     throw stderr;
-    //             // }
-    //             //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
-
-    //         } else {
-    //             entry.autodrain()
-    //         }
-    //     }))
-    // for (let ipaEntry of ipaEntries) {
-
-    // }
-    // if (!found) {
-    //     throw (new Error('can not find icon'))
-    // }
 
 }
 
@@ -351,7 +325,6 @@ function extractApkIcon(filepath, guid, team) {
             var realPath = path.join(team.id, "icon", '/{0}_a.png'.format(guid))
             createFolderIfNeeded(dir)
             var tempOut = path.join(uploadDir, realPath)
-
 
             fs.createReadStream(filepath)
                 .pipe(unzip.Parse())

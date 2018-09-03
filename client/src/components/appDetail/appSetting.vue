@@ -45,7 +45,8 @@
     },
     mounted() {
       this.installType = this.appInfo.installWithPwd === 1 ? '密码安装' : '公开'
-      this.pulishType = this.appInfo.autoPublish === 1 ? '自动发布' : '手动发布'
+      this.pulishType = this.appInfo.autoPublish === true ? '自动发布' : '手动发布'
+      this.installPwd = this.appInfo.installPwd
     },
     methods: {
       clickSure() {

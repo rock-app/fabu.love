@@ -41,9 +41,18 @@
         installPwd: ''
       }
     },
-    created() {},
+    created() {
+    },
+    mounted() {
+      this.installType = this.appInfo.installWithPwd === 1 ? '密码安装' : '公开'
+      this.pulishType = this.appInfo.autoPublish === 1 ? '自动发布' : '手动发布'
+    },
     methods: {
       clickSure() {
+        if (this.installType === '密码安装' && this.installPwd === '') {
+            this.$message.error('密码不能为空')
+            return
+        }
         let body = {
           'shortUrl': this.appInfo.shortUrl,
           'installWithPwd': this.installType === '公开' ? 0 : 1,

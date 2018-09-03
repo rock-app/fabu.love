@@ -37,7 +37,7 @@ var appSchema = new Schema({
         unique: true
     },
     autoPublish: { //是否自动发布
-        type: String,
+        type: Boolean,
         default: false
     },
     installWithPwd: {
@@ -52,8 +52,8 @@ var appSchema = new Schema({
     changelog: String,
     updateMode: {
         type: String,
-        default: 'slient',
-        enum: ['slient', 'normal', 'force']
+        default: 'silent',
+        enum: ['silent', 'normal', 'force']
     },
     releaseVersionCode: String, //当前对外发布的code号
     releaseVersionId: String, //当前对外发布的最新版本号
@@ -73,8 +73,8 @@ var appSchema = new Schema({
         downloadCountLimit: Number,
         updateMode: {
             type: String,
-            default: 'slient',
-            enum: ['slient', 'normal', 'force']
+            default: 'silent',
+            enum: ['silent', 'normal', 'force']
         }
     }
 })

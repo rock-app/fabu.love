@@ -282,6 +282,9 @@
   .headernav-wrapper .rightWrapper .userwrapper {
     display: inline-block;
     height: 100%;
+    border-top: solid 1px #fff;
+    border-left: solid 1px #fff;
+    border-right: solid 1px #fff;
   }
 
   .headernav-wrapper .rightWrapper .userwrapper:hover {

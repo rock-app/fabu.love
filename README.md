@@ -139,7 +139,7 @@ const common = {
 
 
 
-#### 正式环境部署 nginx配置
+#### 正式环境部署 nginx配置(注意请使用https部署,否则iOS会出现无法安装的问题)
 
 可以按照项目根目录的 fabu_nginx.conf 文件进行配置
 

@@ -19,13 +19,14 @@
             <img class="appicon" :src="getIconUrl()" alt="">
             <p class="title">{{this.appBaseData.appName}}</p>
             <div class="info">
-              <p class="desc">版本：{{this.appVersionInfo.versionStr}}</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
+              <p v-if="this.appVersionInfo.versionStr" class="desc">版本：{{this.appVersionInfo.versionStr}}</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
             </div>
             <p class="date">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
-            <div v-if="!showDownLoadBtn">
+            <div v-if="showPasswordInput">
               <el-input v-model="pwd" type="password" placeholder="请输入密码" class="pwd"></el-input>
               <el-button @click="clickSure" type="primary" round class="downloadBtn">确定</el-button>
             </div>
+
             <el-button v-if="showDownLoadBtn" @click="clickDownLoadBtn" class="downloadBtn" type="primary" round><i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>    下载安装</el-button>
           </div>
         </div>
@@ -73,18 +74,26 @@
         var isAndroid = !!(u.match(/(Android)\s+([\d.]+)/))
         return isAndroid
       },
-      showDownLoadBtn() {
-        if (this.appBaseData.installWithPwd !== 1 || this.pwd === this.appBaseData.installPwd) {
-          return true
-        } else {
+      showDownLoadBtn() { // mac端不显示，密码安装且密码不正确时不显示
+        var p = navigator.platform
+        if (p.indexOf('Mac') === 0) {
           return false
+        } else {
+          if (this.appBaseData.installWithPwd !== 1 || this.pwd === this.appBaseData.installPwd) {
+            return true
+          } else {
+            return false
+          }
         }
+
+      },
+      showPasswordInput() {
+          if (this.appBaseData.installWithPwd === 1 && this.pwd !== this.appBaseData.installPwd) { // 密码安装,且密码不对的情况下展示，其他情况都隐藏
+              return true
+          }
       }
     },
     created() {
-      console.log(this.$route.fullPath)
-      console.log(window.origin)
-
       this.getAppInfo(this.$route.params.id)
 
       // 判断是否是手机设备
@@ -105,6 +114,10 @@
       getAppInfo(shortUrl) {
         AppResourceApi.getAppInfoByShortUrl(shortUrl).then((res) => {
           console.log(res)
+          if (res.data.version === null) {
+              this.$message.error('未检测到版本信息')
+              return
+          }
           this.appVersionInfo = res.data.version
           this.appBaseData = res.data.app
           let releaseDate = new Date(this.appVersionInfo.uploadAt)

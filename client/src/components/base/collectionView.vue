@@ -107,7 +107,7 @@
   }
   .collectionView-wrapper .itemWrapper {
     position: relative;
-    height: 336px;
+    padding-bottom: 24px;
     background-color: white;
     margin-top: 20px;
     width: 264px;

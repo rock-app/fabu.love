@@ -334,6 +334,7 @@
     line-height: 16px;
     word-wrap: break-word;
     word-break: normal;
+    user-select: text;
   }
   .detail-content-top {
     width: 100%;

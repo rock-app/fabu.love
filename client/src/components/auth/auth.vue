@@ -163,7 +163,8 @@
               'userName': this.username,
               'userId': response.data._id,
               'teamArr': response.data.teams,
-              'email': response.data.email
+              'email': response.data.email,
+              'apiToken': response.data.apiToken
             }
             // 保存用户信息
             saveUserInfo(user)

@@ -345,4 +345,7 @@
     box-sizing: border-box;
     font-size: 14px;
   }
+  .headernav-wrapper .rightWrapper .userInfoSub:hover {
+    background-color: #eee;
+  }
 </style>

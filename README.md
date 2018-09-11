@@ -74,7 +74,8 @@ App is listening on 9898.
 ```Bash
 cd client
 cnpm install
-npm run dev
+npm run build #正式环境可以用该命令编译静态文件交给nginx
+npm run dev  #本地运行可以使用该命令
 
 ============>>out
 ...

@@ -36,7 +36,7 @@ demo地址: https://fabu.love
 #### 运行前准备
 
 * 安装 MongoDB (3.6)
-* 安装 Nodejs (node在10以上会有上传ipa的问题,请使用node9/10)
+* 安装 Nodejs (node在10以上会有上传ipa的问题,请使用node8/9)
 * 安装 pm2、babel-node
 
 ```bash

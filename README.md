@@ -215,6 +215,6 @@ npm ERR! Please include the following file with any support request:
 npm ERR!     /var/www/LoveFabu/server/npm-debug.log
 
 ```
-###A1: node版本过低，升级node版本，推荐使用node8/9，node版本控制参考 <https://blog.csdn.net/qq_38128179/article/details/80745362>， 升级node版本之后需要重新运行server端。
+### A1: node版本过低，升级node版本，推荐使用node8/9，node版本控制参考 <https://blog.csdn.net/qq_38128179/article/details/80745362>， 升级node版本之后需要重新运行server端。
 
 

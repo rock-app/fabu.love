@@ -160,7 +160,7 @@ server{
 
   location /upload/ {
       #该root目录为根目录下config.json文件里dir目录 上传的apk和ipa文件当作静态文件处理
-      root /home/ubuntu/fabulove/upload
+      root /home/ubuntu/fabulove/upload;
       expires  30d;
   }
 

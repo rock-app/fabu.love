@@ -11,6 +11,9 @@ import {configAxios} from './api/basehttp'
 import VueLazyLoad from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 
+// 解决android5.0 上预览界面不显示的问题
+import 'babel-polyfill'
+
 Vue.use(infiniteScroll)
 
 Vue.config.productionTip = false
@@ -49,7 +52,6 @@ Vue.prototype.$message = Message
 Vue.use(VueLazyLoad, {
   loading: require('./assets/logo.png')
 })
-
 
 // 配置接口信息
 configAxios()

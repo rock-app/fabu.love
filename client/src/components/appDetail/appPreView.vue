@@ -5,7 +5,9 @@
       <!--中间-->
       <div :class="getContentClass()" v-if="this.appBaseData">
         <div :class="getLeftClass()">
-          <div v-if="this.isIos || this.isAndroid">
+          <!--手机上查看-->
+          <div v-show="isPhone">
+            <p>手机</p>
             <phoneWrapper
               :appBaseData="appBaseData"
               :appVersionInfo="appVersionInfo"
@@ -15,7 +17,9 @@
           </div>
 
 
-          <div class="pcWrapper" v-if="!this.isIos && !this.isAndroid">
+          <!--pc上查看-->
+          <div class="pcWrapper" v-show="!isPhone">
+            <p>33333333</p>
             <img class="appicon" :src="getIconUrl()" alt="">
             <p class="title">{{this.appBaseData.appName}}</p>
             <div class="info">
@@ -32,8 +36,8 @@
         </div>
 
 
-        <!--手机视图-->
-        <div class="preview-mobilewrapper" v-show="this.showQRCode">
+        <!--右侧二维码-->
+        <div class="preview-mobilewrapper" v-show="!isPhone">
           <img class="mobieImg" src='../../assets/ic_mobilphone.png'>
           <vue-qr class="qrcodeImg" :text="downloadUrl" :margin="20"></vue-qr>
           <p class="codetips">请扫描二维码下载APP</p>
@@ -59,8 +63,8 @@
         appBaseData: null,
         downloadUrl: '',
         platformStr: '',
-        showQRCode: false,
-        pwd: ''
+        pwd: '',
+        isPhone: false
       }
     },
     computed: {
@@ -93,15 +97,20 @@
           }
       }
     },
-    created() {
+    mounted() {
       this.getAppInfo(this.$route.params.id)
 
       // 判断是否是手机设备
       if (this.isIos || this.isAndroid) {
-        this.showQRCode = false
+        this.isPhone = true
       } else {
-        this.showQRCode = true
+        this.isPhone = false
       }
+    },
+    created() {
+      this.$nextTick(() => {
+      })
+
     },
     methods: {
       getTableBackground(index) {
@@ -131,7 +140,7 @@
           }
 
         }, reject => {
-
+          this.$message.error('服务器错误')
         })
       },
       getIconUrl() {
@@ -173,14 +182,14 @@
       },
       getContentClass() {
         // 判断是否是手机设备
-        if (this.isIos || this.isAndroid) {
+        if (this.isPhone) {
           return 'preview-middlewrapper-forPhone'
         } else {
           return 'preview-middlewrapper'
         }
       },
       getLeftClass() {
-        if (this.isIos || this.isAndroid) {
+        if (this.isPhone) {
           return 'left-forPhone'
         } else {
           return 'left'

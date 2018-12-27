@@ -283,7 +283,7 @@ function parseApk(filename) {
                 .filter(s => s.length != 0)
                 .map(element => { return element.split('=') })
                 .forEach(element => {
-                    if (element && element.length > 2 && element[0] == 'label' && em) {
+                    if (element && element.length > 2 && element[0] == 'label') {
                         label = element[1]
                     }
                 })

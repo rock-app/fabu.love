@@ -320,18 +320,19 @@ module.exports = class AppRouter {
         if (!version) {
             throw new Error("版本不存在")
         }
-        if (body.release) {
-            await App.updateOne({ _id: app.id }, {
-                releaseVersionId: version._id,
-                releaseVersionCode: version.versionCode
-            })
-        } else {
+        if (app.releaseVersionId) {
             await App.updateOne({ _id: app.id }, {
                 releaseVersionId: '',
                 releaseVersionCode: ''
             })
+            ctx.body = responseWrapper(true, "版本已关闭")
+        } else {
+            await App.updateOne({ _id: app.id }, {
+                releaseVersionId: version._id,
+                releaseVersionCode: version.versionCode
+            })
+            ctx.body = responseWrapper(true, "版本已发布")
         }
-        ctx.body = responseWrapper(true, body.release ? "版本已发布" : "版本已关闭")
     }
 
     @request('get', '/api/app/checkupdate/{teamID}/{platform}/{bundleID}/{currentVersionCode}')
@@ -445,7 +446,6 @@ module.exports = class AppRouter {
             })
         }
 
-        ctx.body = responseWrapper({ 'app': app, 'version': version })
     }
 
     @request('post', '/api/app/{appId}/{versionId}')

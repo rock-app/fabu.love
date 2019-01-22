@@ -198,6 +198,7 @@ function parseIpa(filename) {
             info.appName = data.metadata.CFBundleDisplayName
             info.versionStr = data.metadata.CFBundleShortVersionString
             info.versionCode = data.metadata.CFBundleVersion
+            info.iconName = data.metadata.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName
 
             try {
                 const environment = data.provisioning.Entitlements['aps-environment']
@@ -218,13 +219,15 @@ function parseIpa(filename) {
 
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
+    var ipaInfo = await parseIpa(filename)
+    var iconName = ipaInfo.iconName || 'AppIcon';
     var tmpOut = tempDir + '/{0}.png'.format(guid)
     var found = false
     var buffer = fs.readFileSync(filename)
     var data = await unzip.Open.buffer(buffer)
     var promise = new Promise((resolve, reject) => {
         data.files.forEach(file => {
-            if (file.path.indexOf('AppIcon60x60@2x.png') != -1) {
+            if (file.path.indexOf(iconName + '60x60@2x.png') != -1) {
                 found = true
                 file.stream()
                     .pipe(fs.createWriteStream(tmpOut))

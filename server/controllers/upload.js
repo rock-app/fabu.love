@@ -25,6 +25,7 @@ var unzip = require('unzipper')
 var etl = require('etl')
 var mkdirp = require('mkdirp')
 var ipaMataData = require('ipa-metadata')
+const { compose, maxBy, filter, get } = require('lodash/fp')
 
 var { writeFile, readFile, responseWrapper, exec } = require('../helper/util')
 
@@ -325,19 +326,32 @@ function extractApkIcon(filepath, guid, team) {
             var realPath = path.join(team.id, "icon", '/{0}_a.png'.format(guid))
             createFolderIfNeeded(dir)
             var tempOut = path.join(uploadDir, realPath)
-
-            fs.createReadStream(filepath)
-                .pipe(unzip.Parse())
-                .pipe(etl.map(entry => {
-                    if (entry.path.indexOf(iconPath) != -1) {
-                        console.log(entry.path)
-                        entry.pipe(etl.toFile(tempOut))
-                        resolve({ 'success': true, fileName: realPath })
-                    } else {
-                        entry.autodrain()
-                    }
-                }))
-
+            
+            var { ext, dir } = path.parse(iconPath);
+            // 获取到最大的png的路径
+            let maxSizePath;
+            const initialPromise = ext === '.xml' ?
+                unzip.Open.file(filepath).then(directory => {
+                    const getMaxSizeImagePath = compose(get('path'), maxBy('compressedSize'),
+                        filter(entry => entry.path.indexOf(dir) >= 0 && entry.path.indexOf('.png') >= 0), get('files'));
+                    maxSizePath = getMaxSizeImagePath(directory)
+                }) : new Promise((resolve) => resolve())
+            initialPromise.then(() => {
+                fs.createReadStream(filepath)
+                    .pipe(unzip.Parse())
+                    .pipe(etl.map(entry => {
+                        // 适配iconPath为ic_launcher.xml的情况
+                        const entryPath = entry.path
+                        const isXml = entryPath.indexOf('.xml');
+                        if ( (!isXml && entryPath.indexOf(iconPath) != -1) || (isXml && entry.path.indexOf(maxSizePath) != -1)) {
+                            console.log(entry.path)
+                            entry.pipe(etl.toFile(tempOut))
+                            resolve({ 'success': true, fileName: realPath })
+                        } else {
+                            entry.autodrain()
+                        }
+                    }))
+            })
         })
     })
 }

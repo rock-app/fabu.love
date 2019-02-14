@@ -88,6 +88,9 @@
       if (this.$route.fullPath === '/members') {
         this.activeIndex = '团队管理'
       }
+      if (this.$route.fullPath === '/miniAppList') {
+        this.activeIndex = '小程序列表'
+      }
     },
     created() {
     },

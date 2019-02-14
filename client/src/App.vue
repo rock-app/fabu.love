@@ -15,7 +15,7 @@
       }
     },
     created() {
-        console.log(window.location.pathname)
+      console.log(window.location.pathname)
       this.$nextTick(() => {
         let user = getUserInfo()
         if (user) {

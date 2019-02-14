@@ -9,6 +9,13 @@
         </div>
       </div>
 
+      <!--应用列表-->
+      <miniAppItem
+        :dataArr="this.dataList"
+        @gotoAppDetail="gotoAppDetail"
+      >
+      </miniAppItem>
+
       <!--新增小程序-->
       <el-dialog
         title="新建小程序"
@@ -19,8 +26,8 @@
           <el-form-item label="项目名称">
             <el-input v-model="miniAppInfo.name"></el-input>
           </el-form-item>
-          <el-form-item label="AppKey">
-            <el-input v-model="miniAppInfo.appKey"></el-input>
+          <el-form-item label="AppId">
+            <el-input v-model="miniAppInfo.appId"></el-input>
           </el-form-item>
           <el-form-item label="AppSecret">
             <el-input v-model="miniAppInfo.appSecret"></el-input>
@@ -28,24 +35,91 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="showAddAppContent = false">取 消</el-button>
-          <el-button type="primary" @click="showAddAppContent = false">确 定</el-button>
+          <el-button type="primary" @click="clickSure">确 定</el-button>
         </span>
       </el-dialog>
+
+      <emptyView v-if="this.showEmpty"></emptyView>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as MiniApi from '../../api/moudle/miniApi'
+  import EmptyView from '../appList/emptyView.vue'
+  import { getUserTeam } from '../../mgr/userMgr'
+  import MiniAppItem from '../base/miniAppItem.vue'
+
   export default {
     data() {
       return {
         showAddAppContent: false,
-        miniAppInfo: {}
+        miniAppInfo: {
+          name: '',
+          appId: '',
+          appSecret: ''
+        },
+        showEmpty: false,
+        dataList: [],
+        currentTeam: {}
       }
     },
-    created() {},
+    components: {
+      EmptyView, MiniAppItem
+    },
+    created() {
+    },
+    mounted() {
+      this.currentTeam = getUserTeam()
+      this.loadAppList()
+    },
     methods: {
+      loadAppList() {
+        MiniApi.getAppList(this.currentTeam._id)
+          .then(response => {
+            this.dataList = []
+            this.dataList = response.data.reverse()
+            if (this.dataList.length === 0) {
+              this.showEmpty = true
+            } else {
+              this.showEmpty = false
+            }
+            console.log(this.dataList)
+          }, reject => {
+            this.$message.error(reject)
+            this.showEmpty = true
+          })
+      },
       addMiniApp() {
         this.showAddAppContent = true
+      },
+      clickSure() {
+        if (this.miniAppInfo.name === '') {
+          this.$message.error('请输入小程序应用名称')
+          return
+        }
+        if (this.miniAppInfo.appId === '') {
+          this.$message.error('请输入小程序appId')
+          return
+        }
+        if (this.miniAppInfo.appSecret === '') {
+          this.$message.error('请输入小程序appSecret')
+          return
+        }
+        let body = {
+          'name': this.miniAppInfo.name,
+          'appId': this.miniAppInfo.appId,
+          'appSecret': this.miniAppInfo.appSecret,
+          'teamId': this.currentTeam._id
+        }
+        MiniApi.create(body).then(response => {
+          console.log(response)
+          this.showAddAppContent = false
+        }, reject => {
+
+        })
+      },
+      gotoAppDetail() {
+
       }
     }
   }

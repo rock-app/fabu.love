@@ -342,7 +342,7 @@ function extractApkIcon(filepath, guid, team) {
                     .pipe(etl.map(entry => {
                         // 适配iconPath为ic_launcher.xml的情况
                         const entryPath = entry.path
-                        const isXml = entryPath.indexOf('.xml');
+                        const isXml = entryPath.indexOf('.xml') >= 0
                         if ( (!isXml && entryPath.indexOf(iconPath) != -1) || (isXml && entry.path.indexOf(maxSizePath) != -1)) {
                             console.log(entry.path)
                             entry.pipe(etl.toFile(tempOut))

@@ -16,10 +16,16 @@ import fpath from 'path';
 import mustache from 'mustache';
 import _ from 'lodash'
 
+
+
+
+const axios = require('axios');
 const Miniapp = require('../model/miniapp_model')
 const Team = require('../model/team')
 
 const tag = tags(['MiniAppResource']);
+const mkdirp = require('mkdirp')
+const uuidv1 = require('uuid/v1');
 
 //更新策略
 
@@ -165,6 +171,7 @@ module.exports = class MiniAppRouter {
     @body({
         appId: { type: 'string', require: true ,description: "小程序的appid" },
         scene: { type: 'string', require: false ,description: "场景参数列如authcode=xxxx&match=xxxx" },
+        page: { type: 'string', require: false ,description: "入口页面" },
         remark: { type: 'string', require: true ,description: "备注信息" },
         teamId: { type: 'string', require: true ,description: "团队id" },
     })
@@ -174,14 +181,49 @@ module.exports = class MiniAppRouter {
         // var size = ctx.query.size || 10
         var user = ctx.state.user.data;
         var body = ctx.request.body;
-        var { teamId } = ctx.validatedParams;
 
         var app = await Miniapp.findOne({ appId: body.appId })
-        appInTeamAndUserIsManager(body.appId,body.teamId,user._id)
+        appInTeamAndUserIsManager(app._id,body.teamId,user._id)
+        
+        var result = await axios.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${app.appId}&secret=${app.appSecret}`)
 
-        var result = await Miniapp.find({ 'ownerId': teamId || user.id })
-            // .limit(size).skip(page * size)
-        ctx.body = responseWrapper(result)
+        var token = result.data.access_token
+        console.log(token)
+        if(!token){
+            throw new Error("获取token失败，检查网络和appid和appsecret")
+        }
+
+        var dir = `upload/mini/${app.appId}`
+        var uploadDir = fpath.join(config.fileDir, dir)
+        createFolderIfNeeded(uploadDir)
+        var imageName = `${uuidv1()}.jpg`;
+        if (body.scene){
+            var result = await requestImage(`https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${token}`,{
+                scene: body.scene,
+                page: body.page
+            },uploadDir,imageName)
+            console.log(result)
+        }else{
+            var result = await requestImage(`https://api.weixin.qq.com/wxa/getwxacode?access_token=${token}`,{
+                path: body.page
+            },uploadDir,imageName)
+            console.log(result)
+        }
+
+        var downloadCodeInfo = {
+            remark:body.remark,
+            image:`${dir}/${imageName}`,
+            param:body.scene,
+            page:body.page
+        }
+
+        await app.update({
+            $push: {
+                downloadCodeImage: downloadCodeInfo
+            }
+        })
+        var updatedApp = await Miniapp.findOne({ appId: body.appId })
+        ctx.body = responseWrapper(updatedApp)
     }
 
 
@@ -250,6 +292,27 @@ module.exports = class MiniAppRouter {
 
 }
 
+
+async function requestImage(url,data,codePath,imageName){
+
+
+    const path = fpath.resolve(codePath, imageName)
+    const writer = fs.createWriteStream(path)
+    const response = await axios({
+      url,
+      method: 'POST',
+      responseType: 'stream',
+      data: data
+    })
+    
+    response.data.pipe(writer)
+  
+    return new Promise((resolve, reject) => {
+      writer.on('finish', resolve)
+      writer.on('error', reject)
+    })
+}
+
 async function appInTeamAndUserIsManager(appId, teamId, userId) {
     var team = await Team.findOne({
         _id: teamId,
@@ -266,7 +329,7 @@ async function appInTeamAndUserIsManager(appId, teamId, userId) {
     if (!team) {
         throw new Error("应用不存在或您没有权限执行该操作")
     }
-    var app = await App.findOne({ _id: appId, ownerId: team._id })
+    var app = await Miniapp.findOne({ _id: appId, ownerId: team._id })
     if (!app) {
         throw new Error("应用不存在或您没有权限执行该操作")
     } else {
@@ -315,4 +378,12 @@ function modifyFilter(filter) {
         result[key] = { $regex: filter[key] }
     }
     return result
+}
+
+function createFolderIfNeeded(path) {
+    if (!fs.existsSync(path)) {
+        mkdirp.sync(path, function(err) {
+            if (err) console.error(err)
+        })
+    }
 }

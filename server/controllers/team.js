@@ -380,7 +380,7 @@ module.exports = class TeamRouter {
         }
 
         if (membersId.length > 0) {
-            await User.update({ _id: { $in: membersId }, 'teams._id': teamId }, {
+            await User.updateMany({ _id: { $in: membersId }, 'teams._id': teamId }, {
                 $set: {
                     'teams.$.name': body.name
                 }

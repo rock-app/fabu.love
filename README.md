@@ -35,8 +35,8 @@ demo地址: https://fabu.love
 
 #### 运行前准备
 
-* 安装 MongoDB
-* 安装 Nodejs
+* 安装 MongoDB (3.6)
+* 安装 Nodejs (node在10以上会有上传ipa的问题,请使用node8/9)
 * 安装 pm2、babel-node
 
 ```bash
@@ -74,7 +74,8 @@ App is listening on 9898.
 ```Bash
 cd client
 cnpm install
-npm run dev
+npm run build #正式环境可以用该命令编译静态文件交给nginx
+npm run dev  #本地运行可以使用该命令
 
 ============>>out
 ...
@@ -159,7 +160,7 @@ server{
 
   location /upload/ {
       #该root目录为根目录下config.json文件里dir目录 上传的apk和ipa文件当作静态文件处理
-      root /home/ubuntu/fabulove/upload
+      root /home/ubuntu/fabulove/upload;
       expires  30d;
   }
 

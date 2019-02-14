@@ -9,6 +9,7 @@ import Fawn from "fawn"
 import Mail from '../helper/mail'
 import config from '../config'
 import Ldap from '../helper/ldap'
+import crypto from 'crypto'
 
 const jwt = require('jsonwebtoken');
 
@@ -41,6 +42,24 @@ var registerSchema = {
 }
 
 module.exports = class AuthRouter {
+
+    @request('post', '/api/user/apitoken')
+    @summary('生成apitoken')
+    @tag
+    static async apiToken(ctx, next) {
+        var user = ctx.state.user.data
+        var user = await User.findOne({ _id: user._id })
+        if (user) {
+            // var key = await bcrypt.hash(user.email, 10)
+            var md5 = crypto.createHash('md5')
+            var salt = user.email + Date()
+            var key = md5.update(user.email + salt).digest('hex')
+            await User.findByIdAndUpdate(user._id, { apiToken: key })
+            ctx.body = responseWrapper(key)
+        } else {
+            throw new Error('授权失败，请重新登录后重试')
+        }
+    }
 
     @request('post', '/api/user/login')
     @summary('登录')

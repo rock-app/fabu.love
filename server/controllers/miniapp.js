@@ -61,11 +61,6 @@ var appProfile = {
 module.exports = class MiniAppRouter {
     @request('post', '/api/miniapps/create')
     @summary("创建一个小程序")
-        // @query(
-        //     {
-        //     page:{type:'number',default:0,description:'分页页码(可选)'},
-        //     size:{type:'number',default:10,description:'每页条数(可选)'}
-        // })
     @body({
         name: { type: 'string', require: true },
         appId: { type: 'string', require: true ,description: "小程序的appid" },
@@ -77,7 +72,7 @@ module.exports = class MiniAppRouter {
         // var page = ctx.query.page || 0
         // var size = ctx.query.size || 10
         var user = ctx.state.user.data;
-        var body = ctx.body;
+        var body = ctx.request.body;
 
         var content = {
             creator:user.username,
@@ -171,17 +166,18 @@ module.exports = class MiniAppRouter {
         appId: { type: 'string', require: true ,description: "小程序的appid" },
         scene: { type: 'string', require: false ,description: "场景参数列如authcode=xxxx&match=xxxx" },
         remark: { type: 'string', require: true ,description: "备注信息" },
+        teamId: { type: 'string', require: true ,description: "团队id" },
     })
     @tag
     static async addDownloadCode(ctx, next) {
         // var page = ctx.query.page || 0
         // var size = ctx.query.size || 10
         var user = ctx.state.user.data;
-        var body = ctx.body;
+        var body = ctx.request.body;
         var { teamId } = ctx.validatedParams;
 
         var app = await Miniapp.findOne({ appId: body.appId })
-        appInTeamAndUserIsManager()
+        appInTeamAndUserIsManager(body.appId,body.teamId,user._id)
 
         var result = await Miniapp.find({ 'ownerId': teamId || user.id })
             // .limit(size).skip(page * size)

@@ -32,6 +32,11 @@ export default new Router({
           path: '/members',
           name: 'TeamMgr',
           component: resolve => require(['@/components/team/teamMgr.vue'], resolve)
+        },
+        {
+          path: '/miniAppList',
+          name: 'MiniAppList',
+          component: resolve => require(['@/components/miniApplication/miniAppList.vue'], resolve)
         }
       ]
     },

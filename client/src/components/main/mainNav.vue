@@ -17,6 +17,10 @@
             <i class="icon-ic_applist"></i>
             <span slot="title">应用列表</span>
           </el-menu-item>
+          <el-menu-item index="小程序列表" @click="clickSubItem">
+            <i class="icon-ic_applist"></i>
+            <span slot="title">小程序列表</span>
+          </el-menu-item>
           <el-menu-item index="团队管理" @click="clickSubItem">
             <i class="icon-ic_mnggp"></i>
             <span slot="title">团队管理</span>
@@ -123,6 +127,9 @@
           window.open(herf, '_blank')
         }
         if (data.index === 'About') {
+        }
+        if (data.index === '小程序列表') {
+          this.$router.push('/miniAppList')
         }
       },
       gotoApiDoc() {

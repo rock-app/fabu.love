@@ -3,7 +3,7 @@
     <div class="detail-header">
       <div class="detail-header-top">
         <!--v-lazy="getIconUrl()"-->
-        <img class="appicon" src="../../assets/ic_touxiang.png">
+        <img class="appicon" src="../../assets/miniicon.png">
         <p class="appname">{{this.appInfo.appName}}</p>
         <button class="delete button-style-border" @click="delectMiniApp">删除</button>
       </div>

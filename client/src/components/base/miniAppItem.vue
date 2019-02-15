@@ -3,7 +3,7 @@
     <ul class="collectionView-wrapper-ul">
       <li v-for="(item, index) in this.dataArr" :key="index" class="itemWrapper">
 
-        <img class="appItem-icon" src="../../assets/ic_touxiang.png" @click="gotoAppDetail(item)">
+        <img class="appItem-icon" src="../../assets/miniicon.png" @click="gotoAppDetail(item)">
 
         <div class="appItem-info">
           <div class="appItem-info-namewrapper">

@@ -77,6 +77,11 @@
         this.isAppList = true
         this.$refs.arrow.style.transform = `rotate(0deg)`
       })
+      this.bus.$on('miniApplist', () => {
+        this.isAppList = true
+        this.$refs.arrow.style.transform = `rotate(0deg)`
+      })
+
       this.bus.$on('appdetail', (appName) => {
         this.isAppList = false
         this.appName = appName
@@ -121,6 +126,7 @@
       this.bus.$off('createTeam')
       this.bus.$off('dissolveTeam')
       this.bus.$off('miniAppDetail')
+      this.bus.$off('miniApplist')
     },
     methods: {
       // dissolve是否是解散团队

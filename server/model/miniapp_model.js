@@ -29,14 +29,9 @@ var miniappSchema = new Schema({
     updateAt: {
         type: Date
     },
-    shortUrl: {
-        type: String,
-        unique: true
-    },
-
     ownerId: String,
     changelog: String,
-    downloadCodeImage:[String],
+    downloadCodeImage:[{remark:String,image:String,param:String,page:String}],
 
     releaseVersionId: String, //当前对外发布的最新版本号
 

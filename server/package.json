@@ -44,7 +44,8 @@
         "ipa-metadata": "^1.4.0",
         "mustache": "^2.3.0",
         "ldapjs": "^1.0.2",
-        "etl": "^0.5.13"
+        "etl": "^0.5.13",
+        "axios":"^0.18.0"
     },
     "devDependencies": {
         "babel-cli": "^6.24.1",

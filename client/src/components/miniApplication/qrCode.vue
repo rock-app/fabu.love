@@ -1,7 +1,7 @@
 <template>
     <div class="qrcode-wrapper">
       <ul class="qrcode-wrapper-ul">
-        <li v-for="(item, index) in downloadCodeImages" :key="index" class="itemWrapper">
+        <li v-for="(item, index) in downloadCodeImages" :key="index" class="itemWrapper" @mouseenter="mouseenter(item, index)" @mouseleave="mouseleave(item, index)">
           <img class="qrcode-icon" v-lazy="getIcon(item)" :onerror="defaultImg">
           <div>
             <table style="width: 100%;table-layout: fixed;margin-top: 24px">
@@ -25,16 +25,24 @@
               </tr>
             </table>
           </div>
+
+          <i v-show="item.showDelete" class="el-icon-circle-close" @click="deleteQrCode(item)"></i>
+
         </li>
       </ul>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as MiniApi from '../../api/moudle/miniApi'
+
   export default {
     props: {
       downloadCodeImages: {
         type: Array
+      },
+      appId: {
+        type: String
       }
     },
     data() {
@@ -47,6 +55,30 @@
       getIcon(item) {
         console.log(`${this.axios.defaults.baseURL}${item.image}`)
         return `${this.axios.defaults.baseURL}${item.image}`
+      },
+      mouseenter(item, index) {
+        item.showDelete = true
+        this.$set(this.downloadCodeImages, index, item)
+      },
+      mouseleave(item, index) {
+        item.showDelete = false
+        this.$set(this.downloadCodeImages, index, item)
+      },
+      deleteQrCode(item) {
+        this.$confirm('确认删除？')
+          .then(_ => {
+            let body = {
+              appId: this.appId,
+              codeId: item._id
+            }
+            MiniApi.deleteQrCode(body).then((res) => {
+              this.$message.success('删除成功')
+              this.$emit('deleteQrcodeSuccess')
+            }, reject => {
+              this.$message.error(reject)
+            })
+          })
+          .catch(_ => {})
       }
     }
   }
@@ -96,5 +128,11 @@
   }
   .qrcode-wrapper .appItem-info-appInfo {
     text-align: left;
+  }
+  .qrcode-wrapper .el-icon-circle-close {
+    position: absolute;
+    right: -6px;
+    top: -6px;
+    color: $warmRed;
   }
 </style>

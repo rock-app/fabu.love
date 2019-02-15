@@ -17,6 +17,8 @@
 
       <qrCode v-if="this.downloadCodeImageArray.length > 0"
               :downloadCodeImages="downloadCodeImageArray"
+              :appId="this.appInfo.appId"
+              @deleteQrcodeSuccess="deleteQrcodeSuccess"
       >
 
       </qrCode>
@@ -108,10 +110,14 @@
         }
         MiniApi.getQrCode(body).then((res) => {
           console.log(res)
-          this.downloadCodeImageArray = res.downloadCodeImage
+          this.downloadCodeImageArray = res.data.downloadCodeImage || []
+          this.showCreateQrCodeInfo = false
         }, reject => {
           this.$message.error(reject)
         })
+      },
+      deleteQrcodeSuccess() {
+        this.getAppDetailData()
       }
     }
   }

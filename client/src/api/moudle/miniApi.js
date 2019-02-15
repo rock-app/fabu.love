@@ -32,3 +32,9 @@ export function getQrCode(body) {
   let url = 'api/miniapps/adddownloadcode'
   return postHttp(url, body)
 }
+
+// 删除一个下载二维码
+export function deleteQrCode(body) {
+  let url = 'api/miniapps/removedownloadcode'
+  return postHttp(url, body)
+}

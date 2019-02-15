@@ -160,7 +160,8 @@
 
       },
       clickLogo() {
-//        this.$router.push('/apps')
+//        this.$router.replace('/apps')
+//        window.location.replace(window.location.href)
       }
     },
     watch: {

@@ -226,6 +226,34 @@ module.exports = class MiniAppRouter {
         ctx.body = responseWrapper(updatedApp)
     }
 
+    @request('post', '/api/miniapps/removedownloadcode')
+    @summary("删除一个下载二维码")
+        // @query(
+        //     {
+        //     page:{type:'number',default:0,description:'分页页码(可选)'},
+        //     size:{type:'number',default:10,description:'每页条数(可选)'}
+        // })
+    @body({
+        appId: { type: 'string', require: true ,description: "小程序的appid" },
+        codeId: { type: 'string', require: true ,description: "入口页面" },
+    })
+    @tag
+    static async removeDownloadCode(ctx, next) {
+        // var page = ctx.query.page || 0
+        // var size = ctx.query.size || 10
+        var user = ctx.state.user.data;
+        var body = ctx.request.body;
+
+        var app = await Miniapp.findOne({ appId: body.appId })
+        appInTeamAndUserIsManager(app._id,body.teamId,user._id)
+
+        await app.update({
+            $pull: {
+                downloadCodeImage: { _id:body.codeId }
+            }
+        })
+        ctx.body = responseWrapper(true,'小程序码已删除')
+    }
 
     // @request('post', '/api/apps/{teamId}/{id}/profile')
     // @summary("更新应用设置")

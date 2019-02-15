@@ -82,6 +82,7 @@
           console.log(res)
           this.appInfo = res.data
           this.downloadCodeImageArray = this.appInfo.downloadCodeImage
+          this.bus.$emit('miniAppDetail', this.appInfo.appName)
         }, reject => {
           this.$message.error(reject)
         })

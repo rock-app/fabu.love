@@ -82,6 +82,11 @@
         this.appName = appName
         this.$refs.arrow.style.transform = `rotate(-90deg)`
       })
+      this.bus.$on('miniAppDetail', (appName) => {
+        this.isAppList = false
+        this.appName = appName
+        this.$refs.arrow.style.transform = `rotate(-90deg)`
+      })
       this.bus.$on('allreadMessage', () => {
         this.redDocHidden = true
       })
@@ -115,6 +120,7 @@
       this.bus.$off('allreadMessage')
       this.bus.$off('createTeam')
       this.bus.$off('dissolveTeam')
+      this.bus.$off('miniAppDetail')
     },
     methods: {
       // dissolve是否是解散团队
@@ -186,8 +192,15 @@
         } else {
         }
       },
+      // 点击我的团队，返回
       clickFlagBtn() {
-        this.$router.push('/apps')
+        console.log(this.$route.fullPath)
+        if (this.$route.fullPath.indexOf('/app/') !== -1) {
+          this.$router.push('/apps')
+        }
+        if (this.$route.fullPath.indexOf('/miniApp/') !== -1) {
+          this.$router.push('/miniAppList')
+        }
       },
       popovershow() {
         this.$refs.arrow.style.transform = `rotate(-180deg)`

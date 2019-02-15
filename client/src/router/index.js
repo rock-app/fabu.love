@@ -37,6 +37,11 @@ export default new Router({
           path: '/miniAppList',
           name: 'MiniAppList',
           component: resolve => require(['@/components/miniApplication/miniAppList.vue'], resolve)
+        },
+        {
+          path: '/miniApp/:appId',
+          name: 'MiniAppDetail',
+          component: resolve => require(['@/components/miniApplication/miniAppDetail.vue'], resolve)
         }
       ]
     },

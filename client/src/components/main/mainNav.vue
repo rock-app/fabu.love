@@ -12,7 +12,7 @@
         ref="elmenu"
       >
         <!--不可以用v-if，否则会因为控件加载时序问题导致，指定选中的item失效-->
-        <div v-show="this.activeIndex !== '应用概述'">
+        <div v-show="this.activeIndex !== '应用概述' && this.activeIndex !== '应用详情'">
           <el-menu-item index="应用列表" @click="clickSubItem">
             <i class="icon-ic_applist"></i>
             <span slot="title">应用列表</span>
@@ -35,6 +35,13 @@
           <el-menu-item index="应用设置" @click="clickSubItem">
             <i class="icon-ic_appsetting-copy"></i>
             <span slot="title">应用设置</span>
+          </el-menu-item>
+        </div>
+        <!--小程序-->
+        <div v-show="this.activeIndex === '应用详情'">
+          <el-menu-item index="应用详情" @click="clickSubItem">
+            <i class="icon-ic_appdes"></i>
+            <span slot="title">应用详情</span>
           </el-menu-item>
         </div>
       </el-menu>
@@ -76,8 +83,12 @@
       }
     },
     mounted() {
+      // 监听进入详情页面就变化左侧的菜单
       this.bus.$on('appdetail', () => {
         this.activeIndex = '应用概述'
+      })
+      this.bus.$on('miniAppDetail', () => {
+        this.activeIndex = '应用详情'
       })
       this.bus.$on('applist', () => {
         if (this.$route.fullPath !== '/apps') {
@@ -85,6 +96,14 @@
         }
         this.activeIndex = '应用列表'
       })
+      this.bus.$on('miniApplist', () => {
+        if (this.$route.fullPath !== '/miniAppList') {
+          this.$router.push('/miniAppList')
+        }
+        this.activeIndex = '小程序列表'
+      })
+
+      // 刷新浏览器的时候防止菜单变化
       if (this.$route.fullPath === '/members') {
         this.activeIndex = '团队管理'
       }
@@ -97,6 +116,8 @@
     destroyed() {
       this.bus.$off('applist')
       this.bus.$off('appdetail')
+      this.bus.$off('miniApplist')
+      this.bus.$off('miniAppDetail')
     },
     methods: {
       clickSubItem(data) {

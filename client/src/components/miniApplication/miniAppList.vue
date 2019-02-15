@@ -69,6 +69,7 @@
     created() {
     },
     mounted() {
+      this.bus.$emit('miniApplist')
       this.currentTeam = getUserTeam()
       this.loadAppList()
     },
@@ -119,11 +120,11 @@
         })
       },
       gotoAppDetail(item) {
-//        this.$router.push({
-//          name: 'AppDetail',
-//          params: {appId: item._id}
-//        })
-//        this.bus.$emit('appdetail')
+        this.$router.push({
+          name: 'MiniAppDetail',
+          params: {appId: item._id}
+        })
+        this.bus.$emit('miniAppDetail')
       }
     }
   }

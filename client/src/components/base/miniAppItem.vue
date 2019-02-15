@@ -19,7 +19,7 @@
             <tr>
               <td class="appItem-info-title">AppSecret:</td>
               <td>
-                <div class="appItem-info-appInfo nowrap">{{item.appSecret}}</div>
+                <div class="appItem-info-appInfo nowrap">{{(item.appSecret.slice(0, 5) + '******')}}</div>
               </td>
             </tr>
           </table>

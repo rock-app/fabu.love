@@ -3,6 +3,28 @@
       <ul class="qrcode-wrapper-ul">
         <li v-for="(item, index) in downloadCodeImages" :key="index" class="itemWrapper">
           <img class="qrcode-icon" v-lazy="getIcon(item)" :onerror="defaultImg">
+          <div>
+            <table style="width: 100%;table-layout: fixed;margin-top: 24px">
+              <tr>
+                <td class="appItem-info-title">scene:</td>
+                <td>
+                  <div class="appItem-info-appInfo nowrap" v-html="item.param"></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="appItem-info-title">page:</td>
+                <td>
+                  <div class="appItem-info-appInfo nowrap">{{item.page}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td class="appItem-info-title">备注:</td>
+                <td>
+                  <div class="appItem-info-appInfo nowrap">{{item.remark}}</div>
+                </td>
+              </tr>
+            </table>
+          </div>
         </li>
       </ul>
     </div>
@@ -44,11 +66,10 @@
     }
     .qrcode-wrapper .itemWrapper {
       position: relative;
-      padding-bottom: 24px;
+      padding-bottom: 12px;
       background-color: white;
       margin-top: 20px;
       width: 264px;
-      height: 264px;
       text-align: center;
       border-radius: 4px ;
       transition: 0.5s;
@@ -61,8 +82,19 @@
     .qrcode-wrapper .itemWrapper:hover .appItem-info-namewrapper p {
       color: #000;
     }
-    .qrcode-wrapper .itemWrapper .appItem-icon {
+    .qrcode-wrapper .itemWrapper .qrcode-icon {
       width: 264px;
       height: 264px;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow: hidden;
     }
+
+  .qrcode-wrapper .appItem-info-title {
+    line-height: 26px;
+    height: 26px;
+  }
+  .qrcode-wrapper .appItem-info-appInfo {
+    text-align: left;
+  }
 </style>

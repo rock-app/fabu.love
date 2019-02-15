@@ -112,14 +112,18 @@
           'teamId': this.currentTeam._id
         }
         MiniApi.create(body).then(response => {
-          console.log(response)
           this.showAddAppContent = false
+          this.loadAppList()
         }, reject => {
 
         })
       },
-      gotoAppDetail() {
-
+      gotoAppDetail(item) {
+//        this.$router.push({
+//          name: 'AppDetail',
+//          params: {appId: item._id}
+//        })
+//        this.bus.$emit('appdetail')
       }
     }
   }

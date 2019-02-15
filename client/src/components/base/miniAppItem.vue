@@ -3,7 +3,7 @@
     <ul class="collectionView-wrapper-ul">
       <li v-for="(item, index) in this.dataArr" :key="index" class="itemWrapper">
 
-        <img class="appItem-icon" v-if="item.icon" :src="getIcon(item)" @click="gotoAppDetail(item)">
+        <img class="appItem-icon" src="../../assets/ic_touxiang.png" @click="gotoAppDetail(item)">
 
         <div class="appItem-info">
           <div class="appItem-info-namewrapper">
@@ -11,15 +11,15 @@
           </div>
           <table style="width: 100%;table-layout: fixed;margin-top: 24px">
             <tr>
-              <td class="appItem-info-title">AppKey:</td>
+              <td class="appItem-info-title">AppId:</td>
               <td>
-                <div class="appItem-info-appInfo nowrap" v-html="getShortUrl(item)"></div>
+                <div class="appItem-info-appInfo nowrap" v-html="item.appId"></div>
               </td>
             </tr>
             <tr>
               <td class="appItem-info-title">AppSecret:</td>
               <td>
-                <div class="appItem-info-appInfo nowrap">{{item.bundleId}}</div>
+                <div class="appItem-info-appInfo nowrap">{{item.appSecret}}</div>
               </td>
             </tr>
           </table>
@@ -54,6 +54,7 @@
     },
     methods: {
       gotoAppDetail(item) {
+        this.$emit('gotoAppDetail', item)
       },
       getIcon(item) {
         return `${this.axios.defaults.baseURL}${item.icon}`

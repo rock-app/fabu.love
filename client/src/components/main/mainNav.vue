@@ -17,10 +17,10 @@
             <i class="icon-ic_applist"></i>
             <span slot="title">应用列表</span>
           </el-menu-item>
-          <el-menu-item index="小程序列表" @click="clickSubItem">
+          <!-- <el-menu-item index="小程序列表" @click="clickSubItem">
             <i class="icon-ic_applist"></i>
             <span slot="title">小程序列表</span>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item index="团队管理" @click="clickSubItem">
             <i class="icon-ic_mnggp"></i>
             <span slot="title">团队管理</span>

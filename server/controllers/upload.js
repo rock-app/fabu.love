@@ -24,7 +24,7 @@ var apkParser3 = require('../library/apkparser/apkparser')
 var unzip = require('unzipper')
 var etl = require('etl')
 var mkdirp = require('mkdirp')
-var ipaMataData = require('ipa-metadata')
+var ipaMataData = require('ipa-metadata2')
 const { compose, maxBy, filter, get } = require('lodash/fp')
 
 var { writeFile, readFile, responseWrapper, exec } = require('../helper/util')
@@ -226,7 +226,7 @@ async function extractIpaIcon(filename, guid, team) {
     var found = false
     var buffer = fs.readFileSync(filename)
     var data = await unzip.Open.buffer(buffer)
-    var promise = new Promise((resolve, reject) => {
+    await Promise((resolve, reject) => {
         data.files.forEach(file => {
             if (file.path.indexOf(iconName + '60x60@2x.png') != -1) {
                 found = true
@@ -238,7 +238,9 @@ async function extractIpaIcon(filename, guid, team) {
         })
     })
 
-    var value = await promise
+    if (!found) {
+        throw (new Error('can not find icon'))
+    }
 
     var pnfdefryDir = path.join(__dirname, '..', 'library/pngdefry')
         //写入成功判断icon是否是被苹果破坏过的图片
@@ -260,16 +262,12 @@ async function extractIpaIcon(filename, guid, team) {
     var iconSuffix = "/" + guid + "_i.png"
     createFolderIfNeeded(path.join(uploadDir, iconRelatePath))
     if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
-        await fs.renameSync(tmpOut, path.join(iconRelatePath, iconSuffix))
+        await fs.renameSync(tmpOut, path.join(uploadDir,iconRelatePath, iconSuffix))
         return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
     }
     await fs.unlinkSync(tmpOut)
     fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid), path.join(uploadDir, iconRelatePath, iconSuffix))
     return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
-
-    if (!found) {
-        throw (new Error('can not find icon'))
-    }
 
 }
 

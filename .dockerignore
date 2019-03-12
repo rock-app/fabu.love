@@ -1,0 +1,8 @@
+launch.json
+
+node_modules/
+.idea/
+
+upload/
+
+temp/

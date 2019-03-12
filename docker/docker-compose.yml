@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./helper:/helper/db
+    ports:
+      - "27017:27017"
+
+  server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports: 
+      - "9898:9898"
+    links:
+      - mongo
+
+  
+
+
+  

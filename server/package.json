@@ -31,8 +31,8 @@
         "koa-body": "^2.5.0",
         "koa-compose": "^4.1.0",
         "bunyan": "^1.8.12",
-        "mongoose": "5.0.4",
-        "jsonwebtoken": "^7.4.1",
+        "mongoose": "^5.4.19",
+        "jsonwebtoken": "^8.5.0",
         "unzipper": "^0.9.3",
         "lodash": "^4.17.4",
         "pm2": "^2.9.3",
@@ -45,7 +45,9 @@
         "mustache": "^2.3.0",
         "ldapjs": "^1.0.2",
         "etl": "^0.5.13",
-        "axios": "^0.18.0"
+        "axios": "^0.18.0",
+        "hoek": ">=4.2.1",
+        "mpath": ">=0.5.1"
     },
     "devDependencies": {
         "babel-cli": "^6.24.1",

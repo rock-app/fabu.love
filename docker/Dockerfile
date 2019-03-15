@@ -19,7 +19,7 @@ ADD server /opt/server
 RUN cnpm install && cnpm install bcrypt@latest --save
 
 # 增加前端页面到server
-ADD client/dist /opt/web
+# ADD client/dist /opt/web
 # ADD docker/nginx/fabulove.conf /etc/nginx/conf.d/fabulove.conf
 
 EXPOSE 9898

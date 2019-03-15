@@ -1,4 +1,4 @@
-FROM node:10.15-jessie
+FROM node:8.9.4
 
 # 安装依赖库
 RUN npm install -g babel-cli \

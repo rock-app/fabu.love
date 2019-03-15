@@ -51,6 +51,18 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 #### 运行步骤
 
+##### 使用docker运行（建议）
+
+**前提：本地已安装docker、mongodb已运行**
+
+1. 下载本项目源码 进入根目录
+2. 执行`docker build -t fabu -f docker/Dockerfile .`
+3. 执行`docker run -p 9898:9898 --network host fabu:latest`
+4. 打开浏览器 http://0.0.0.0:9898
+
+
+##### 本地运行运行
+
 1.clone 下载代码 `git clone https://github.com/HeadingMobile/LoveFabu.git`
 
 2.运行server端
@@ -86,6 +98,7 @@ npm run dev  #本地运行可以使用该命令
 ```
 
 4.使用浏览器打开进入http://localhost3009即可进入应用
+
 
 
 

@@ -6,23 +6,23 @@ RUN npm install -g babel-cli \
 # 设置目录
 RUN mkdir -p /opt/data /opt/server /opt/web /opt/logs /var/cache/nginx/client_temp
 
-# 增加库
-# RUN apk add --no-cache openssl
 
-# 增加启动脚本
-ADD docker/docker-entrypoint.sh /opt/server/
-RUN chmod +x /opt/server/docker-entrypoint.sh
+# 增加前端页面显示
+WORKDIR /opt/client
+ADD client /opt/client
+RUN cnpm install
+RUN npm run build
 
 # 增加server
 WORKDIR /opt/server
 ADD server /opt/server
-RUN cnpm install
+RUN cnpm install && cnpm install bcrypt@latest --save
 
-# 增加nginx前端页面
+# 增加前端页面到server
 ADD client/dist /opt/web
-ADD docker/nginx/fabulove.conf /etc/nginx/conf.d/fabulove.conf
+# ADD docker/nginx/fabulove.conf /etc/nginx/conf.d/fabulove.conf
 
 EXPOSE 9898
 
-ENTRYPOINT ["/opt/server/docker-entrypoint.sh"]
-#CMD ["nginx", "-g", "daemon off;"]
+# ENTRYPOINT ["/opt/server/docker-entrypoint.sh"]
+CMD ["npm", "start"]

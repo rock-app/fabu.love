@@ -3,6 +3,9 @@ launch.json
 node_modules/
 .idea/
 
+server/node_modules/
+client/node_modules/
+
 upload/
 
 temp/

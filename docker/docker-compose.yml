@@ -5,7 +5,7 @@ services:
     container_name: mongo
     image: mongo
     volumes:
-      - ./helper:/helper/db
+      - ./data/db:/data/db
     ports:
       - "27017:27017"
 
@@ -13,10 +13,10 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
+    environment:
+      FABU_DB_HOST: mongo
     ports: 
       - "9898:9898"
-    links:
-      - mongo
 
   
 

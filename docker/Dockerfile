@@ -1,4 +1,4 @@
-FROM node:8.9.4
+FROM node:10.15.3
 
 # 安装依赖库
 RUN npm install -g babel-cli \
@@ -16,7 +16,8 @@ RUN npm run build
 # 增加server
 WORKDIR /opt/server
 ADD server /opt/server
-RUN cnpm install && cnpm install bcrypt@latest --save
+# RUN cnpm install && cnpm install bcrypt@latest --save
+RUN cnpm install
 
 # 增加前端页面到server
 # ADD client/dist /opt/web

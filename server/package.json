@@ -47,7 +47,8 @@
         "etl": "^0.5.13",
         "axios": "^0.18.0",
         "hoek": ">=4.2.1",
-        "mpath": ">=0.5.1"
+        "mpath": ">=0.5.1",
+        "app-info-parser": "^0.2.3"
     },
     "devDependencies": {
         "babel-cli": "^6.24.1",

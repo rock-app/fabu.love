@@ -25,6 +25,7 @@ var unzip = require('unzipper')
 var etl = require('etl')
 var mkdirp = require('mkdirp')
 var ipaMataData = require('ipa-metadata2')
+const AppInfoParser = require('app-info-parser')
 const { compose, maxBy, filter, get } = require('lodash/fp')
 
 var { writeFile, readFile, responseWrapper, exec } = require('../helper/util')
@@ -188,22 +189,24 @@ function storeInfo(filename, guid) {
 
 ///解析ipa
 function parseIpa(filename) {
+    const parser = new AppInfoParser(filename)
+
     return new Promise((resolve, reject) => {
-        ipaMataData(filename, (err, data) => {
-            if (err)
-                reject(err)
+        parser.parse().then(result => {
+            console.log('app info ----> ', result)
+            console.log('icon base64 ----> ', result.icon)
+
             var info = {}
             info.platform = 'ios'
-            info.bundleId = data.metadata.CFBundleIdentifier
-            info.bundleName = data.metadata.CFBundleName
-            info.appName = data.metadata.CFBundleDisplayName
-            info.versionStr = data.metadata.CFBundleShortVersionString
-            info.versionCode = data.metadata.CFBundleVersion
-            info.iconName = data.metadata.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName
-
+            info.bundleId = result.CFBundleIdentifier
+            info.bundleName = result.CFBundleName
+            info.appName = result.CFBundleDisplayName
+            info.versionStr = result.CFBundleShortVersionString
+            info.versionCode = result.CFBundleVersion
+            info.iconName = result.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName
             try {
-                const environment = data.provisioning.Entitlements['aps-environment']
-                const active = data.provisioning.Entitlements['beta-reports-active']
+                const environment = result.mobileProvision.Entitlements['aps-environment']
+                const active = result.mobileProvision.Entitlements['beta-reports-active']
                 if (environment == 'production') {
                     info.appLevel = active ? 'appstore' : 'enterprise'
                 } else {
@@ -215,6 +218,7 @@ function parseIpa(filename) {
             }
             resolve(info)
         })
+        
     })
 }
 
@@ -226,7 +230,7 @@ async function extractIpaIcon(filename, guid, team) {
     var found = false
     var buffer = fs.readFileSync(filename)
     var data = await unzip.Open.buffer(buffer)
-    await Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
         data.files.forEach(file => {
             if (file.path.indexOf(iconName + '60x60@2x.png') != -1) {
                 found = true

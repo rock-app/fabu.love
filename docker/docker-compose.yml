@@ -9,9 +9,7 @@ services:
     ports:
       - "27017:27017"
     networks:
-      appnet:
-        aliases:
-          - mongo
+      - appnet
 
   server:
     build:
@@ -19,12 +17,16 @@ services:
       dockerfile: docker/Dockerfile
     environment:
       FABU_DB_HOST: mongo
+      FABU_BASE_URL: https://fabu.apppills.com
+      FABU_UPLOAD_DIR: /fabu/upload
     ports: 
       - "9898:9898"
+    volumes:
+      - ./upload:/fabu/upload
+    depends_on:
+      - mongo
     networks:
-      appnet:
-        aliases:
-          - fabu-server
+      - appnet
 
 networks:
   appnet:

@@ -53,11 +53,10 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 ##### 使用docker运行（建议）
 
-**前提：本地已安装docker、mongodb已运行**
-
+**前提：本地已安装docker**
 1. 下载本项目源码 进入根目录
-2. 执行`docker build -t fabu -f docker/Dockerfile .`
-3. 执行`docker run -p 9898:9898 --network host fabu:latest`
+2. 执行`cd docker`
+3. 执行`docker-compose up -d --build`
 4. 打开浏览器 http://0.0.0.0:9898
 
 
@@ -93,11 +92,11 @@ npm run dev  #本地运行可以使用该命令
 ...
 ...
  DONE  Compiled successfully in 18546ms                                                
- I  Your application is running here: http://0.0.0.0:3009
+ I  Your application is running here: http://0.0.0.0:9898
 ============>>end
 ```
 
-4.使用浏览器打开进入http://localhost3009即可进入应用
+4.使用浏览器打开进入http://localhost:9898即可进入应用
 
 
 

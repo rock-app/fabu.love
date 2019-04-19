@@ -31,9 +31,20 @@ demo地址: https://fabu.love
 └── wiki //todo 还在编写中
 ```
 
+#### 运行步骤
+
+##### 使用docker运行（建议）
+
+> ps：请先安装docker
+1. 下载源码  `git clone https://github.com/HeadingMobile/fabu.love.git`
+2. 执行`cd docker`
+3. 执行`docker-compose up -d --build`
+4. 打开浏览器 http://0.0.0.0:9898
 
 
-#### 运行前准备
+##### 本地运行运行
+
+运行前准备
 
 * 安装 MongoDB (3.6)
 * 安装 Nodejs (node在10以上会有上传ipa的问题,请使用node8/9)
@@ -48,19 +59,6 @@ npm install -g pm2 babel-cli
 ```bash
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
-
-#### 运行步骤
-
-##### 使用docker运行（建议）
-
-**前提：本地已安装docker**
-1. 下载本项目源码 进入根目录
-2. 执行`cd docker`
-3. 执行`docker-compose up -d --build`
-4. 打开浏览器 http://0.0.0.0:9898
-
-
-##### 本地运行运行
 
 1.clone 下载代码 `git clone https://github.com/HeadingMobile/LoveFabu.git`
 

@@ -2,78 +2,65 @@
 
 - server
     基于node构建server服务
-- web
-    基于nginx构建web服务
-
-> 说明  
-    nginx服务需要访问server服务
+- Mongo
+    
 
 
 # Docker 部署说明文档
 
-- 安装docker
- https://docs.docker.com/docker-for-mac/
+- 安装docker和Docker-compose最新版
+  https://docs.docker.com/docker-for-mac/
 
-- 获取公共镜像
- ```
- 查看本地镜像：docker image ls
- 从公共仓库获取镜像: docker pull [镜像]
- docker pull mongo
- docker pull node
- ````
- 
- - 构建镜像
- ```
- 在项目根目录下创建Dockerfile文件
- Dockerfile 指令
- 
- 指定工作目录
- WORKDIR <工作目录路径>
-
- 将项目下的文件复制到指定目录下
- COPY package.json /usr/src/app/
-
- 启动容器安装依赖
- RUN npm install
- 
- 暴露端口
- EXPOSE 3008
-
- 容器启动命令
- CMD [ "npm", "start" ]
-
- ```
-
- - compose 项目
+使用docker-compose部署：
+>  - compose 项目
 参考文档:https://yeasy.gitbooks.io/docker_practice/content/compose/compose_file.html
-```
+
+docker-compose中包含server服务和mongodb，如果已经单独运行了mongodb可以直接用Dockerfile构建。
+
+ ```
 构建yml文件
 设置容器信息
 
+version: '3'
 services:
-  app:
-    container_name: app
-    restart: always
-    build: .
-    ports:
-      - "3008:3008"
-    links:
-      - mongo
+
   mongo:
     container_name: mongo
     image: mongo
     volumes:
-      - ./helper:/helper/db
+      - ./data:/data/db
     ports:
       - "27017:27017"
+    networks:
+      - appnet
 
+  server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    environment:
+      FABU_DB_HOST: mongo
+      FABU_BASE_URL: https://fabu.apppills.com  #这是服务器部署的地址，请换成自己的 本地运行demo可以删除本行
+      FABU_UPLOAD_DIR: /fabu/upload 
+    ports: 
+      - "9898:9898"
+    volumes:
+      - ./upload:/fabu/upload
+    depends_on:
+      - mongo
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver:
+      bridge
+
+ ```
+
+进入docker目录中：
+执行：
+```
+docker-compose up -d --build
 ```
 
-- 执行 docker-compose up 启动server_app镜像的容器。
-- 通过localhost:3008访问server
-- 删除本地镜像
-```
-docker image rm [选项] <镜像1> [<镜像2> ...
-
-docker image rm server_app
-```

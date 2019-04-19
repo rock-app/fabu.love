@@ -2,7 +2,7 @@
 typora-copy-images-to: ./screenshots
 ---
 
-#### 爱发布
+### 爱发布
 
 demo地址: https://fabu.love
 该平台是类似于fir.im/蒲公英类似的一个平台.可以自己部署.
@@ -17,7 +17,7 @@ demo地址: https://fabu.love
 
 ![Artboard](./screenshots/Artboard.png)
 
-#### 项目结构
+### 项目结构
 
 ```
 .
@@ -31,9 +31,9 @@ demo地址: https://fabu.love
 └── wiki //todo 还在编写中
 ```
 
-#### 运行步骤
+### 运行步骤
 
-##### 使用docker运行（建议）
+#### 使用docker运行（建议）
 
 > ps：请先安装docker
 1. 下载源码  `git clone https://github.com/HeadingMobile/fabu.love.git`
@@ -42,7 +42,7 @@ demo地址: https://fabu.love
 4. 打开浏览器 http://0.0.0.0:9898
 
 
-##### 本地运行
+#### 本地运行
 
 运行前准备
 
@@ -99,7 +99,7 @@ npm run dev  #本地运行可以使用该命令
 
 
 
-##### 项目配置说明
+### 项目配置说明
 
 **前端配置**
 
@@ -150,7 +150,7 @@ const common = {
 
 
 
-#### 正式环境部署 nginx配置(注意请使用https部署,否则iOS会出现无法安装的问题)
+### 正式环境部署 nginx配置(注意请使用https部署,否则iOS会出现无法安装的问题)
 
 可以按照项目根目录的 fabu_nginx.conf 文件进行配置
 

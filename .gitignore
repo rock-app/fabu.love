@@ -6,4 +6,5 @@ node_modules/
 upload/
 docker/data/
 docker/upload/
+upload/
 temp/

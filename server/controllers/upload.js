@@ -214,7 +214,7 @@ function parseIpa(filename) {
                 }
             } catch (err) {
                 info.appLevel = 'develop'
-                reject("应用未签名,暂不支持")
+                // reject("应用未签名,暂不支持")
             }
             resolve(info)
         })

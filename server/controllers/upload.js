@@ -240,6 +240,8 @@ async function extractIpaIcon(filename, guid, team) {
                     .on('finish', resolve)
             }
         })
+    }).catch({
+        
     })
 
     if (!found) {
@@ -276,37 +278,68 @@ async function extractIpaIcon(filename, guid, team) {
 }
 
 ///解析apk
-function parseApk(filename) {
+function parseApk(filename)  {
+
+    const parser = new AppInfoParser(filename)
+
+
     return new Promise((resolve, reject) => {
-        apkParser3(filename, (err, data) => {
-            var apkPackage = parseText(data.package)
-            console.log(data)
-            console.log("----------------")
-            console.log(data['application-label'])
+        parser.parse().then(result => {
+            // console.log('app info ----> ', result)
+            // console.log('icon base64 ----> ', result.icon)
+            // console.log('====================================', JSON.stringify(result));
             var label = undefined
-            data['launchable-activity']
-                .split(' ')
-                .filter(s => s.length != 0)
-                .map(element => { return element.split('=') })
-                .forEach(element => {
-                    if (element && element.length > 2 && element[0] == 'label') {
-                        label = element[1]
-                    }
-                })
+
+            if(result.application && result.application.label && result.application.label.length > 0) {
+                label = result.application.label[0]
+            }
+
             if (label) {
                 label = label.replace(/'/g, '')
             }
-            var appName = (data['application-label'] || data['application-label-zh-CN'] || data['application-label-es-US'] ||
-                data['application-label-zh_CN'] || data['application-label-es_US'] || label || 'unknown')
+            var appName = (result['application-label'] || result['application-label-zh-CN'] || result['application-label-es-US'] ||
+            result['application-label-zh_CN'] || result['application-label-es_US'] || label || 'unknown')
+
             var info = {
                 'appName': appName.replace(/'/g, ''),
-                'versionCode': Number(apkPackage.versionCode),
-                'bundleId': apkPackage.name,
-                'versionStr': apkPackage.versionName,
+                'versionCode': Number(result.versionCode),
+                'bundleId': result.package,
+                'versionStr': result.versionName,
                 'platform': 'android'
             }
             resolve(info)
-        })
+          }).catch(err => {
+            console.log('err ----> ', err)
+          })
+        // apkParser3(filename, (err, data) => {
+        //     var apkPackage = parseText(data.package)
+        //     console.log(data)
+        //     console.log("----------------")
+        //     console.log(data['application-label'])
+        //     var label = undefined
+        //     data['launchable-activity']
+        //         .split(' ')
+        //         .filter(s => s.length != 0)
+        //         .map(element => { return element.split('=') })
+        //         .forEach(element => {
+        //             if (element && element.length > 2 && element[0] == 'label') {
+        //                 label = element[1]
+        //             }
+        //         })
+        //     if (label) {
+        //         label = label.replace(/'/g, '')
+        //     }
+        //     var appName = (data['application-label'] || data['application-label-zh-CN'] || data['application-label-es-US'] ||
+        //         data['application-label-zh_CN'] || data['application-label-es_US'] || label || 'unknown')
+        //     var info = {
+        //         'appName': appName.replace(/'/g, ''),
+        //         'versionCode': Number(apkPackage.versionCode),
+        //         'bundleId': apkPackage.name,
+        //         'versionStr': apkPackage.versionName,
+        //         'platform': 'android'
+        //     }
+        //     resolve(info)
+        // })
     })
 }
 
@@ -335,6 +368,25 @@ function extractApkIcon(filepath, guid, team) {
             var { ext, dir } = path.parse(iconPath);
             // 获取到最大的png的路径
             let maxSizePath;
+            // if (ext === '.xml') {
+
+            // } else {
+            //     fs.createReadStream(filepath)
+            //         .pipe(unzip.Parse())
+            //         .pipe(etl.map(entry => {
+            //             // 适配iconPath为ic_launcher.xml的情况
+            //             const entryPath = entry.path
+            //             // const isXml = entryPath.indexOf('.xml') >= 0
+            //             // if ( (!isXml && entryPath.indexOf(iconPath) != -1) || (isXml && entry.path.indexOf(maxSizePath) != -1)) {
+            //             //     console.log(entry.path)
+            //             entry.pipe(etl.toFile(tempOut))
+            //             resolve({ 'success': true, fileName: realPath })
+            //             // } else {
+            //             //     entry.autodrain()
+            //             // }
+            //         }))
+            // }
+
             const initialPromise = ext === '.xml' ?
                 unzip.Open.file(filepath).then(directory => {
                     const getMaxSizeImagePath = compose(get('path'), maxBy('compressedSize'),
@@ -353,6 +405,7 @@ function extractApkIcon(filepath, guid, team) {
                             entry.pipe(etl.toFile(tempOut))
                             resolve({ 'success': true, fileName: realPath })
                         } else {
+                            resolve({ 'success': true, fileName: realPath })
                             entry.autodrain()
                         }
                     }))

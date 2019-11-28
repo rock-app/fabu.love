@@ -12,9 +12,8 @@ services:
       - appnet
 
   server:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
+    container_name: client_deploy
+    image: agassiyzh/fabu.love
     environment:
       FABU_DB_HOST: mongo
       # FABU_BASE_URL: https://fabu.apppills.com 正式环境部署请打开注释，并修改为域名为自己的域名

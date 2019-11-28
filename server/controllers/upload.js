@@ -27,11 +27,30 @@ var mkdirp = require('mkdirp')
 var ipaMataData = require('ipa-metadata2')
 const AppInfoParser = require('app-info-parser')
 const { compose, maxBy, filter, get } = require('lodash/fp')
+const OSS = require('ali-oss')
 
 var { writeFile, readFile, responseWrapper, exec } = require('../helper/util')
 
 var tempDir = path.join(config.fileDir, 'temp')
 var uploadDir = path.join(config.fileDir, 'upload')
+
+const usOSS = config.OSSRegion != undefined || 
+              config.OSSAccessKeyID != undefined ||
+              config.OSSAccessKeySecret != undefined ||
+              config.OSSBucket != undefined;
+
+var OSSClient = undefined;
+
+if (usOSS) {
+    OSSClient = new OSS({
+        region: config.OSSRegion,
+        accessKeyId: config.OSSAccessKeyID,
+        accessKeySecret: config.OSSAccessKeySecret,
+        bucket: config.OSSBucket, 
+     });
+}
+
+
 
 createFolderIfNeeded(tempDir)
 
@@ -103,6 +122,7 @@ module.exports = class UploadRouter {
 async function parseAppAndInsertToDB(file, user, team) {
     var filePath = file.path
     var parser, extractor;
+    var isApppValid = true;
     if (path.extname(filePath) === ".ipa") {
         parser = parseIpa
         extractor = extractIpaIcon
@@ -119,14 +139,10 @@ async function parseAppAndInsertToDB(file, user, team) {
         //解析icon图标
     var icon = await extractor(filePath, fileName, team);
 
-    //移动文件到对应目录
-    var fileRelatePath = path.join(team.id, info.platform)
-    createFolderIfNeeded(path.join(uploadDir, fileRelatePath))
-    var fileRealPath = path.join(uploadDir, fileRelatePath, fileName + path.extname(filePath))
-    await fs.renameSync(filePath, fileRealPath)
-    info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath))
+    
 
     var app = await App.findOne({ 'platform': info['platform'], 'bundleId': info['bundleId'], 'ownerId': team._id })
+    var version = undefined;
     if (!app) {
         info.creator = user.username;
         info.creatorId = user._id;
@@ -138,8 +154,8 @@ async function parseAppAndInsertToDB(file, user, team) {
         await app.save()
         info.uploader = user.username;
         info.uploaderId = user._id;
-        info.size = fs.statSync(fileRealPath).size
-        var version = Version(info)
+        info.size = fs.statSync(filePath).size
+        version = Version(info)
         version.appId = app._id;
         if (app.platform == 'ios') {
             version.installUrl = mapInstallUrl(app.id, version.id)
@@ -147,10 +163,7 @@ async function parseAppAndInsertToDB(file, user, team) {
             version.installUrl = info.downloadUrl
         }
         await version.save()
-        return { 'app': app, 'version': version }
-    }
-    var version = await Version.findOne({ appId: app.id, versionCode: info.versionCode })
-    if (!version) {
+    }else if (!(version = await Version.findOne({ appId: app.id, versionCode: info.versionCode }))) {
         info.uploader = user.username;
         info.uploaderId = user._id;
         info.size = fs.statSync(fileRealPath).size
@@ -162,12 +175,35 @@ async function parseAppAndInsertToDB(file, user, team) {
             version.installUrl = `${config.baseUrl}/${info.downloadUrl}`
         }
         await version.save()
-        return { 'app': app, 'version': version }
     } else {
+
+        isApppValid = false;
+
         let err = Error()
         err.code = 408
         err.message = '当前版本已存在'
         throw err
+        
+    }
+    
+    if (isApppValid) {
+        if (!usOSS) {
+            //移动文件到对应目录
+            var fileRelatePath = path.join(team.id, info.platform)
+            createFolderIfNeeded(path.join(uploadDir, fileRelatePath))
+            var fileRealPath = path.join(uploadDir, fileRelatePath, fileName + path.extname(filePath))
+            await fs.renameSync(filePath, fileRealPath)
+            info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath))
+        }else {
+            // 上传OSS
+            const OSSFilePath = path.join("fabu.love", team.id, info.platform, fileName + path.extname(filePath))
+
+            var result = await OSSClient.put(OSSFilePath, filePath);
+
+            console.log("文件上传成功! ", result);
+
+        }
+        return { 'app': app, 'version': version }
     }
 }
 

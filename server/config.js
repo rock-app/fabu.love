@@ -26,6 +26,11 @@ const common = {
     ldapUserDn: process.env.FABU_LDAP_USERDN || "", //ldap管理员dn 也就是管理员用户名
     ldapBindCredentials: process.env.FABU_LDAP_CREDENTIALS || "", //ldap管理员密码
     ldapBase: process.env.FABU_LDAP_BASE || "", //ldap base
+
+    OSSRegion: process.env.FABU_OSS_REGION || undefined,
+    OSSAccessKeyID: process.env.FABU_OSS_ACCESS_KEY_ID || undefined,
+    OSSAccessKeySecret: process.env.FABU_OSS_ACCESS_KEY_SECRET || undefined,
+    OSSBucket: process.env.FABU_OSS_BUCKET || undefined,
 };
 
 function boolConfig(str) {

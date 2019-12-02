@@ -209,8 +209,7 @@ async function parseAppAndInsertToDB(file, user, team) {
 
 ///映射可安装的app下载地址
 function mapInstallUrl(appId, versionId) {
-    let baseUrl = useOSS? OSSBaseURL : config.baseUrl + '/'
-    return `itms-services://?action=download-manifest&url=${baseUrl}api/plist/${appId}/${versionId}`
+    return `itms-services://?action=download-manifest&url=${config.baseUrl}/api/plist/${appId}/${versionId}`
 }
 
 ///移动相关信息到指定目录

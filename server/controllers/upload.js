@@ -196,7 +196,7 @@ async function parseAppAndInsertToDB(file, user, team) {
 
             var result = await OSSClient.put(OSSFilePath, filePath);
 
-            info.downloadUrl = OSSFilePath;
+            info.downloadUrl = result.url;
 
             console.log("download url :", info.downloadUrl)
 
@@ -209,7 +209,8 @@ async function parseAppAndInsertToDB(file, user, team) {
 
 ///映射可安装的app下载地址
 function mapInstallUrl(appId, versionId) {
-    return `itms-services://?action=download-manifest&url=${config.baseUrl}/api/plist/$config.{appId}/${versionId}`
+    let baseUrl = useOSS? OSSBaseURL : config.baseUrl + '/'
+    return `itms-services://?action=download-manifest&url=${baseUrl}api/plist/$config.${appId}/${versionId}`
 }
 
 ///移动相关信息到指定目录

@@ -7,6 +7,7 @@ const common = {
     port: process.env.FABU_PORT || "9898", //server运行的端口
     apiPrefix: 'api',
     fileDir: process.env.FABU_UPLOAD_DIR || path.join(__dirname, ".."), //上传文件的存放目录
+    pathPrefix: process.env.FABU_PATH_PREFIX || "upload",
     secret: process.env.FABU_SECRET || "secretsecret", //secret
     dbUser: process.env.FABU_DBUSER || undefined, //数据库用户 (没有开启mongodb用户认证的可以不填写)
     dbPass: process.env.FABU_DBPWD || undefined, //数据库密码 (没有开启mongodb用户认证的可以不填写)

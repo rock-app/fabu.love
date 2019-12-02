@@ -144,6 +144,9 @@
         })
       },
       getIconUrl() {
+        if (this.appBaseData.icon.startsWith('http://') || this.appBaseData.icon.startsWith('https://')) {
+          return this.appBaseData.icon
+        }
         return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
       },
       clickDownLoadBtn() {
@@ -154,7 +157,12 @@
           a.click()
         } else {
           const a = document.createElement('a')
-          let url = `${this.axios.defaults.baseURL}${this.appVersionInfo.downloadUrl}`
+          var url = ''
+          if (this.appVersionInfo.downloadUrl.startsWith('http://') || this.appVersionInfo.downloadUrl.startsWith('https://')) {
+            url = this.appVersionInfo.downloadUrl
+          }else {
+            url = `${this.axios.defaults.baseURL}${this.appVersionInfo.downloadUrl}`
+          }
           a.setAttribute('href', url)
           a.click()
           let _this = this

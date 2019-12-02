@@ -168,7 +168,12 @@
       // 下载应用
       clickDownLoad(item) {
         const a = document.createElement('a')
-        let url = `${this.axios.defaults.baseURL}${item.downloadUrl}`
+        var url = '';
+        if (item.downloadUrl.startsWith('https://') || item.downloadUrl.startsWith('http://')) {
+          url = item.downloadUrl
+        }else {
+          url = `${this.axios.defaults.baseURL}${item.downloadUrl}`
+        }
         a.setAttribute('href', url)
         a.click()
         fetch(url).then(response => {

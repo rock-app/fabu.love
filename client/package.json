@@ -54,6 +54,7 @@
     "node-sass": "^4.9.3",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
+    "p-limit": "^2.2.1",
     "portfinder": "^1.0.13",
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.8",

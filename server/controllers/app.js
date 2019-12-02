@@ -11,7 +11,7 @@ import {
 import fs from 'fs';
 import config from '../config'
 import { APIError } from "../helper/rest";
-import { getIp, responseWrapper } from "../helper/util";
+import { getIp, responseWrapper, useOSS, OSSBaseURL } from "../helper/util";
 import fpath from 'path';
 import mustache from 'mustache';
 import _ from 'lodash'
@@ -498,7 +498,9 @@ module.exports = class AppRouter {
             throw new Error("版本不存在")
         }
 
-        var url = `${config.baseUrl}/${version.downloadUrl}`
+        var url = useOSS? `${OSSBaseURL}${version.downloadUrl}` : `${config.baseUrl}/${version.downloadUrl}`
+
+        var iconUrl = useOSS? `${OSSBaseURL}/${app.icon}` : `${config.baseUrl}/${app.icon}`
 
         var result = fs.readFileSync(fpath.join(__dirname, "..", 'templates') + '/template.plist')
         var template = result.toString();
@@ -508,7 +510,7 @@ module.exports = class AppRouter {
             versionStr: version.versionStr,
             downloadUrl: url,
             fileSize: version.size,
-            iconUrl: `${config.baseUrl}/${app.icon}`
+            iconUrl: iconUrl
         });
         ctx.set('Content-Type', 'text/xml; charset=utf-8');
         ctx.set('Access-Control-Allow-Origin', '*');

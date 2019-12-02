@@ -29,19 +29,15 @@ const AppInfoParser = require('app-info-parser')
 const { compose, maxBy, filter, get } = require('lodash/fp')
 const OSS = require('ali-oss')
 
-var { writeFile, readFile, responseWrapper, exec } = require('../helper/util')
+var { writeFile, readFile, responseWrapper, exec, useOSS, OSSBaseURL } = require('../helper/util')
 
 var tempDir = path.join(config.fileDir, 'temp')
-var uploadDir = path.join(config.fileDir, 'upload')
-
-const usOSS = config.OSSRegion != undefined || 
-              config.OSSAccessKeyID != undefined ||
-              config.OSSAccessKeySecret != undefined ||
-              config.OSSBucket != undefined;
+var uploadPrefix = config.pathPrefix
+var uploadDir = path.join(config.fileDir, uploadPrefix)
 
 var OSSClient = undefined;
 
-if (usOSS) {
+if (useOSS) {
     OSSClient = new OSS({
         region: config.OSSRegion,
         accessKeyId: config.OSSAccessKeyID,
@@ -54,7 +50,6 @@ if (usOSS) {
 
 createFolderIfNeeded(tempDir)
 
-var uploadPrefix = "upload";
 
 function createFolderIfNeeded(path) {
     if (!fs.existsSync(path)) {
@@ -146,7 +141,7 @@ async function parseAppAndInsertToDB(file, user, team) {
     if (!app) {
         info.creator = user.username;
         info.creatorId = user._id;
-        info.icon = path.join(uploadPrefix, icon.fileName);
+        info.icon = useOSS? `${OSSBaseURL}${uploadPrefix}/${icon.fileName}` : path.join(uploadPrefix, icon.fileName);
         info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
         app = new App(info)
         app.ownerId = team._id;
@@ -166,7 +161,7 @@ async function parseAppAndInsertToDB(file, user, team) {
     }else if (!(version = await Version.findOne({ appId: app.id, versionCode: info.versionCode }))) {
         info.uploader = user.username;
         info.uploaderId = user._id;
-        info.size = fs.statSync(fileRealPath).size
+        info.size = fs.statSync(filePath).size
         var version = Version(info)
         version.appId = app._id;
         if (app.platform == 'ios') {
@@ -187,7 +182,7 @@ async function parseAppAndInsertToDB(file, user, team) {
     }
     
     if (isApppValid) {
-        if (!usOSS) {
+        if (!useOSS) {
             //移动文件到对应目录
             var fileRelatePath = path.join(team.id, info.platform)
             createFolderIfNeeded(path.join(uploadDir, fileRelatePath))
@@ -196,9 +191,14 @@ async function parseAppAndInsertToDB(file, user, team) {
             info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath))
         }else {
             // 上传OSS
-            const OSSFilePath = path.join("fabu.love", team.id, info.platform, fileName + path.extname(filePath))
+            console.log("===================开始上传OSS")
+            const OSSFilePath = path.join(uploadPrefix, team.id, info.platform, fileName + path.extname(filePath))
 
             var result = await OSSClient.put(OSSFilePath, filePath);
+
+            info.downloadUrl = OSSFilePath;
+
+            console.log("download url :", info.downloadUrl)
 
             console.log("文件上传成功! ", result);
 
@@ -209,7 +209,7 @@ async function parseAppAndInsertToDB(file, user, team) {
 
 ///映射可安装的app下载地址
 function mapInstallUrl(appId, versionId) {
-    return `itms-services://?action=download-manifest&url=${config.baseUrl}/api/plist/${appId}/${versionId}`
+    return `itms-services://?action=download-manifest&url=${config.baseUrl}/api/plist/$config.{appId}/${versionId}`
 }
 
 ///移动相关信息到指定目录
@@ -247,7 +247,7 @@ function parseIpa(filename) {
                     info.appLevel = active ? 'appstore' : 'enterprise'
                 } else {
                     info.appLevel = 'develop'
-                }
+                } 
             } catch (err) {
                 info.appLevel = 'develop'
                 // reject("应用未签名,暂不支持")
@@ -299,18 +299,26 @@ async function extractIpaIcon(filename, guid, team) {
     if (stderr) {
         throw stderr;
     }
+    var sourceIconFilePath = "";
     //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
+    if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
+        sourceIconFilePath = tmpOut;
+    }else {
+        sourceIconFilePath = tempDir + '/{0}_tmp.png'.format(guid);
+    }
+
     var iconRelatePath = path.join(team.id, "/icon")
     var iconSuffix = "/" + guid + "_i.png"
-    createFolderIfNeeded(path.join(uploadDir, iconRelatePath))
-    if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
-        await fs.renameSync(tmpOut, path.join(uploadDir,iconRelatePath, iconSuffix))
-        return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
-    }
-    await fs.unlinkSync(tmpOut)
-    fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid), path.join(uploadDir, iconRelatePath, iconSuffix))
-    return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
+    if (useOSS) {
+        var result = await OSSClient.put(path.join(uploadPrefix, iconRelatePath, iconSuffix), sourceIconFilePath);
 
+        console.log("oss icon url:", result)
+    }else {
+        createFolderIfNeeded(path.join(uploadDir, iconRelatePath))
+        fs.renameSync(sourceIconFilePath, path.join(uploadDir, iconRelatePath, iconSuffix))
+        await fs.unlinkSync(tmpOut)
+    }
+    return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
 }
 
 ///解析apk

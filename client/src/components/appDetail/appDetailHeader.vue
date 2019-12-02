@@ -70,6 +70,9 @@
         window.open(href, '_blank')
       },
       getIconUrl() {
+        if (this.appInfo.icon.startsWith("http://") || this.appInfo.icon.startsWith("https://")) {
+          return this.appInfo.icon
+        }
         return `${this.axios.defaults.baseURL}${this.appInfo.icon}`
       },
       getAppType() {

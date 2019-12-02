@@ -1,5 +1,6 @@
 const fs = require('fs')
 const cp = require('child_process')
+import config from '../config';
 
 const readFile = (path, opts = 'utf8') => new Promise((res, rej) => {
     fs.readFile(path, opts, (err, data) => {
@@ -67,11 +68,20 @@ const getIp = (req) => new Promise((resolve) => {
     resolve(ip)
 })
 
+const useOSS = config.OSSRegion != undefined || 
+              config.OSSAccessKeyID != undefined ||
+              config.OSSAccessKeySecret != undefined ||
+              config.OSSBucket != undefined;
+
+const OSSBaseURL = `https://${config.OSSBucket}.${config.OSSRegion}.aliyuncs.com/`;
+
 
 module.exports = {
     responseWrapper,
     readFile,
     writeFile,
     exec,
-    getIp
+    getIp,
+    useOSS,
+    OSSBaseURL
 }

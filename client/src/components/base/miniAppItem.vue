@@ -57,6 +57,9 @@
         this.$emit('gotoAppDetail', item)
       },
       getIcon(item) {
+        if (item.icon.startsWith("http://") ||item.icon.startsWith("https://")) {
+          return item.icon
+        }
         return `${this.axios.defaults.baseURL}${item.icon}`
       },
       getShortUrl(item) {

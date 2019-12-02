@@ -48,6 +48,9 @@
     created() {},
     methods: {
       getIconUrl() {
+        if (this.appBaseData.icon.startsWith('http://') || this.appBaseData.icon.startsWith('https://')) {
+          return this.appBaseData.icon;
+        }
         return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
       },
       clickSure() {

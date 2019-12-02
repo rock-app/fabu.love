@@ -498,9 +498,20 @@ module.exports = class AppRouter {
             throw new Error("版本不存在")
         }
 
-        var url = useOSS? `${OSSBaseURL}${version.downloadUrl}` : `${config.baseUrl}/${version.downloadUrl}`
+        var url = ''
+        var iconUrl = ''
 
-        var iconUrl = useOSS? `${OSSBaseURL}/${app.icon}` : `${config.baseUrl}/${app.icon}`
+        if (version.downloadUrl.startsWith('http://') || version.downloadUrl.startsWith('https://')) {
+            var url = version.downloadUrl
+        }else{
+            var url = `${config.baseUrl}/${version.downloadUrl}`
+        }
+
+        if (app.icon.startsWith('http://') || app.icon.startsWith('https://')) {
+            var iconUrl = app.icon
+        }else {
+            var iconUrl = `${config.baseUrl}/${app.icon}`
+        }
 
         var result = fs.readFileSync(fpath.join(__dirname, "..", 'templates') + '/template.plist')
         var template = result.toString();

@@ -150,26 +150,12 @@ async function parseAppAndInsertToDB(file, user, team) {
         info.uploader = user.username;
         info.uploaderId = user._id;
         info.size = fs.statSync(filePath).size
-        version = Version(info)
-        version.appId = app._id;
-        if (app.platform == 'ios') {
-            version.installUrl = mapInstallUrl(app.id, version.id)
-        } else {
-            version.installUrl = info.downloadUrl
-        }
-        await version.save()
+        
     }else if (!(version = await Version.findOne({ appId: app.id, versionCode: info.versionCode }))) {
         info.uploader = user.username;
         info.uploaderId = user._id;
         info.size = fs.statSync(filePath).size
-        var version = Version(info)
-        version.appId = app._id;
-        if (app.platform == 'ios') {
-            version.installUrl = mapInstallUrl(app.id, version.id)
-        } else {
-            version.installUrl = `${config.baseUrl}/${info.downloadUrl}`
-        }
-        await version.save()
+        
     } else {
 
         isApppValid = false;
@@ -203,6 +189,16 @@ async function parseAppAndInsertToDB(file, user, team) {
             console.log("文件上传成功! ", result);
 
         }
+
+        var version = Version(info)
+        version.appId = app._id;
+        if (app.platform == 'ios') {
+            version.installUrl = mapInstallUrl(app.id, version.id)
+        } else {
+            version.installUrl = info.downloadUrl
+        }
+        await version.save()
+
         return { 'app': app, 'version': version }
     }
 }

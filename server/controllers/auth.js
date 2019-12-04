@@ -77,9 +77,9 @@ module.exports = class AuthRouter {
             })
             let user = await User.findOne({ username: body.username });
             if (ldapUser && ((!user) || user.username !== ldapUser.name)) {
-                console.log('user' + ldapUser)
+                console.log('user' + JSON.stringify(ldapUser))
                 var password = await bcrypt.hash(body.password, 10)
-                var newUser = new User({ username: ldapUser.name, password: password, email: ldapUser.mail });
+                var newUser = new User({ username: body.username, password: password, email: ldapUser.mail });
                 var team = new Team();
                 team._id = newUser._id;
                 team.name = "我的团队";

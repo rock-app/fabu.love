@@ -16,17 +16,9 @@ class Ldap {
     auth(username, password) {
         this.create()
         var base = config.ldapBase
-        var filters = new AndFilter({
-            filters: [
-                new EqualityFilter({
-                    attribute: 'objectCategory',
-                    value: 'Person'
-                }),
-                new EqualityFilter({
-                    attribute: 'sAMAccountName',
-                    value: username
-                })
-            ]
+        var filters = new EqualityFilter({
+            attribute: 'cn',
+            value: username
         })
 
         var opts = {

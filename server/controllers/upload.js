@@ -11,6 +11,7 @@ import {
     path as rpath
 } from '../swagger';
 import config from '../config';
+import { verify } from 'crypto';
 var Team = require('../model/team')
 const Version = require('../model/version')
 const App = require('../model/app_model')
@@ -403,7 +404,7 @@ function extractApkIcon(filepath, guid, team) {
             var dir = path.join(uploadDir, team.id, "icon")
             var realPath = path.join(team.id, "icon", '/{0}_a.png'.format(guid))
             createFolderIfNeeded(dir)
-            var tempOut = path.join(uploadDir, realPath)
+            var iconOutPath = path.join(uploadDir, realPath)
             
             var { ext, dir } = path.parse(iconPath);
             // 获取到最大的png的路径
@@ -442,7 +443,16 @@ function extractApkIcon(filepath, guid, team) {
                         const isXml = entryPath.indexOf('.xml') >= 0
                         if ( (!isXml && entryPath.indexOf(iconPath) != -1) || (isXml && entry.path.indexOf(maxSizePath) != -1)) {
                             console.log(entry.path)
-                            entry.pipe(etl.toFile(tempOut))
+
+                            if (useOSS) {
+                                OSSClient.putStream(path.join(uploadPrefix, realPath), entry).then((result) => {
+                                    console.log(result)
+                                })
+
+                            }else {
+                                entry.pipe(etl.toFile(iconOutPath))
+                            }
+
                             resolve({ 'success': true, fileName: realPath })
                         } else {
                             resolve({ 'success': true, fileName: realPath })

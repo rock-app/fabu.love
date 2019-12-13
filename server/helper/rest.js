@@ -26,7 +26,7 @@ module.exports = {
                     }
 
                     if (e.userdata instanceof Object) {
-                        body = Object.assign(body, e.userdata)
+                        body['data'] = e.userdata
                     }
 
                     ctx.response.body = body

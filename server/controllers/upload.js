@@ -158,14 +158,17 @@ async function parseAppAndInsertToDB(file, user, team) {
         info.size = fs.statSync(filePath).size
         
     } else {
-
         isApppValid = false;
 
         let err = Error()
         err.code = 408
         err.message = '当前版本已存在'
+
+        err.userdata = {
+            'app': app, 'version': version
+        }
+
         throw err
-        
     }
     
     if (isApppValid) {

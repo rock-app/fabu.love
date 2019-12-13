@@ -20,11 +20,17 @@ module.exports = {
                 } catch (e) {
                     console.log('Process API error...')
                     ctx.response.type = 'application/json'
-                    ctx.response.body = {
+                    var body = {
                         success: false,
                         message: e.message || ''
                     }
-                    console.log(e)
+
+                    if (e.userdata instanceof Object) {
+                        body = Object.assign(body, e.userdata)
+                    }
+
+                    ctx.response.body = body
+                    
                 }
             } else {
                 await next()

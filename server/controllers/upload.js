@@ -44,6 +44,7 @@ if (useOSS) {
         accessKeyId: config.OSSAccessKeyID,
         accessKeySecret: config.OSSAccessKeySecret,
         bucket: config.OSSBucket, 
+        timeout: "6000s"
      });
 }
 

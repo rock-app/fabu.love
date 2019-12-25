@@ -8,7 +8,7 @@ if (config.dbUser) {
 }
 
 console.log(dbUrl)
-mongoose.connect(dbUrl, (err) => {
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log('Mongoose connection error: ' + err.message)
     } else {

@@ -16,6 +16,7 @@ const Version = require('../model/version')
 const App = require('../model/app_model')
 var multer = require('koa-multer');
 var fs = require('fs')
+var crypto = require('crypto')
 var path = require('path')
 var os = require('os')
 var mime = require('mime')
@@ -119,11 +120,27 @@ async function parseAppAndInsertToDB(file, user, team) {
         //解析icon图标
     var icon = await extractor(filePath, fileName, team);
 
+
     //移动文件到对应目录
     var fileRelatePath = path.join(team.id, info.platform)
     createFolderIfNeeded(path.join(uploadDir, fileRelatePath))
     var fileRealPath = path.join(uploadDir, fileRelatePath, fileName + path.extname(filePath))
-    await fs.renameSync(filePath, fileRealPath)
+
+    //获取文件MD5值
+    var buffer = fs.readFileSync(filePath)
+    var fsHash = crypto.createHash('md5')
+    fsHash.update(buffer)
+    var filemd5 = fsHash.digest('hex')
+
+    //异步保存问题（避免跨磁盘移动问题）
+    var readStream = fs.createReadStream(filePath)
+	var writeStream = fs.createWriteStream(fileRealPath)
+    readStream.pipe(writeStream)
+	readStream.on('end',function(){
+	    fs.unlinkSync(filePath)
+	})
+
+
     info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath))
 
     var app = await App.findOne({ 'platform': info['platform'], 'bundleId': info['bundleId'], 'ownerId': team._id })
@@ -140,6 +157,7 @@ async function parseAppAndInsertToDB(file, user, team) {
         info.uploaderId = user._id;
         info.size = fs.statSync(fileRealPath).size
         var version = Version(info)
+        version.md5 = filemd5
         version.appId = app._id;
         if (app.platform == 'ios') {
             version.installUrl = mapInstallUrl(app.id, version.id)
@@ -156,6 +174,7 @@ async function parseAppAndInsertToDB(file, user, team) {
         info.size = fs.statSync(fileRealPath).size
         var version = Version(info)
         version.appId = app._id;
+        version.md5 = filemd5
         if (app.platform == 'ios') {
             version.installUrl = mapInstallUrl(app.id, version.id)
         } else {
@@ -274,6 +293,13 @@ async function extractIpaIcon(filename, guid, team) {
     await fs.unlinkSync(tmpOut)
     fs.renameSync(tempDir + '/{0}_tmp.png'.format(guid), path.join(uploadDir, iconRelatePath, iconSuffix))
     return { 'success': true, 'fileName': iconRelatePath + iconSuffix }
+
+}
+
+function sleep(milliSeconds){ 
+    var StartTime =new Date().getTime(); 
+    let i = 0;
+    while (new Date().getTime() <StartTime+milliSeconds);
 
 }
 

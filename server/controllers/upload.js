@@ -134,12 +134,11 @@ async function parseAppAndInsertToDB(file, user, team) {
 
     //异步保存问题（避免跨磁盘移动问题）
     var readStream = fs.createReadStream(filePath)
-	var writeStream = fs.createWriteStream(fileRealPath)
+    var writeStream = fs.createWriteStream(fileRealPath)
     readStream.pipe(writeStream)
-	readStream.on('end',function(){
-	    fs.unlinkSync(filePath)
-	})
-
+    readStream.on('end',function(){
+        fs.unlinkSync(filePath)
+    })
 
     info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath))
 

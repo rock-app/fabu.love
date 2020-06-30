@@ -295,13 +295,6 @@ async function extractIpaIcon(filename, guid, team) {
 
 }
 
-function sleep(milliSeconds){ 
-    var StartTime =new Date().getTime(); 
-    let i = 0;
-    while (new Date().getTime() <StartTime+milliSeconds);
-
-}
-
 ///解析apk
 function parseApk(filename)  {
 

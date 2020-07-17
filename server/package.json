@@ -35,7 +35,7 @@
         "jsonwebtoken": "^8.5.0",
         "unzipper": "^0.9.3",
         "unzip-stream": "^0.3.0",
-        "lodash": "^4.17.4",
+        "lodash": "^4.17.19",
         "pm2": "^2.9.3",
         "uuid": "^3.2.1",
         "mime": "^2.2.0",

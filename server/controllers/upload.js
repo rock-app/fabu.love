@@ -201,6 +201,9 @@ function parseIpa(filename) {
             info.bundleId = result.CFBundleIdentifier
             info.bundleName = result.CFBundleName
             info.appName = result.CFBundleDisplayName
+            if (typeof(info.appName) == 'undefined' || info.appName == null || info.appName == '') {
+                info.appName = info.bundleName
+            }
             info.versionStr = result.CFBundleShortVersionString
             info.versionCode = result.CFBundleVersion
             info.iconName = result.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName

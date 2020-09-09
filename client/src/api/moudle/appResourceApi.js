@@ -18,7 +18,7 @@ export function getAppDetail(teamId, appId) {
 // 获取应用的版本列表
 export function getAppVersionList(teamId, id, page) {
   let params = {
-    'page': page, 'size': 10
+    'page': page, 'size': 50
   }
   let url = `api/apps/${teamId}/${id}/versions`
   return getHttp(url, params)

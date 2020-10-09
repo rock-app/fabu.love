@@ -18,4 +18,22 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+```
+###1.更新代码 
+Modify code
+
+###2. 编译 image
+docker build -t answerhuang/fabulove:latest -f docker/Dockerfile .
+
+
+###3. 推送到 docker hub
+docker push answerhuang/fabulove:latest
+
+
+###4. 需要发布的机器拉取最新的镜像
+docker pull answerhuang/fabulove:latest
+
+
+###5. 重新创建容器
+docker-compose up -d --build
+```

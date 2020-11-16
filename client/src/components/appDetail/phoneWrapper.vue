@@ -3,8 +3,10 @@
       <img class="appicon" :src="getIconUrl()" alt="">
       <p class="title">{{this.appBaseData.appName}}</p>
       <div class="info">
-        <p class="desc">版本：{{this.appVersionInfo.versionStr}}</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
+        <p class="desc">版本：{{this.appVersionInfo.versionStr}}({{this.appVersionInfo.versionCode}})</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
+       
       </div>
+      <p class="info">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
       <div v-if="!showDownLoadBtn">
         <div>
           <el-input v-model="pwd" type="password" placeholder="请输入密码" class="pwd"></el-input>

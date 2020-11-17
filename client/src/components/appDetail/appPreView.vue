@@ -132,7 +132,7 @@
           let releaseDate = new Date(this.appVersionInfo.uploadAt)
           this.downloadUrl = `${window.origin}${this.$route.fullPath}`
           this.platformStr = res.data.app.platform
-          this.appVersionInfo.creatDateStr = `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()} ${releaseDate.getHours()}:${releaseDate.getMinutes()}:${releaseDate.getSeconds()}`
+          this.appVersionInfo.creatDateStr = releaseDate.toFormat()
           if (this.appBaseData.installPwd === 1) {
             this.installWithPwd = true
           } else {

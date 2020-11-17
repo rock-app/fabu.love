@@ -2,11 +2,11 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import {Button, Dialog, Menu, Input, Switch, Popover, Form, Upload, Progress, Badge, Container, Header, Aside, Main, Footer, Loading, Message, MenuItem, Table, TableColumn, FormItem, Pagination, Radio, MessageBox} from 'element-ui'
+import { Button, Dialog, Menu, Input, Switch, Popover, Form, Upload, Progress, Badge, Container, Header, Aside, Main, Footer, Loading, Message, MenuItem, Table, TableColumn, FormItem, Pagination, Radio, MessageBox } from 'element-ui'
 
 import router from './router'
 import axios from 'axios'
-import {configAxios} from './api/basehttp'
+import { configAxios } from './api/basehttp'
 
 import VueLazyLoad from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
@@ -56,10 +56,21 @@ Vue.use(VueLazyLoad, {
 // 配置接口信息
 configAxios()
 
+Date.prototype.toFormat = function () {
+  return `
+${this.getFullYear()}-\
+${("0" + (this.getMonth() + 1)).match(/\d{2}$/)[0]}-\
+${("0" + this.getDate()).match(/\d{2}$/)[0]} \
+${("0" + this.getHours()).match(/\d{2}$/)[0]}:\
+${("0" + this.getMinutes()).match(/\d{2}$/)[0]}:\
+${("0" + this.getSeconds()).match(/\d{2}$/)[0]}`
+}
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  components: {App},
+  components: { App },
   template: '<App/>'
 })

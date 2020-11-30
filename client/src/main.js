@@ -55,15 +55,15 @@ Vue.use(VueLazyLoad, {
 
 // 配置接口信息
 configAxios()
-
+/* eslint-disable no-extend-native */
 Date.prototype.toFormat = function () {
   return `
 ${this.getFullYear()}-\
-${("0" + (this.getMonth() + 1)).match(/\d{2}$/)[0]}-\
-${("0" + this.getDate()).match(/\d{2}$/)[0]} \
-${("0" + this.getHours()).match(/\d{2}$/)[0]}:\
-${("0" + this.getMinutes()).match(/\d{2}$/)[0]}:\
-${("0" + this.getSeconds()).match(/\d{2}$/)[0]}`
+${('0' + (this.getMonth() + 1)).match(/\d{2}$/)[0]}-\
+${('0' + this.getDate()).match(/\d{2}$/)[0]} \
+${('0' + this.getHours()).match(/\d{2}$/)[0]}:\
+${('0' + this.getMinutes()).match(/\d{2}$/)[0]}:\
+${('0' + this.getSeconds()).match(/\d{2}$/)[0]}`
 }
 
 

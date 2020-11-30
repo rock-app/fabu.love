@@ -230,7 +230,7 @@
         })
       },
       getCreatTime(date) {
-        return new Date(date).toFormat();
+        return new Date(date).toFormat()
       },
       getAppSize(size) {
         return `${(size / 1024 / 1024).toFixed(2)}M`

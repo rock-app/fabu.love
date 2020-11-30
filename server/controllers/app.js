@@ -152,7 +152,7 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在或您没有权限查询该应用")
         }
-        var versions = await Version.find({ appId: id })
+        var versions = await Version.find({ appId: id }).sort({uploadAt:-1})
             .limit(size).skip(page * size)
         ctx.body = responseWrapper(versions)
     }

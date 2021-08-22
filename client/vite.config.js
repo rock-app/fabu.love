@@ -21,15 +21,19 @@ export default ({
 
   let proxy = {};
 
+  // prod_url 换成自己最终部署的地址.
+  const prod_url = 'https://app.distribution.medcloud.cn/';
+  const local_url = 'http://127.0.0.1:9898/';
   let define = {
     'process.env': {},
-    'process.env.SERVER_HOST': mode === 'production' ? 'https://app.distribution.medcloud.cn/' : 'http://127.0.0.1:9898/',
+    'process.env.SERVER_HOST': mode === 'production' ? prod_url : local_url,
+    'process.env.FABU_BASE_URL': mode === 'production' ? prod_url : local_url,
   };
 
   let esbuild = {};
 
   return {
-    base: mode === 'production' ? 'https://app.distribution.medcloud.cn/' : 'http://127.0.0.1:9898/', // index.html文件所在位置
+    base: mode === 'production' ? prod_url : local_url, // index.html文件所在位置
     root: './', // js导入的资源路径，src
     resolve: {
       alias,

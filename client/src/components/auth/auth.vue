@@ -266,7 +266,7 @@
     position: absolute;
     display: flex;
     display: -webkit-flex;
-    background-image: url("../../assets/bg-samll.png");
+    background-image: url("../../common/assets/bg-samll.png");
     background-size: 100% 100%;
     font-family: PingFangSC;
     overflow: hidden;
@@ -301,7 +301,7 @@
     margin-top: 17.6vh;
     background-size: 210px 40px;
     background-repeat: no-repeat;
-    background-image: url("../../assets/logo_w.png");
+    background-image: url("../../common/assets/logo_w.png");
   }
 
   .user-divier {

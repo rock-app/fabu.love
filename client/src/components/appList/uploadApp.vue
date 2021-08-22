@@ -3,7 +3,7 @@
     <!--<el-progress ref="progress" :stroke-width="30" class="uploadProgress" :percentage="progress" status="exception"></el-progress>-->
     <!--<button class="uploadCancelBtn" @click="cancelUpload">取消上传</button>-->
     <div class="uploadContent">
-      <img src="../../assets/loadding.gif">
+      <img src="../../common/assets/loadding.gif">
       <div style="font-size: 20px;margin-top: 30px;color: #6477F2" v-html="`正在上传中...${progress}%`"></div>
     </div>
   </div>
@@ -11,7 +11,7 @@
 
 <script type="text/ecmascript-6">
   import { Message } from 'element-ui'
-  const axios = require('axios')
+  import axios from 'axios'
 
   export default {
     props: {

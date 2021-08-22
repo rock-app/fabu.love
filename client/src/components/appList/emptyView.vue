@@ -1,8 +1,8 @@
 <template>
   <div class="empeyapp-wrapper">
-    <img class="arrow" src="../../assets/empty-arrow.png" alt="">
+    <img class="arrow" src="../../common/assets/empty-arrow.png" alt="">
     <div class="empty-wrapper">
-      <img class="empty" src="../../assets/empty_app.png" alt="">
+      <img class="empty" src="../../common/assets/empty_app.png" alt="">
       <p>空空如也～～</p>
       <p>点击左上角按钮，上传第一个应用吧</p>
     </div>

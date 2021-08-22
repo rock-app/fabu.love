@@ -1,4 +1,3 @@
 #!/bin/sh
-nginx
-cd /opt/server
+cd /opt/server || exit
 npm start

@@ -137,10 +137,10 @@
     background-size: 52px 38px;
   }
   .collectionView-wrapper .itemWrapper .appItem-platform-ios {
-    background-image: url("../../assets/tag_ios.png");
+    background-image: url("../../common/assets/tag_ios.png");
   }
   .collectionView-wrapper .itemWrapper .appItem-platform-android {
-    background-image: url("../../assets/tag_android.png");
+    background-image: url("../../common/assets/tag_android.png");
   }
   .itemWrapper .appItem-icon {
     width: 72px;

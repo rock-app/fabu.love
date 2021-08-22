@@ -17,48 +17,48 @@ export default new Router({
     {
       path: '/',
       redirect: '/apps',
-      component: resolve => require(['@/components/main/main.vue'], resolve),
+      component: () => import('../components/main/main.vue'),
       children: [
         {
           path: '/apps',
-          component: resolve => require(['@/components/appList/appList.vue'], resolve)
+          component: () => import('../components/appList/appList.vue')
         },
         {
           path: '/app/:appId',
           name: 'AppDetail',
-          component: resolve => require(['@/components/appDetail/appDetail.vue'], resolve)
+          component: () => import('../components/appDetail/appDetail.vue')
         },
         {
           path: '/members',
           name: 'TeamMgr',
-          component: resolve => require(['@/components/team/teamMgr.vue'], resolve)
+          component: () => import('../components/team/teamMgr.vue')
         },
         {
           path: '/miniAppList',
           name: 'MiniAppList',
-          component: resolve => require(['@/components/miniApplication/miniAppList.vue'], resolve)
+          component: () => import('../components/miniApplication/miniAppList.vue')
         },
         {
           path: '/miniApp/:appId',
           name: 'MiniAppDetail',
-          component: resolve => require(['@/components/miniApplication/miniAppDetail.vue'], resolve)
+          component: () => import('../components/miniApplication/miniAppDetail.vue')
         }
       ]
     },
     {
       path: '/login',
       name: 'Login',
-      component: resolve => require(['@/components/auth/auth.vue'], resolve)
+      component: () => import('../components/auth/auth.vue')
     },
     {
       path: '/user',
       name: 'UserInfo',
-      component: resolve => require(['@/components/user/userInfo.vue'], resolve)
+      component: () => import('../components/user/userInfo.vue')
     },
     {
       path: '/:id',
       name: 'AppPreView',
-      component: resolve => require(['@/components/appDetail/appPreView.vue'], resolve)
+      component: () => import('../components/appDetail/appPreView.vue')
     }
   ]
 })

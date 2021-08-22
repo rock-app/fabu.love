@@ -47,7 +47,7 @@
     },
     data() {
       return {
-        defaultImg: 'this.src="' + require('../../assets/imgerror.png') + '"'
+        defaultImg: 'this.src="' + import('../../common/assets/imgerror.png') + '"'
       }
     },
     created() {},

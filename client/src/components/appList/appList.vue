@@ -33,8 +33,8 @@
     </div>
     <!--应用列表-->
     <collectionView
-      :dataArr="this.dataList"
-      @gotoAppDetail="gotoAppDetail"
+        :dataArr="this.dataList"
+        @gotoAppDetail="gotoAppDetail"
     >
     </collectionView>
 
@@ -54,25 +54,25 @@
   import CollectionView from '../base/collectionView.vue'
   import EmptyView from './emptyView.vue'
 
-  export default {
-    name: 'Apps',
-    data() {
-      return {
-        currentPlatform: '',
-        dataList: [],
-        originDataList: [],
-        queryText: '',
-        showUploadView: false,
-        file: FileList,
-        currentPage: 0,
-        currentTeam: {},
-        showEmpty: false
+export default {
+  name: 'Apps',
+  data() {
+    return {
+      currentPlatform: '',
+      dataList: [],
+      originDataList: [],
+      queryText: '',
+      showUploadView: false,
+      file: FileList,
+      currentPage: 0,
+      currentTeam: {},
+      showEmpty: false
       }
-    },
-    components: {
-      UploadApp, CollectionView, EmptyView
-    },
-    computed: {},
+  },
+  components: {
+    UploadApp, CollectionView, EmptyView
+  },
+  computed: {},
     methods: {
       loadAppList() {
         AppResourceApi.getAppList(this.currentTeam._id)

@@ -16,7 +16,6 @@
             ></phoneWrapper>
           </div>
 
-
           <!--pc上查看-->
           <div class="pcWrapper" v-show="!isPhone">
             <p>33333333</p>
@@ -35,13 +34,21 @@
           </div>
         </div>
 
-
         <!--右侧二维码-->
         <div class="preview-mobilewrapper" v-show="!isPhone">
-          <img class="mobieImg" src='../../assets/ic_mobilphone.png'>
+          <img class="mobieImg" src="../../common/assets/ic_mobilphone.png">
           <vue-qr class="qrcodeImg" :text="downloadUrl" :margin="20"></vue-qr>
           <p class="codetips">请扫描二维码下载APP</p>
           <p class="platform">适用于{{this.platformStr}}系统</p>
+        </div>
+
+        <div>
+          <ul>
+            <li v-for="(item, index) in history" :key="index" @click="historyClickDownLoadBtn(item)">
+              <div>{{item.versionStr}}(build {{item.versionCode}})</div>
+              <div>{{formatTime(item.uploadAt)}}</div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -64,7 +71,8 @@
         downloadUrl: '',
         platformStr: '',
         pwd: '',
-        isPhone: false
+        isPhone: false,
+        history: []
       }
     },
     computed: {
@@ -113,6 +121,9 @@
 
     },
     methods: {
+      formatTime(time) {
+        return new Date(time).toFormat()
+      },
       getTableBackground(index) {
         if (index % 2 === 0) {
           return `backgroundColor: rgb(244, 245, 247)`
@@ -129,6 +140,7 @@
           }
           this.appVersionInfo = res.data.version
           this.appBaseData = res.data.app
+          this.history = res.data.history || []
           let releaseDate = new Date(this.appVersionInfo.uploadAt)
           this.downloadUrl = `${window.origin}${this.$route.fullPath}`
           this.platformStr = res.data.app.platform
@@ -146,6 +158,37 @@
       getIconUrl() {
         return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
       },
+
+      historyClickDownLoadBtn(item) {
+        if (this.isIos) {
+          const a = document.createElement('a')
+          a.setAttribute('href', item.installUrl)
+          a.click()
+        } else {
+          const a = document.createElement('a')
+          let url = `${this.axios.defaults.baseURL}${item.downloadUrl}`
+          a.setAttribute('href', url)
+          a.click()
+          let _this = this
+          fetch(url).then(response => {
+            var reader = response.body.getReader()
+            var headers = response.headers
+            var totalLength = headers.get('Content-Length')
+            var bytesReceived = 0
+            reader.read().then(function processResult(result) {
+              if (result.done) {
+                AppResourceApi.downloadedCount(item.appId, item._id).then(() => {
+                }, reject => {})
+                return
+              }
+              bytesReceived += result.value.length
+              console.log(`progress: ${bytesReceived / totalLength * 100}%`)
+              return reader.read().then(processResult)
+            })
+          })
+        }
+      },
+
       clickDownLoadBtn() {
         if (this.isIos) {
           const a = document.createElement('a')
@@ -215,8 +258,27 @@
     background-color: white;
     width: 100%;
     height: 100%;
-    background-image: url("../../assets/bg_picture.png");
+    background-image: url("../../common/assets/bg_picture.png");
     background-size: cover;
+
+    ul  {
+      background: #fff;
+      padding: 16px 32px;
+      li {
+        padding: 12px 0;
+        display: flex;
+        justify-content: space-around;
+        font-size: 12px;
+        &:nth-child(2n - 1) {
+          background: #f2f6f8;
+        }
+      }
+    }
+
+    .preview-middlewrapper ul{
+      padding: 0;
+      margin-top: 140px;
+    }
   }
   .preview-middlewrapper {
     margin-top: 0px;
@@ -241,14 +303,14 @@
   .preview-middlewrapper .left {
     display: inline-block;
     width: 50%;
-    height: 100%;
+    //height: 100%;
     vertical-align: top;
     text-align: left;
   }
   .preview-mobilewrapper {
     display: inline-block;
     width: 50%;
-    height: 100%;
+    //height: 100%;
     vertical-align: top;
     position: relative;
     text-align: center;
@@ -316,7 +378,8 @@
   .downloadBtn i:before {
     color: white;
   }
-  .preview-mobilewrapper .qrcodeImg img{
+
+  .preview-mobilewrapper .qrcodeImg {
     position: absolute;
     width: 150px;
     height: auto;
@@ -350,7 +413,7 @@
   .preview-middlewrapper-forPhone {
     margin-top: 0px;
     width: 100%;
-    height: 100%;
+    //height: 100%;
     text-align: center;
     position: absolute;
     font-size: 0px;

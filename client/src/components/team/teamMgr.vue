@@ -2,14 +2,14 @@
   <div class="teamMgr">
     <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;right: 72px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
     <el-button class="uploadWrapper button-style-main" @click="createTeam">
-      <img style="{width: 12; height: 12px;}" src="../../assets/ic_add@2x.png">
+      <img style="{width: 12; height: 12px;}" src="../../common/assets/ic_add@2x.png">
       <label> 新建团队</label>
     </el-button>
     <div class="teamMgr-header">
       <div>
         <div>
           <label>{{teamName}}</label>
-          <img v-show="isOwner" class="teamMgr-edit" src="../../assets/ic_morecz.png" @click="showMenu" />
+          <img v-show="isOwner" class="teamMgr-edit" src="../../common/assets/ic_morecz.png" @click="showMenu" />
           <context-menu class="ctx-menu" ref="ctxMenu">
             <li class="ctx-item" @click="editAction">编辑团队名称</li>
             <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
@@ -19,12 +19,12 @@
           <label class="teamMgr-teamId">ID: {{teamId}}</label>
         </div>
       </div>
-      
+
     </div>
     <div class="teamMgr-collection">
       <div class="teamMgr-content">
         <div class="teamMgr-group-header">
-          <img src="../../assets/ic_addmmb.png" @click="addClick" />
+          <img src="../../common/assets/ic_addmmb.png" @click="addClick" />
         </div>
         <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected" @roleUpdate="requestMembers"></item>
         <div class="teamMgr-group-footer">
@@ -78,8 +78,8 @@
 </template>
 
 <script>
-import Item from './teamItem'
-import * as TeamApi from '../../api/moudle/teamApi'
+import Item from './teamItem.vue';
+import * as TeamApi from '../../api/moudle/teamApi';
 import * as UserApi from '../../api/moudle/userApi'
 import * as useMgr from '../../mgr/userMgr'
 import contextMenu from 'vue-context-menu'

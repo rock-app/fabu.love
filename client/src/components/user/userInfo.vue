@@ -4,14 +4,14 @@
       <div v-show="this.show" class="userInfo-wrapper-body" @click.stop="clickcontent">
         <div class="userWrapper">
             <div class="imgwrapper">
-                <img src="../../assets/ic_touxiang_l.png" alt="">
+                <img src="../../common/assets/ic_touxiang_l.png" alt="">
             </div>
             <div class="userInfo-name-token">
                 <p class="userInfo-name">{{this.userInfo.userName}}</p>
-                <div v-show="hasApiToken" class="userInfo-apiToken-contain"> 
+                <div v-show="hasApiToken" class="userInfo-apiToken-contain">
                     <label class="userInfo-apiToken-text"> {{ apiToken }} </label>
                     <button class="reset-button" @click="apiTokenAction" title='点击重置ApiToken'>
-                        <img style="{width: 24; height: 24px;}" src="../../assets/btn_redraw@2x.png">
+                        <img style="{width: 24; height: 24px;}" src="../../common/assets/btn_redraw@2x.png">
                     </button>
                 </div>
             </div>
@@ -19,7 +19,7 @@
                      <el-button class= "userInfo-apiToken-initButton" type="primary" @click="apiTokenAction" round>生成ApiToken</el-button>
             </div>
         </div>
-      
+
         <ul class="userInfo-wrapper-nav">
           <li v-for="item in navArr" :style="getactiveClass(item)" :key="item" class="userInfo-wrapper-nav-sub" @click="clickItem(item)">
             {{item}}
@@ -111,16 +111,16 @@
     .fadeRight-enter-active {
         transition: all .5s ease;
     }
-    
+
     .fadeRight-leave-active {
         transition: all .5s ease;
     }
-    
+
     .fadeRight-enter,
     .fadeRight-leave-to {
         transform: translateX(100%);
     }
-    
+
     .userInfo-wrapper {
         position: fixed;
         top: 72px;
@@ -130,7 +130,7 @@
         background-color: rgba(255, 255, 255, 0.5);
         z-index: 1000;
     }
-    
+
     .userInfo-wrapper-body {
         float: right;
         width: 480px;
@@ -140,7 +140,7 @@
         box-shadow: 0 2px 6px rgba(120, 120, 120, 0.5);
         overflow: scroll;
     }
-    
+
     .userInfo-wrapper-body .userWrapper {
         font-size: 0px;
         padding-top: 22px;
@@ -148,7 +148,7 @@
         justify-content: flex-start;
         align-items: center;
     }
-    
+
     .userWrapper .imgwrapper {
         width: 72px;
         height: 72px;
@@ -157,21 +157,21 @@
         display: inline-block;
         vertical-align: middle;
     }
-    
+
     .userWrapper .imgwrapper img {
         width:  72px;
         height: 72px;
         border-radius: 26px;
         background-size: 72px 72px;
     }
-    
+
     .userInfo-wrapper-nav {
         margin-top: 24px;
         width: 100%;
         height: 48px;
         border-bottom: solid 1px #eee;
     }
-    
+
     .userInfo-wrapper-nav-sub {
         width: 96px;
         height: 48px;
@@ -182,13 +182,13 @@
         text-align: center;
         border-bottom: solid 1px transparent;
     }
-    
+
     .userInfo-name-token {
         display: flex;
-        flex-direction: column;   
-        justify-content: center; 
+        flex-direction: column;
+        justify-content: center;
         height: 72px;
-        margin-left: 12px;    
+        margin-left: 12px;
         .userInfo-name {
             font-size: 24px;
             font-weight: bold;
@@ -212,14 +212,14 @@
                 line-height: 26px;
                 background-color: rgba(0,0,0,0);
             }
-            
+
         }
-        
+
     }
 
     .userInfo-apiToken-initButton {
         margin-left: 12px;
     }
 
-    
+
 </style>

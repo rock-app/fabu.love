@@ -35,7 +35,7 @@
         <i class="icon-ic_notice" @click="clickMessage"></i>
       </el-badge>
       <div class="userwrapper" @click="clickUserIcon" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
-        <img src="../../assets/ic_touxiang.png" alt="" class="userIcon">
+        <img src="../../common/assets/ic_touxiang.png" alt="" class="userIcon">
         <p class="nowrap">{{this.userInfo.userName}}</p>
       </div>
 

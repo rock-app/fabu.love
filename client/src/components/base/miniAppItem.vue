@@ -3,7 +3,7 @@
     <ul class="collectionView-wrapper-ul">
       <li v-for="(item, index) in this.dataArr" :key="index" class="itemWrapper">
 
-        <img class="appItem-icon" src="../../assets/miniicon.png" @click="gotoAppDetail(item)">
+        <img class="appItem-icon" src="../../common/assets/miniicon.png" @click="gotoAppDetail(item)">
 
         <div class="appItem-info">
           <div class="appItem-info-namewrapper">
@@ -121,10 +121,10 @@
     background-size: 52px 38px;
   }
   .collectionView-wrapper .itemWrapper .appItem-platform-ios {
-    background-image: url("../../assets/tag_ios.png");
+    background-image: url("../../common/assets/tag_ios.png");
   }
   .collectionView-wrapper .itemWrapper .appItem-platform-android {
-    background-image: url("../../assets/tag_android.png");
+    background-image: url("../../common/assets/tag_android.png");
   }
   .itemWrapper .appItem-icon {
     width: 72px;

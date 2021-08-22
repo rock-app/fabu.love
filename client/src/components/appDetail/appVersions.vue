@@ -394,14 +394,14 @@
     width: 18px;
     height: 16px;
     background-size: 18px 18px;
-    background-image: url("../../assets/sign_grey.png");
+    background-image: url("../../common/assets/sign_grey.png");
   }
   .version-table-one-lighting {
     display: inline-block;
     width: 18px;
     height: 16px;
     background-size: 18px 18px;
-    background-image: url("../../assets/sign_now.png");
+    background-image: url("../../common/assets/sign_now.png");
   }
   .appVersion-wrapper .version-table .cell {
     text-align: center;

@@ -9,7 +9,7 @@ var parseOutput;
 parseApk = function(filename, cb) {
   var exeName = null;
   if (os.type() === 'Darwin') {
-      exeName = 'aapt-osx';
+      exeName = 'aapt-osx-x86-64';
   } else if (os.type() === 'Linux') {
       exeName = 'aapt-linux';
   } else {

@@ -7,7 +7,7 @@
     </div>
     <div class="teamItem-owner" @click.stop="roleAction">
       <label>{{ownerString}}</label>
-      <img v-show="isRole" class="teamItem-owner-img" :style="iconStyle" src="../../assets/ic_moreqx.png"/>
+      <img v-show="isRole" class="teamItem-owner-img" :style="iconStyle" src="../../common/assets/ic_moreqx.png"/>
     </div>
     <context-menu class="ctx-menu" @ctx-cancel="onCtxClose" @ctx-close="onCtxClose" ref="ctxMenu">
         <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToManager">管理员</li>

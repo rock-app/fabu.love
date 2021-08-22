@@ -76,7 +76,11 @@ var appSchema = new Schema({
             default: 'silent',
             enum: ['silent', 'normal', 'force']
         }
-    }
+    },
+    showHistory: { //是否展示历史版本
+        type: Boolean,
+        default: true
+    },
 })
 
 // appSchema.virtual('versions').get(function () {     return Version.find })

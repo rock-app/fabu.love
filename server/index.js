@@ -11,8 +11,6 @@ const cors = require('koa-cors')
 const koajwt = require('koa-jwt')
 const path = require('path')
 const fs = require('fs')
-const send = require('koa-send');
-const mount = require('koa-mount')
 
 const app = new Koa()
 
@@ -28,12 +26,13 @@ app.use(serve(path.resolve(config.fileDir)))
 app.use(serve(path.join(__dirname, '..', 'client/dist')));
 
 app.use(function(ctx, next) {
-    if (ctx.request.path.indexOf("/api") != 0) {
-        ctx.response.type = 'html';
-        ctx.response.body = fs.readFileSync(path.join(__dirname, '..', 'client/dist/index.html'), 'utf8');
-    } else {
-        return next()
-    }
+  // 不是以 api 开头的请求, 返回前端页面.
+  if (ctx.request.path.split('/').filter(item => item !== '').shift() !== 'api') {
+    ctx.response.type = 'html';
+    ctx.response.body = fs.readFileSync(path.join(__dirname, '..', 'client/dist/index.html'), 'utf8');
+  } else {
+    return next();
+  }
 })
 
 var middleware = koajwt({ secret: config.secret, debug: true }).unless({

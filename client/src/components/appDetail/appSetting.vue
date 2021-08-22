@@ -17,6 +17,10 @@
           <el-radio v-model="pulishType" label="手动发布">手动发布</el-radio>
           <el-radio v-model="pulishType" label="自动发布">上传新版本后自动立即发布</el-radio>
         </el-form-item>
+        <el-form-item label="是否展示历史版本">
+          <el-radio v-model="showHistory" label="是">展示</el-radio>
+          <el-radio v-model="showHistory" label="否">不展示</el-radio>
+        </el-form-item>
       </el-form>
 
       <button type="button" class="bottomBtn button-style-border" @click="clickSure">立即生效</button>
@@ -38,7 +42,8 @@
       return {
         installType: '公开',
         pulishType: '手动发布',
-        installPwd: ''
+        installPwd: '',
+        showHistory: '是'
       }
     },
     created() {
@@ -46,6 +51,7 @@
     mounted() {
       this.installType = this.appInfo.installWithPwd === 1 ? '密码安装' : '公开'
       this.pulishType = this.appInfo.autoPublish === true ? '自动发布' : '手动发布'
+      this.showHistory = this.appInfo.showHistory === true ? '是' : '否'
       this.installPwd = this.appInfo.installPwd
     },
     methods: {
@@ -58,7 +64,8 @@
           'shortUrl': this.appInfo.shortUrl,
           'installWithPwd': this.installType === '公开' ? 0 : 1,
           'installPwd': this.installPwd,
-          'autoPublish': this.pulishType === '手动发布' ? 0 : 1
+          'autoPublish': this.pulishType === '手动发布' ? 0 : 1,
+          'showHistory': this.showHistory === '是' ? 1 : 0,
         }
         AppResourceApi.updateAppSetting(getUserTeam()._id, this.appInfo._id, body).then((res) => {
             if (res.success) {
@@ -86,7 +93,7 @@
   }
   .appsetting-wrapper .content {
     width: 100%;
-    height: 276px;
+    height: 400px;
     background-color: white;
     margin-top: 1px;
     padding-top: 35px;

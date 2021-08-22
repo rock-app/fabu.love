@@ -27,7 +27,7 @@
           </el-pagination>
 
           <div class="nomessage" v-show="this.dataArr.length === 0">
-            <img src="../../assets/box.png" alt="">
+            <img src="../../common/assets/box.png" alt="">
             <p>暂无消息</p>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="mainNav-wrapper">
     <div class="mainNav-logo">
-      <img src="../../assets/logo_s.png" alt="" @click="clickLogo">
+      <img src="../../common/assets/logo_s.png" alt="" @click="clickLogo">
       <div class="line"></div>
     </div>
 

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import TokenMgr from '../mgr/TokenMgr'
 import { Message } from 'element-ui'
-import { removeUserInfo } from '../mgr/userMgr'
+import { removeUserInfo } from '@/mgr/userMgr'
 
 let vue = new Vue()
 

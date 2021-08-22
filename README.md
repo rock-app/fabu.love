@@ -2,7 +2,25 @@
 typora-copy-images-to: ./screenshots
 ---
 
+
+# 更新:
+### V2.0 2021年08月22日
+feature: 打包方式升级为 vite.
+
+feature: node 版本升级至 12.18.1
+
+feature: APP 详情页面最多显示 500条记录.
+
+feature: 删除APP指定版本时, 同时删除对应安装文件.
+
+feature: 新增下载页面显示最多50条历史记录, 并支持点击安装.
+
+fix: 更新 aapt-osx 版本, 支持在 macOS 系统本地调试.
+
+fix: 优化部分逻辑.
+
 ### 爱发布
+
 
 demo地址: https://fabu.apppills.com/
 该平台是类似于fir.im/蒲公英类似的一个平台.可以自己部署.

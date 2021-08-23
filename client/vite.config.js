@@ -26,8 +26,8 @@ export default ({
   const local_url = 'http://127.0.0.1:9898/';
   let define = {
     'process.env': {},
-    'process.env.SERVER_HOST': mode === 'production' ? prod_url : local_url,
-    'process.env.FABU_BASE_URL': mode === 'production' ? prod_url : local_url,
+    'process.env.SERVER_HOST': mode === 'production' ? prod_url : `"${local_url}"`,
+    'process.env.FABU_BASE_URL': mode === 'production' ? prod_url : `"${local_url}"`,
   };
 
   let esbuild = {};
@@ -57,7 +57,8 @@ export default ({
     plugins: [
       legacyPlugin({
         targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
-      }), createVuePlugin(),
+      }),
+      createVuePlugin()
     ],
     css: {
       preprocessorOptions: {

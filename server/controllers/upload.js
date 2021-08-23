@@ -203,11 +203,11 @@ function parseIpa(filename) {
       info.appName = result.CFBundleDisplayName;
       info.versionStr = result.CFBundleShortVersionString;
       info.versionCode = result.CFBundleVersion;
-      info.iconName = result.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName;
+      info.iconName = result.CFBundleIcons ? result.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName : '';
       try {
         const environment = result.mobileProvision.Entitlements['aps-environment'];
         const active = result.mobileProvision.Entitlements['beta-reports-active'];
-        if (environment == 'production') {
+        if (environment === 'production') {
           info.appLevel = active ? 'appstore' : 'enterprise';
         } else {
           info.appLevel = 'develop';
@@ -224,15 +224,15 @@ function parseIpa(filename) {
 
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
-  var ipaInfo = await parseIpa(filename);
-  var iconName = ipaInfo.iconName || 'AppIcon';
-  var tmpOut = tempDir + '/{0}.png'.format(guid);
-  var found = false;
-  var buffer = fs.readFileSync(filename);
-  var data = await unzip.Open.buffer(buffer);
+  let ipaInfo = await parseIpa(filename);
+  let iconName = ipaInfo.iconName || 'AppIcon';
+  let tmpOut = tempDir + '/{0}.png'.format(guid);
+  let found = false;
+  let buffer = fs.readFileSync(filename);
+  let data = await unzip.Open.buffer(buffer);
   await new Promise((resolve, reject) => {
     data.files.forEach(file => {
-      if (file.path.indexOf(iconName + '60x60@2x.png') != -1) {
+      if (file.path.indexOf(iconName + '60x60@2x.png') !== -1) {
         found = true;
         file.stream()
         .pipe(fs.createWriteStream(tmpOut))
@@ -246,9 +246,9 @@ async function extractIpaIcon(filename, guid, team) {
     throw (new Error('can not find icon'));
   }
 
-  var pnfdefryDir = path.join(__dirname, '..', 'library/pngdefry');
+  let pngdefryDir = path.join(__dirname, '..', 'library/pngdefry');
   //写入成功判断icon是否是被苹果破坏过的图片
-  var exeName = '';
+  let exeName = '';
   if (os.type() === 'Darwin') {
     exeName = 'pngfy-osx';
   } else if (os.type() === 'Linux') {
@@ -257,15 +257,15 @@ async function extractIpaIcon(filename, guid, team) {
     throw new Error('Unknown OS!');
   }
 
-  var { stderr, stdout } = await exec(path.join(pnfdefryDir, exeName + ' -s _tmp ', tmpOut));
+  let { stderr, stdout } = await exec(path.join(pngdefryDir, exeName + ' -s _tmp ', tmpOut));
   if (stderr) {
     throw stderr;
   }
   //执行pngdefry -s xxxx.png 如果结果显示"not an -iphone crushed PNG file"表示改png不需要修复
-  var iconRelatePath = path.join(team.id, '/icon');
-  var iconSuffix = '/' + guid + '_i.png';
+  let iconRelatePath = path.join(team.id, '/icon');
+  let iconSuffix = '/' + guid + '_i.png';
   await createFolderIfNeeded(path.join(uploadDir, iconRelatePath));
-  if (stdout.indexOf('not an -iphone crushed PNG file') != -1) {
+  if (stdout.indexOf('not an -iphone crushed PNG file') !== -1) {
     await fs.renameSync(tmpOut, path.join(uploadDir, iconRelatePath, iconSuffix));
     return { 'success': true, 'fileName': iconRelatePath + iconSuffix };
   }

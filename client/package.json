@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-legacy": "^1.4.4",
+    "@vitejs/plugin-vue": "^1.4.0",
+    "@vue/compiler-sfc": "^3.2.4",
     "sass": "^1.37.5",
     "vite": "2",
     "vite-plugin-vue2": "latest",

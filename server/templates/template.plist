@@ -11,19 +11,20 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-          <string>{{{ downloadUrl }}}</string>
-					<key>md5-size</key>
-          <integer>{{{ fileSize }}}</integer>
+					<string>{{{ downloadUrl }}}</string>
 				</dict>
-				 <dict>
-         <key>kind</key>
-         <string>display-image</string>
-         <!-- optional. indicates if icon needs shine effect applied. -->
-         <key>needs-shine</key>
-         <true/>
-         <key>url</key>
-         <string>{{{ iconUrl }}}</string>
-        </dict>
+				<dict>
+					<key>kind</key>
+					<string>display-image</string>
+					<key>url</key>
+					<string>{{{ iconUrl }}}</string>
+				</dict>
+				<dict>
+					<key>kind</key>
+					<string>full-size-image</string>
+					<key>url</key>
+					<string>{{{ iconUrl }}}</string>
+				</dict>
 			</array>
 			<key>metadata</key>
 			<dict>

@@ -7,7 +7,7 @@
     "start": "babel-node index.js",
     "build": "babel src -d sdist --source-maps",
     "preLaunchTask": "npm run build",
-    "debug": "babel-node index.js --inspect --debug-brk --nolazy index.js"
+    "debug": "babel-node index.js --inspect --inspect-brk --nolazy index.js"
   },
   "keywords": [
     "koa",

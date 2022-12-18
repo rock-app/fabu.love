@@ -355,6 +355,9 @@ function extractApkIcon(filepath, guid, team) {
       if (!iconPath) {
         throw ('can not find app icon');
       }
+      // res/mipmap-anydpi-v26/ic_launcher.xml 解析不行
+      //TODO:[answer] 临时写死一个目录
+      iconPath = 'res/mipmap-xxxhdpi-v4/ic_launcher.png';
 
       iconPath = iconPath.replace(/'/g, '');
       var dir = path.join(uploadDir, team.id, 'icon');
@@ -386,8 +389,7 @@ function extractApkIcon(filepath, guid, team) {
 
       const initialPromise = ext === '.xml' ?
         unzip.Open.file(filepath).then(directory => {
-          const getMaxSizeImagePath = compose(get('path'), maxBy('compressedSize'),
-            filter(entry => entry.path.indexOf(dir) >= 0 && entry.path.indexOf('.png') >= 0), get('files'));
+          const getMaxSizeImagePath = compose(get('path'), maxBy('compressedSize'), filter(entry => entry.path.indexOf(dir) >= 0 && entry.path.indexOf('.png') >= 0), get('files'));
           maxSizePath = getMaxSizeImagePath(directory);
         }) : new Promise((resolve) => resolve());
       initialPromise.then(() => {

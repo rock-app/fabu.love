@@ -32,7 +32,7 @@
         "koa-compose": "^4.1.0",
         "bunyan": "^1.8.12",
         "mongoose": "^5.7.5",
-        "jsonwebtoken": "^8.5.0",
+        "jsonwebtoken": "^9.0.0",
         "unzipper": "^0.9.3",
         "unzip-stream": "^0.3.0",
         "lodash": "^4.17.4",

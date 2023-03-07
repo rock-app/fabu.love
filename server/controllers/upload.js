@@ -253,7 +253,7 @@ async function extractIpaIcon(filename, guid, team) {
     var data = await unzip.Open.buffer(buffer)
     await new Promise((resolve, reject) => {
         data.files.forEach(file => {
-            if (file.path.indexOf(iconName + '60x60@2x.png') != -1) {
+            if (file.path.indexOf(iconName) != -1 && file.path.indexOf(".png") != -1)  {
                 found = true
                 file.stream()
                     .pipe(fs.createWriteStream(tmpOut))

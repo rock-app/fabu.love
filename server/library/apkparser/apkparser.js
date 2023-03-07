@@ -9,7 +9,8 @@ var parseOutput;
 parseApk = function(filename, cb) {
   var exeName = null;
   if (os.type() === 'Darwin') {
-      exeName = 'aapt-osx';
+      // exeName = 'aapt-osx';
+      exeName = 'aapt-osx_x64'; // macOS High Sierra 10.13.4 及更新的系统需要改成 x64 版本
   } else if (os.type() === 'Linux') {
       exeName = 'aapt-linux';
   } else {

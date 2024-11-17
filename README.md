@@ -2,8 +2,32 @@
 typora-copy-images-to: ./screenshots
 ---
 
+# 如何自己编译镜像
+### 修改 prod_url
+修改 vite.config.js 中的 prod_url, 改成最终部署的域名地址.
+
+### 编译镜像
+```shell
+docker build -t answerhuang/fabulove:202411171617 -f docker/Dockerfile .
+```
+
+### 推送镜像
+```shell
+docker push answerhuang/fabulove:202411171617
+```
+
+### 运行镜像
+在 docker 目录下, 运行 docker-compose 命令
+```shell
+cd docker
+docker-compose up -d --build
+```
 
 # 更新:
+
+### V2.1 2024年 11月 17
+fix: 修复 iOS 新版本 ipa 包获取不到 icon 导致上传失败问题
+
 ### V2.0 2021年08月22日
 feature: 打包方式升级为 vite.
 
@@ -203,11 +227,5 @@ server{
   }
   client_max_body_size 208M; #最大上传的ipa/apk文件大小
 }
-```
-
-### docker 编译发布
-```shell
-docker build -t answerhuang/fabulove:202411171617 -f docker/Dockerfile .
-docker push answerhuang/fabulove:202411171617
 ```
 

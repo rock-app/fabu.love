@@ -2,7 +2,7 @@ FROM node:12.18.1
 
 # 安装依赖库
 RUN npm install -g babel-cli
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN npm install -g cnpm@7 --registry=https://registry.npmmirror.com
 # 设置目录
 RUN mkdir -p /opt/data /opt/server /opt/web /opt/logs /opt/docker
 

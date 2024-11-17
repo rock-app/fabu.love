@@ -205,3 +205,8 @@ server{
 }
 ```
 
+### docker 编译发布
+```shell
+docker build -t answerhuang/fabulove:202411171617 -f docker/Dockerfile .
+```
+

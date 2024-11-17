@@ -7,7 +7,7 @@
     "start": "babel-node index.js",
     "build": "babel src -d sdist --source-maps",
     "preLaunchTask": "npm run build",
-    "debug": "babel-node index.js --inspect --debug-brk --nolazy index.js"
+    "debug": "babel-node index.js --inspect --inspect-brk --nolazy index.js"
   },
   "keywords": [
     "koa",
@@ -20,7 +20,7 @@
     "url": "https://github.com/michaelliao/learn-javascript.git"
   },
   "dependencies": {
-    "app-info-parser": "^1.1.2",
+    "app-info-parser": "^1.1.6",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "etl": "^0.6.12",
@@ -41,6 +41,7 @@
     "mongoose": "^5.13.2",
     "mustache": "^4.2.0",
     "nodemailer": "^6.6.2",
+    "text2png": "^2.3.0",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2"
   },

@@ -27,6 +27,7 @@ const etl = require('etl');
 const mkdirp = require('mkdirp');
 const AppInfoParser = require('app-info-parser');
 const { compose, maxBy, filter, get } = require('lodash/fp');
+const text2png = require('text2png');
 
 const { writeFile, readFile, responseWrapper, exec } = require('../helper/util');
 
@@ -193,8 +194,8 @@ function parseIpa(filename) {
 
   return new Promise((resolve, reject) => {
     parser.parse().then(result => {
-      console.log('app info ----> ', result);
-      console.log('icon base64 ----> ', result.icon);
+      // console.log('app info ----> ', result);
+      // console.log('icon base64 ----> ', result.icon);
 
       var info = {};
       info.platform = 'ios';
@@ -225,6 +226,7 @@ function parseIpa(filename) {
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
   let ipaInfo = await parseIpa(filename);
+  console.log('ipaInfo:', ipaInfo);
   let iconName = ipaInfo.iconName || 'AppIcon';
   let tmpOut = tempDir + '/{0}.png'.format(guid);
   let found = false;
@@ -238,9 +240,24 @@ async function extractIpaIcon(filename, guid, team) {
         .pipe(fs.createWriteStream(tmpOut))
         .on('error', reject)
         .on('finish', resolve);
+      } else {
+        found = true;
+        fs.writeFileSync(
+          tmpOut,
+          text2png(ipaInfo.bundleName || ipaInfo.appName, {
+            backgroundColor: 'black',
+            color: 'white',
+            font: '80px Futura',
+            lineSpacing: 10,
+            padding: 200,
+          }),
+          { encoding: 'utf8', flag: 'w' });
+        resolve();
       }
     });
-  }).catch({});
+  }).catch(() => {
+    return Promise.reject('upload failure');
+  });
 
   if (!found) {
     throw (new Error('can not find icon'));
@@ -355,6 +372,9 @@ function extractApkIcon(filepath, guid, team) {
       if (!iconPath) {
         throw ('can not find app icon');
       }
+      // res/mipmap-anydpi-v26/ic_launcher.xml 解析不行
+      //TODO:[answer] 临时写死一个目录
+      iconPath = 'res/mipmap-xxxhdpi-v4/ic_launcher.png';
 
       iconPath = iconPath.replace(/'/g, '');
       var dir = path.join(uploadDir, team.id, 'icon');
@@ -386,8 +406,7 @@ function extractApkIcon(filepath, guid, team) {
 
       const initialPromise = ext === '.xml' ?
         unzip.Open.file(filepath).then(directory => {
-          const getMaxSizeImagePath = compose(get('path'), maxBy('compressedSize'),
-            filter(entry => entry.path.indexOf(dir) >= 0 && entry.path.indexOf('.png') >= 0), get('files'));
+          const getMaxSizeImagePath = compose(get('path'), maxBy('compressedSize'), filter(entry => entry.path.indexOf(dir) >= 0 && entry.path.indexOf('.png') >= 0), get('files'));
           maxSizePath = getMaxSizeImagePath(directory);
         }) : new Promise((resolve) => resolve());
       initialPromise.then(() => {

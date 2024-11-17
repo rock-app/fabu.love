@@ -27,6 +27,7 @@ const etl = require('etl');
 const mkdirp = require('mkdirp');
 const AppInfoParser = require('app-info-parser');
 const { compose, maxBy, filter, get } = require('lodash/fp');
+const text2png = require('text2png');
 
 const { writeFile, readFile, responseWrapper, exec } = require('../helper/util');
 
@@ -193,8 +194,8 @@ function parseIpa(filename) {
 
   return new Promise((resolve, reject) => {
     parser.parse().then(result => {
-      console.log('app info ----> ', result);
-      console.log('icon base64 ----> ', result.icon);
+      // console.log('app info ----> ', result);
+      // console.log('icon base64 ----> ', result.icon);
 
       var info = {};
       info.platform = 'ios';
@@ -225,6 +226,7 @@ function parseIpa(filename) {
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
   let ipaInfo = await parseIpa(filename);
+  console.log('ipaInfo:', ipaInfo);
   let iconName = ipaInfo.iconName || 'AppIcon';
   let tmpOut = tempDir + '/{0}.png'.format(guid);
   let found = false;
@@ -238,9 +240,24 @@ async function extractIpaIcon(filename, guid, team) {
         .pipe(fs.createWriteStream(tmpOut))
         .on('error', reject)
         .on('finish', resolve);
+      } else {
+        found = true;
+        fs.writeFileSync(
+          tmpOut,
+          text2png(ipaInfo.bundleName || ipaInfo.appName, {
+            backgroundColor: 'black',
+            color: 'white',
+            font: '80px Futura',
+            lineSpacing: 10,
+            padding: 200,
+          }),
+          { encoding: 'utf8', flag: 'w' });
+        resolve();
       }
     });
-  }).catch({});
+  }).catch(() => {
+    return Promise.reject('upload failure');
+  });
 
   if (!found) {
     throw (new Error('can not find icon'));

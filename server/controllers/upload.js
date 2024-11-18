@@ -240,21 +240,22 @@ async function extractIpaIcon(filename, guid, team) {
         .pipe(fs.createWriteStream(tmpOut))
         .on('error', reject)
         .on('finish', resolve);
-      } else {
-        found = true;
-        fs.writeFileSync(
-          tmpOut,
-          text2png(ipaInfo.bundleName || ipaInfo.appName, {
-            backgroundColor: 'black',
-            color: 'white',
-            font: '80px Futura',
-            lineSpacing: 10,
-            padding: 200,
-          }),
-          { encoding: 'utf8', flag: 'w' });
-        resolve();
       }
     });
+    if (!found) {
+      found = true;
+      fs.writeFileSync(
+        tmpOut,
+        text2png(ipaInfo.bundleName || ipaInfo.appName, {
+          backgroundColor: 'black',
+          color: 'white',
+          font: '80px Futura',
+          lineSpacing: 10,
+          padding: 200,
+        }),
+        { encoding: 'utf8', flag: 'w' });
+      resolve();
+    }
   }).catch(() => {
     return Promise.reject('upload failure');
   });

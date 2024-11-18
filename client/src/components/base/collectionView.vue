@@ -72,7 +72,6 @@
         this.$emit('gotoAppDetail', item)
       },
       getIcon(item) {
-          console.log(`${this.axios.defaults.baseURL}${item.icon}`)
           return `${this.axios.defaults.baseURL}${item.icon}`
       },
       getShortUrl(item) {

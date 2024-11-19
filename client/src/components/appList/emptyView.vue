@@ -21,7 +21,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
   .empeyapp-wrapper {
     width: 100%;
     height: 100%;

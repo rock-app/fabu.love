@@ -130,7 +130,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../common/scss/base.scss';
+@use '../../common/scss/base.scss' as *;
 
 .teamItem {
   position: relative;

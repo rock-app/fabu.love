@@ -81,7 +81,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .changePasswordWrapper {
     padding-left: 48px;

@@ -143,7 +143,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .fadeRight-enter-active {
     transition: all .5s ease;

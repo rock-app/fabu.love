@@ -4,7 +4,7 @@
       <p class="title">{{this.appBaseData.appName}}</p>
       <div class="info">
         <p class="desc">版本：{{this.appVersionInfo.versionStr}}({{this.appVersionInfo.versionCode}})</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
-       
+
       </div>
       <p class="info">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
       <div v-if="!showDownLoadBtn">
@@ -65,7 +65,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .phoneDownLoadWrapper {
   }

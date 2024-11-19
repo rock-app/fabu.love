@@ -172,7 +172,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .mainNav-wrapper {
     position: relative;

@@ -84,8 +84,8 @@ module.exports = class UploadRouter {
         releaseVersionCode: result.version.versionCode
       });
     }
-    console.log(result.app.autoPublish);
-    console.log(result.version.released);
+    console.log('result.app.autoPublish:', result.app.autoPublish);
+    console.log('result.version.released:', result);
     ctx.body = responseWrapper(result);
   }
 

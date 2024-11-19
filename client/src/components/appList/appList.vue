@@ -214,7 +214,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .applist-wrapper {
     padding-left: 20px;

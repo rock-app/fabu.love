@@ -80,7 +80,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .appsetting-wrapper .top {
     width: 100%;

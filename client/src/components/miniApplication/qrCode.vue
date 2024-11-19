@@ -85,7 +85,7 @@
 </script>
 
 <style lang="scss">
-    @import "../../common/scss/base";
+    @use "../../common/scss/base" as *;
 
     .qrcode-wrapper {
       width: 100%;

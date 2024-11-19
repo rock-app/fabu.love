@@ -295,7 +295,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .appVersion-wrapper .detail-header-bottom {
     background-color: white;

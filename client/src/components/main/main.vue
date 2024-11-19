@@ -63,7 +63,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .main .main-container {
     position: absolute;

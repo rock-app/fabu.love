@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "axios": "^0.21.1",
-    "element-ui": "2.15.5",
+    "axios": "0.21.1",
+    "element-ui": "2.15.14",
     "vue": "^2.6.14",
     "vue-context-menu": "^2.0.6",
     "vue-infinite-scroll": "^2.0.2",
@@ -39,7 +39,7 @@
     "@vue/compiler-sfc": "^3.2.4",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
-    "sass": "^1.37.5",
+    "sass": "^1.49.9",
     "vite": "2",
     "vite-plugin-vue2": "latest",
     "vue-template-compiler": "^2.6.14"

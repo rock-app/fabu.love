@@ -131,7 +131,7 @@
 </script>
 
 <style lang="scss">
-    @import "../../common/scss/base";
+    @use "../../common/scss/base" as *;
     .miniApplist-wrapper {
       padding-left: 20px;
       padding-right: 20px;

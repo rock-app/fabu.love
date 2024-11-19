@@ -34,9 +34,13 @@
 </script>
 <!-- 引入组件库 -->
 <style lang="scss">
-  @import "common/scss/reset";
-  @import "common/scss/element";
-  @import 'common/scss/icon.css';
+  //@import "common/scss/reset";
+  //@import "common/scss/element";
+  //@import 'common/scss/icon.css';
+
+  @use "common/scss/reset" as *;
+  @use "common/scss/element" as *;
+  @use "common/scss/icon.css" as *;
 
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;

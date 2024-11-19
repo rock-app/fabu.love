@@ -307,7 +307,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../common/scss/base';
+@use '../../common/scss/base' as *;
 .teamMgr {
   margin-top: 24px;
   position: relative;

@@ -1,4 +1,6 @@
-FROM node:14
+FROM node:20
+
+RUN apt-get update && apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 # 安装依赖库
 RUN npm install -g babel-cli
@@ -15,6 +17,7 @@ WORKDIR /opt/client
 ADD client /opt/client
 RUN npm install
 RUN npm run build
+RUN #npm run build:development
 
 # 增加server
 WORKDIR /opt/server

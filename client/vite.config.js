@@ -5,10 +5,7 @@ import {
   createVuePlugin
 } from 'vite-plugin-vue2';
 // @see https://cn.vitejs.dev/config/
-export default ({
-                  command,
-                  mode
-                }) => {
+export default ({ command, mode }) => {
   let rollupOptions = {};
 
   let optimizeDeps = {};
@@ -17,6 +14,7 @@ export default ({
     '@': path.resolve(__dirname, './src'),
     'Components': path.resolve(__dirname, './src/components'),
     'vue$': 'vue/dist/vue.esm.js',
+    'vue': 'vue/dist/vue.esm.js',
   };
 
   let proxy = {};
@@ -26,8 +24,8 @@ export default ({
   const local_url = 'http://127.0.0.1:9898/';
   let define = {
     'process.env': {},
-    'process.env.SERVER_HOST': mode === 'production' ? prod_url : `"${local_url}"`,
-    'process.env.FABU_BASE_URL': mode === 'production' ? prod_url : `"${local_url}"`,
+    'process.env.SERVER_HOST': mode === 'production' ? prod_url : `"${ local_url }"`,
+    'process.env.FABU_BASE_URL': mode === 'production' ? prod_url : `"${ local_url }"`,
   };
 
   let esbuild = {};
@@ -56,7 +54,7 @@ export default ({
     optimizeDeps,
     plugins: [
       legacyPlugin({
-        targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
+        targets: [ 'Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15' ],
       }),
       createVuePlugin()
     ],
@@ -68,5 +66,6 @@ export default ({
         }
       }
     },
+
   };
 }

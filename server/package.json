@@ -20,6 +20,7 @@
     "url": "https://github.com/michaelliao/learn-javascript.git"
   },
   "dependencies": {
+    "@koa/cors": "^5.0.0",
     "app-info-parser": "^1.1.6",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
@@ -29,7 +30,6 @@
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
-    "koa-cors": "0.0.16",
     "koa-jwt": "^4.0.1",
     "koa-multer": "^1.0.2",
     "koa-router": "10.0.0",

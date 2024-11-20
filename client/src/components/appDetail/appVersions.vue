@@ -159,8 +159,8 @@
     methods: {
       getAppVersionListData() {
         AppResourceApi.getAppVersionList(this.userteam._id, this.appInfo._id, this.currentPage).then((res) => {
-          console.log(res)
           this.dataArr = res.data
+          console.log('res.data:', res.data)
         }, reject => {
 
         })

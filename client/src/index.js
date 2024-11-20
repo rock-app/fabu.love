@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import { Button, Dialog, Menu, Input, Switch, Popover, Form, Upload, Progress, Badge, Container, Header, Aside, Main, Footer, Loading, Message, MenuItem, Table, TableColumn, FormItem, Pagination, Radio, MessageBox } from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
 
 import router from './router'
 import axios from 'axios'

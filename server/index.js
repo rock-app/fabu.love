@@ -7,7 +7,8 @@ const bodyParser = require('koa-bodyparser')
     // 导入controller middleware:
 const rest = require('./helper/rest')
 const serve = require('koa-static');
-const cors = require('koa-cors')
+// const cors = require('koa-cors')
+const cors = require('@koa/cors');
 const koajwt = require('koa-jwt')
 const path = require('path')
 const fs = require('fs')

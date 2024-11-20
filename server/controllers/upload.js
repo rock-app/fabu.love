@@ -84,8 +84,6 @@ module.exports = class UploadRouter {
         releaseVersionCode: result.version.versionCode
       });
     }
-    console.log('result.app.autoPublish:', result.app.autoPublish);
-    console.log('result.version.released:', result);
     ctx.body = responseWrapper(result);
   }
 
@@ -226,7 +224,7 @@ function parseIpa(filename) {
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
   let ipaInfo = await parseIpa(filename);
-  console.log('ipaInfo:', ipaInfo);
+  // console.log('ipaInfo:', ipaInfo);
   let iconName = ipaInfo.iconName || 'AppIcon';
   let tmpOut = tempDir + '/{0}.png'.format(guid);
   let found = false;

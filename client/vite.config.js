@@ -1,9 +1,8 @@
 /* eslint-disable */
 import legacyPlugin from '@vitejs/plugin-legacy';
 import * as path from 'path';
-import {
-  createVuePlugin
-} from 'vite-plugin-vue2';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx'
 // @see https://cn.vitejs.dev/config/
 export default ({ command, mode }) => {
   let rollupOptions = {};
@@ -13,8 +12,8 @@ export default ({ command, mode }) => {
   let alias = {
     '@': path.resolve(__dirname, './src'),
     'Components': path.resolve(__dirname, './src/components'),
-    'vue$': 'vue/dist/vue.esm.js',
-    'vue': 'vue/dist/vue.esm.js',
+    // 'vue$': 'vue/dist/vue.esm.js',
+    // 'vue': 'vue/dist/vue.esm.js',
   };
 
   let proxy = {};
@@ -44,8 +43,8 @@ export default ({ command, mode }) => {
     build: {
       target: 'es2015',
       minify: 'terser', // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
-      manifest: false, // 是否产出maifest.json
-      sourcemap: false, // 是否产出soucemap.json
+      manifest: false, // 是否产出manifest.json
+      sourcemap: false, // 是否产出sourcemap.json
       outDir: 'dist', // 产出目录
       rollupOptions,
       chunkSizeWarningLimit: 1000,
@@ -56,7 +55,17 @@ export default ({ command, mode }) => {
       legacyPlugin({
         targets: [ 'Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15' ],
       }),
-      createVuePlugin()
+      vue({
+        script: {
+          defineModel: true,
+        },
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => [ 'context-menu', 'context-menu-item' ].includes(tag),
+          }
+        }
+      }),
+      vueJsx(),
     ],
     css: {
       preprocessorOptions: {

@@ -39,24 +39,24 @@
       MainNav, HeaderNav, FooterWrapper, UserInfo, UserMessage
     },
     created() {
-      this.bus.$on('showUserInfo', () => {
+      this.bus.on('showUserInfo', () => {
         this.showUserInfo = true
       })
-      this.bus.$on('hiddenUserInfo', () => {
+      this.bus.on('hiddenUserInfo', () => {
         this.showUserInfo = false
       })
-      this.bus.$on('showUserMessage', () => {
+      this.bus.on('showUserMessage', () => {
         this.showUserMessage = true
       })
-      this.bus.$on('hiddenUserMessage', () => {
+      this.bus.on('hiddenUserMessage', () => {
         this.showUserMessage = false
       })
     },
     destroyed() {
-      this.bus.$off('showUserInfo')
-      this.bus.$off('hiddenUserInfo')
-      this.bus.$off('showUserMessage')
-      this.bus.$off('hiddenUserMessage')
+      this.bus.off('showUserInfo')
+      this.bus.off('hiddenUserInfo')
+      this.bus.off('showUserMessage')
+      this.bus.off('hiddenUserMessage')
     },
     methods: {}
   }

@@ -87,7 +87,7 @@
       cancel() {
         this.show = false
         setTimeout(() => {
-          this.bus.$emit('hiddenUserMessage')
+          this.bus.emit('hiddenUserMessage')
         }, 500)
       },
       handleSizeChange(val) {
@@ -133,7 +133,7 @@
         UserApi.allRead().then((res) => {
           this.$message.success(res.message)
           this.loadData()
-          this.bus.$emit('allreadMessage')
+          this.bus.emit('allreadMessage')
         }, reject => {
 
         })

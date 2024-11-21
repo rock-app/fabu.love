@@ -1,16 +1,14 @@
-import Vue from 'vue'
 import TokenMgr from '../mgr/TokenMgr'
-import { Message } from 'element-ui'
+import { ElMessage } from 'element-plus'
 import { removeUserInfo } from '@/mgr/userMgr'
-
-let vue = new Vue()
+import axios from 'axios'
 
 export function getHttp(url, params) {
     return new Promise((resolve, reject) => {
-        vue.axios.get(url, { params: params })
+        axios.get(url, { params: params })
             .then(response => {
                 if (response.data.success === false) {
-                    Message.error(response.data.message)
+                    ElMessage.error(response.data.message)
                     reject(response.data.message)
                 }
                 setTimeout(() => {
@@ -25,11 +23,11 @@ export function getHttp(url, params) {
 
 export function deleteHttp(url) {
     return new Promise((resolve, reject) => {
-        vue.axios.delete(url)
+        axios.delete(url)
             .then(response => {
                 setTimeout(() => {
                     if (response.data.success === false) {
-                        Message.error(response.data.message)
+                        ElMessage.error(response.data.message)
                         reject(response.data.message)
                     }
                     resolve(response.data)
@@ -43,7 +41,7 @@ export function deleteHttp(url) {
 
 export function postHttp(url, body, params) {
     return new Promise((resolve, reject) => {
-        vue.axios({
+        axios({
             method: 'post',
             url: url,
             params: params,
@@ -51,7 +49,7 @@ export function postHttp(url, body, params) {
         }).then(response => {
             setTimeout(() => {
                 if (response.data.success === false) {
-                    Message.error(response.data.message)
+                    ElMessage.error(response.data.message)
                     reject(response.data.message)
                 }
                 resolve(response.data)
@@ -71,13 +69,13 @@ export function configAxios() {
         baseUrl += '/'
     }
 
-    vue.axios.defaults.baseURL = baseUrl
-    vue.axios.defaults.headers.common['Content-Type'] = 'application/json'
-    vue.axios.default.timeout = 60000
+    axios.defaults.baseURL = baseUrl
+    axios.defaults.headers.common['Content-Type'] = 'application/json'
+    axios.default.timeout = 60000
 
-    vue.axios.interceptors.request.use(
+    axios.interceptors.request.use(
         config => {
-            let token = TokenMgr.get(vue.axios.defaults.baseURL)
+            let token = TokenMgr.get(axios.defaults.baseURL)
             if (token) {
                 config.headers.Authorization = 'Bearer' + ' ' + token
             }
@@ -86,7 +84,7 @@ export function configAxios() {
             return Promise.reject(err)
         })
 
-    vue.axios.interceptors.response.use({}, error => {
+    axios.interceptors.response.use({}, error => {
         if (!error.response) {
             error.message = '请检查网络设置'
             return Promise.reject(error)

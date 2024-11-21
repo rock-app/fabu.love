@@ -76,6 +76,8 @@
 
 <script type="text/ecmascript-6">
 
+import { useRoute, useRouter } from "vue-router";
+
   export default {
     data() {
       return {
@@ -84,54 +86,56 @@
     },
     mounted() {
       // 监听进入详情页面就变化左侧的菜单
-      this.bus.$on('appdetail', () => {
+      this.bus.on('appdetail', () => {
         this.activeIndex = '应用概述'
       })
-      this.bus.$on('miniAppDetail', () => {
+      this.bus.on('miniAppDetail', () => {
         this.activeIndex = '应用详情'
       })
-      this.bus.$on('applist', () => {
-        if (this.$route.fullPath !== '/apps') {
-          this.$router.push('/apps')
+      this.bus.on('applist', () => {
+        if (this.route.fullPath !== '/apps') {
+          this.router.push('/apps')
         }
         this.activeIndex = '应用列表'
       })
-      this.bus.$on('miniApplist', () => {
-        if (this.$route.fullPath !== '/miniAppList') {
-          this.$router.push('/miniAppList')
+      this.bus.on('miniApplist', () => {
+        if (this.route.fullPath !== '/miniAppList') {
+          this.router.push('/miniAppList')
         }
         this.activeIndex = '小程序列表'
       })
 
       // 刷新浏览器的时候防止菜单变化
-      if (this.$route.fullPath === '/members') {
+      if (this.route.fullPath === '/members') {
         this.activeIndex = '团队管理'
       }
-      if (this.$route.fullPath === '/miniAppList') {
+      if (this.route.fullPath === '/miniAppList') {
         this.activeIndex = '小程序列表'
       }
     },
     created() {
+      this.router = useRouter()
+      this.route = useRoute()
     },
     destroyed() {
-      this.bus.$off('applist')
-      this.bus.$off('appdetail')
-      this.bus.$off('miniApplist')
-      this.bus.$off('miniAppDetail')
+      this.bus.off('applist')
+      this.bus.off('appdetail')
+      this.bus.off('miniApplist')
+      this.bus.off('miniAppDetail')
     },
     methods: {
       clickSubItem(data) {
         if (data.index === '应用列表') {
-          this.$router.push('/apps')
+          this.router.push('/apps')
         }
         if (data.index === '应用概述') {
-          this.bus.$emit('appSummary')
+          this.bus.emit('appSummary')
         }
         if (data.index === '应用设置') {
-          this.bus.$emit('appSetting')
+          this.bus.emit('appSetting')
         }
         if (data.index === '团队管理') {
-          this.$router.push('/members')
+          this.router.push('/members')
         }
         if (data.index === 'API文档') {
           let href = `${this.axios.defaults.baseURL}api/swagger`
@@ -153,7 +157,7 @@
         if (data.index === 'About') {
         }
         if (data.index === '小程序列表') {
-          this.$router.push('/miniAppList')
+          this.router.push('/miniAppList')
         }
       },
       gotoApiDoc() {

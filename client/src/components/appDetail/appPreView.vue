@@ -1,5 +1,3 @@
-
-
 <template>
     <div class="previewapp-wrapper">
       <!--中间-->
@@ -56,7 +54,7 @@
 
 <script type="text/ecmascript-6">
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
-  import VueQr from 'vue-qr'
+  import VueQr from 'vue-qr/src/packages/vue-qr.vue'
   import PhoneWrapper from './phoneWrapper.vue'
 
   export default {

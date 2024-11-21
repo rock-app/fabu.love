@@ -73,7 +73,7 @@
     created() {
       this.$nextTick(() => {
         // 放置浏览器刷新菜单变化
-        this.bus.$emit('miniAppDetail')
+        this.bus.emit('miniAppDetail')
         this.userteam = getUserTeam()
         this.getAppDetailData()
       })
@@ -84,7 +84,7 @@
           console.log(res)
           this.appInfo = res.data
           this.downloadCodeImageArray = this.appInfo.downloadCodeImage
-          this.bus.$emit('miniAppDetail', this.appInfo.appName)
+          this.bus.emit('miniAppDetail', this.appInfo.appName)
         }, reject => {
           this.$message.error(reject)
         })

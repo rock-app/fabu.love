@@ -1,22 +1,23 @@
 <template>
   <div class="teamMgr">
-    <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;right: 72px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
+    <div
+      style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;right: 72px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
     <el-button class="uploadWrapper button-style-main" @click="createTeam">
-      <img style="{width: 12; height: 12px;}" src="../../common/assets/ic_add@2x.png">
+      <img style="width: 12px; height: 12px;" src="../../common/assets/ic_add@2x.png">
       <label> 新建团队</label>
     </el-button>
     <div class="teamMgr-header">
       <div>
         <div>
-          <label>{{teamName}}</label>
-          <img v-show="isOwner" class="teamMgr-edit" src="../../common/assets/ic_morecz.png" @click="showMenu" />
-          <context-menu class="ctx-menu" ref="ctxMenu">
-            <li class="ctx-item" @click="editAction">编辑团队名称</li>
-            <li class="ctx-item menu-item" @click="dissolve">解散团队</li>
-          </context-menu>
+          <label>{{ teamName }}</label>
+          <img v-show="isOwner" class="teamMgr-edit" src="../../common/assets/ic_morecz.png" @click="onShowMenu"/>
+          <!--          <context-menu :show="showMenu" :options="optionsComponent">-->
+          <!--            <context-menu-item label="编辑团队名称" @click="editAction"/>-->
+          <!--            <context-menu-item label="解散团队" @click="dissolve"/>-->
+          <!--          </context-menu>-->
         </div>
         <div>
-          <label class="teamMgr-teamId">ID: {{teamId}}</label>
+          <label class="teamMgr-teamId">ID: {{ teamId }}</label>
         </div>
       </div>
 
@@ -24,46 +25,47 @@
     <div class="teamMgr-collection">
       <div class="teamMgr-content">
         <div class="teamMgr-group-header">
-          <img src="../../common/assets/ic_addmmb.png" @click="addClick" />
+          <img src="../../common/assets/ic_addmmb.png" @click="addClick"/>
         </div>
-        <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]" @select="itemSelected" @roleUpdate="requestMembers"></item>
+        <item v-for="(member, index) in members" :key="index" :index="index" v-model="members[index]"
+              @select="itemSelected" @roleUpdate="requestMembers"></item>
         <div class="teamMgr-group-footer">
-          <div> 共 {{members.length}} 名成员</div>
+          <div> 共 {{ members.length }} 名成员</div>
         </div>
         <div class="teamMgr-group-bottom"></div>
       </div>
     </div>
-    <el-dialog title="邀请成员" :visible.sync="isShowInvite" width="30%" center>
+    <el-dialog title="邀请成员" v-model="isShowInvite" width="30%" center>
       <el-input placeholder="多个邮箱使用空格分开" :rows="10" type="textarea" v-model="invitedEmails">
       </el-input>
-      <span slot="footer" class="dialog-footer">
-              <el-button @click="isShowInvite=false">取 消</el-button>
-              <el-button type="primary" @click="sendInvite">确 定</el-button>
-        </span>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isShowInvite=false">取 消</el-button>
+        <el-button type="primary" @click="sendInvite">确 定</el-button>
+      </div>
     </el-dialog>
-    <el-dialog title="修改团队名称" :visible.sync="editing" width="30%" center>
+    <el-dialog title="修改团队名称" v-model="editing" width="30%" center>
       <el-input placeholder="请输入新的团队名称" type="text" v-focus="editing" :focus="editing" v-model="editName">
       </el-input>
-      <span slot="footer" class="dialog-footer">
-              <el-button @click="editing=false">取 消</el-button>
-              <el-button type="primary" @click="modifyTeamName">确 定</el-button>
-        </span>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editing=false">取 消</el-button>
+        <el-button type="primary" @click="modifyTeamName">确 定</el-button>
+      </div>
     </el-dialog>
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-      <span>{{message}}</span>
+    <el-dialog title="提示" v-model="dialogVisible" width="30%">
+      <span>{{ message }}</span>
       <span slot="footer" v-if="isManager" class="dialog-footer">
           <el-button @click="dialogVisible=false">取 消</el-button>
           <el-button type="primary" @click="deleteMember">确 定</el-button>
         </span>
     </el-dialog>
-    <el-dialog title="提示" :visible.sync="dissolveShow" width="30%">
+    <el-dialog title="提示" v-model="dissolveShow" width="30%">
       <span>确定要解散该团队吗？</span>
       <span slot="footer" class="dialog-footer">
           <el-button @click="dissolveShow=false">取 消</el-button>
           <el-button type="primary" @click="dissolveTeam">确 定</el-button>
         </span>
     </el-dialog>
-    <el-dialog title="创建团队" :visible.sync="createTeamVisible">
+    <el-dialog title="创建团队" v-model="createTeamVisible">
       <el-form :model="form">
         <el-form-item label="团队名称">
           <el-input v-model="form.name" auto-complete="off"></el-input>
@@ -78,12 +80,14 @@
 </template>
 
 <script>
+import ContextMenu from "@imengyu/vue3-context-menu";
 import Item from './teamItem.vue';
 import * as TeamApi from '../../api/moudle/teamApi';
 import * as UserApi from '../../api/moudle/userApi'
 import * as useMgr from '../../mgr/userMgr'
-import contextMenu from 'vue-context-menu'
+
 export default {
+
   data() {
     return {
       teamName: '',
@@ -102,18 +106,25 @@ export default {
       createTeamVisible: false,
       form: {
         name: ''
-      }
+      },
+      showMenu: false,
+      optionsComponent: {
+        zIndex: 3,
+        minWidth: 230,
+        x: 500,
+        y: 200
+      },
     }
   },
   mounted() {
     this.requestMembers()
     this.isOwner = useMgr.getUserTeam().role
-    this.bus.$on('refreshList', () => {
+    this.bus.on('refreshList', () => {
       this.requestMembers()
     })
   },
   destroyed() {
-    this.bus.$off('refreshList')
+    this.bus.off('refreshList')
   },
   computed: {},
   methods: {
@@ -124,16 +135,40 @@ export default {
           type: resp.success ? 'success' : 'error',
           message: resp.message
         })
-        if (resp.success) {
-          this.bus.$emit('createTeam')
+        if ( resp.success ) {
+          this.bus.emit('createTeam')
         }
       })
     },
     createTeam() {
       this.createTeamVisible = true
     },
-    showMenu() {
-      this.$refs.ctxMenu.open()
+    onShowMenu(e) {
+      ContextMenu.showContextMenu({
+        x: e.x,
+        y: e.y,
+        items: [
+          {
+            label: "编辑团队名称",
+            customClass: 'ctx-item',
+            onClick: () => {
+              this.editAction()
+            }
+          },
+          {
+            label: "解散团队",
+            customClass: 'ctx-item menu-item',
+            onClick: () => {
+              this.dissolve()
+            }
+          },
+        ]
+      });
+      // return
+      //
+      // this.showMenu = true
+      // this.optionsComponent.x = e.x;
+      // this.optionsComponent.y = e.y;
     },
     editAction() {
       this.editing = !this.editing
@@ -154,11 +189,11 @@ export default {
           type: resp.success ? 'success' : 'error',
           message: resp.message
         })
-        if (resp.success) {
+        if ( resp.success ) {
           let team = useMgr.getUserTeam()
           team.name = name
           this.teamName = name
-          this.bus.$emit('teamNameUpdate', team)
+          this.bus.emit('teamNameUpdate', team)
         }
       })
       this.editing = false
@@ -170,11 +205,11 @@ export default {
           type: resp.success ? 'success' : 'error',
           message: resp.message
         })
-        if (resp.success) {
+        if ( resp.success ) {
           this.members = []
           this.teamName = ''
           let team = useMgr.getUserTeam()
-          this.bus.$emit('dissolveTeam', team)
+          this.bus.emit('dissolveTeam', team)
         }
       })
       this.dissolveShow = false
@@ -187,12 +222,12 @@ export default {
       let emailList = this.invitedEmails.split(' ')
       let validedEmailList = []
       for (var email of emailList) {
-        if (this.valideEmail(email)) {
+        if ( this.valideEmail(email) ) {
           var changedEmail = email.replace(/[\r\n]/g, '')
           validedEmailList.push(changedEmail)
         }
       }
-      if (validedEmailList.length > 0) {
+      if ( validedEmailList.length > 0 ) {
         this.request(validedEmailList)
       } else {
         this.$message.error('请输入正确的邮箱')
@@ -206,14 +241,14 @@ export default {
       let owner = this.members.filter(member => {
         return member._id === useMgr.getUserId()
       })[0].role
-      if (cuurentId !== userId || owner !== 'owner') {
+      if ( cuurentId !== userId || owner !== 'owner' ) {
         this.stateUpdate()
         this.dialogVisible = true
       }
     },
     deleteMember() {
       this.dialogVisible = false
-      if (this.currentIndex >= 0) {
+      if ( this.currentIndex >= 0 ) {
         let teamId = useMgr.getUserTeam()._id
         let userId = this.members[this.currentIndex]._id
         TeamApi.deleteMembers(teamId, userId).then(resp => {
@@ -221,14 +256,14 @@ export default {
             message: resp.message,
             type: resp.success ? 'success' : 'error'
           })
-          if (resp.success) {
+          if ( resp.success ) {
             this.requestMembers()
           }
         })
       }
     },
     stateUpdate() {
-      if (this.currentIndex >= 0) {
+      if ( this.currentIndex >= 0 ) {
         let owner = this.members.filter(member => {
           return member._id === useMgr.getUserId()
         })[0].role
@@ -255,7 +290,7 @@ export default {
     request(emailList) {
       let teamId = useMgr.getUserTeam()._id
       TeamApi.inviteMembers(teamId, emailList).then(resp => {
-        if (resp.success) {
+        if ( resp.success ) {
           this.$message({
             message: resp.message,
             type: 'success'
@@ -279,12 +314,11 @@ export default {
   },
   components: {
     Item,
-    contextMenu
   },
   directives: {
     focus: {
       update(el, { value }) {
-        if (value) {
+        if ( value ) {
           el.focus()
         }
       }
@@ -295,7 +329,7 @@ export default {
       let itemArr = this.members.filter(member => {
         return member._id === useMgr.getUserId()
       })
-      if (itemArr && itemArr.length > 0) {
+      if ( itemArr && itemArr.length > 0 ) {
         this.isOwner = itemArr[0].role === 'owner'
       }
     },
@@ -308,23 +342,28 @@ export default {
 
 <style lang="scss">
 @use '../../common/scss/base' as *;
+
 .teamMgr {
   margin-top: 24px;
   position: relative;
   user-select: text;
+
   .uploadWrapper {
     width: 144px;
     height: 48px;
     float: right;
     margin-right: 72px;
   }
+
   .uploadWrapper img {
     margin-right: 15px;
   }
+
   .uploadWrapper:hover {
     background-color: $mainColor;
     color: white;
   }
+
   .teamMgr-header {
     font-size: 24px;
     text-align: center;
@@ -342,6 +381,7 @@ export default {
       padding-top: 4px;
       font-size: 14px;
     }
+
     .teamMgr-edit {
       padding-left: 24px;
       padding-right: 24px;
@@ -349,6 +389,7 @@ export default {
       width: 4px;
       margin-top: -4px;
     }
+
     .ctx-menu {
       list-style: none;
       background-color: #fff;
@@ -359,18 +400,12 @@ export default {
       -moz-box-shadow: 0 0 5px #d5dfed;
       -webkit-box-shadow: 0 0 5px #d5dfed;
       box-shadow: 0 0 5px #d5dfed;
+
       .ctx-menu-container {
         -moz-box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
         -webkit-box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
         box-shadow: 0 5px 11px 0 #d5dfed, 0 4px 15px 0 #d5dfed;
       }
-    }
-    .ctx-item {
-      height: 44px;
-      line-height: 44px;
-    }
-    .menu-item {
-      color: #ff001f;
     }
   }
 
@@ -386,10 +421,12 @@ export default {
     height: 100%;
     border-radius: 20px 20px 0px 0px;
   }
+
   .teamMgr-content {
     width: 66%;
     margin: auto;
     background-color: white;
+
     .teamMgr-group-header {
       height: 72px;
       line-height: 100px;
@@ -397,21 +434,24 @@ export default {
       justify-content: flex-end;
       align-items: center;
       margin-left: 24px;
+
       & > img {
         margin-top: -72px;
         margin-right: 24px;
         width: 48px;
         height: 48px;
-        z-index: 400px;
+        z-index: 400;
         border-radius: 24px;
         box-shadow: 0px 2px 12px #cccccc;
       }
     }
+
     .teamMgr-group-footer {
       height: 72px;
       border-bottom: 1px dashed #d5dfed;
       text-align: center;
       display: flex;
+
       div {
         background-color: white;
         color: #d5dfed;
@@ -422,9 +462,26 @@ export default {
         line-height: 20px;
       }
     }
+
     .teamMgr-group-bottom {
       height: 72px;
     }
   }
+
+  .dialog-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 20px;
+    height: 50px;
+  }
+}
+
+.ctx-item {
+  height: 40px;
+}
+
+.menu-item {
+  color: #ff001f;
 }
 </style>

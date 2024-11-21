@@ -82,7 +82,7 @@
             cancel() {
                 this.show = false
                 setTimeout(() => {
-                    this.bus.$emit('hiddenUserInfo')
+                    this.bus.emit('hiddenUserInfo')
                 }, 500)
             },
             clickcontent() {},

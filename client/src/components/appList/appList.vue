@@ -48,6 +48,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
   import { getUserTeam } from '../../mgr/userMgr'
@@ -129,11 +130,11 @@ export default {
         }
       },
       gotoAppDetail(item) {
-        this.$router.push({
+        this.router.push({
           name: 'AppDetail',
           params: {appId: item._id}
         })
-        this.bus.$emit('appdetail')
+        this.bus.emit('appdetail')
       },
       appItemHovered() {
       },
@@ -156,12 +157,13 @@ export default {
       }
     },
     destroyed() {
-      this.bus.$off('refreshList')
+      this.bus.off('refreshList')
     },
     mounted() {
+      this.router = useRouter()
       this.currentTeam = getUserTeam()
-      this.bus.$emit('applist')
-      this.bus.$on('refreshList', () => {
+      this.bus.emit('applist')
+      this.bus.on('refreshList', () => {
         this.currentTeam = getUserTeam()
         this.loadAppList()
       })

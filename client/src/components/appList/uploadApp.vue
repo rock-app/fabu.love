@@ -10,7 +10,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { Message } from 'element-ui'
+  import { ElMessage } from 'element-plus'
   import axios from 'axios'
 
   export default {
@@ -63,7 +63,7 @@
         axios.post(`api/apps/${_this.teamId}/upload`, data, config)
           .then((res) => {
           console.log(res)
-            Message({
+            ElMessage({
               message: res.data.success ? '上传成功' : res.data.message,
               type: res.data.success ? 'success' : 'error'
             })
@@ -75,7 +75,7 @@
               console.log('Request canceled', err.message)
               return
             }
-            Message.error('上传失败')
+            ElMessage.error('上传失败')
           })
       }
     }

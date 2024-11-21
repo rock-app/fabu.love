@@ -6,6 +6,7 @@
 </template>
 
 <script>
+  import { useRouter } from "vue-router";
   import {getUserInfo} from './mgr/userMgr'
 
   export default {
@@ -15,13 +16,14 @@
       }
     },
     created() {
-      console.log(window.location.pathname)
+      this.router = useRouter()
+      console.log('window.location.pathname:', window.location.pathname)
       this.$nextTick(() => {
         let user = getUserInfo()
         if (user) {
         } else {
           if (window.location.pathname === '/login' || window.location.pathname === '/') {
-            this.$router.push('/login')
+            this.router.push('/login')
           }
         }
       })

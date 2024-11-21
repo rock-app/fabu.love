@@ -85,7 +85,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-
+  import { useRouter } from "vue-router";
   import * as LoginApi from '../../api/moudle/loginApi'
   import TokenMgr from '../../mgr/TokenMgr'
   import {saveUserInfo} from '../../mgr/userMgr'
@@ -106,6 +106,7 @@
     created() {
       this.$nextTick(() => {
       })
+      this.router = useRouter()
     },
     components: {},
     methods: {
@@ -168,7 +169,7 @@
             }
             // 保存用户信息
             saveUserInfo(user)
-            this.$router.push('/')
+            this.router.push('/')
           }, reject => {
             this.showLoading = false
           })

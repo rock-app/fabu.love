@@ -53,7 +53,7 @@ demo地址: https://fabu.apppills.com/
 
 项目前后端分离开发:
 
-前端使用 vue + element-ui
+前端使用 vue + element-plus
 
 后端使用 nodejs + koa
 

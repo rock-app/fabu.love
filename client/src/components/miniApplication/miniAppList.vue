@@ -44,6 +44,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
   import * as MiniApi from '../../api/moudle/miniApi'
   import EmptyView from '../appList/emptyView.vue'
   import { getUserTeam } from '../../mgr/userMgr'
@@ -67,9 +68,10 @@
       EmptyView, MiniAppItem
     },
     created() {
+      this.router = useRouter()
     },
     mounted() {
-      this.bus.$emit('miniApplist')
+      this.bus.emit('miniApplist')
       this.currentTeam = getUserTeam()
       this.loadAppList()
     },
@@ -120,11 +122,11 @@
         })
       },
       gotoAppDetail(item) {
-        this.$router.push({
+        this.router.push({
           name: 'MiniAppDetail',
           params: {appId: item._id}
         })
-        this.bus.$emit('miniAppDetail')
+        this.bus.emit('miniAppDetail')
       }
     }
   }

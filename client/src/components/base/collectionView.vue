@@ -45,6 +45,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
+
   export default {
     props: {
       // 每排的间距
@@ -66,6 +68,7 @@
     computed: {
     },
     created() {
+      this.router = useRouter()
     },
     methods: {
       gotoAppDetail(item) {
@@ -81,7 +84,7 @@
         this.$emit('gotoAppDetail', item)
       },
       clickPreviewBtn(item) {
-        const {href} = this.$router.resolve({
+        const {href} = this.router.resolve({
           name: 'AppPreView',
           path: '/',
           params: { 'id': item.shortUrl }

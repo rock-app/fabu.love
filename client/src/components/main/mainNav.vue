@@ -15,33 +15,29 @@
         <div v-show="this.activeIndex !== '应用概述' && this.activeIndex !== '应用详情'">
           <el-menu-item index="应用列表" @click="clickSubItem">
             <i class="icon-ic_applist"></i>
-            <span slot="title">应用列表</span>
+            <template #title>应用列表</template>
           </el-menu-item>
-          <!-- <el-menu-item index="小程序列表" @click="clickSubItem">
-            <i class="icon-ic_applist"></i>
-            <span slot="title">小程序列表</span>
-          </el-menu-item> -->
           <el-menu-item index="团队管理" @click="clickSubItem">
             <i class="icon-ic_mnggp"></i>
-            <span slot="title">团队管理</span>
+            <template #title>团队管理</template>
           </el-menu-item>
         </div>
 
         <div v-show="this.activeIndex === '应用概述'">
           <el-menu-item index="应用概述" @click="clickSubItem">
             <i class="icon-ic_appdes"></i>
-            <span slot="title">应用概述</span>
+            <template #title>应用概述</template>
           </el-menu-item>
           <el-menu-item index="应用设置" @click="clickSubItem">
             <i class="icon-ic_appsetting-copy"></i>
-            <span slot="title">应用设置</span>
+            <template #title>应用设置</template>
           </el-menu-item>
         </div>
         <!--小程序-->
         <div v-show="this.activeIndex === '应用详情'">
           <el-menu-item index="应用详情" @click="clickSubItem">
             <i class="icon-ic_appdes"></i>
-            <span slot="title">应用详情</span>
+            <template #title>应用详情</template>
           </el-menu-item>
         </div>
       </el-menu>
@@ -53,19 +49,19 @@
       >
         <el-menu-item index="API文档" @click="clickSubItem">
           <i class="icon-ic_api_s"></i>
-          <span slot="title">API文档</span>
+          <template #title>API文档</template>
         </el-menu-item>
         <el-menu-item index="Help" @click="clickSubItem">
           <i class="icon-ic_help_s"></i>
-          <span slot="title">Help</span>
+          <template #title>Help</template>
         </el-menu-item>
         <el-menu-item index="GitHub" @click="clickSubItem">
           <i class="icon-ic_github_s"></i>
-          <span slot="title">GitHub</span>
+          <template #title>GitHub</template>
         </el-menu-item>
         <el-menu-item index="About" @click="clickSubItem">
           <i class="icon-ic_about_s"></i>
-          <span slot="title">About</span>
+          <template #title>About</template>
         </el-menu-item>
       </el-menu>
     </div>

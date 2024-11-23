@@ -86,8 +86,6 @@ export default {
             } else {
               this.showEmpty = false
             }
-
-            console.log(this.dataList)
           }, reject => {
             this.$message.error(reject)
             this.showEmpty = true

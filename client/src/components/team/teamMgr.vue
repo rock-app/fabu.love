@@ -38,32 +38,43 @@
     <el-dialog title="邀请成员" v-model="isShowInvite" width="30%" center>
       <el-input placeholder="多个邮箱使用空格分开" :rows="10" type="textarea" v-model="invitedEmails">
       </el-input>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="isShowInvite=false">取 消</el-button>
-        <el-button type="primary" @click="sendInvite">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="isShowInvite=false">取 消</el-button>
+          <el-button type="primary" @click="sendInvite">确 定</el-button>
+        </div>
+      </template>
+
     </el-dialog>
     <el-dialog title="修改团队名称" v-model="editing" width="30%" center>
       <el-input placeholder="请输入新的团队名称" type="text" v-focus="editing" :focus="editing" v-model="editName">
       </el-input>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="editing=false">取 消</el-button>
-        <el-button type="primary" @click="modifyTeamName">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="editing=false">取 消</el-button>
+          <el-button type="primary" @click="modifyTeamName">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
     <el-dialog title="提示" v-model="dialogVisible" width="30%">
       <span>{{ message }}</span>
-      <span slot="footer" v-if="isManager" class="dialog-footer">
-          <el-button @click="dialogVisible=false">取 消</el-button>
-          <el-button type="primary" @click="deleteMember">确 定</el-button>
-        </span>
+      <template #footer>
+        <div>
+          <div v-if="isManager" class="dialog-footer">
+            <el-button @click="dialogVisible=false">取 消</el-button>
+            <el-button type="primary" @click="deleteMember">确 定</el-button>
+          </div>
+        </div>
+      </template>
     </el-dialog>
     <el-dialog title="提示" v-model="dissolveShow" width="30%">
       <span>确定要解散该团队吗？</span>
-      <span slot="footer" class="dialog-footer">
+      <template #footer>
+        <div class="dialog-footer">
           <el-button @click="dissolveShow=false">取 消</el-button>
           <el-button type="primary" @click="dissolveTeam">确 定</el-button>
-        </span>
+        </div>
+      </template>
     </el-dialog>
     <el-dialog title="创建团队" v-model="createTeamVisible">
       <el-form :model="form">
@@ -71,10 +82,12 @@
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="createTeamVisible = false">取 消</el-button>
-        <el-button type="primary" @click="sure">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="createTeamVisible = false">取 消</el-button>
+          <el-button type="primary" @click="sure">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>

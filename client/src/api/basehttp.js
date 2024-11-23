@@ -1,3 +1,4 @@
+import { useRouter } from "vue-router";
 import TokenMgr from '../mgr/TokenMgr'
 import { ElMessage } from 'element-plus'
 import { removeUserInfo } from '@/mgr/userMgr'
@@ -61,7 +62,6 @@ export function postHttp(url, body, params) {
 }
 
 export function configAxios() {
-
     console.log(window.location.origin)
     var baseUrl = process.env.SERVER_HOST || window.location.origin
 
@@ -98,9 +98,10 @@ export function configAxios() {
                 TokenMgr.clearTokens()
                 removeUserInfo()
                     // 登录
-                setTimeout(() => {
-                    vue.router.push('/login')
-                }, 500)
+              setTimeout(() => {
+                const router = useRouter()
+                router.push('/login')
+              }, 500)
                 break
             case 403:
                 error.message = '禁止访问!'

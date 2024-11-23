@@ -13,6 +13,7 @@
     "build": "vite build --mode production"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@imengyu/vue3-context-menu": "^1.4.3",
     "@jambonn/vue-lazyload": "^1.0.10",
     "@vitejs/plugin-vue-jsx": "^4.1.0",

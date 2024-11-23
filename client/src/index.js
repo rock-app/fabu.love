@@ -17,13 +17,16 @@ import VueLazyload from '@jambonn/vue-lazyload'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 import ContextMenu from '@imengyu/vue3-context-menu'
 // import infiniteScroll from 'vue-infinite-scroll'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 解决android5.0 上预览界面不显示的问题
 import '@babel/polyfill';
 
 const app = createApp(App).use(router);
 
-
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 // Vue.config.productionTip = false
 //
 // Vue.prototype.axios = axios

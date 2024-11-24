@@ -75,9 +75,6 @@ importers:
       '@babel/preset-env':
         specifier: ^7.26.0
         version: 7.26.0(@babel/core@7.26.0)
-      '@vitejs/plugin-legacy':
-        specifier: ^5.4.3
-        version: 5.4.3(terser@5.36.0)(vite@5.4.11(sass@1.81.0)(terser@5.36.0))
       '@vitejs/plugin-vue':
         specifier: ^5.2.0
         version: 5.2.0(vite@5.4.11(sass@1.81.0)(terser@5.36.0))(vue@3.5.13)
@@ -96,6 +93,9 @@ importers:
       sass:
         specifier: ^1.81.0
         version: 1.81.0
+      terser:
+        specifier: ^5.36.0
+        version: 5.36.0
       vite:
         specifier: ^5.4.11
         version: 5.4.11(sass@1.81.0)(terser@5.36.0)
@@ -1025,13 +1025,6 @@ packages:
   '@types/web-bluetooth@0.0.16':
     resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
 
-  '@vitejs/plugin-legacy@5.4.3':
-    resolution: {integrity: sha512-wsyXK9mascyplcqvww1gA1xYiy29iRHfyciw+a0t7qRNdzX6PdfSWmOoCi74epr87DujM+5J+rnnSv+4PazqVg==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    peerDependencies:
-      terser: ^5.4.0
-      vite: ^5.0.0
-
   '@vitejs/plugin-vue-jsx@4.1.0':
     resolution: {integrity: sha512-KuRejz7KAFvhXDzOudlaS2IyygAwoAEEMtHAdcRSy/8cA5iKH043Qudcz48zsC0M0vvN5iKwIwNMuWbBYn6/Yg==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -1166,13 +1159,6 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
-  browserslist-to-esbuild@2.1.1:
-    resolution: {integrity: sha512-KN+mty6C3e9AN8Z5dI1xeN15ExcRNeISoC3g7V0Kax/MMF9MSoYA2G7lkTTcVUFntiEjkpI0HNgqJC1NjdyNUw==}
-    engines: {node: '>=18'}
-    hasBin: true
-    peerDependencies:
-      browserslist: '*'
-
   browserslist@4.24.2:
     resolution: {integrity: sha512-ZIc+Q62revdMcqC6aChtW4jz3My3klmCO1fEmINZY/8J3EpBg5/A/D0AKmBveUh6pgoeycoMkVMko84tuYS+Gg==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -1204,9 +1190,6 @@ packages:
   core-js@2.6.12:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
     deprecated: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
-
-  core-js@3.39.0:
-    resolution: {integrity: sha512-raM0ew0/jJUqkJ0E6e8UDtl+y/7ktFivgWvqw8dNSQeNWoSDLvQ1H/RN3aPXB9tBd4/FhyR4RDPGhsNIMsAn7g==}
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
@@ -1390,10 +1373,6 @@ packages:
   memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
 
-  meow@13.2.0:
-    resolution: {integrity: sha512-pxQJQzB6djGPXh08dacEloMFopsOqGVRKFPYvPOt9XDZ1HasbgDZA74CJGreSU4G3Ak7EFJGoiH2auq+yXISgA==}
-    engines: {node: '>=18'}
-
   micromatch@4.0.8:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
     engines: {node: '>=8.6'}
@@ -1532,9 +1511,6 @@ packages:
 
   svg-tags@1.0.0:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
-
-  systemjs@6.15.1:
-    resolution: {integrity: sha512-Nk8c4lXvMB98MtbmjX7JwJRgJOL8fluecYCfCeYBznwmpOs8Bf15hLM6z4z71EDAhQVrQrI+wt1aLWSXZq+hXA==}
 
   terser@5.36.0:
     resolution: {integrity: sha512-IYV9eNMuFAV4THUspIRXkLakHnV6XO7FEdtKjf/mDyrnqUg9LnlOn6/RwRvM9SZjR4GUq8Nk8zj67FzVARr74w==}
@@ -2600,21 +2576,6 @@ snapshots:
 
   '@types/web-bluetooth@0.0.16': {}
 
-  '@vitejs/plugin-legacy@5.4.3(terser@5.36.0)(vite@5.4.11(sass@1.81.0)(terser@5.36.0))':
-    dependencies:
-      '@babel/core': 7.26.0
-      '@babel/preset-env': 7.26.0(@babel/core@7.26.0)
-      browserslist: 4.24.2
-      browserslist-to-esbuild: 2.1.1(browserslist@4.24.2)
-      core-js: 3.39.0
-      magic-string: 0.30.13
-      regenerator-runtime: 0.14.1
-      systemjs: 6.15.1
-      terser: 5.36.0
-      vite: 5.4.11(sass@1.81.0)(terser@5.36.0)
-    transitivePeerDependencies:
-      - supports-color
-
   '@vitejs/plugin-vue-jsx@4.1.0(vite@5.4.11(sass@1.81.0)(terser@5.36.0))(vue@3.5.13)':
     dependencies:
       '@babel/core': 7.26.0
@@ -2814,11 +2775,6 @@ snapshots:
       fill-range: 7.1.1
     optional: true
 
-  browserslist-to-esbuild@2.1.1(browserslist@4.24.2):
-    dependencies:
-      browserslist: 4.24.2
-      meow: 13.2.0
-
   browserslist@4.24.2:
     dependencies:
       caniuse-lite: 1.0.30001683
@@ -2847,8 +2803,6 @@ snapshots:
       browserslist: 4.24.2
 
   core-js@2.6.12: {}
-
-  core-js@3.39.0: {}
 
   csstype@3.1.3: {}
 
@@ -3022,8 +2976,6 @@ snapshots:
 
   memoize-one@6.0.0: {}
 
-  meow@13.2.0: {}
-
   micromatch@4.0.8:
     dependencies:
       braces: 3.0.3
@@ -3171,8 +3123,6 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   svg-tags@1.0.0: {}
-
-  systemjs@6.15.1: {}
 
   terser@5.36.0:
     dependencies:

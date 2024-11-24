@@ -261,7 +261,7 @@ export default {
         window.open(href, '_blank')
       }
       if ( data === 'github' ) {
-        let herf = 'https://github.com/HeadingMobile'
+        let herf = 'https://github.com/rock-app/fabu.love'
         window.open(herf, '_blank')
       }
       if ( data.index === 'About' ) {

@@ -147,7 +147,7 @@ import { useRoute, useRouter } from "vue-router";
           window.open(href, '_blank')
         }
         if (data.index === 'GitHub') {
-          let herf = 'https://github.com/HeadingMobile'
+          let herf = 'https://github.com/rock-app/fabu.love'
           window.open(herf, '_blank')
         }
         if (data.index === 'About') {

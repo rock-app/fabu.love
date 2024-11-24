@@ -12,16 +12,25 @@
           @hide="popoverhide"
           trigger="click"
           :disabled="!this.isAppList || teamArr.length === 0"
-          :visible-arrow="false">
+        >
+          <template #reference>
+            <el-button class="teamBtn" @click="clickTeamBtn">
+              {{ this.currentTeam.name }}
+              <div ref="arrow" style="height: 50px">
+                <el-icon style="height: 50px">
+                  <ArrowDown/>
+                </el-icon>
+              </div>
+            </el-button>
+          </template>
           <ul>
             <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
               <p>
-                {{item.name}}
+                {{ item.name }}
               </p>
             </li>
           </ul>
         </el-popover>
-        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
 
         <el-button class="flagBtn" @click="clickFlagBtn" v-show="!isAppList"></el-button>
       </div>

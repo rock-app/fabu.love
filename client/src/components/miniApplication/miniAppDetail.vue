@@ -54,7 +54,7 @@
 
 <script type="text/ecmascript-6">
 import * as MiniApi from '../../api/moudle/miniApi'
-import { getUserTeam } from '../../mgr/userMgr'
+import { getUserTeam } from '@/mgr/userMgr.js'
 import MiniAppDetailHeader from './miniAppDetailHeader.vue'
 import QrCode from './qrCode.vue'
 

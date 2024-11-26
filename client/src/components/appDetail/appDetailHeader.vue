@@ -2,7 +2,7 @@
     <div>
       <div class="detail-header">
         <div class="detail-header-top">
-          <img class="appicon" v-lazy="getIconUrl()">
+          <img class="appicon" v-if="appInfo.icon" v-lazy="getIconUrl()">
           <p class="appname">{{this.appInfo.appName}}</p>
           <div class="appType-platform-wrapper">
             <div class="appType" v-show="this.appInfo.appLevel" v-html="getAppType()"></div>
@@ -151,13 +151,13 @@
     left: 120px;
     line-height: 24px;
     font-size: 24px;
-    font-family: "PingFang SC";
+    font-family: "PingFang SC",serif;
   }
   .detail-header-top .appType-platform-wrapper {
     position: absolute;
     top: 75px;
     left: 120px;
-    font-size: 0px;
+    font-size: 0;
   }
   .appType-platform-wrapper .appType {
     display: inline-block;
@@ -176,7 +176,7 @@
   }
   .detail-header-top .rightwrapper {
     float: right;
-    margin-right: 0px;
+    margin-right: 0;
     padding: 36px 24px;
     position: relative;
   }

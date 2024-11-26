@@ -43,7 +43,7 @@
             placeholder="请输入用户名"
           >
             <template #prepend>
-              <el-button icon="User"/>
+              <el-button icon="User" tabindex="-1"/>
             </template>
           </el-input>
 
@@ -55,7 +55,7 @@
             type="text"
           >
             <template #prepend>
-              <el-button icon="MessageBox"/>
+              <el-button icon="MessageBox" tabindex="-1"/>
             </template>
           </el-input>
 
@@ -66,7 +66,7 @@
             type="password"
           >
             <template #prepend>
-              <el-button icon="Lock"/>
+              <el-button icon="Lock" tabindex="-1"/>
             </template>
           </el-input>
 
@@ -251,18 +251,18 @@ export default {
         window.open(href, '_blank')
       }
       if ( data === 'help' ) {
-        var domain = this.axios.defaults.baseURL
+        const domain = this.axios.defaults.baseURL
           .replace('https://', '')
           .replace('http://', '')
-          .replace('www.', '')
+          .replace('www.', '');
 
         let href = `http://wiki.${ domain }`
         console.log(href)
         window.open(href, '_blank')
       }
       if ( data === 'github' ) {
-        let herf = 'https://github.com/rock-app/fabu.love'
-        window.open(herf, '_blank')
+        let href = 'https://github.com/rock-app/fabu.love'
+        window.open(href, '_blank')
       }
       if ( data.index === 'About' ) {
       }
@@ -284,7 +284,7 @@ export default {
   display: -webkit-flex;
   background-image: url("../../common/assets/bg-samll.png");
   background-size: 100% 100%;
-  font-family: PingFangSC,serif;
+  font-family: PingFangSC, serif;
   overflow: hidden;
 }
 
@@ -331,7 +331,7 @@ export default {
   font-size: 1.5em;
   color: white;
   margin-top: 24px;
-  font-family: STYuanti-SC,serif;
+  font-family: STYuanti-SC, serif;
 }
 
 .user-item {

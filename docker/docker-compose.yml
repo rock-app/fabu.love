@@ -11,10 +11,10 @@ services:
       - appnet
 
   server:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
-    #image: crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:202411272235
+    #build:
+    #  context: ../
+    #  dockerfile: docker/Dockerfile
+    image: crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:202411272235
     container_name: docker_server
     environment:
       FABU_DB_HOST: mongo

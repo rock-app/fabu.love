@@ -3,24 +3,33 @@ typora-copy-images-to: ./screenshots
 ---
 
 # 如何自己编译镜像
-### 修改 prod_url
-修改 vite.config.js 中的 prod_url, 改成最终部署的域名地址.
 
 ### 编译镜像
 ```shell
-docker build -t answerhuang/fabulove:202411171617 -f docker/Dockerfile .
+
+docker buildx build -t fabulove:202411272235 --platform=linux/amd64 -f docker/Dockerfile .
+
 ```
 
 ### 推送镜像
 ```shell
-docker push answerhuang/fabulove:202411171617
+
+docker push fabulove:202411272235
+
 ```
+
+### 修改 docker-compose.yml
+* image 改为 fabulove:202411272235
+* FABU_BASE_URL 改为自己的域名
 
 ### 运行镜像
 在 docker 目录下, 运行 docker-compose 命令
+
 ```shell
+
 cd docker
 docker-compose up -d --build
+
 ```
 
 # 更新:

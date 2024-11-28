@@ -1,6 +1,7 @@
-let fs = require('fs');
 let path = require('path');
 
+console.log('process.env:', process.env)
+console.log('process.env.FABU_BASE_URL:', process.env.FABU_BASE_URL)
 const common = {
   baseUrl: process.env.FABU_BASE_URL, //baseUrl应用请求的url地址,比如https://fabu.love
   port: process.env.FABU_PORT || '9898', //server运行的端口

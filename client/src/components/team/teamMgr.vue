@@ -4,7 +4,7 @@
       style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;right: 72px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
     <el-button class="uploadWrapper button-style-main" @click="createTeam">
       <img style="width: 12px; height: 12px;" src="../../common/assets/ic_add@2x.png">
-      <label> 新建团队</label>
+      <label>新建团队</label>
     </el-button>
     <div class="teamMgr-header">
       <div>

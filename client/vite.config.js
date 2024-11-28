@@ -2,7 +2,8 @@
 import * as path from 'path';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx'
-// @see https://cn.vitejs.dev/config/
+// import { loadEnv } from 'vite';
+
 export default ({ command, mode }) => {
   let rollupOptions = {};
 
@@ -11,30 +12,26 @@ export default ({ command, mode }) => {
   let alias = {
     '@': path.resolve(__dirname, './src'),
     'Components': path.resolve(__dirname, './src/components'),
-    // 'vue$': 'vue/dist/vue.esm.js',
-    // 'vue': 'vue/dist/vue.esm.js',
   };
 
   let proxy = {};
 
-  // prod_url 换成自己最终部署的地址.
-  const prod_url = 'https://app.distribution.medcloud.cn/';
-  const local_url = 'http://127.0.0.1:9898/';
-  let define = {
-    'process.env': {},
-    'process.env.SERVER_HOST': mode === 'production' ? `"${ prod_url }"` : `"${local_url}"`,
-    'process.env.FABU_BASE_URL': mode === 'production' ? `"${ prod_url }"` : `"${ local_url }"`,
-  };
+  // const env = loadEnv(mode, process.cwd(), '')
+
+  // let define = {
+  //   'process.env': {},
+  //   'process.env.FABU_BASE_URL': `"${ env.VITE_BASE_URL }"`,
+  // };
 
   let esbuild = {};
 
   return {
-    base: mode === 'production' ? prod_url : local_url, // index.html文件所在位置
+    // base: env.VITE_BASE_URL, // index.html文件所在位置
     root: './', // js导入的资源路径，src
     resolve: {
       alias,
     },
-    define: define,
+    // define: define,
     server: {
       // 代理
       proxy,
@@ -74,6 +71,5 @@ export default ({ command, mode }) => {
         }
       }
     },
-
   };
 }

@@ -40,7 +40,7 @@
           <p class="platform">适用于{{this.platformStr}}系统</p>
         </div>
 
-        <div>
+        <div v-if="history.length !== 0">
           <ul>
             <li v-for="(item, index) in history" :key="index" @click="historyClickDownLoadBtn(item)">
               <div>{{item.versionStr}}(build {{item.versionCode}})</div>
@@ -131,7 +131,6 @@
       },
       getAppInfo(shortUrl) {
         AppResourceApi.getAppInfoByShortUrl(shortUrl).then((res) => {
-          console.log(res)
           if (res.data.version === null) {
               this.$message.error('未检测到版本信息')
               return

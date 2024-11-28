@@ -1,10 +1,6 @@
-// The Vue build version to load with the `import` command
 import mitt from "mitt";
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import {createApp} from 'vue';
 import App from './App.vue';
-// import { Button, Dialog, Menu, Input, Switch, Popover, Form, Upload, Progress, Badge, Container, Header, Aside, Main, Footer, Loading, Message, MenuItem, Table, TableColumn, FormItem, Pagination, Radio, MessageBox } from 'element-ui'
-// import 'element-ui/lib/theme-chalk/index.css';
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -16,7 +12,6 @@ import { configAxios } from './api/basehttp'
 import VueLazyload from '@jambonn/vue-lazyload'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 import ContextMenu from '@imengyu/vue3-context-menu'
-// import infiniteScroll from 'vue-infinite-scroll'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 解决android5.0 上预览界面不显示的问题
@@ -27,23 +22,13 @@ const app = createApp(App).use(router);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
-// Vue.config.productionTip = false
-//
-// Vue.prototype.axios = axios
-// Vue.prototype.router = router
-// Vue.prototype.bus = new Vue()
 
 app.config.globalProperties.axios = axios;
 app.config.globalProperties.router = router;
 app.config.globalProperties.bus = mitt();
 
-// app.use(infiniteScroll)
 app.use(ElementPlus)
 app.use(ContextMenu)
-// app.config.globalProperties.$prompt = MessageBox.prompt;
-// app.config.globalProperties.$loading = Loading.service;
-// app.config.globalProperties.$confirm = MessageBox.confirm;
-// app.config.globalProperties.$message = Message;
 
 app.use(VueLazyload, {
   loading: import('./common/assets/logo.png')

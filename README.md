@@ -28,7 +28,7 @@ docker push fabulove:202411272235
 ```shell
 
 cd docker
-docker-compose up -d --build
+docker-compose up -d
 
 ```
 

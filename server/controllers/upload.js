@@ -118,7 +118,6 @@ async function parseAppAndInsertToDB(file, user, team) {
   var fileName = info.bundleId + '_' + info.versionStr + '_' + info.versionCode;
   //解析icon图标
   var icon = await extractor(filePath, fileName, team);
-
   //移动文件到对应目录
   var fileRelatePath = path.join(team.id, info.platform);
   await createFolderIfNeeded(path.join(uploadDir, fileRelatePath));
@@ -126,18 +125,18 @@ async function parseAppAndInsertToDB(file, user, team) {
   await fs.renameSync(filePath, fileRealPath);
 
         //获取文件MD5值
-    var buffer = fs.readFileSync(filePath)
+    var buffer = fs.readFileSync(fileRealPath)
     var fsHash = crypto.createHash('md5')
     fsHash.update(buffer)
     var filemd5 = fsHash.digest('hex')
 
-    //异步保存问题（避免跨磁盘移动问题）
-    var readStream = fs.createReadStream(filePath)
-    var writeStream = fs.createWriteStream(fileRealPath)
-    readStream.pipe(writeStream)
-    readStream.on('end',function(){
-        fs.unlinkSync(filePath)
-    })
+    // //异步保存问题（避免跨磁盘移动问题）
+    // var readStream = fs.createReadStream(filePath)
+    // var writeStream = fs.createWriteStream(fileRealPath)
+    // readStream.pipe(writeStream)
+    // readStream.on('end',function(){
+    //     fs.unlinkSync(filePath)
+    // })
 
     info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath));
 
@@ -251,36 +250,32 @@ async function extractIpaIcon(filename, guid, team) {
     var buffer = fs.readFileSync(filename)
     var data = await unzip.Open.buffer(buffer)
     await new Promise((resolve, reject) => {
-        data.files.forEach(file => {
-            if (file.path.indexOf(iconName + '60x60@2x.png') != -1) {
-                found = true
-                file.stream()
-                    .pipe(fs.createWriteStream(tmpOut))
-                    .on('error', reject)
-                    .on('finish', resolve)
-            }
-        })
-    }).catch({
-
-    })
-
-    if (!found) {
-      found = true;
-      fs.writeFileSync(
-        tmpOut,
-        text2png(ipaInfo.bundleName || ipaInfo.appName, {
-          backgroundColor: 'black',
-          color: 'white',
-          font: '80px Futura',
-          lineSpacing: 10,
-          padding: 200,
-        }),
-        { encoding: 'utf8', flag: 'w' });
-      resolve();
-    }
-  }).catch(() => {
-    return Promise.reject('upload failure');
-  });
+      data.files.forEach(file => {
+        if ( file.path.indexOf(iconName + '60x60@2x.png') !== -1 ) {
+          found = true;
+          file.stream()
+            .pipe(fs.createWriteStream(tmpOut))
+            .on('error', reject)
+            .on('finish', resolve);
+        }
+      });
+      if ( !found ) {
+        found = true
+        fs.writeFileSync(
+          tmpOut,
+          text2png(ipaInfo.bundleName || ipaInfo.appName, {
+            backgroundColor: 'black',
+            color: 'white',
+            font: '80px Futura',
+            lineSpacing: 10,
+            padding: 200,
+          }),
+          { encoding: 'utf8', flag: 'w' });
+        resolve()
+      }
+    }).catch(() => {
+      return Promise.reject('upload failure');
+    });
 
   if (!found) {
     throw (new Error('can not find icon'));

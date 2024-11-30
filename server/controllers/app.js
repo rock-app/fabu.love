@@ -518,12 +518,15 @@ module.exports = class AppRouter {
 
         var result = fs.readFileSync(fpath.join(__dirname, "..", 'templates') + '/template.plist')
         var template = result.toString();
+        var appName = app.appName
+        if (typeof(appName) == 'undefined' || appName == null || appName == '') {
+            appName = app.bundleName
+        }
         var rendered = mustache.render(template, {
-            appName: app.appName,
+            appName: appName,
             bundleID: app.bundleId,
             versionStr: version.versionStr,
             downloadUrl: url,
-            fileSize: version.size,
             iconUrl: `${config.baseUrl}/${app.icon}`
         });
         ctx.set('Content-Type', 'text/xml; charset=utf-8');

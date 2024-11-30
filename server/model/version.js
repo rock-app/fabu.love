@@ -25,6 +25,7 @@ var versionSchema = new Schema({
     showOnDownloadPage: { type: Boolean, default: false },
     appLevel: String,
     changelog: String,
+    md5: String,
     hidden: { type: Boolean, default: false },
     updateMode: { type: String, default: 'normal', enum: ['silent', 'normal', 'force'] },
 });

@@ -17,6 +17,7 @@ const Version = require('../model/version');
 const App = require('../model/app_model');
 const multer = require('koa-multer');
 const fs = require('fs');
+const crypto = require('crypto')
 const path = require('path');
 const os = require('os');
 const mime = require('mime');
@@ -123,51 +124,68 @@ async function parseAppAndInsertToDB(file, user, team) {
   await createFolderIfNeeded(path.join(uploadDir, fileRelatePath));
   var fileRealPath = path.join(uploadDir, fileRelatePath, fileName + path.extname(filePath));
   await fs.renameSync(filePath, fileRealPath);
-  info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath));
 
-  var app = await App.findOne({ 'platform': info['platform'], 'bundleId': info['bundleId'], 'ownerId': team._id });
-  if (!app) {
-    info.creator = user.username;
-    info.creatorId = user._id;
-    info.icon = path.join(uploadPrefix, icon.fileName);
-    info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
-    app = new App(info);
-    app.ownerId = team._id;
-    app.currentVersion = info.versionCode;
-    await app.save();
-    info.uploader = user.username;
-    info.uploaderId = user._id;
-    info.size = fs.statSync(fileRealPath).size;
-    var version = Version(info);
-    version.appId = app._id;
-    if (app.platform == 'ios') {
-      version.installUrl = mapInstallUrl(app.id, version.id);
-    } else {
-      version.installUrl = info.downloadUrl;
+        //获取文件MD5值
+    var buffer = fs.readFileSync(filePath)
+    var fsHash = crypto.createHash('md5')
+    fsHash.update(buffer)
+    var filemd5 = fsHash.digest('hex')
+
+    //异步保存问题（避免跨磁盘移动问题）
+    var readStream = fs.createReadStream(filePath)
+    var writeStream = fs.createWriteStream(fileRealPath)
+    readStream.pipe(writeStream)
+    readStream.on('end',function(){
+        fs.unlinkSync(filePath)
+    })
+
+    info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath));
+
+    var app = await App.findOne({ 'platform': info['platform'], 'bundleId': info['bundleId'], 'ownerId': team._id })
+    if (!app) {
+        info.creator = user.username;
+        info.creatorId = user._id;
+        info.icon = path.join(uploadPrefix, icon.fileName);
+        info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
+        app = new App(info)
+        app.ownerId = team._id;
+        app.currentVersion = info.versionCode
+        await app.save()
+        info.uploader = user.username;
+        info.uploaderId = user._id;
+        info.size = fs.statSync(fileRealPath).size
+        var version = Version(info)
+        version.md5 = filemd5
+        version.appId = app._id;
+        if (app.platform == 'ios') {
+            version.installUrl = mapInstallUrl(app.id, version.id)
+        } else {
+            version.installUrl = info.downloadUrl
+        }
+        await version.save()
+        return { 'app': app, 'version': version }
     }
-    await version.save();
-    return { 'app': app, 'version': version };
-  }
-  var version = await Version.findOne({ appId: app.id, versionCode: info.versionCode });
-  if (!version) {
-    info.uploader = user.username;
-    info.uploaderId = user._id;
-    info.size = fs.statSync(fileRealPath).size;
-    var version = Version(info);
-    version.appId = app._id;
-    if (app.platform == 'ios') {
-      version.installUrl = mapInstallUrl(app.id, version.id);
+    var version = await Version.findOne({ appId: app.id, versionCode: info.versionCode })
+    if (!version) {
+        info.uploader = user.username;
+        info.uploaderId = user._id;
+        info.size = fs.statSync(fileRealPath).size
+        var version = Version(info)
+        version.appId = app._id;
+        version.md5 = filemd5
+        if (app.platform == 'ios') {
+            version.installUrl = mapInstallUrl(app.id, version.id)
+        } else {
+            version.installUrl = `${config.baseUrl}/${info.downloadUrl}`
+        }
+        await version.save()
+        return { 'app': app, 'version': version }
     } else {
-      version.installUrl = `${config.baseUrl}/${info.downloadUrl}`;
+        let err = Error()
+        err.code = 408
+        err.message = '当前版本已存在'
+        throw err
     }
-    await version.save();
-    return { 'app': app, 'version': version };
-  } else {
-    let err = Error();
-    err.code = 408;
-    err.message = '当前版本已存在';
-    throw err;
-  }
 }
 
 ///映射可安装的app下载地址
@@ -195,51 +213,57 @@ function parseIpa(filename) {
       // console.log('app info ----> ', result);
       // console.log('icon base64 ----> ', result.icon);
 
-      var info = {};
-      info.platform = 'ios';
-      info.bundleId = result.CFBundleIdentifier;
-      info.bundleName = result.CFBundleName;
-      info.appName = result.CFBundleDisplayName;
-      info.versionStr = result.CFBundleShortVersionString;
-      info.versionCode = result.CFBundleVersion;
-      info.iconName = result.CFBundleIcons ? result.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName : '';
-      try {
-        const environment = result.mobileProvision.Entitlements['aps-environment'];
-        const active = result.mobileProvision.Entitlements['beta-reports-active'];
-        if (environment === 'production') {
-          info.appLevel = active ? 'appstore' : 'enterprise';
-        } else {
-          info.appLevel = 'develop';
-        }
-      } catch (err) {
-        info.appLevel = 'develop';
-        // reject("应用未签名,暂不支持")
-      }
-      resolve(info);
-    });
+            var info = {}
+            info.platform = 'ios'
+            info.bundleId = result.CFBundleIdentifier
+            info.bundleName = result.CFBundleName
+            info.appName = result.CFBundleDisplayName
+            if (typeof(info.appName) == 'undefined' || info.appName == null || info.appName == '') {
+                info.appName = info.bundleName
+            }
+            info.versionStr = result.CFBundleShortVersionString
+            info.versionCode = result.CFBundleVersion
+            info.iconName = result.CFBundleIcons ? result.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconName : '';
+            try {
+                const environment = result.mobileProvision.Entitlements['aps-environment']
+                const active = result.mobileProvision.Entitlements['beta-reports-active']
+                if (environment == 'production') {
+                    info.appLevel = active ? 'appstore' : 'enterprise'
+                } else {
+                    info.appLevel = 'develop'
+                }
+            } catch (err) {
+                info.appLevel = 'develop'
+                // reject("应用未签名,暂不支持")
+            }
+            resolve(info)
+        })
 
-  });
+    })
 }
 
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
-  let ipaInfo = await parseIpa(filename);
-  // console.log('ipaInfo:', ipaInfo);
-  let iconName = ipaInfo.iconName || 'AppIcon';
-  let tmpOut = tempDir + '/{0}.png'.format(guid);
-  let found = false;
-  let buffer = fs.readFileSync(filename);
-  let data = await unzip.Open.buffer(buffer);
-  await new Promise((resolve, reject) => {
-    data.files.forEach(file => {
-      if (file.path.indexOf(iconName + '60x60@2x.png') !== -1) {
-        found = true;
-        file.stream()
-        .pipe(fs.createWriteStream(tmpOut))
-        .on('error', reject)
-        .on('finish', resolve);
-      }
-    });
+    var ipaInfo = await parseIpa(filename)
+    var iconName = ipaInfo.iconName || 'AppIcon';
+    var tmpOut = tempDir + '/{0}.png'.format(guid)
+    var found = false
+    var buffer = fs.readFileSync(filename)
+    var data = await unzip.Open.buffer(buffer)
+    await new Promise((resolve, reject) => {
+        data.files.forEach(file => {
+            if (file.path.indexOf(iconName + '60x60@2x.png') != -1) {
+                found = true
+                file.stream()
+                    .pipe(fs.createWriteStream(tmpOut))
+                    .on('error', reject)
+                    .on('finish', resolve)
+            }
+        })
+    }).catch({
+
+    })
+
     if (!found) {
       found = true;
       fs.writeFileSync(

@@ -71,7 +71,7 @@ export function configAxios() {
 
   axios.defaults.baseURL = baseUrl
   axios.defaults.headers.common['Content-Type'] = 'application/json'
-  axios.default.timeout = 60000
+  axios.defaults.timeout = 60000
 
   axios.interceptors.request.use(
     config => {

@@ -17,7 +17,6 @@
     },
     created() {
       this.router = useRouter()
-      console.log('window.location.pathname:', window.location.pathname)
       this.$nextTick(() => {
         let user = getUserInfo()
         if (user) {

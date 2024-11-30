@@ -1,8 +1,8 @@
 services:
-
   mongo:
+    platform: "linux/amd64"
     container_name: mongo
-    image: mongo
+    image: mongo:4.4.7
     volumes:
       - ./data:/data/db
     ports:
@@ -11,10 +11,10 @@ services:
       - appnet
 
   server:
-    #build:
-    #  context: ../
-    #  dockerfile: docker/Dockerfile
-    image: crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:202411290049
+#    build:
+#      context: ../
+#      dockerfile: docker/Dockerfile
+    image: crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:202411300000
     container_name: docker_server
     environment:
       FABU_DB_HOST: mongo

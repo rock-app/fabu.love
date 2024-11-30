@@ -14,7 +14,17 @@ export default ({ command, mode }) => {
     'Components': path.resolve(__dirname, './src/components'),
   };
 
-  let proxy = {};
+  let proxy = {
+    '/api': {
+      target: 'http://localhost:9898',
+      changeOrigin: true,
+      // rewrite: (path) => path.replace(/^\/api/, ''),
+    },
+    '/upload': {
+      target: 'http://localhost:9898',
+      changeOrigin: true,
+    }
+  };
 
   // const env = loadEnv(mode, process.cwd(), '')
 

@@ -62,7 +62,6 @@
     methods: {
       getAppDetailData() {
         AppResourceApi.getAppDetail(this.userteam._id, this.$route.params.appId).then((res) => {
-          console.log(res);
           this.appInfo = res.data;
           this.subTitleArr = [];
           this.subTitleArr.push(this.appInfo.bundleId);

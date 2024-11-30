@@ -2,8 +2,17 @@
 typora-copy-images-to: ./screenshots
 ---
 
-# 如何自己编译镜像
+# 本地调试镜像
+### 本地调试镜像
+```shell
 
+COMPOSE_DOCKER_CLI_BUILD=1 \
+DOCKER_BUILDKIT=1 \
+DOCKER_DEFAULT_PLATFORM=linux/amd64 \
+docker-compose up -d --build
+```
+
+# 如何自己编译镜像
 ### 编译镜像
 ```shell
 

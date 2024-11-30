@@ -55,14 +55,14 @@
               _this.progress = percentCompleted
             })
           },
-          cancelToken: _this.source.token
+          cancelToken: _this.source.token,
+          headers: {
+            'Content-Type': 'multipart/form-data'  //multipart/form-data
+          }
         }
-
-        axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
 
         axios.post(`api/apps/${_this.teamId}/upload`, data, config)
           .then((res) => {
-          console.log(res)
             ElMessage({
               message: res.data.success ? '上传成功' : res.data.message,
               type: res.data.success ? 'success' : 'error'

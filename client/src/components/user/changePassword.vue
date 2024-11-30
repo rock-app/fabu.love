@@ -21,6 +21,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
   import * as UserApi from '../../api/moudle/userApi'
   import {removeUserInfo} from '../../mgr/userMgr'
   import TokenMgr from '../../mgr/TokenMgr'
@@ -35,6 +36,7 @@
       }
     },
     created() {
+      this.router = useRouter()
     },
     methods: {
       clickChangeBtn() {
@@ -68,7 +70,7 @@
           this.$message.success('密码修改成功，请重新登录')
           TokenMgr.clearTokens()
           removeUserInfo()
-          this.$router.push('/login')
+          this.router.push('/login')
         }, reject => {
 
         })
@@ -81,7 +83,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .changePasswordWrapper {
     padding-left: 48px;

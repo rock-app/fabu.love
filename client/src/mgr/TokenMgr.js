@@ -1,7 +1,5 @@
 import StorageMgr from './StorageMgr'
-import Vue from 'vue'
-
-let vue = new Vue()
+import axios from 'axios'
 
 /// 根据域名管理token
 class TokenMgr {
@@ -53,7 +51,7 @@ class TokenMgr {
     // let link = document.createElement('a')
     // link.href = url
     // return link.host
-    return vue.axios.defaults.baseURL
+    return axios.defaults.baseURL
   }
 
 }

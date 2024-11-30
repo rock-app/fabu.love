@@ -1,29 +1,29 @@
-FROM node:10.15.3
+FROM node:20
+
+RUN apt-get update && apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 # 安装依赖库
-RUN npm install -g babel-cli \
-    && npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN npm install -g babel-cli
+# RUN npm install -g npm --registry=https://registry.npmmirror.com
 # 设置目录
-RUN mkdir -p /opt/data /opt/server /opt/web /opt/logs /var/cache/nginx/client_temp
+RUN mkdir -p /opt/data /opt/server /opt/web /opt/logs /opt/docker
 
+# copy docker entrypoint file
+WORKDIR /opt/docker
+ADD docker/docker-entrypoint.sh /opt/docker
 
 # 增加前端页面显示
 WORKDIR /opt/client
 ADD client /opt/client
-RUN cnpm install
+RUN npm install
 RUN npm run build
+RUN #npm run build:development
 
 # 增加server
 WORKDIR /opt/server
 ADD server /opt/server
-# RUN cnpm install && cnpm install bcrypt@latest --save
-RUN cnpm install
-
-# 增加前端页面到server
-# ADD client/dist /opt/web
-# ADD docker/nginx/fabulove.conf /etc/nginx/conf.d/fabulove.conf
+RUN npm install
 
 EXPOSE 9898
 
-# ENTRYPOINT ["/opt/server/docker-entrypoint.sh"]
-CMD ["npm", "start"]
+ENTRYPOINT ["/opt/docker/docker-entrypoint.sh"]

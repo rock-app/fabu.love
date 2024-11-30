@@ -152,7 +152,7 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在或您没有权限查询该应用")
         }
-        var versions = await Version.find({ appId: id })
+        var versions = await Version.find({ appId: id }).sort({uploadAt:-1})
             .limit(size).skip(page * size)
         ctx.body = responseWrapper(versions)
     }
@@ -198,6 +198,7 @@ module.exports = class AppRouter {
         var user = ctx.state.user.data
         var { teamId, id, versionId } = ctx.validatedParams;
         var app = await appInTeamAndUserIsManager(id, teamId, user._id)
+        var findOne = await Version.findById(versionId)
         var result = await Version.deleteOne({ _id: versionId })
         if (versionId == app.releaseVersionId) {
             await App.updateOne({ _id: app._id }, {
@@ -210,6 +211,12 @@ module.exports = class AppRouter {
                 grayReleaseVersionId: null,
                 grayStrategy: null
             })
+        }
+        try {
+            // 删除对应版本的文件
+            fs.unlinkSync(fpath.join(config.fileDir, findOne.downloadUrl))
+        } catch(err) {
+            console.error(err)
         }
         ctx.body = responseWrapper(true, "版本已删除")
     }
@@ -351,9 +358,11 @@ module.exports = class AppRouter {
             }
             // var lastVersionCode = app.currentVersion
 
+            // 当前版本
+            var currentVersion = await Version.findOne({versionCode: currentVersionCode, appId: app._id})
+
             // if ( < lastVersionCode) {
             //1.拿出最新的version 最新的非灰度版本
-
             // 最新的灰度版本
             var lastestGrayVersion = await Version.findOne({ _id: app.grayReleaseVersionId })
 
@@ -388,7 +397,8 @@ module.exports = class AppRouter {
             } else {
                 ctx.body = responseWrapper({
                     app: app,
-                    version: version
+                    version: version,
+                    currentVersion // 应用当前的版本信息
                 })
             }
 
@@ -445,7 +455,13 @@ module.exports = class AppRouter {
             })
         }
 
-        ctx.body = responseWrapper({ 'app': app, 'version': version })
+        // 查出历史版本,前50条
+        let history = []
+        if (app.showHistory === true) {
+            history = await Version.find({appId: version.appId}).sort({uploadAt: -1}).limit(50)
+        }
+
+        ctx.body = responseWrapper({'app': app, 'version': version, history })
     }
 
     @request('post', '/api/app/{appId}/{versionId}')

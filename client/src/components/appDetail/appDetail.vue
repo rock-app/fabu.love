@@ -44,33 +44,32 @@
     },
     computed: {},
     destroyed() {
-      this.bus.$off('appSummary')
-      this.bus.$off('appSetting')
+      this.bus.off('appSummary')
+      this.bus.off('appSetting')
     },
     created() {
       this.$nextTick(() => {
         this.userteam = getUserTeam()
         this.getAppDetailData()
       })
-      this.bus.$on('appSummary', () => {
+      this.bus.on('appSummary', () => {
         this.showAppSetting = false
       })
-      this.bus.$on('appSetting', () => {
+      this.bus.on('appSetting', () => {
         this.showAppSetting = true
       })
     },
     methods: {
       getAppDetailData() {
         AppResourceApi.getAppDetail(this.userteam._id, this.$route.params.appId).then((res) => {
-          console.log(res)
-          this.appInfo = res.data
-          this.subTitleArr = []
-          this.subTitleArr.push(this.appInfo.bundleId)
-          this.subTitleArr.push(this.axios.defaults.baseURL + this.appInfo.shortUrl)
-          this.subTitleArr.push(this.appInfo._id)
-          this.bus.$emit('appdetail', res.data.appName)
+          this.appInfo = res.data;
+          this.subTitleArr = [];
+          this.subTitleArr.push(this.appInfo.bundleId);
+          this.subTitleArr.push(this.axios.defaults.baseURL + this.appInfo.shortUrl);
+          this.subTitleArr.push(this.appInfo._id);
+          this.bus.emit('appdetail', res.data.appName);
         }, reject => {
-          this.$message.error(reject)
+          this.$message.error(reject);
         })
       },
       updateAppInfoSuccess() {
@@ -81,7 +80,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
 
 </style>

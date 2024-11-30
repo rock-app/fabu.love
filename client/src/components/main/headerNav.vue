@@ -12,16 +12,25 @@
           @hide="popoverhide"
           trigger="click"
           :disabled="!this.isAppList || teamArr.length === 0"
-          :visible-arrow="false">
+        >
+          <template #reference>
+            <el-button class="teamBtn" @click="clickTeamBtn">
+              {{ this.currentTeam.name }}
+              <div ref="arrow" style="height: 50px">
+                <el-icon style="height: 50px">
+                  <ArrowDown/>
+                </el-icon>
+              </div>
+            </el-button>
+          </template>
           <ul>
             <li class="leftWrapper-item" v-for="(item, index) in this.teamArr" :key="index" @click="changeTeam(item)">
               <p>
-                {{item.name}}
+                {{ item.name }}
               </p>
             </li>
           </ul>
         </el-popover>
-        <el-button class="teamBtn" v-popover:popover @click="clickTeamBtn">{{this.currentTeam.name}}  <i class="el-icon-arrow-down" ref="arrow"></i></el-button>
 
         <el-button class="flagBtn" @click="clickFlagBtn" v-show="!isAppList"></el-button>
       </div>
@@ -35,7 +44,7 @@
         <i class="icon-ic_notice" @click="clickMessage"></i>
       </el-badge>
       <div class="userwrapper" @click="clickUserIcon" @mouseover="userInfoHovered" @mouseout="userInfoUnhovered">
-        <img src="../../assets/ic_touxiang.png" alt="" class="userIcon">
+        <img src="../../common/assets/ic_touxiang.png" alt="" class="userIcon">
         <p class="nowrap">{{this.userInfo.userName}}</p>
       </div>
 
@@ -52,6 +61,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { useRoute, useRouter } from "vue-router";
   import { getUserInfo, removeUserInfo, getUserTeam, saveUserTeam, updateTeamArr } from '../../mgr/userMgr'
   import TokenMgr from '../../mgr/TokenMgr'
   import * as UserApi from '../../api/moudle/userApi'
@@ -73,38 +83,38 @@
       }
     },
     mounted() {
-      this.bus.$on('applist', () => {
+      this.bus.on('applist', () => {
         this.isAppList = true
         this.$refs.arrow.style.transform = `rotate(0deg)`
       })
-      this.bus.$on('miniApplist', () => {
+      this.bus.on('miniApplist', () => {
         this.isAppList = true
         this.$refs.arrow.style.transform = `rotate(0deg)`
       })
 
-      this.bus.$on('appdetail', (appName) => {
+      this.bus.on('appdetail', (appName) => {
         this.isAppList = false
         this.appName = appName
         this.$refs.arrow.style.transform = `rotate(-90deg)`
       })
-      this.bus.$on('miniAppDetail', (appName) => {
+      this.bus.on('miniAppDetail', (appName) => {
         this.isAppList = false
         this.appName = appName
         this.$refs.arrow.style.transform = `rotate(-90deg)`
       })
-      this.bus.$on('allreadMessage', () => {
+      this.bus.on('allreadMessage', () => {
         this.redDocHidden = true
       })
       // 解散团队
-      this.bus.$on('dissolveTeam', (team) => {
+      this.bus.on('dissolveTeam', (team) => {
         this.updataTeam(true)
       })
       // 创建团队
-      this.bus.$on('createTeam', () => {
+      this.bus.on('createTeam', () => {
         this.updataTeam()
       })
       // 修改团队名称
-      this.bus.$on('teamNameUpdate', (item) => {
+      this.bus.on('teamNameUpdate', (item) => {
         // 更新当前团队
         saveUserTeam(item)
         // 更新团队名称
@@ -118,15 +128,17 @@
     },
     created() {
       this.updataTeam()
+      this.router = useRouter()
+      this.route = useRoute()
     },
     destroyed() {
-      this.bus.$off('applist')
-      this.bus.$off('appdetail')
-      this.bus.$off('allreadMessage')
-      this.bus.$off('createTeam')
-      this.bus.$off('dissolveTeam')
-      this.bus.$off('miniAppDetail')
-      this.bus.$off('miniApplist')
+      this.bus.off('applist')
+      this.bus.off('appdetail')
+      this.bus.off('allreadMessage')
+      this.bus.off('createTeam')
+      this.bus.off('dissolveTeam')
+      this.bus.off('miniAppDetail')
+      this.bus.off('miniApplist')
     },
     methods: {
       // dissolve是否是解散团队
@@ -142,7 +154,7 @@
           updateTeamArr(this.teamArr)
           if (dissolve) {
             saveUserTeam(this.teamArr[0])
-            this.bus.$emit('refreshList')
+            this.bus.emit('refreshList')
           } else {
           }
           this.userInfo = getUserInfo()
@@ -162,15 +174,15 @@
       },
       clickUserInfoWrapper() {
         this.userHover = false
-        this.bus.$emit('showUserInfo')
+        this.bus.emit('showUserInfo')
       },
       loginout() {
         TokenMgr.clearTokens()
         removeUserInfo()
-        this.$router.replace('/login')
+        this.router.replace('/login')
       },
       clickMessage() {
-        this.bus.$emit('showUserMessage')
+        this.bus.emit('showUserMessage')
       },
       loadMessage() {
         UserApi.getMessageCount().then((res) => {
@@ -191,7 +203,7 @@
         // 更新team
         this.currentTeam = getUserTeam()
         // 刷新app列表
-        this.bus.$emit('refreshList')
+        this.bus.emit('refreshList')
       },
       clickTeamBtn() {
         if (this.isAppList) {
@@ -201,11 +213,11 @@
       // 点击我的团队，返回
       clickFlagBtn() {
         console.log(this.$route.fullPath)
-        if (this.$route.fullPath.indexOf('/app/') !== -1) {
-          this.$router.push('/apps')
+        if (this.route.fullPath.indexOf('/app/') !== -1) {
+          this.router.push('/apps')
         }
-        if (this.$route.fullPath.indexOf('/miniApp/') !== -1) {
-          this.$router.push('/miniAppList')
+        if (this.route.fullPath.indexOf('/miniApp/') !== -1) {
+          this.router.push('/miniAppList')
         }
       },
       popovershow() {
@@ -219,7 +231,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .headernav-wrapper {
   }

@@ -2,7 +2,67 @@
 typora-copy-images-to: ./screenshots
 ---
 
+# 本地调试镜像
+### 本地调试镜像
+```shell
+
+COMPOSE_DOCKER_CLI_BUILD=1 \
+DOCKER_BUILDKIT=1 \
+DOCKER_DEFAULT_PLATFORM=linux/amd64 \
+docker-compose up -d --build
+```
+
+# 如何自己编译镜像
+### 编译镜像
+```shell
+
+docker buildx build -t fabulove:202411272235 --platform=linux/amd64 -f docker/Dockerfile .
+
+```
+
+### 推送镜像
+```shell
+
+docker push fabulove:202411272235
+
+```
+
+### 修改 docker-compose.yml
+* image 改为 fabulove:202411272235
+* FABU_BASE_URL 改为自己的域名
+
+### 运行镜像
+在 docker 目录下, 运行 docker-compose 命令
+
+```shell
+
+cd docker
+docker-compose up -d
+
+```
+
+# 更新:
+
+### V2.1 2024年 11月 17
+fix: 修复 iOS 新版本 ipa 包获取不到 icon 导致上传失败问题
+
+### V2.0 2021年08月22日
+feature: 打包方式升级为 vite.
+
+feature: node 版本升级至 12.18.1
+
+feature: APP 详情页面最多显示 500条记录.
+
+feature: 删除APP指定版本时, 同时删除对应安装文件.
+
+feature: 新增下载页面显示最多50条历史记录, 并支持点击安装.
+
+fix: 更新 aapt-osx 版本, 支持在 macOS 系统本地调试.
+
+fix: 优化部分逻辑.
+
 ### 爱发布
+
 
 demo地址: https://fabu.apppills.com/
 该平台是类似于fir.im/蒲公英类似的一个平台.可以自己部署.
@@ -11,7 +71,7 @@ demo地址: https://fabu.apppills.com/
 
 项目前后端分离开发:
 
-前端使用 vue + element-ui
+前端使用 vue + element-plus
 
 后端使用 nodejs + koa
 
@@ -36,7 +96,7 @@ demo地址: https://fabu.apppills.com/
 #### 使用docker运行（建议）
 
 > ps：请先安装docker
-1. 下载源码  `git clone https://github.com/HeadingMobile/fabu.love.git`
+1. 下载源码  `git clone https://github.com/rock-app/fabu.love`
 2. 执行`cd docker`
 3. 执行`docker-compose up -d --build`
 4. 打开浏览器 http://0.0.0.0:9898
@@ -60,7 +120,7 @@ npm install -g pm2 babel-cli
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
 
-1.clone 下载代码 `git clone https://github.com/HeadingMobile/LoveFabu.git`
+1.clone 下载代码 `git clone https://github.com/rock-app/fabu.love`
 
 2.运行server端
 
@@ -84,7 +144,7 @@ App is listening on 9898.
 cd client
 cnpm install
 npm run build #正式环境可以用该命令编译静态文件交给nginx
-npm run dev  #本地运行可以使用该命令
+npm run start  #本地运行可以使用该命令
 
 ============>>out
 ...

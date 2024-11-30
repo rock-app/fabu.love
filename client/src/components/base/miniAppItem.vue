@@ -3,7 +3,7 @@
     <ul class="collectionView-wrapper-ul">
       <li v-for="(item, index) in this.dataArr" :key="index" class="itemWrapper">
 
-        <img class="appItem-icon" src="../../assets/miniicon.png" @click="gotoAppDetail(item)">
+        <img class="appItem-icon" src="../../common/assets/miniicon.png" @click="gotoAppDetail(item)">
 
         <div class="appItem-info">
           <div class="appItem-info-namewrapper">
@@ -30,6 +30,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
+
   export default {
     props: {
       // 每排的间距
@@ -51,6 +53,7 @@
     computed: {
     },
     created() {
+      this.router = useRouter()
     },
     methods: {
       gotoAppDetail(item) {
@@ -66,7 +69,7 @@
         this.$emit('gotoAppDetail', item)
       },
       clickPreviewBtn(item) {
-        const {href} = this.$router.resolve({
+        const {href} = this.router.resolve({
           name: 'AppPreView',
           path: '/',
           params: { 'id': item.shortUrl }
@@ -78,7 +81,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
   .collectionView-wrapper {
     width: 100%;
   }
@@ -121,10 +124,10 @@
     background-size: 52px 38px;
   }
   .collectionView-wrapper .itemWrapper .appItem-platform-ios {
-    background-image: url("../../assets/tag_ios.png");
+    background-image: url("../../common/assets/tag_ios.png");
   }
   .collectionView-wrapper .itemWrapper .appItem-platform-android {
-    background-image: url("../../assets/tag_android.png");
+    background-image: url("../../common/assets/tag_android.png");
   }
   .itemWrapper .appItem-icon {
     width: 72px;

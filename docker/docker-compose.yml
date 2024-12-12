@@ -16,6 +16,7 @@ services:
 #      dockerfile: docker/Dockerfile
     image: crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:202411300000
     container_name: docker_server
+    restart: always
     environment:
       FABU_DB_HOST: mongo
 #      FABU_BASE_URL: https://server.docker.orb.local/ #正式环境部署请打开注释，并修改为域名为自己的域名

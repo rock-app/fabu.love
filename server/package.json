@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@koa/cors": "^5.0.0",
+    "adbkit-apkreader": "^3.2.0",
     "app-info-parser": "^1.1.6",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
@@ -42,7 +43,7 @@
     "mustache": "^4.2.0",
     "nodemailer": "^6.6.2",
     "text2png": "^2.3.0",
-    "unzipper": "^0.10.11",
+    "unzipper": "^0.12.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

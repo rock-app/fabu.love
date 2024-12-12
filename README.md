@@ -41,6 +41,91 @@ docker-compose up -d
 
 ```
 
+# 运行
+docker-compose (使用构建好的镜像)
+```yaml
+
+services:
+  mongo:
+    platform: "linux/amd64"
+    container_name: mongo
+    image: mongo:4.4.7
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - appnet
+
+  server:
+    image: answerhuang/fabulove:2.0.0
+    container_name: docker_server
+    environment:
+      FABU_DB_HOST: mongo
+      FABU_BASE_URL: https://server.docker.orb.local/ #正式环境部署请打开注释，并修改为域名为自己的域名
+      FABU_UPLOAD_DIR: /fabu/upload
+    ports:
+      - "9898:9898"
+    volumes:
+      - ./upload:/fabu/upload
+    depends_on:
+      - mongo
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver:
+      bridge
+
+
+
+
+```
+
+docker-compose (自己编译镜像)
+```yaml
+
+services:
+  mongo:
+    platform: "linux/amd64"
+    container_name: mongo
+    image: mongo:4.4.7
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - appnet
+
+  server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: docker_server
+    environment:
+      FABU_DB_HOST: mongo
+      FABU_BASE_URL: https://server.docker.orb.local/ #正式环境部署请打开注释，并修改为域名为自己的域名
+      FABU_UPLOAD_DIR: /fabu/upload
+    ports:
+      - "9898:9898"
+    volumes:
+      - ./upload:/fabu/upload
+    depends_on:
+      - mongo
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver:
+      bridge
+
+
+
+
+```
+
 # 更新:
 
 ### V2.1 2024年 11月 17

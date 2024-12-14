@@ -199,7 +199,7 @@ function mapInstallUrl(appId, versionId) {
 
 ///移动相关信息到指定目录
 function storeInfo(filename, guid) {
-  var new_path;
+  let new_path;
   if ( path.extname(filename) === '.ipa' ) {
     new_path = path.join(ipasDir, guid + '.ipa');
   } else if ( path.extname(filename) === '.apk' ) {
@@ -217,12 +217,12 @@ function parseIpa(filename) {
       // console.log('app info ----> ', result);
       // console.log('icon base64 ----> ', result.icon);
 
-      var info = {}
+      const info = {};
       info.platform = 'ios'
       info.bundleId = result.CFBundleIdentifier
       info.bundleName = result.CFBundleName
       info.appName = result.CFBundleDisplayName
-      if ( typeof ( info.appName ) == 'undefined' || info.appName == null || info.appName == '' ) {
+      if ( typeof ( info.appName ) == 'undefined' || info.appName == null || info.appName === '' ) {
         info.appName = info.bundleName
       }
       info.versionStr = result.CFBundleShortVersionString
@@ -231,7 +231,7 @@ function parseIpa(filename) {
       try {
         const environment = result.mobileProvision.Entitlements['aps-environment']
         const active = result.mobileProvision.Entitlements['beta-reports-active']
-        if ( environment == 'production' ) {
+        if ( environment === 'production' ) {
           info.appLevel = active ? 'appstore' : 'enterprise'
         } else {
           info.appLevel = 'develop'
@@ -246,15 +246,31 @@ function parseIpa(filename) {
   })
 }
 
+async function generatePngWithText(iconPath, name) {
+  return new Promise((resolve, reject) => {
+    fs.writeFileSync(
+      iconPath,
+      text2png(name, {
+        backgroundColor: 'black',
+        color: 'white',
+        font: '80px Futura',
+        lineSpacing: 10,
+        padding: 200,
+      }),
+      { encoding: 'utf8', flag: 'w' });
+    resolve()
+  })
+}
+
 ///解析ipa icon
 async function extractIpaIcon(filename, guid, team) {
-  var ipaInfo = await parseIpa(filename)
-  var iconName = ipaInfo.iconName || 'AppIcon';
-  var tmpOut = tempDir + '/{0}.png'.format(guid)
-  var found = false
-  var buffer = fs.readFileSync(filename)
-  var data = await unzip.Open.buffer(buffer)
-  await new Promise((resolve, reject) => {
+  let ipaInfo = await parseIpa(filename)
+  let iconName = ipaInfo.iconName || 'AppIcon';
+  let tmpOut = tempDir + '/{0}.png'.format(guid)
+  let found = false
+  let buffer = fs.readFileSync(filename)
+  let data = await unzip.Open.buffer(buffer)
+  await new Promise(async (resolve, reject) => {
     data.files.forEach(file => {
       if ( file.path.indexOf(iconName + '60x60@2x.png') !== -1 ) {
         found = true;
@@ -266,16 +282,7 @@ async function extractIpaIcon(filename, guid, team) {
     });
     if ( !found ) {
       found = true
-      fs.writeFileSync(
-        tmpOut,
-        text2png(ipaInfo.bundleName || ipaInfo.appName, {
-          backgroundColor: 'black',
-          color: 'white',
-          font: '80px Futura',
-          lineSpacing: 10,
-          padding: 200,
-        }),
-        { encoding: 'utf8', flag: 'w' });
+      await generatePngWithText(tmpOut, ipaInfo.bundleName || ipaInfo.appName)
       resolve()
     }
   }).catch(() => {
@@ -322,10 +329,7 @@ function parseApk(filename) {
 
   return new Promise((resolve, reject) => {
     parser.parse().then(result => {
-      // console.log('app info ----> ', result)
-      // console.log('icon base64 ----> ', result.icon)
-      // console.log('====================================', JSON.stringify(result));
-      var label = undefined;
+      let label = undefined;
 
       if ( result.application && result.application.label && result.application.label.length > 0 ) {
         label = result.application.label[0];
@@ -334,10 +338,10 @@ function parseApk(filename) {
       if ( label ) {
         label = label.replace(/'/g, '');
       }
-      var appName = ( result['application-label'] || result['application-label-zh-CN'] || result['application-label-es-US'] ||
+      let appName = ( result['application-label'] || result['application-label-zh-CN'] || result['application-label-es-US'] ||
         result['application-label-zh_CN'] || result['application-label-es_US'] || label || 'unknown' );
 
-      var info = {
+      let info = {
         'appName': appName.replace(/'/g, ''),
         'versionCode': Number(result.versionCode),
         'bundleId': result.package,
@@ -348,56 +352,31 @@ function parseApk(filename) {
     }).catch(err => {
       console.log('err ----> ', err);
     });
-    // apkParser3(filename, (err, data) => {
-    //     var apkPackage = parseText(data.package)
-    //     console.log(data)
-    //     console.log("----------------")
-    //     console.log(data['application-label'])
-    //     var label = undefined
-    //     data['launchable-activity']
-    //         .split(' ')
-    //         .filter(s => s.length != 0)
-    //         .map(element => { return element.split('=') })
-    //         .forEach(element => {
-    //             if (element && element.length > 2 && element[0] == 'label') {
-    //                 label = element[1]
-    //             }
-    //         })
-    //     if (label) {
-    //         label = label.replace(/'/g, '')
-    //     }
-    //     var appName = (data['application-label'] || data['application-label-zh-CN'] || data['application-label-es-US'] ||
-    //         data['application-label-zh_CN'] || data['application-label-es_US'] || label || 'unknown')
-    //     var info = {
-    //         'appName': appName.replace(/'/g, ''),
-    //         'versionCode': Number(apkPackage.versionCode),
-    //         'bundleId': apkPackage.name,
-    //         'versionStr': apkPackage.versionName,
-    //         'platform': 'android'
-    //     }
-    //     resolve(info)
-    // })
   });
 }
 
 function extractAPKIconV2(filepath, guid, team) {
+  let iconDir = path.join(uploadDir, team.id, 'icon');
+  let realPath = path.join(team.id, 'icon', '/{0}_a.png'.format(guid));
+
   return new Promise(async (resolve, reject) => {
     const parser = new AppInfoParser(filepath) // or xxx.ipa
-    const result = await parser.parse()
-    if ( result.icon ) {
+    const parserResult = await parser.parse()
+    if ( parserResult.icon ) {
       // 可能会包含 xml 文件
-      let largestIcon = result.application.icon.filter(name => name.endsWith('.png')).pop()
+      let largestIcon = parserResult.application.icon.filter(name => name.endsWith('.png') || name.endsWith('.webp')).pop()
 
       const reader = await ApkReader.open(filepath)
       const png = await reader.readContent(largestIcon)
 
-      let iconDir = path.join(uploadDir, team.id, 'icon');
-      let realPath = path.join(team.id, 'icon', '/{0}_a.png'.format(guid));
       await createFolderIfNeeded(iconDir);
       let tempOut = path.join(uploadDir, realPath);
 
-      // TODO: [answer] 如果拿不到图片, 就自己绘制
       fs.writeFile(tempOut, png, (err) => {
+        resolve({ 'success': true, fileName: realPath });
+      })
+    } else {
+      generatePngWithText(realPath, parserResult.application.label.pop()).then(() => {
         resolve({ 'success': true, fileName: realPath });
       })
     }
@@ -484,18 +463,8 @@ function extractApkIcon(filepath, guid, team) {
 
 ///格式化输入字符串 /用法: "node{0}".format('.js'), 返回'node.js'
 String.prototype.format = function () {
-  var args = arguments;
+  let args = arguments;
   return this.replace(/\{(\d+)\}/g, function (s, i) {
     return args[i];
   });
 };
-
-function parseText(text) {
-  var regx = /(\w+)='([\S]+)'/g;
-  var match = null;
-  var result = {};
-  while ( match = regx.exec(text) ) {
-    result[match[1]] = match[2];
-  }
-  return result;
-}

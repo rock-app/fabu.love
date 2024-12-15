@@ -23,7 +23,7 @@
     "@koa/cors": "^5.0.0",
     "adbkit-apkreader": "^3.2.0",
     "app-info-parser": "^1.1.6",
-    "axios": "^0.21.1",
+    "axios": "^0.28.0",
     "bcrypt": "^5.0.1",
     "etl": "^0.6.12",
     "fawn": "^2.1.5",

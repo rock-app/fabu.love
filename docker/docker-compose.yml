@@ -2,6 +2,7 @@ services:
   mongo:
     platform: "linux/amd64"
     container_name: mongo
+    restart: always
     image: mongo:4.4.7
     volumes:
       - ./data:/data/db
@@ -14,7 +15,7 @@ services:
 #    build:
 #      context: ../
 #      dockerfile: docker/Dockerfile
-    image: crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:202411300000
+    image: fabulove:2.0.1
     container_name: docker_server
     restart: always
     environment:

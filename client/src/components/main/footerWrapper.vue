@@ -15,7 +15,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
   .footer-wrapper {
     width: 100%;
     height: 24px;

@@ -32,14 +32,14 @@
           label=""
           class="version-table-one"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <span :class="getIconClass(scope.row)"></span>
           </template>
         </el-table-column>
         <el-table-column
           label="版本"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <p v-html="getVersion(scope.row)"></p>
           </template>
         </el-table-column>
@@ -47,7 +47,7 @@
           label="更新时间"
           width="150"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <p v-html="getCreatTime(scope.row.uploadAt)"></p>
           </template>
         </el-table-column>
@@ -55,7 +55,7 @@
           label="文件大小"
           width="120"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <p v-html="getAppSize(scope.row.size)"></p>
           </template>
         </el-table-column>
@@ -63,7 +63,7 @@
           label="下载次数"
           width="120"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <span style="color: #9B9B9B;display: inline-block" v-html="getAllowDownLoadCount(scope.row)"></span>
           </template>
         </el-table-column>
@@ -75,7 +75,7 @@
           label="操作"
           width="200"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <button class="appversion-elButton" @click="releaseApp(scope.row)"><i class="icon-ic_overview"></i></button>
             <button class="appversion-elButton" @click="clickDownLoad(scope.row)"><i class="icon-ic_download"></i></button>
             <button class="appversion-elButton" @click="clickEditor(scope.row)"><i class="icon-ic_edit"></i></button>
@@ -114,6 +114,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import {getUserTeam} from '../../mgr/userMgr'
   import EditorVersion from './editorVersion.vue'
@@ -149,17 +150,18 @@
         this.getAppVersionListData()
       })
 
-      this.bus.$on('uploadSuccess', () => {
+      this.bus.on('uploadSuccess', () => {
         this.getAppVersionListData()
       })
+
+      this.router = useRouter()
     },
     destroyed() {
-      this.bus.$off('uploadSuccess')
+      this.bus.off('uploadSuccess')
     },
     methods: {
       getAppVersionListData() {
         AppResourceApi.getAppVersionList(this.userteam._id, this.appInfo._id, this.currentPage).then((res) => {
-          console.log(res)
           this.dataArr = res.data
         }, reject => {
 
@@ -197,7 +199,7 @@
         this.versionInfo = item
       },
       clickPreview(item) {
-        const {href} = this.$router.resolve({
+        const {href} = this.router.resolve({
           name: 'AppPreView',
           path: '/',
           params: { 'id': this.appInfo.shortUrl }
@@ -230,9 +232,7 @@
         })
       },
       getCreatTime(date) {
-        console.log(date)
-        let releaseDate = new Date(date)
-        return `${releaseDate.getFullYear()}-${releaseDate.getMonth() + 1}-${releaseDate.getDate()}`
+        return new Date(date).toFormat()
       },
       getAppSize(size) {
         return `${(size / 1024 / 1024).toFixed(2)}M`
@@ -297,7 +297,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .appVersion-wrapper .detail-header-bottom {
     background-color: white;
@@ -396,14 +396,14 @@
     width: 18px;
     height: 16px;
     background-size: 18px 18px;
-    background-image: url("../../assets/sign_grey.png");
+    background-image: url("../../common/assets/sign_grey.png");
   }
   .version-table-one-lighting {
     display: inline-block;
     width: 18px;
     height: 16px;
     background-size: 18px 18px;
-    background-image: url("../../assets/sign_now.png");
+    background-image: url("../../common/assets/sign_now.png");
   }
   .appVersion-wrapper .version-table .cell {
     text-align: center;

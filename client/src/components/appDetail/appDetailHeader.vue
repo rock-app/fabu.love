@@ -2,7 +2,7 @@
     <div>
       <div class="detail-header">
         <div class="detail-header-top">
-          <img class="appicon" v-lazy="getIconUrl()">
+          <img class="appicon" v-if="appInfo.icon" v-lazy="getIconUrl()">
           <p class="appname">{{this.appInfo.appName}}</p>
           <div class="appType-platform-wrapper">
             <div class="appType" v-show="this.appInfo.appLevel" v-html="getAppType()"></div>
@@ -40,6 +40,7 @@
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import {getUserTeam} from '../../mgr/userMgr'
   import UploadApp from '../appList/uploadApp.vue'
+  import { useRouter } from 'vue-router'
 
   export default {
     props: {
@@ -59,10 +60,11 @@
     },
     created() {
       this.team = getUserTeam()
+      this.router = useRouter();
     },
     methods: {
       clickPreviewBtn() {
-        const {href} = this.$router.resolve({
+        const {href} = this.router.resolve({
           name: 'AppPreView',
           path: '/',
           params: { 'id': this.appInfo.shortUrl }
@@ -95,7 +97,7 @@
           .then(_ => {
             AppResourceApi.delectApp(this.team._id, this.appInfo._id).then((res) => {
               this.$message.success('删除成功')
-              this.$router.go(-1)
+              this.router.go(-1)
             }, reject => {
               this.$message.error(reject)
             })
@@ -111,14 +113,14 @@
         this.$refs.referenceUpload.value = ''
         this.showUploadView = false
         // 上传成功
-        this.bus.$emit('uploadSuccess')
+        this.bus.emit('uploadSuccess')
       }
     }
   }
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .detail-header {
     width: 100%;
@@ -149,13 +151,13 @@
     left: 120px;
     line-height: 24px;
     font-size: 24px;
-    font-family: "PingFang SC";
+    font-family: "PingFang SC",serif;
   }
   .detail-header-top .appType-platform-wrapper {
     position: absolute;
     top: 75px;
     left: 120px;
-    font-size: 0px;
+    font-size: 0;
   }
   .appType-platform-wrapper .appType {
     display: inline-block;
@@ -174,7 +176,7 @@
   }
   .detail-header-top .rightwrapper {
     float: right;
-    margin-right: 0px;
+    margin-right: 0;
     padding: 36px 24px;
     position: relative;
   }

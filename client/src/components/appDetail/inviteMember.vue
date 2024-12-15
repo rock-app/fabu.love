@@ -39,7 +39,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .inviteMember-wrapper {
     position: fixed;

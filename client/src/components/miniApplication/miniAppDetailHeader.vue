@@ -3,7 +3,7 @@
     <div class="detail-header">
       <div class="detail-header-top">
         <!--v-lazy="getIconUrl()"-->
-        <img class="appicon" src="../../assets/miniicon.png">
+        <img class="appicon" src="../../common/assets/miniicon.png">
         <p class="appname">{{this.appInfo.appName}}</p>
         <button class="delete button-style-border" @click="delectMiniApp">删除</button>
       </div>
@@ -25,6 +25,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
   import * as MiniApi from '../../api/moudle/miniApi'
   import { getUserTeam } from '../../mgr/userMgr'
 
@@ -48,6 +49,8 @@
         this.subTitleArr = [this.appInfo.appId, (this.appInfo.appSecret.slice(0, 5) + '******')]
         this.headerOperationData = ['AppId', 'AppSecret']
       })
+
+      this.router = useRouter()
     },
     methods: {
       getIconUrl() {
@@ -58,7 +61,7 @@
           .then(_ => {
             MiniApi.delectApp(this.team._id, this.appInfo._id).then((res) => {
               this.$message.success('删除成功')
-              this.$router.go(-1)
+              this.router.go(-1)
             }, reject => {
               this.$message.error(reject)
             })
@@ -70,7 +73,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .miniAppDetail-wrapper .detail-header {
     width: 100%;

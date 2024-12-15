@@ -47,7 +47,7 @@
     },
     data() {
       return {
-        defaultImg: 'this.src="' + require('../../assets/imgerror.png') + '"'
+        defaultImg: 'this.src="' + import('../../common/assets/imgerror.png') + '"'
       }
     },
     created() {},
@@ -85,7 +85,7 @@
 </script>
 
 <style lang="scss">
-    @import "../../common/scss/base";
+    @use "../../common/scss/base" as *;
 
     .qrcode-wrapper {
       width: 100%;

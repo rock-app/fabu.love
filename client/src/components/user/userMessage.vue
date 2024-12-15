@@ -27,7 +27,7 @@
           </el-pagination>
 
           <div class="nomessage" v-show="this.dataArr.length === 0">
-            <img src="../../assets/box.png" alt="">
+            <img src="../../common/assets/box.png" alt="">
             <p>暂无消息</p>
           </div>
         </div>
@@ -87,7 +87,7 @@
       cancel() {
         this.show = false
         setTimeout(() => {
-          this.bus.$emit('hiddenUserMessage')
+          this.bus.emit('hiddenUserMessage')
         }, 500)
       },
       handleSizeChange(val) {
@@ -133,7 +133,7 @@
         UserApi.allRead().then((res) => {
           this.$message.success(res.message)
           this.loadData()
-          this.bus.$emit('allreadMessage')
+          this.bus.emit('allreadMessage')
         }, reject => {
 
         })
@@ -143,7 +143,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .fadeRight-enter-active {
     transition: all .5s ease;

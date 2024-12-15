@@ -1,9 +1,9 @@
-version: '3'
 services:
-
   mongo:
+    platform: "linux/amd64"
     container_name: mongo
-    image: mongo
+    restart: always
+    image: mongo:4.4.7
     volumes:
       - ./data:/data/db
     ports:
@@ -12,14 +12,17 @@ services:
       - appnet
 
   server:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
+#    build:
+#      context: ../
+#      dockerfile: docker/Dockerfile
+    image: fabulove:2.0.1
+    container_name: docker_server
+    restart: always
     environment:
       FABU_DB_HOST: mongo
-      # FABU_BASE_URL: https://fabu.apppills.com 正式环境部署请打开注释，并修改为域名为自己的域名
+#      FABU_BASE_URL: https://server.docker.orb.local/ #正式环境部署请打开注释，并修改为域名为自己的域名
       FABU_UPLOAD_DIR: /fabu/upload
-    ports: 
+    ports:
       - "9898:9898"
     volumes:
       - ./upload:/fabu/upload
@@ -34,4 +37,4 @@ networks:
       bridge
 
 
-  
+

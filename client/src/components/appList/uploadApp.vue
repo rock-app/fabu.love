@@ -3,15 +3,15 @@
     <!--<el-progress ref="progress" :stroke-width="30" class="uploadProgress" :percentage="progress" status="exception"></el-progress>-->
     <!--<button class="uploadCancelBtn" @click="cancelUpload">取消上传</button>-->
     <div class="uploadContent">
-      <img src="../../assets/loadding.gif">
+      <img src="../../common/assets/loadding.gif">
       <div style="font-size: 20px;margin-top: 30px;color: #6477F2" v-html="`正在上传中...${progress}%`"></div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import { Message } from 'element-ui'
-  const axios = require('axios')
+  import { ElMessage } from 'element-plus'
+  import axios from 'axios'
 
   export default {
     props: {
@@ -55,15 +55,15 @@
               _this.progress = percentCompleted
             })
           },
-          cancelToken: _this.source.token
+          cancelToken: _this.source.token,
+          headers: {
+            'Content-Type': 'multipart/form-data'  //multipart/form-data
+          }
         }
-
-        axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
 
         axios.post(`api/apps/${_this.teamId}/upload`, data, config)
           .then((res) => {
-          console.log(res)
-            Message({
+            ElMessage({
               message: res.data.success ? '上传成功' : res.data.message,
               type: res.data.success ? 'success' : 'error'
             })
@@ -75,7 +75,7 @@
               console.log('Request canceled', err.message)
               return
             }
-            Message.error('上传失败')
+            ElMessage.error('上传失败')
           })
       }
     }
@@ -83,7 +83,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .uploadApp-wrapper {
     position: fixed;

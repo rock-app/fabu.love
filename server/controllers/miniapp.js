@@ -25,7 +25,7 @@ const Team = require('../model/team')
 
 const tag = tags(['MiniAppResource']);
 const mkdirp = require('mkdirp')
-const uuidv1 = require('uuid/v1');
+const { v1: uuidv1 } = require('uuid');
 
 //更新策略
 
@@ -184,7 +184,7 @@ module.exports = class MiniAppRouter {
 
         var app = await Miniapp.findOne({ appId: body.appId })
         appInTeamAndUserIsManager(app._id,body.teamId,user._id)
-        
+
         var result = await axios.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${app.appId}&secret=${app.appSecret}`)
 
         var token = result.data.access_token
@@ -273,8 +273,8 @@ module.exports = class MiniAppRouter {
     //     ctx.body = responseWrapper(true, "应用设置已更新")
     // }
 
-  
-  
+
+
     @request('get', '/api/count/{appid}/{versionId}')
     @summary("增加一次下载次数")
     @tag
@@ -332,9 +332,9 @@ async function requestImage(url,data,codePath,imageName){
       responseType: 'stream',
       data: data
     })
-    
+
     response.data.pipe(writer)
-  
+
     return new Promise((resolve, reject) => {
       writer.on('finish', resolve)
       writer.on('error', reject)

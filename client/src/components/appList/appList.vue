@@ -33,8 +33,8 @@
     </div>
     <!--应用列表-->
     <collectionView
-      :dataArr="this.dataList"
-      @gotoAppDetail="gotoAppDetail"
+        :dataArr="this.dataList"
+        @gotoAppDetail="gotoAppDetail"
     >
     </collectionView>
 
@@ -48,31 +48,32 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { useRouter } from "vue-router";
   import * as AppResourceApi from '../../api/moudle/appResourceApi'
   import UploadApp from './uploadApp.vue'
   import { getUserTeam } from '../../mgr/userMgr'
   import CollectionView from '../base/collectionView.vue'
   import EmptyView from './emptyView.vue'
 
-  export default {
-    name: 'Apps',
-    data() {
-      return {
-        currentPlatform: '',
-        dataList: [],
-        originDataList: [],
-        queryText: '',
-        showUploadView: false,
-        file: FileList,
-        currentPage: 0,
-        currentTeam: {},
-        showEmpty: false
+export default {
+  name: 'Apps',
+  data() {
+    return {
+      currentPlatform: '',
+      dataList: [],
+      originDataList: [],
+      queryText: '',
+      showUploadView: false,
+      file: FileList,
+      currentPage: 0,
+      currentTeam: {},
+      showEmpty: false
       }
-    },
-    components: {
-      UploadApp, CollectionView, EmptyView
-    },
-    computed: {},
+  },
+  components: {
+    UploadApp, CollectionView, EmptyView
+  },
+  computed: {},
     methods: {
       loadAppList() {
         AppResourceApi.getAppList(this.currentTeam._id)
@@ -85,8 +86,6 @@
             } else {
               this.showEmpty = false
             }
-
-            console.log(this.dataList)
           }, reject => {
             this.$message.error(reject)
             this.showEmpty = true
@@ -129,11 +128,11 @@
         }
       },
       gotoAppDetail(item) {
-        this.$router.push({
+        this.router.push({
           name: 'AppDetail',
           params: {appId: item._id}
         })
-        this.bus.$emit('appdetail')
+        this.bus.emit('appdetail')
       },
       appItemHovered() {
       },
@@ -156,12 +155,13 @@
       }
     },
     destroyed() {
-      this.bus.$off('refreshList')
+      this.bus.off('refreshList')
     },
     mounted() {
+      this.router = useRouter()
       this.currentTeam = getUserTeam()
-      this.bus.$emit('applist')
-      this.bus.$on('refreshList', () => {
+      this.bus.emit('applist')
+      this.bus.on('refreshList', () => {
         this.currentTeam = getUserTeam()
         this.loadAppList()
       })
@@ -214,7 +214,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .applist-wrapper {
     padding-left: 20px;

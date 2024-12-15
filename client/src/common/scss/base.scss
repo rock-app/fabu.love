@@ -1,5 +1,5 @@
 
-@import "./reset";
+@use "./reset" as *;
 
 $mainColor: #6477F2;
 $mainTitleColor: #354052;

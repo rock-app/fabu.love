@@ -1,7 +1,7 @@
 <template>
   <div class="mainNav-wrapper">
     <div class="mainNav-logo">
-      <img src="../../assets/logo_s.png" alt="" @click="clickLogo">
+      <img src="../../common/assets/logo_s.png" alt="" @click="clickLogo">
       <div class="line"></div>
     </div>
 
@@ -15,33 +15,29 @@
         <div v-show="this.activeIndex !== '应用概述' && this.activeIndex !== '应用详情'">
           <el-menu-item index="应用列表" @click="clickSubItem">
             <i class="icon-ic_applist"></i>
-            <span slot="title">应用列表</span>
+            <template #title>应用列表</template>
           </el-menu-item>
-          <!-- <el-menu-item index="小程序列表" @click="clickSubItem">
-            <i class="icon-ic_applist"></i>
-            <span slot="title">小程序列表</span>
-          </el-menu-item> -->
           <el-menu-item index="团队管理" @click="clickSubItem">
             <i class="icon-ic_mnggp"></i>
-            <span slot="title">团队管理</span>
+            <template #title>团队管理</template>
           </el-menu-item>
         </div>
 
         <div v-show="this.activeIndex === '应用概述'">
           <el-menu-item index="应用概述" @click="clickSubItem">
             <i class="icon-ic_appdes"></i>
-            <span slot="title">应用概述</span>
+            <template #title>应用概述</template>
           </el-menu-item>
           <el-menu-item index="应用设置" @click="clickSubItem">
             <i class="icon-ic_appsetting-copy"></i>
-            <span slot="title">应用设置</span>
+            <template #title>应用设置</template>
           </el-menu-item>
         </div>
         <!--小程序-->
         <div v-show="this.activeIndex === '应用详情'">
           <el-menu-item index="应用详情" @click="clickSubItem">
             <i class="icon-ic_appdes"></i>
-            <span slot="title">应用详情</span>
+            <template #title>应用详情</template>
           </el-menu-item>
         </div>
       </el-menu>
@@ -53,19 +49,19 @@
       >
         <el-menu-item index="API文档" @click="clickSubItem">
           <i class="icon-ic_api_s"></i>
-          <span slot="title">API文档</span>
+          <template #title>API文档</template>
         </el-menu-item>
         <el-menu-item index="Help" @click="clickSubItem">
           <i class="icon-ic_help_s"></i>
-          <span slot="title">Help</span>
+          <template #title>Help</template>
         </el-menu-item>
         <el-menu-item index="GitHub" @click="clickSubItem">
           <i class="icon-ic_github_s"></i>
-          <span slot="title">GitHub</span>
+          <template #title>GitHub</template>
         </el-menu-item>
         <el-menu-item index="About" @click="clickSubItem">
           <i class="icon-ic_about_s"></i>
-          <span slot="title">About</span>
+          <template #title>About</template>
         </el-menu-item>
       </el-menu>
     </div>
@@ -76,6 +72,8 @@
 
 <script type="text/ecmascript-6">
 
+import { useRoute, useRouter } from "vue-router";
+
   export default {
     data() {
       return {
@@ -84,54 +82,56 @@
     },
     mounted() {
       // 监听进入详情页面就变化左侧的菜单
-      this.bus.$on('appdetail', () => {
+      this.bus.on('appdetail', () => {
         this.activeIndex = '应用概述'
       })
-      this.bus.$on('miniAppDetail', () => {
+      this.bus.on('miniAppDetail', () => {
         this.activeIndex = '应用详情'
       })
-      this.bus.$on('applist', () => {
-        if (this.$route.fullPath !== '/apps') {
-          this.$router.push('/apps')
+      this.bus.on('applist', () => {
+        if (this.route.fullPath !== '/apps') {
+          this.router.push('/apps')
         }
         this.activeIndex = '应用列表'
       })
-      this.bus.$on('miniApplist', () => {
-        if (this.$route.fullPath !== '/miniAppList') {
-          this.$router.push('/miniAppList')
+      this.bus.on('miniApplist', () => {
+        if (this.route.fullPath !== '/miniAppList') {
+          this.router.push('/miniAppList')
         }
         this.activeIndex = '小程序列表'
       })
 
       // 刷新浏览器的时候防止菜单变化
-      if (this.$route.fullPath === '/members') {
+      if (this.route.fullPath === '/members') {
         this.activeIndex = '团队管理'
       }
-      if (this.$route.fullPath === '/miniAppList') {
+      if (this.route.fullPath === '/miniAppList') {
         this.activeIndex = '小程序列表'
       }
     },
     created() {
+      this.router = useRouter()
+      this.route = useRoute()
     },
     destroyed() {
-      this.bus.$off('applist')
-      this.bus.$off('appdetail')
-      this.bus.$off('miniApplist')
-      this.bus.$off('miniAppDetail')
+      this.bus.off('applist')
+      this.bus.off('appdetail')
+      this.bus.off('miniApplist')
+      this.bus.off('miniAppDetail')
     },
     methods: {
       clickSubItem(data) {
         if (data.index === '应用列表') {
-          this.$router.push('/apps')
+          this.router.push('/apps')
         }
         if (data.index === '应用概述') {
-          this.bus.$emit('appSummary')
+          this.bus.emit('appSummary')
         }
         if (data.index === '应用设置') {
-          this.bus.$emit('appSetting')
+          this.bus.emit('appSetting')
         }
         if (data.index === '团队管理') {
-          this.$router.push('/members')
+          this.router.push('/members')
         }
         if (data.index === 'API文档') {
           let href = `${this.axios.defaults.baseURL}api/swagger`
@@ -147,13 +147,13 @@
           window.open(href, '_blank')
         }
         if (data.index === 'GitHub') {
-          let herf = 'https://github.com/HeadingMobile'
+          let herf = 'https://github.com/rock-app/fabu.love'
           window.open(herf, '_blank')
         }
         if (data.index === 'About') {
         }
         if (data.index === '小程序列表') {
-          this.$router.push('/miniAppList')
+          this.router.push('/miniAppList')
         }
       },
       gotoApiDoc() {
@@ -172,7 +172,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+  @use "../../common/scss/base" as *;
 
   .mainNav-wrapper {
     position: relative;

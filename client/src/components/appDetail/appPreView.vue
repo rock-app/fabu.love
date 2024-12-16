@@ -259,7 +259,6 @@
     background-size: cover;
 
     ul  {
-      background: #fff;
       padding: 16px 32px;
       li {
         padding: 12px 0;

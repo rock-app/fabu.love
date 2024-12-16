@@ -20,7 +20,6 @@ const fs = require('fs');
 const crypto = require('crypto')
 const path = require('path');
 const os = require('os');
-const mime = require('mime');
 const { v4: uuidV4 } = require('uuid');
 const apkParser3 = require('../library/apkparser/apkparser');
 const unzip = require('unzipper');
@@ -87,17 +86,6 @@ module.exports = class UploadRouter {
       });
     }
     ctx.body = responseWrapper(result);
-  }
-
-  static async download(ctx, next) {
-    const { body } = ctx.request;
-    var file = __dirname + '';
-    var filename = path.basename(file);
-    var mimetype = mime.lookup(file);
-    ctx.body = await fs.createReadStream(__dirname, '/');
-    ctx.set('Content-disposition',
-      'attachment; filename=' + filename);
-    ctx.set('Content-type', mimetype);
   }
 };
 

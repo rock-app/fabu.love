@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Fawn = require("fawn");
 import config from '../config';
 
-var dbUrl = `mongodb://${config.dbHost}:${config.dbPort}/${config.dbName}`;
+let dbUrl = `mongodb://${ config.dbHost }:${ config.dbPort }/${ config.dbName }`;
 if (config.dbUser) {
     dbUrl = `mongodb://${config.dbUser}:${config.dbPass}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 }
@@ -21,6 +21,6 @@ mongoose
     .on('disconnected', function () {
         console.log('Mongoose connection disconnected')
     })
-Fawn.init(mongoose);
+Fawn.init(dbUrl);
 
 module.exports = mongoose

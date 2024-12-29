@@ -41,7 +41,7 @@ var appSchema = new Schema({
         default: false
     },
     installWithPwd: {
-        Boolean,
+        type: Boolean,
         default: false
     },
     installPwd: {

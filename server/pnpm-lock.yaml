@@ -66,8 +66,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       mongoose:
-        specifier: ^8.9.0
-        version: 8.9.0(@aws-sdk/credential-providers@3.712.0(@aws-sdk/client-sso-oidc@3.712.0(@aws-sdk/client-sts@3.712.0)))(socks@2.8.3)
+        specifier: ^8.9.5
+        version: 8.9.5(@aws-sdk/credential-providers@3.712.0(@aws-sdk/client-sso-oidc@3.712.0(@aws-sdk/client-sts@3.712.0)))(socks@2.8.3)
       mustache:
         specifier: ^4.2.0
         version: 4.2.0
@@ -2016,8 +2016,8 @@ packages:
     resolution: {integrity: sha512-hZOKfZEakCvy+84MyZAv/2EL588SHghBrkhtl+LGBRv9QkPs4SY28a376q9CyN/y0JYinNcrrFMx6lgdQatz5Q==}
     engines: {node: '>=0.6.19'}
 
-  mongoose@8.9.0:
-    resolution: {integrity: sha512-b58zY3PLNBcoz6ZXFckr0leJcVVBMAOBvD+7Bj2ZjghAwntXmNnqwlDixTKQU3UYoQIGTv+AQx/0ThsvaeVrCA==}
+  mongoose@8.9.5:
+    resolution: {integrity: sha512-SPhOrgBm0nKV3b+IIHGqpUTOmgVL5Z3OO9AwkFEmvOZznXTvplbomstCnPOGAyungtRXE5pJTgKpKcZTdjeESg==}
     engines: {node: '>=16.20.1'}
 
   mpath@0.3.0:
@@ -5571,7 +5571,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mongoose@8.9.0(@aws-sdk/credential-providers@3.712.0(@aws-sdk/client-sso-oidc@3.712.0(@aws-sdk/client-sts@3.712.0)))(socks@2.8.3):
+  mongoose@8.9.5(@aws-sdk/credential-providers@3.712.0(@aws-sdk/client-sso-oidc@3.712.0(@aws-sdk/client-sts@3.712.0)))(socks@2.8.3):
     dependencies:
       bson: 6.10.1
       kareem: 2.6.3

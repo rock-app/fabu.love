@@ -28,7 +28,7 @@
     "etl": "^0.8.0",
     "fawn": "^2.1.5",
     "jsonwebtoken": "^9.0.2",
-    "koa": "^2.15.3",
+    "koa": "^2.16.1",
     "koa-bodyparser": "^4.4.1",
     "koa-compose": "^4.1.0",
     "koa-jwt": "^4.0.4",

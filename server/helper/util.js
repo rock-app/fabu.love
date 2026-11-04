@@ -23,26 +23,28 @@ const responseWrapper = function wrapper(success, message, data) {
     if (arguments.length === 3) {
         return { 'success': success, 'message': message, 'data': data };
     }
-    //只传2个参数,必须传是否成功 和 返回的提示信息
     if (arguments.length === 2) {
         return { 'success': success, 'message': message };
     };
-    //如果只传一个参数 则默认当作请求成功 返回正常数据
     if (arguments.length === 1) {
         return { 'success': true, 'data': arguments[0] };
     }
     return {}
 }
 
-function exec(command, options = {
+// Run a program directly, passing every argument as a separate array element.
+// No shell is involved, so arguments are never interpreted as shell syntax and
+// no character filtering/quoting is needed. NOTE: this also means shell features
+// (pipes, "&&"/";", redirection, $VAR expansion, ...) are no longer available.
+function exec(file, args = [], options = {
     log: false,
     cwd: process.cwd()
 }) {
     if (options.log)
-        console.log(command)
+        console.log([file].concat(args).join(' '))
 
     return new Promise((done, failed) => {
-        cp.exec(command, {
+        cp.execFile(file, args, {
             options
         }, (err, stdout, stderr) => {
             if (err) {
